@@ -1,11 +1,23 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <link href='css/main.css' rel='stylesheet' type='text/css'>
         <meta charset="utf-8">
         <title>굳</title>
     </head>
     <body>
-        <input id = "file-input" type="file">
-        <button id = "submit">submit</button>
+        <div id = "wraper">
+            <header>
+                <h1>Prototype Ver.1</h1>
+            </header>
+            <!--Latest "accept"-->
+        
+            <input id = "file-input" type="file" accept="image/*">
+            <input id = "text-input" type="text">
+            <button id = "submit-button">submit</button>
+            <div id = "content">
+            </div>
+        </div>
         <script src="js/main.js"></script>
     </body>
     
