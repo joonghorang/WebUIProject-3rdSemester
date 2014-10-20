@@ -119,14 +119,14 @@
 
 //
 //
-(function(){
-    var CANVAS_WIDTH = 400;
-    var CANVAS_HEIGHT = 300;
+(function main() {
+    var CANVAS_WIDTH = 800;
+    var CANVAS_HEIGHT = 600;
     var ORIGINIMAGE_HEIGHT = 300;
     
     
-    var fontSize = 30;
-    var fontName = "Nanum Gothic";
+    var fontSize = 72;
+    var fontName = "NanumMyeongjo";
     var fontColor = "#FFF";
     var fileInput = document.getElementById("file-input");
     var textInput = document.getElementById("text-input");
@@ -140,7 +140,7 @@
     
     var inputImage = null;
     
-    textInput.value = "테스트용 문구 입니다";
+    textInput.value = "달.";
     
     fileInput.addEventListener("change", function(){
         var file = this.files.item(0);
@@ -196,7 +196,7 @@
     function setText(context, text, x, y, color, font, fontSize){
         context.fillStyle = "#FFF";
         context.font = fontSize + "px " + fontName;
-        context.fillText(textInput.value, 10, fontSize + 10);
+        context.fillText(textInput.value, 200, fontSize + 150);
     }
     function getAvgRGBAFromImage(img){
         var imgCanvas = createCanvasFromImage(img);
@@ -227,3 +227,47 @@
     }
     
 })();
+
+
+// RGB to HSV
+// 일단 개념은 대충이해하고 코드를 스톡오버 플로우에서 복사해왔으나 좀더 들여다 봐야할 듯.
+function setRgbToHsv () {
+    var rr, gg, bb;
+    var r = arguments[0] / 255,
+        g = arguments[1] / 255,
+        b = arguments[2] / 255;
+    var h, 
+        s,
+        v = Math.max(r, g, b);
+    var diff = v - Math.min(r, g, b);
+    var diffc = function(c){
+            return (v - c) / 6 / diff + 1 / 2;
+        };
+
+    if (diff == 0) {
+        h = s = 0; // rgb의 최대값과 최소값을 뺀 값이 0이라면 모든 평면이 같다는 의미.
+    } else {
+        s = diff / v;
+        rr = diffc(r);
+        gg = diffc(g);
+        bb = diffc(b);
+
+        if (r === v) {
+            h = bb - gg;
+        }else if (g === v) {
+            h = (1 / 3) + rr - bb;
+        }else if (b === v) {
+            h = (2 / 3) + gg - rr;
+        }
+        if (h < 0) {
+            h += 1;
+        }else if (h > 1) {
+            h -= 1;
+        }
+    }
+    return {
+        h: Math.round(h * 360),
+        s: Math.round(s * 100),
+        v: Math.round(v * 100)
+    };
+}
