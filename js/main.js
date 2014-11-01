@@ -173,6 +173,9 @@
             }
             rCanvasCtx.putImageData(rImageData, 0, 0);
             setText(rCanvasCtx, textInput.value, 10, 10, fontColor, fontName, fontSize);
+            console.log(textInput.value);
+            console.log(textInput);
+            console.log(rCanvasCtx);
             
             content.appendChild(rCanvas);
         }
