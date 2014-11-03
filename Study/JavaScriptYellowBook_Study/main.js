@@ -2,8 +2,8 @@
 var textInput = document.getElementById("text-input");
 var fontSize = 36;
 var fontName = "NanumMyeongjo";
+var fontWeight = "bold ";
 var fontColor = "#FFFFFF";
-
 // -. 캔버스를 생성한다.  
 var drawing = document.getElementById("drawing");
 
@@ -31,33 +31,124 @@ if (drawing.getContext) { // <canvas>가 지원되는지 확인 하는 분기
 
 // -. 텍스트가 입력되어 submit 버튼을 누르면 텍스트로 넘어온 값을 읽고 처리하여 html요소에 삽입한다.  
     textInput.addEventListener("change", function(){
+		var originTextData = textInput.value;
+		var textX = canvasWidth/2;
+		var textY = canvasHeight/2;
 
-    	if(textInput.value.length > 10){
+    	if(textInput.value.length >= 13){
     		alert("Error");
     	} else {
 
+    		var originTextArray = stringToWordList(originTextData);
+    		originTextArray = addEnterToWordList(originTextArray);
+    		displayWordList(originTextArray);
 
-			var textX = canvasWidth/2;
-			var textY = canvasHeight/2;
-
-			console.log("textX : " + textX);
-			console.log("measureText : " + context.measureText(textInput.value).width);
-
-	    	var originTextData = textInput.value;
-	    	setText(context, originTextData, fontColor, fontName, fontSize, textX, textY);
-
-			document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
-
-			console.log("After textX : " + textX);
-			console.log("After measureText : " + context.measureText(textInput.value).width);
         }
     
-		function setText(context, text,color, font, fontSize, x, y){
+		function setText(context, text, color, font, fontSize, x, y){
 		    context.fillStyle = fontColor;
-		    context.font = fontSize + "px " + fontName;
+		    context.font = fontSize + "px " + fontName; //fontWeight + " " + 
 		    context.textAlign = "center";
-		    //context.textBaseline = "middle";
-		    context.fillText(textInput.value, x, y);
+		    context.textBaseline = "middle";
+		    context.fillText(text, x + 8, y);
 		}
+
+		function stringToWordList(String){
+			var result = [];
+			result = String.split(" ");
+			return result;
+		}
+
+		function addEnterToWordList(WordArray){
+			for(var i = 0; i < WordArray.length; i++){
+				WordArray[i] += "\n";
+			}
+			return WordArray;
+		}
+
+		function displayWordList(wordArray){
+
+			var addTextY = 0;
+			switch(wordArray.length){
+				case 1 :
+					fontSize = 72;
+					if(wordArray[0].length > 8 && wordArray[0].length <= 9){
+						fontSize = 60;
+					}else if(wordArray[0].length > 9){
+						fontSize = 48;
+					} 
+
+					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
+					break;
+				case 2 :
+					fontSize = 60;
+					addTextY = 35;
+
+					for(var i = 0; i < wordArray.length; i++){
+						if(wordArray[i].length > 8 && wordArray[i].length <= 12){
+							fontSize = 48;
+							addTextY = 30;
+						}
+					}
+					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
+					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY + addTextY);
+					break;
+				case 3 :
+					fontSize = 48;
+					addTextY = 60;
+
+					for(var i = 0; i < wordArray.length; i++){
+						if(wordArray[i].length > 7 && wordArray[i].length <= 11){
+							fontSize = 36;
+							addTextY = 24;
+						}
+					}
+					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
+					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY);
+					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
+					break;
+				case 4 :
+					fontSize = 48;
+					addTextY = 30;
+
+					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
+					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
+					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
+					setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
+					break;
+				case 5 : 
+					fontSize = 36;
+					addTextY = 40;
+
+					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 2);
+					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
+					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY);
+					setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY);
+					setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 2);
+					break;
+				case 6 : 
+					fontSize = 36;
+					addTextY = 24;
+
+					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 5);
+					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
+					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
+					setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY - addTextY);
+					setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
+					setText(context, wordArray[5], fontColor, fontName, fontSize, textX, textY + addTextY * 5);
+						 break;
+				case 7 : 
+						 break;
+				case 8 : 
+						 break;
+				case 9 :
+						 break;
+				default : 
+	    				 setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
+			}
+
+			document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
+		}
+
     }, false);
 
