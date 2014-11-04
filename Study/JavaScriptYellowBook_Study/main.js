@@ -36,9 +36,9 @@ textInput.addEventListener("change", function(){
 	var textY = canvasHeight/2;
 	// 왼쪽 정렬을 위한 코드. (윈쪽 정렬한 후 문단 전체를 제일 긴 단어를 기준으로 가운데 정렬하기)
 	var addTextX = 0;
-	var addTextY = 0;
+	var addTextY = 24; // 24가 기본값
 
-	if(textInput.value.length >= 13){
+	if(textInput.value.length >= 30){
 		alert("Error");
 	} else {
 
@@ -70,6 +70,7 @@ textInput.addEventListener("change", function(){
 	}
 
 	function displayWordList(context, wordArray){
+		console.log(wordArray.length);
 
 		switch(wordArray.length){
 			case 1 :
@@ -134,26 +135,39 @@ textInput.addEventListener("change", function(){
 				setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 2);
 				break;
 			case 6 : 
+				alert("here is default 6 ");
 				fontSize = 36;
 				addTextY = 24;
 
 				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 5);
 				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
-				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
-				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY - addTextY);
+				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY - addTextY);
+				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY);
 				setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
 				setText(context, wordArray[5], fontColor, fontName, fontSize, textX, textY + addTextY * 5);
 					 break;
-			case 7 : 
-					 break;
-			case 8 : 
-					 break;
-			case 9 :
-					 break;
 			default : 
+					 console.log("here is default");
 					 textX = repositionTextX(wordArray, textX, fontSize);
-    				 setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
+
+					 if(wordArray.length % 2 === 0){
+						 for(var i = 0; i < wordArray.length/2; i++){
+	    				 	setText(context, wordArray[i], fontColor, fontName, fontSize, textX, textY - addTextY * i;
+	    				 }
+	    				 for(var i = wordArray.length/2; i < wordArray.length; i++){
+	    				 	setText(context, wordArray[i], fontColor, fontName, fontSize, textX, textY + addTextY * i;
+	    				 }
+	    			 } else if(wordArray.length % 2 === 1){
+						 for(var i = 0; i < wordArray.length/2; i++){
+	    				 	setText(context, wordArray[i], fontColor, fontName, fontSize, textX, textY - addTextY * i;
+	    				 }
+	    				 setText(context,wordArray[i], fontColor, fontName, fontSize, textX, textY);
+	    				 for(var i = wordArray.length/2+1; i < wordArray.length; i++){
+	    				 	setText(context, wordArray[i], fontColor, fontName, fontSize, textX, textY + addTextY * i;
+	    				 }
+	    			 }
+	    			 break;
 		}
 
 		document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
@@ -176,6 +190,10 @@ textInput.addEventListener("change", function(){
 		addTextX = (context.measureText(findMostLongWord(wordArray)).width) / 2;
 		textX -= addTextX;
 		return textX;
+	}
+
+	function setTextFactory(){
+
 	}
 
 }, false);
