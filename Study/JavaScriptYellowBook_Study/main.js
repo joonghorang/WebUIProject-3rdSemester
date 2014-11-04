@@ -30,125 +30,154 @@ if (drawing.getContext) { // <canvas>가 지원되는지 확인 하는 분기
 }
 
 // -. 텍스트가 입력되어 submit 버튼을 누르면 텍스트로 넘어온 값을 읽고 처리하여 html요소에 삽입한다.  
-    textInput.addEventListener("change", function(){
-		var originTextData = textInput.value;
-		var textX = canvasWidth/2;
-		var textY = canvasHeight/2;
+textInput.addEventListener("change", function(){
+	var originTextData = textInput.value;
+	var textX = canvasWidth/2;
+	var textY = canvasHeight/2;
+	// 왼쪽 정렬을 위한 코드. (윈쪽 정렬한 후 문단 전체를 제일 긴 단어를 기준으로 가운데 정렬하기)
+	var addTextX = 0;
+	var addTextY = 0;
 
-    	if(textInput.value.length >= 13){
-    		alert("Error");
-    	} else {
+	if(textInput.value.length >= 13){
+		alert("Error");
+	} else {
 
-    		var originTextArray = stringToWordList(originTextData);
-    		originTextArray = addEnterToWordList(originTextArray);
-    		displayWordList(originTextArray);
+		var originTextArray = stringToWordList(originTextData);
+		originTextArray = addEnterToWordList(originTextArray);
+		displayWordList(context, originTextArray);
 
-        }
-    
-		function setText(context, text, color, font, fontSize, x, y){
-		    context.fillStyle = fontColor;
-		    context.font = fontSize + "px " + fontName; //fontWeight + " " + 
-		    context.textAlign = "center";
-		    context.textBaseline = "middle";
-		    context.fillText(text, x + 8, y);
+    }
+
+	function setText(context, text, color, font, fontSize, x, y){
+	    context.fillStyle = fontColor;
+	    context.font = fontSize + "px " + fontName; //fontWeight + " " + 
+	    context.textAlign = "left";
+	    context.textBaseline = "middle";
+	    context.fillText(text, x + 8, y);
+	}
+
+	function stringToWordList(String){
+		var result = [];
+		result = String.split(" ");
+		return result;
+	}
+
+	function addEnterToWordList(WordArray){
+		for(var i = 0; i < WordArray.length; i++){
+			WordArray[i] += "\n";
 		}
+		return WordArray;
+	}
 
-		function stringToWordList(String){
-			var result = [];
-			result = String.split(" ");
-			return result;
-		}
+	function displayWordList(context, wordArray){
 
-		function addEnterToWordList(WordArray){
-			for(var i = 0; i < WordArray.length; i++){
-				WordArray[i] += "\n";
-			}
-			return WordArray;
-		}
-
-		function displayWordList(wordArray){
-
-			var addTextY = 0;
-			switch(wordArray.length){
-				case 1 :
-					fontSize = 72;
-					if(wordArray[0].length > 8 && wordArray[0].length <= 9){
-						fontSize = 60;
-					}else if(wordArray[0].length > 9){
-						fontSize = 48;
-					} 
-
-					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
-					break;
-				case 2 :
+		switch(wordArray.length){
+			case 1 :
+				fontSize = 72;
+				if(wordArray[0].length > 8 && wordArray[0].length <= 9){
 					fontSize = 60;
-					addTextY = 35;
-
-					for(var i = 0; i < wordArray.length; i++){
-						if(wordArray[i].length > 8 && wordArray[i].length <= 12){
-							fontSize = 48;
-							addTextY = 30;
-						}
-					}
-					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
-					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY + addTextY);
-					break;
-				case 3 :
+				}else if(wordArray[0].length > 9){
 					fontSize = 48;
-					addTextY = 60;
+				} 
+				textX = repositionTextX(context, wordArray);
+				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
+				break;
+			case 2 :
+				fontSize = 60;
+				addTextY = 35;
 
-					for(var i = 0; i < wordArray.length; i++){
-						if(wordArray[i].length > 7 && wordArray[i].length <= 11){
-							fontSize = 36;
-							addTextY = 24;
-						}
+				for(var i = 0; i < wordArray.length; i++){
+					if(wordArray[i].length > 8 && wordArray[i].length <= 12){
+						fontSize = 48;
+						addTextY = 30;
 					}
-					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
-					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY);
-					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
-					break;
-				case 4 :
-					fontSize = 48;
-					addTextY = 30;
+				}
 
-					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
-					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
-					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
-					setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
-					break;
-				case 5 : 
-					fontSize = 36;
-					addTextY = 40;
+				textX = repositionTextX(context, wordArray);
 
-					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 2);
-					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
-					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY);
-					setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY);
-					setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 2);
-					break;
-				case 6 : 
-					fontSize = 36;
-					addTextY = 24;
+				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
+				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY + addTextY);
+				break;
+			case 3 :
+				fontSize = 48;
+				addTextY = 60;
 
-					setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 5);
-					setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
-					setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
-					setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY - addTextY);
-					setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
-					setText(context, wordArray[5], fontColor, fontName, fontSize, textX, textY + addTextY * 5);
-						 break;
-				case 7 : 
-						 break;
-				case 8 : 
-						 break;
-				case 9 :
-						 break;
-				default : 
-	    				 setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
-			}
+				for(var i = 0; i < wordArray.length; i++){
+					if(wordArray[i].length > 7 && wordArray[i].length <= 11){
+						fontSize = 36;
+						addTextY = 24;
+					}
+				}
+				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
+				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY);
+				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
+				break;
+			case 4 :
+				fontSize = 48;
+				addTextY = 30;
 
-			document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
+				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
+				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
+				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
+				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
+				break;
+			case 5 : 
+				fontSize = 36;
+				addTextY = 40;
+
+				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 2);
+				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
+				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY);
+				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY);
+				setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 2);
+				break;
+			case 6 : 
+				fontSize = 36;
+				addTextY = 24;
+
+				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 5);
+				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
+				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
+				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY - addTextY);
+				setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
+				setText(context, wordArray[5], fontColor, fontName, fontSize, textX, textY + addTextY * 5);
+					 break;
+			case 7 : 
+					 break;
+			case 8 : 
+					 break;
+			case 9 :
+					 break;
+			default : 
+    				 setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
 		}
 
-    }, false);
+		document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
+	}
+
+	function findMostLongWord(wordArray){
+		var mostLongWord = wordArray[0];
+		if(wordArray.length = 1){
+			return mostLongWord;
+		}
+		for(var i = 0; i < wordArray.length - 1; i++){
+			if(wordArray[i].length < wordArray[i+1].length){
+				mostLongWord = wordArray[i+1];
+			}
+		}
+		return mostLongWord;
+	}
+
+	function repositionTextX(context, wordArray){
+		console.log(wordArray);
+		console.log(findMostLongWord(wordArray));
+		console.log(context.measureText(findMostLongWord(wordArray)).width);
+		addTextX = (context.measureText(findMostLongWord(wordArray)).width);
+		textX -= addTextX;
+		console.log(fontSize);
+		console.log(textX);
+		return textX;
+	}
+
+}, false);
 
