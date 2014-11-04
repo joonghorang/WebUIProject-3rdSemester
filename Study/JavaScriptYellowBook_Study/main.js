@@ -79,7 +79,7 @@ textInput.addEventListener("change", function(){
 				}else if(wordArray[0].length > 9){
 					fontSize = 48;
 				} 
-				textX = repositionTextX(context, wordArray);
+				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
 				break;
 			case 2 :
@@ -93,8 +93,7 @@ textInput.addEventListener("change", function(){
 					}
 				}
 
-				textX = repositionTextX(context, wordArray);
-
+				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
 				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY + addTextY);
 				break;
@@ -108,6 +107,7 @@ textInput.addEventListener("change", function(){
 						addTextY = 24;
 					}
 				}
+				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
 				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY);
 				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
@@ -116,6 +116,7 @@ textInput.addEventListener("change", function(){
 				fontSize = 48;
 				addTextY = 30;
 
+				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
 				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
 				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
@@ -125,6 +126,7 @@ textInput.addEventListener("change", function(){
 				fontSize = 36;
 				addTextY = 40;
 
+				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 2);
 				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
 				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY);
@@ -135,6 +137,7 @@ textInput.addEventListener("change", function(){
 				fontSize = 36;
 				addTextY = 24;
 
+				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 5);
 				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
 				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
@@ -149,6 +152,7 @@ textInput.addEventListener("change", function(){
 			case 9 :
 					 break;
 			default : 
+					 textX = repositionTextX(wordArray, textX, fontSize);
     				 setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
 		}
 
@@ -157,9 +161,7 @@ textInput.addEventListener("change", function(){
 
 	function findMostLongWord(wordArray){
 		var mostLongWord = wordArray[0];
-		if(wordArray.length = 1){
-			return mostLongWord;
-		}
+
 		for(var i = 0; i < wordArray.length - 1; i++){
 			if(wordArray[i].length < wordArray[i+1].length){
 				mostLongWord = wordArray[i+1];
@@ -168,14 +170,11 @@ textInput.addEventListener("change", function(){
 		return mostLongWord;
 	}
 
-	function repositionTextX(context, wordArray){
-		console.log(wordArray);
-		console.log(findMostLongWord(wordArray));
-		console.log(context.measureText(findMostLongWord(wordArray)).width);
-		addTextX = (context.measureText(findMostLongWord(wordArray)).width);
+	function repositionTextX(wordArray, textX, fontSize){
+		context = drawing.getContext("2d");
+		context.font = fontSize + "px " + fontName;
+		addTextX = (context.measureText(findMostLongWord(wordArray)).width) / 2;
 		textX -= addTextX;
-		console.log(fontSize);
-		console.log(textX);
 		return textX;
 	}
 
