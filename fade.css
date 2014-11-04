@@ -1,0 +1,46 @@
+div{
+    position: relative;
+    width: 500px;
+    height: 367px;
+}
+
+/*case1 : only css. hover. backgroundImage*/
+#container1{
+    transition: background-image .5s ease-in-out;
+    background-image: url("./dontwakemeup.jpg");
+}
+
+#container1:hover{
+    background-image: url("./color.jpg");
+}
+
+/*case2 : only css. opacity. hover*/
+#container2 img{
+    position: absolute;
+    top : 0;
+    left: 0;
+}
+
+#image2{
+    opacity: 1;
+    transition: opacity .5s ease-in-out;
+}
+#image2:hover{
+    opacity: 0;
+}
+
+/*case3 : css+js. opacity transition. onclick*/
+#container3 img{
+    position: absolute;
+    top : 0;
+    left: 0;
+    /*opacity: 1;*/
+}
+
+/*case4 : jquery*/
+#container4 img{
+    position: absolute;
+    top : 0;
+    left: 0;
+    opacity: 1;
+}

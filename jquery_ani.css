@@ -1,0 +1,17 @@
+div:nth-child(odd){
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: #7a1e99;
+}
+div:nth-child(even){
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: #d6d3d6;
+}
+
+img{
+    width: 100px;
+    height: 100px;
+}
