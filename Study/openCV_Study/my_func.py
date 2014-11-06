@@ -16,13 +16,13 @@ def drawHistogram(array):
     histo = np.zeros((histoHeight, histoWidth, 3), np.uint8)
     histo[:] = (255, 255, 255)
  
-    maxDataHeight = max(array)
-    for i in range(length):
-        dataHeight = array[i] * histoHeight / maxDataHeight
+    maxDataHeight = max(array, key = lambda data:data["size"] )
+    for data in array:
+        dataHeight = data["size"] * histoHeight / maxDataHeight["size"]
         cv2.rectangle(
             histo,
-            (i*dataWidth, histoHeight - dataHeight),
-            ((i+1)*dataWidth - 1, histoHeight),
+            (data["hue"]*dataWidth, histoHeight - dataHeight),
+            ((data["hue"]+1)*dataWidth - 1, histoHeight),
             (0, 0, 255), 1)
 
     return histo
