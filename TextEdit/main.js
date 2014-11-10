@@ -4,6 +4,7 @@ var fontSize = 36;
 var fontName = "NanumMyeongjo";
 var fontWeight = "bold ";
 var fontColor = "#FFFFFF";
+
 // -. 캔버스를 생성한다.  
 var drawing = document.getElementById("drawing");
 
@@ -76,9 +77,11 @@ textInput.addEventListener("change", function(){
 				fontSize = 72;
 				if(wordArray[0].length > 8 && wordArray[0].length <= 9){
 					fontSize = 60;
-				}else if(wordArray[0].length > 9){
-					fontSize = 48;
-				} 
+				} else if(wordArray[0].length > 9 && wordArray[0].length <= 15){
+					fontSize = 36;
+				} else if(wordArray[0].length > 15){
+					fontSize = 16;
+				}
 				textX = repositionTextX(wordArray, textX, fontSize);
 				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
 				break;
@@ -87,9 +90,12 @@ textInput.addEventListener("change", function(){
 				addTextY = 35;
 
 				for(var i = 0; i < wordArray.length; i++){
-					if(wordArray[i].length > 8 && wordArray[i].length <= 12){
+					if(wordArray[i].length > 6 && wordArray[i].length <= 12){
 						fontSize = 48;
 						addTextY = 30;
+					} else if(wordArray[0].length > 12){
+						fontSize = 16;
+						addTextY = 10;
 					}
 				}
 
@@ -177,7 +183,6 @@ textInput.addEventListener("change", function(){
 	    				 }
 	    				 break;
 	    			 }
-	    			 
 		}
 
 		document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
@@ -203,8 +208,13 @@ textInput.addEventListener("change", function(){
 	}
 
 	function setTextFactory(){
-
 	}
-
 }, false);
 
+// 깃 허브에 커밋제목에 #잇슈번호를 추가하면 해당 잇슈에 액티비티로 들어간다. 
+// content editable (바로 수정할 수 있는 것 )
+// Speaking JavaScript 책 볼 것.
+
+
+// 놀랭책 핵심 챕터 by 전용우 교수님
+// 4장 - 13장 (이 중에서도 필요하다고 생각되는 거 보세요.)

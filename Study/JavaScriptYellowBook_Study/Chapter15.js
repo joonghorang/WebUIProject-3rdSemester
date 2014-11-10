@@ -163,4 +163,5 @@ lighter // 새 그림과 이미 존재하는 이미지 값을 더해 더 밝은 
 copy // 새 그림이 이미 존재하는 이미지를 완전히 교체
 xor // 새 그림의 이미지 데이터와 이미 존재하는 이미지 데이터를 픽셀단위로 XOR 연산하여 표시한다.  
 
+* 관련 링크 : https://developer.mozilla.org/samples/canvas-tutorial/6_1_canvas_composite.html
 * 기본적으로 캔버스는 PNG를 받는다. 
