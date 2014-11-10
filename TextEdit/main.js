@@ -22,7 +22,7 @@ if (drawing.getContext) { // <canvas>가 지원되는지 확인 하는 분기
 	var image = document.createElement("img");  // 임의의 img태그를 하나 생성하고 그걸 image 변수에 삽입
 	image.src = imgURI; 						// 저장해둔 imgURI 를 경로에 삽입
 
-	context.fillStyle = "#550000";
+	context.fillStyle = "#258000";
 	context.fillRect(0, 0, 500, 500);
 
 	var canvasWidth = context.canvas.width; // 입력받은 캔버스의 가로 세로 
@@ -83,7 +83,7 @@ textInput.addEventListener("change", function(){
 					fontSize = 16;
 				}
 				textX = repositionTextX(wordArray, textX, fontSize);
-				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY);
+				setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
 				break;
 			case 2 :
 				fontSize = 60;
@@ -100,8 +100,7 @@ textInput.addEventListener("change", function(){
 				}
 
 				textX = repositionTextX(wordArray, textX, fontSize);
-				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
-				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY + addTextY);
+				setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);;
 				break;
 			case 3 :
 				fontSize = 48;
@@ -114,80 +113,39 @@ textInput.addEventListener("change", function(){
 					}
 				}
 				textX = repositionTextX(wordArray, textX, fontSize);
-				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY);
-				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY);
-				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
+				setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
 				break;
 			case 4 :
 				fontSize = 48;
 				addTextY = 30;
 
 				textX = repositionTextX(wordArray, textX, fontSize);
-				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
-				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
-				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY + addTextY);
-				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
+				setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
 				break;
 			case 5 : 
 				fontSize = 36;
 				addTextY = 40;
 
 				textX = repositionTextX(wordArray, textX, fontSize);
-				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 2);
-				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY);
-				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY);
-				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY);
-				setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 2);
+				setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
 				break;
 			case 6 : 
 				fontSize = 36;
 				addTextY = 24;
 
 				textX = repositionTextX(wordArray, textX, fontSize);
-				setText(context, wordArray[0], fontColor, fontName, fontSize, textX, textY - addTextY * 5);
-				setText(context, wordArray[1], fontColor, fontName, fontSize, textX, textY - addTextY * 3);
-				setText(context, wordArray[2], fontColor, fontName, fontSize, textX, textY - addTextY);
-				setText(context, wordArray[3], fontColor, fontName, fontSize, textX, textY + addTextY);
-				setText(context, wordArray[4], fontColor, fontName, fontSize, textX, textY + addTextY * 3);
-				setText(context, wordArray[5], fontColor, fontName, fontSize, textX, textY + addTextY * 5);
+				setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
 					 break;
 			default : 
 					 fontSize = 36;
 					 addTextY = 36;
 					 textX = repositionTextX(wordArray, textX, fontSize);
-					 var wordPointer = 0;
-					 var temp = 1;
-
-					 if(wordArray.length % 2 === 0){ 				// 줄이 짝수 일 때 
-					 	 temp = 0;
-						 for(var i = 0; i < wordArray.length/2; i++){
-	    				 	setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - (addTextY * (wordArray.length/2-i) - addTextY/2));
-	    				 	wordPointer++;
-	    				 }
-	    				 for(var j = (wordArray.length/2); j < wordArray.length; j++){
-	    				 	setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + (addTextY * temp + addTextY/2));
-	    				 	wordPointer++;
-	    				 	temp++;
-	    				 }
-	    				 break;
-	    			 } else if(wordArray.length % 2 === 1){ 		// 줄이 홀수 일 때 
-						 for(var i = 0; i < wordArray.length/2 - 1; i++){
-	    				 	setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - addTextY * (wordArray.length/2-i-0.5));
-	    				 	wordPointer++;
-	    				 }
-	    				  setText(context,wordArray[wordPointer++], fontColor, fontName, fontSize, textX, textY);
-	    				 for(var j = (wordArray.length/2)+0.5; j < wordArray.length; j++){
-	    				 	setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + addTextY * temp);
-	    				 	wordPointer++;
-	    				 	temp++;
-	    				 }
-	    				 break;
+					 setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
+	    			 break;
 	    			 }
 		}
-
 		document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
-	}
-
+	// }
 	function findMostLongWord(wordArray){
 		var mostLongWord = wordArray[0];
 
@@ -207,8 +165,36 @@ textInput.addEventListener("change", function(){
 		return textX;
 	}
 
-	function setTextFactory(){
+	function setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY){
+		var wordPointer = 0;
+		var temp = 1;
+
+		if(wordArray.length % 2 === 0){ 				// 줄이 짝수 일 때 
+			temp = 0;
+			for(var i = 0; i < wordArray.length/2; i++){
+			 	setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - (addTextY * (wordArray.length/2-i) - addTextY/2));
+			 	wordPointer++;
+			}
+			for(var j = (wordArray.length/2); j < wordArray.length; j++){
+			 	setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + (addTextY * temp + addTextY/2));
+			 	wordPointer++;
+			 	temp++;
+			}
+		} else if(wordArray.length % 2 === 1){ 		// 줄이 홀수 일 때 
+			for(var i = 0; i < wordArray.length/2 - 1; i++){
+			 	setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - addTextY * (wordArray.length/2-i-0.5));
+			 	wordPointer++;
+			}
+			setText(context,wordArray[wordPointer++], fontColor, fontName, fontSize, textX, textY);
+			for(var j = (wordArray.length/2)+0.5; j < wordArray.length; j++){
+			 	setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + addTextY * temp);
+			 	wordPointer++;
+			 	temp++;
+			}
+		}
+		return;
 	}
+
 }, false);
 
 // 깃 허브에 커밋제목에 #잇슈번호를 추가하면 해당 잇슈에 액티비티로 들어간다. 
