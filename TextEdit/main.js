@@ -172,11 +172,11 @@ textInput.addEventListener("change", function(){
 		if(wordArray.length % 2 === 0){ 				// 줄이 짝수 일 때 
 			temp = 0;
 			for(var i = 0; i < wordArray.length/2; i++){
-			 	setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - (addTextY * (wordArray.length/2-i) - addTextY/2));
+			 	setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - (addTextY * (wordArray.length/2-i) - addTextY/2) * 2);
 			 	wordPointer++;
 			}
 			for(var j = (wordArray.length/2); j < wordArray.length; j++){
-			 	setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + (addTextY * temp + addTextY/2));
+			 	setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + (addTextY * temp + addTextY/2) * 2);
 			 	wordPointer++;
 			 	temp++;
 			}
