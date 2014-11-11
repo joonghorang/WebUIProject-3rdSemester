@@ -389,3 +389,133 @@ readystatechange 이벤트
 
 13.4.8 장치 이벤트 
 스마트폰과 태블릿 장치에 대응하기 위한 이벤트 목록입니다. 
+
+orientationchange 이벤트(모바일 사파리용) 
+이 이벤트는 사용자가 장치를 가로 모드나 세로 모드로 바꿀 때 발생합니다. 
+ex)
+EventUtil.addHandler(window, "load", function(event){
+	var div = document.getElementById("myDiv");
+	div.innerHTML = "Current orientation is " + window.orientation;
+
+	EvnetUtil.addHandler(window, "orientationchange", function(event){
+		div.innerHTML = "Current orientation is " + window.orientation;
+	});
+});
+
+deviceorientation 이벤트 
+이 이벤트는 가속도계가 부착된 장치에서 관련 있는 동작을 감지했을 때
+window에서 발생하며, 따라서 장치에 따라 지원이 제한됩니다. 
+이 이벤트의 목적은 장치의 방향을 감지하는 것이지 움직임을 감지하는 것이 아닙니다. 
+
+자세한건 원문 참조 604p
+
+13.4.9 터치와 제스쳐 이벤트 
+
+터치 이벤트 명세 
+http://dvcs.w3.org/hg/webevents/raw-file/tip/touchevents/html
+
+터치 이벤트 
+touchstart		|		손가락으로 화면을 터치할 때 발생하며, 
+						이미 다른 손가락으로 화면에 대고 있어도 다른 손가락을 대면 또 발생합니다. 
+
+tochmove		|		손가락을 화면에서 움직일 때 계속 발생합니다. 
+						이 이벤트가 일어나는 동안 preventDefault()를 호출하면 스크롤을 막을 수 있습니다. 
+
+touchend		|		손가락을 화면에서 뗄 때 발생합니다. 
+
+touchcancel 	|		시스템에서 터치를 더 이상 추적하지 않을 때 발생합니다. 
+						언제 이런 상황이 발생하는지 명확하게 문서화되지는 않았습니다. 
+
+각 이벤트는 모두 버블링되어 올라갑니다. 
+각 터치 이벤트의 event 객체에는 마우스 이벤트와 공통인
+target, bubbles, cancelable, veiw, clientX, clientY, scrrenX, screenY, detail, alterKey, shifthKey, ctrlKey, metaKey
+프로퍼티가 들어있습니다. 
+
+이 외에 3 가지 프로퍼티가 더 있습니다 
+touches : 현재 감지한 터치를 나타내는 Touch 객체의 배열입니다. 
+targetTouches : 이벤트의 타깃에 묶인 Touch 객체의 배열입니다. 
+changedTouches : 사용자의 마지막 행동에서 바뀐 Touch 객체의 배열입니다. 
+
+ex)
+터치 한 번에 대해서만 추적하는 코드
+function handleTouchEvent(evnet){
+	if(event.touches.length == 1){
+		var output = document.getElementById("output");
+		switch(event.type){
+			case "touchstart":
+				output.innerHTML = "Touch started (" + event.touches[0].clientX + "," + event.touches[0].clientY + ")";
+				break;
+			case "touchend" :
+				output.innerHTML = "<br>Touch ended (" + event.changedTouches[0].clientX + "," + event.changedTouches[0].clientY + ")";
+				break;
+			case "touchmove" :
+				event.preventDefault() // 스크롤 방지
+				output.innerHTML += "<br>Touch moved (" +
+									event.changedTouches[0].clientX + "," +
+									event.changedTouches[0].clientY + ")";	
+				break;
+		}
+	}
+}
+
+EventUtil.addHandler(document, "touchstart", handleTouchEvent);
+EventUtil.addHandler(document, "touchend", handleTouchEvent);
+EventUtil.addHandler(document, "touchmove", handleTouchEvent);
+
+이 코드는 단 하나의 터치를 추적하여 터치가 단 하나 있을 때에만 그 정보를 표시합니다. 
+
+제스처 이벤트 
+
+'제스처'란 두 손가락으로 화면을 터치한 채 표시된 부분의 크기를 바꾸거나 회전하는 동작을 말합니다. 
+제스처 이벤트에는 다음 세 가지가 있습니다. 
+
+- gesturestart : 한 손가락을 화면에 얹은 채 다른 손가락으로 화면을 터치할 때 발생합니다. 
+- gesturechange : 화면에서 두 손가락 중 하나의 위치가 바뀔 때 발생합니다. 
+- gestureend : 두 손가락 중 하나를 화면에서 뗄 때 발생합니다. 
+
+이들 이벤트는 두 손가락으로 이벤트 대상을 터치할 때만 발생합니다. 
+이들 역시 버블링 됩니다. 
+
+터치와 제스처 이벤트는 연관되어 있습니다. 
+한 손가락을 화면 위에 놓으면
+touchstart 이벤트가 발생합니다. 
+다른 손가락을 화면 위에 놓으면 
+gesturestart 이벤트가 우선 발생하며, 
+두 번재 손가락의 위치에서 touchstart 이벤트가 또 발생합니다. 
+두 손가락 중 하나를 움직이면
+gesturechange 이벤트가 발생하고, 
+두 손가락 중 하나를 떼는 순간 gestureend 이벤트가 발생하며
+해당 위치에서 touchend 이벤트가 발생합니다. 
+
+13.5 메모리와 성능
+
+13.5.1 이벤트 위임
+"이벤트 핸들러 개수" 문제의 해결책은 이 방법입니다. 
+이벤트 버블링의 장점을 활용하여, 이벤트 핸들러를 하나만 할당해서 
+해당 타입의 이벤트를 모두 처리하는 테크닉입니다. 
+
+예를 들어 click 이벤트는 document 레벨가지 버블링되어 올라갑니다. 
+즉 클릭 가능한 요소마다 일일이 onclick 이벤트 핸들러를 할당하지 않고
+전체 페이지에 하나만 할당해도 되는 방식입니다. 
+
+ex)
+var list = document.getElementById("myLinks");
+
+EventUtil.addHandler(list, "click", function(event){
+	event = EventUtil.getEvent(event);
+	var target = EventUtil.getTarget(event);
+
+	switch(target.id){
+		case "doSomething" :
+			document.title = "I changed the document's title";
+			break;
+		case "goSomewhere" : 
+			location.href = "http:/www.naver.com";
+			break;
+
+		case "sayHi" :
+			alert("hi");
+			break;	
+	}
+});
+
