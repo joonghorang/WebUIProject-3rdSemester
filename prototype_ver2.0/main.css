@@ -1,17 +1,51 @@
-#submit-button{
-    position: absolute;
-    left:510px;
-    top:15px;
-    background-color: white;
-    font: #202020;
-    font-family: NanumGothic ;
-    font-size: 20px;
-    font-weight: 500;
-    width: 110px;
-    height: 35px;
-    border : 0px; 
+/* reset */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, button, input, div {
+ margin: 0;
+ padding: 0;
+ border: 0;
+ font-size: 100%;
+ font: inherit;
 }
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+ display: block;
+}
+ol, ul {
+ list-style: none;
+}
+blockquote, q {
+ quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+ content: '';
+ content: none;
+}
+table {
+ border-collapse: collapse;
+ border-spacing: 0;
+}
+/*reset end*/
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
 
+body{   /*사용자 마우스 드래그시 파란색 생기는 것 제거*/
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
 #file-input{
     position: absolute;
     float : left;
@@ -32,6 +66,10 @@
     background-color: #202020;
 }
 
+#textBox{
+    width : 1000px;
+    height : 1000px;
+}
 #text-input{
     position: absolute;
     left: 200px;
@@ -39,6 +77,22 @@
     height: 30px;
     width: 300px;
     line-height: 30px;
+    display : none;
+}
+
+#submit-button{
+    position: absolute;
+    left:510px;
+    top:15px;
+    background-color: white;
+    font: #202020;
+    font-family: NanumGothic ;
+    font-size: 20px;
+    font-weight: 500;
+    width: 110px;
+    height: 35px;
+    border : 0px; 
+    display : none;
 }
 
 #content{

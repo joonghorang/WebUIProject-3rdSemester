@@ -1,7 +1,10 @@
 (function main() {
-    var ORIGINIMAGE_HEIGHT = 300;
+    //var ORIGINIMAGE_HEIGHT = 300;
     var fileInput = document.getElementById("file-input");
-    var submitButton = document.getElementById("submit-button");    
+    var submitButton = document.getElementById("submit-button");  
+    var input_style = document.getElementById("input-style");  
+    var text_input = document.getElementById("text-input");
+    var textBox = document.getElementById("textBox");
     var inputImage = null;
     
     fileInput.addEventListener("change", function(){
@@ -9,8 +12,28 @@
         var imageURL = URL.createObjectURL(file);
         inputImage = document.createElement("img");
         inputImage.src = imageURL;
-        inputImage.heightㅠ = ORIGINIMAGE_HEIGHT;
+        inputImage.setAttribute("class", "inputImage");
+        inputImage.style.opacity = 0; 
+        
+        inputImage.addEventListener('click',function(){
+            this.style.transition = 'opacity .5s ease-in-out';
+            if(this.style.opacity === "0"){
+                this.style.opacity = 1;
+            }
+            else{
+                this.style.opacity = 0;
+            }
+        },false);
         content.appendChild(inputImage);
+
+        inputImage.style.display = 'none';
+
+        fileInput.style.display = 'none';
+        input_style.style.display = 'none';
+
+        submitButton.style.display = 'block';
+        text_input.style.display = 'block';
+        text_input.value = "Input your text here.";
     }, false);
     
     submitButton.addEventListener("click", function(){
@@ -20,7 +43,10 @@
         else {
             getAvgRGBAFromImage(inputImage);
             mainText(setPixel);
-            submitButton.reset();
+            textBox.style.display = 'none';
+            inputImage.style.display = 'block';
+            inputImage.style.position = 'absolute';
+
         }
     }, false);
     
