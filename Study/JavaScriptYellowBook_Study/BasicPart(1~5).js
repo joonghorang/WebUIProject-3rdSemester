@@ -188,7 +188,7 @@ slice() 함수는 배열에 포함된 데이터 일부를 가진 새 배열을 �
 매개변수를 두 개 받는데 가져올 데이터 범위의 시작과 끝이다. 
 매개변수를 하나만 넘기면 해당 인덱스에서 끝까지 모든 데이터를 가져온다. 
 
-slice()나 concat() 메서드는 원래 배열을 전혀 건드리지 않느낟. 
+slice()나 concat() 메서드는 원래 배열을 전혀 건드리지 않는다. 
 
 가장 강력한 함수중 하나인 splice()는 
 배열의 중간에 데이터를 삽입하는 데 사용한다. 반환 값은 배열이다. 또한 원본 배열에도 영향을 미친다. 
@@ -266,7 +266,7 @@ function callSomeFunction(someFunction, someArg){
 	return someFunction(someArg);
 }
 function add10(num){
-	redturn num + 10;
+	return num + 10;
 }
 
 var result1 = callSomeFunction(add10, 10);
