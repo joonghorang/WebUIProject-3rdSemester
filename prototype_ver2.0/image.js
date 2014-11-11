@@ -20,6 +20,7 @@
         else {
             getAvgRGBAFromImage(inputImage);
             mainText(setPixel);
+            submitButton.reset();
         }
     }, false);
     
