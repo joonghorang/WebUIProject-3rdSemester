@@ -1,14 +1,13 @@
-function mainText(r, g, b, a, CANVAS_WIDTH, CANVAS_HEIGHT){
+function mainText(setPixel){
     
-    // -. 캔버스를 생성한다.  
-        var drawing = document.getElementById("drawing");
-
-        if (drawing.getContext) { // <canvas>가 지원되는지 확인 하는 분기
+        //캔버스를 생성한다.  
+        var drawing = document.createElement("canvas");
+        drawing.width = CANVAS_WIDTH;
+        drawing.height = CANVAS_HEIGHT;
+    
+        if (drawing.getContext) {
 
             var context = drawing.getContext("2d");
-
-            //context 변수에 해당 캔버스의 컨텍스트 객체를 저장한다. 
-            //또 기본적으로 toDataURL() 메서드를 이용해 생성한 캔버스 이미지를 내보내야 한다. 
 
             // 이미지 데이터의 URI
             var imgURI = drawing.toDataURL("image/png"); // 여기서 png는 내보낼 데이터 형식이다. 기본적으로 브라우저는 png를 받는다.
@@ -17,8 +16,16 @@ function mainText(r, g, b, a, CANVAS_WIDTH, CANVAS_HEIGHT){
             var image = document.createElement("img");  // 임의의 img태그를 하나 생성하고 그걸 image 변수에 삽입
             image.src = imgURI; 						// 저장해둔 imgURI 를 경로에 삽입
 
-            context.fillStyle = '#505050';
-            context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            //image colorData -> canvas imagedata
+            var rImageData = context.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
+            for(var x = 0; x<CANVAS_WIDTH; ++x){
+                for(var y = 0; y < CANVAS_HEIGHT; ++y){
+                    setPixel(rImageData, x, y, avgR, avgG, avgB, avgA);
+                }
+            }
+            context.putImageData(rImageData, 0, 0);
+            document.getElementById("content").appendChild(drawing);
+       
         } 
     
         textWriter();

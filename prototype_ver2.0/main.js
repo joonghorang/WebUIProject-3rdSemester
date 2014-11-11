@@ -1,7 +1,7 @@
 var textInput = document.getElementById("text-input");
 var fontSize = 36;
 var fontName = "NanumMyeongjo";
-var fontWeight = "bold ";
+var fontWeight = 500;
 var fontColor = "#FFFFFF";
 
 var avgR;
