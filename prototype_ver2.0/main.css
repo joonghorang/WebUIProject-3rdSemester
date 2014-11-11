@@ -1,0 +1,35 @@
+#submit-button{
+    background-color: white;
+    font: #202020;
+    font-family: NanumGothic ;
+    font-size: 30px;
+    font-weight: 600;
+    width: 150px;
+    border : 0px; 
+}
+
+#file-input{
+    position: absolute;
+    float : left;
+    height: 50px;
+    opacity: 0;
+}
+
+#input-style{
+    position: absolute;
+    width: 140px;
+    height: 50px;
+    color: #FFFFFF;
+    font-family: NanumGothic;
+    font-size: 15px;
+    line-height: 50px;
+    text-align: center;
+    background-color: #202020;
+}
+
+#text-input{
+    height: 30px;
+    width: 300px;
+    line-height: 30px;
+}
+
