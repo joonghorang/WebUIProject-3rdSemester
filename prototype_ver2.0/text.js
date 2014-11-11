@@ -2,6 +2,7 @@ function mainText(setPixel){
     
         //캔버스를 생성한다.  
         var drawing = document.createElement("canvas");
+        console.log(CANVAS_WIDTH);
         drawing.width = CANVAS_WIDTH;
         drawing.height = CANVAS_HEIGHT;
     
@@ -50,7 +51,6 @@ function mainText(setPixel){
         }
 
         function setText(context, text, color, font, fontSize, x, y){
-            console.log("setTextWorking");
             context.fillStyle = fontColor;
             context.font = fontSize + "px " + fontName; //fontWeight + " " + 
             context.textAlign = "left";
