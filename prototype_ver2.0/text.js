@@ -1,38 +1,37 @@
 function mainText(setPixel){
     
-        //캔버스를 생성한다.  
-        var drawing = document.createElement("canvas");
-        console.log(CANVAS_WIDTH);
-        drawing.width = CANVAS_WIDTH;
-        drawing.height = CANVAS_HEIGHT;
-    
-        if (drawing.getContext) {
+    //캔버스를 생성한다.  
+    var drawing = document.createElement("canvas");
+    console.log(CANVAS_WIDTH);
+    drawing.width = CANVAS_WIDTH;
+    drawing.height = CANVAS_HEIGHT;
 
-            var context = drawing.getContext("2d");
+    if (drawing.getContext) {
 
-            // 이미지 데이터의 URI
-            var imgURI = drawing.toDataURL("image/png"); // 여기서 png는 내보낼 데이터 형식이다. 기본적으로 브라우저는 png를 받는다.
+        var context = drawing.getContext("2d");
 
-            // 이미지 표시
-            var image = document.createElement("img");  // 임의의 img태그를 하나 생성하고 그걸 image 변수에 삽입
-            image.src = imgURI; 						// 저장해둔 imgURI 를 경로에 삽입
+        // 이미지 데이터의 URI
+        var imgURI = drawing.toDataURL("image/png"); // 여기서 png는 내보낼 데이터 형식이다. 기본적으로 브라우저는 png를 받는다.
 
-            //image colorData -> canvas imagedata
-            var rImageData = context.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
-            for(var x = 0; x<CANVAS_WIDTH; ++x){
-                for(var y = 0; y < CANVAS_HEIGHT; ++y){
-                    setPixel(rImageData, x, y, avgR, avgG, avgB, avgA);
-                }
+        // 이미지 표시
+        var image = document.createElement("img");  // 임의의 img태그를 하나 생성하고 그걸 image 변수에 삽입
+        image.src = imgURI; 						// 저장해둔 imgURI 를 경로에 삽입
+
+        //image colorData -> canvas imagedata
+        var rImageData = context.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
+        for(var x = 0; x<CANVAS_WIDTH; ++x){
+            for(var y = 0; y < CANVAS_HEIGHT; ++y){
+                setPixel(rImageData, x, y, avgR, avgG, avgB, avgA);
             }
-            context.putImageData(rImageData, 0, 0);
-            document.getElementById("content").appendChild(drawing);
-       
-        } 
-    
+        }
+        context.putImageData(rImageData, 0, 0);
+        document.getElementById("content").appendChild(drawing);
         textWriter();
-    
+    }
+
     // -. 텍스트가 입력되어 submit 버튼을 누르면 텍스트로 넘어온 값을 읽고 처리하여 html요소에 삽입한다.  
     function textWriter(){
+
         var originTextData = textInput.value;
         var textX = CANVAS_WIDTH/2;
         var textY = CANVAS_HEIGHT/2;
@@ -40,39 +39,7 @@ function mainText(setPixel){
         var addTextX = 0;
         var addTextY = 24; // 24가 기본값
 
-        if(textInput.value.length >= 30){
-            alert("Error");
-        } else {
-
-            var originTextArray = stringToWordList(originTextData);
-            originTextArray = addEnterToWordList(originTextArray);
-            displayWordList(context, originTextArray);
-
-        }
-
-        function setText(context, text, color, font, fontSize, x, y){
-            context.fillStyle = fontColor;
-            context.font = fontSize + "px " + fontName; //fontWeight + " " + 
-            context.textAlign = "left";
-            context.textBaseline = "middle";
-            context.fillText(text, x + 8, y);
-        }
-
-        function stringToWordList(String){
-            var result = [];
-            result = String.split(" ");
-            return result;
-        }
-
-        function addEnterToWordList(WordArray){
-            for(var i = 0; i < WordArray.length; i++){
-                WordArray[i] += "\n";
-            }
-            return WordArray;
-        }
-
         function displayWordList(context, wordArray){
-
             switch(wordArray.length){
                 case 1 :
                     fontSize = 72;
@@ -143,10 +110,41 @@ function mainText(setPixel){
                          textX = repositionTextX(wordArray, textX, fontSize);
                          setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
                          break;
-                         }
             }
+            
             document.body.appendChild(image); // 생성한 image변수(img태그)를 body안에 붙임
-        // }
+         
+            function setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY){
+                var wordPointer = 0;
+                var temp = 1;
+
+
+                if(wordArray.length % 2 === 0){                 // 줄이 짝수 일 때 
+                    temp = 0;
+                    for(var i = 0; i < wordArray.length/2; i++){
+                        setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - (addTextY * (wordArray.length/2-i) - addTextY/2) * 2);
+                        wordPointer++;
+                    }
+                    for(var j = (wordArray.length/2); j < wordArray.length; j++){
+                        setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + (addTextY * temp + addTextY/2) * 2);
+                        wordPointer++;
+                        temp++;
+                    }
+                } else if(wordArray.length % 2 === 1){      // 줄이 홀수 일 때 
+                    for(var i = 0; i < wordArray.length/2 - 1; i++){
+                        setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - addTextY * (wordArray.length/2-i-0.5));
+                        wordPointer++;
+                    }
+                    setText(context,wordArray[wordPointer++], fontColor, fontName, fontSize, textX, textY);
+                    for(var j = (wordArray.length/2)+0.5; j < wordArray.length; j++){
+                        setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + addTextY * temp);
+                        wordPointer++;
+                        temp++;
+                    }
+                }
+            };
+        };
+
         function findMostLongWord(wordArray){
             var mostLongWord = wordArray[0];
 
@@ -166,34 +164,35 @@ function mainText(setPixel){
             return textX;
         }
 
-        function setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY){
-            var wordPointer = 0;
-            var temp = 1;
+        function setText(context, text, color, font, fontSize, x, y){
+            context.fillStyle = fontColor;
+            context.font = fontSize + "px " + fontName; //fontWeight + " " + 
+            context.textAlign = "left";
+            context.textBaseline = "middle";
+            context.fillText(text, x + 8, y);
+        };
 
-            if(wordArray.length % 2 === 0){ 				// 줄이 짝수 일 때 
-                temp = 0;
-                for(var i = 0; i < wordArray.length/2; i++){
-                    setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - (addTextY * (wordArray.length/2-i) - addTextY/2) * 2);
-                    wordPointer++;
-                }
-                for(var j = (wordArray.length/2); j < wordArray.length; j++){
-                    setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + (addTextY * temp + addTextY/2) * 2);
-                    wordPointer++;
-                    temp++;
-                }
-            } else if(wordArray.length % 2 === 1){ 		// 줄이 홀수 일 때 
-                for(var i = 0; i < wordArray.length/2 - 1; i++){
-                    setText(context, wordArray[wordPointer], fontColor, fontName, fontSize, textX, textY - addTextY * (wordArray.length/2-i-0.5));
-                    wordPointer++;
-                }
-                setText(context,wordArray[wordPointer++], fontColor, fontName, fontSize, textX, textY);
-                for(var j = (wordArray.length/2)+0.5; j < wordArray.length; j++){
-                    setText(context, wordArray[j], fontColor, fontName, fontSize, textX, textY + addTextY * temp);
-                    wordPointer++;
-                    temp++;
-                }
+        function stringToWordList(String){
+            var result = [];
+            result = String.split(" ");
+            return result;
+        };
+
+        function addEnterToWordList(WordArray){
+            for(var i = 0; i < WordArray.length; i++){
+                WordArray[i] += "\n";
             }
-            return;
+            return WordArray;
+        };
+
+        if(textInput.value.length >= 30){
+            alert("Error");
+        } else {
+
+            var originTextArray = stringToWordList(originTextData);
+            originTextArray = addEnterToWordList(originTextArray);
+            displayWordList(context, originTextArray);
+
         }
-    }
-}
+    };
+};
