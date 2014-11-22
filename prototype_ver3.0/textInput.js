@@ -10,7 +10,7 @@ var textInput = document.getElementById("textInput");
 var button = document.getElementById("button");
 var textValue;
 
-window.onload = function(){
+window.onload = function(){						// 기본 동적 스타일 
 
 	// html.style.width = MAX_WIDTH + "px";
 	// html.style.height = MAX_HEIGHT + "px";
@@ -37,14 +37,12 @@ window.onload = function(){
 	// textInput.style.color = "#303030";
 };
 
-EventUtil.addHandler(textInput, "focus", function(event){
+EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 	textInput.textContent = "+";
 	textInput.style.textAlign = "left";
 
 	textInput.style.paddingLeft = MAX_WIDTH/4 + "px";
 	textInput.style.width = MAX_WIDTH - MAX_WIDTH/4 - 50 + "px";
-	// textInput.style.lineHeight = MAX_HEIGHT - MAX_HEIGHT/4 + "px";
-	// textInput.style.height = MAX_HEIGHT - MAX_HEIGHT/4 + "px";
 	
 	textInput.style.fontSize = "60px";
 });
@@ -54,7 +52,16 @@ EventUtil.addHandler(textInput, "paste", function(event){ // 붙이기 방지
 	EventUtil.preventDefault(event);
 });
 
-EventUtil.addHandler(button, "click", function(event){
+EventUtil.addHandler(button, "click", function(event){		// 전송버튼 이벤트 
 	textValue = textInput.textContent;
-	console.log(textValue);
+	console.log(textValue); //testcode
+});
+
+EventUtil.addHandler(textInput, "keypress", function(event){	// 엔터키 누르면 전송하게 하는 이벤트 
+	event = EventUtil.getEvent(event);
+	if(event.keyCode === 13){
+		EventUtil.preventDefault(event);
+		textValue = textInput.textContent;
+		console.log(textValue); //testcode
+	}
 });

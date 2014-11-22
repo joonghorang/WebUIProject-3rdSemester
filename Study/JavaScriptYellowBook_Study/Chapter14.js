@@ -336,9 +336,8 @@ textbox.setSelectionRange(4, 7); // "o w"
 		var target = EventUtil.getTarget(event);
 		var charCode = EventUtil.getCharCode(event);
 
-		if(!/\d/.test(String.fromCharCode(charCode)) 
-			&& charCode > 9 
-			&& !event.ctrlKey){
+		if(event.ctrlKey === 13){
+			console.log(1);
 			EventUtil.preventDefault(event);
 		}
 	});
