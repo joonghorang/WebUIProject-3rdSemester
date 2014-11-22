@@ -8,6 +8,7 @@ var html = document.getElementById("html");
 var wraper = document.getElementById("wraper");
 var textInput = document.getElementById("textInput");
 var button = document.getElementById("button");
+var textValue;
 
 window.onload = function(){
 
@@ -51,4 +52,9 @@ EventUtil.addHandler(textInput, "focus", function(event){
 EventUtil.addHandler(textInput, "paste", function(event){ // 붙이기 방지 
 	var text = EventUtil.getClipboardText(event);
 	EventUtil.preventDefault(event);
+});
+
+EventUtil.addHandler(button, "click", function(event){
+	textValue = textInput.textContent;
+	console.log(textValue);
 });

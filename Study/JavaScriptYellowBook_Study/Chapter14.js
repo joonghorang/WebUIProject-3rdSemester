@@ -93,7 +93,7 @@ ex)
 <input type = "reset" value = "Reset Form">
 
 // 커스텀 리셋 버튼 
-<button type - "reset"> Reset Form </button>
+<button type = "reset"> Reset Form </button>
 
 마찬가지로 버튼이 눌린 다음 필요하다면 
 리셋전에 이벤트를 걸어 취소할 수도 있습니다. 
