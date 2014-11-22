@@ -1,0 +1,16 @@
+#wrapper{
+	line-height : 100%;
+	vertical-align: middle;
+	text-align: center;
+}
+#textInput{
+	padding-top : 20px;
+	padding-bottom : 20px;
+	background-color: yellow;
+	line-height : 300px;
+	text-align: center;
+	vertical-align: middle;
+	font-size : 60px;
+	font-color : #2020D0;
+	font-family : NanumMyeongjo;
+}
