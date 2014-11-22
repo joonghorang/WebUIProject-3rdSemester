@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			// drawImage()
+			// 파라미터 : image 소스, 표시할 위치(x, y)
+			// 파라미터 : image 소스, 표시할 위치(x, y), 표현할 크기(width, height)
+			// 파라미터 : imgae 소스, 표시할 위치(x, y), 잘라낼 크기(width, height), 표시할 위치(x, y), 표현할 크기(width, height)
+
+			function draw_canvas(){
+				var canvas = document.getElementById('mycanvas');
+				var ctx = canvas.getContext('2d');
+
+				var img = new Image();
+				img.src = 'image/1.jpg';
+				img.onload = function() {
+					// 캔버스에 이미지를 삽입
+					ctx.drawImage(img, 0, 0);
+				}
+			}
+		</script>
+	</head>
+
+	<body onload="draw_canvas();">
+		<canvas id = "mycanvas" width = "2000" height = "1000"></canvas>
+	</body>
+</html>
