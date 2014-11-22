@@ -1,5 +1,4 @@
-(function(window, document) {
-'use strict';
+
 var EventUtil = {
         addHandler: function( element, type, handler ) {
             if ( element.addEventListener ) {
@@ -95,4 +94,3 @@ var EventUtil = {
         	}
         } 
     };
-})(window, window.document);
