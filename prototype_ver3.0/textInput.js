@@ -1,9 +1,6 @@
 var MAX_WIDTH = window.innerWidth;
 var MAX_HEIGHT = window.innerHeight;
 
-console.log(MAX_HEIGHT);
-console.log(MAX_WIDTH);
-
 var html = document.getElementById("html");
 var wraper = document.getElementById("wraper");
 var textInput = document.getElementById("textInput");
