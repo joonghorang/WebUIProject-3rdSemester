@@ -1,0 +1,69 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+body{
+    font-family: "Nanum Gothic", sans-serif;
+}
+
+#title{
+    position: absolute;
+    width: 100%;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 40px;
+    font-weight: 100;
+    font-family: "Nanum Gothic", sans-serif;
+}
+
+#content_wrapper{    
+    width: 840px;
+    margin: 0px auto;
+    padding-top: 100px;
+}
+
+/*전체 컨테이너는 perspective를 유지합니다.*/
+/*
+참고
+perspective 속성을 설정할 경우 속성을 먹인 것 자신이 아니라 자식 엘리먼트의 view에 적용된다. 
+perspective 속성은 3D transform 효과가 적용된 요소에만 영향을 미친다. 
+perspective-origin 속성과 함께 사용할 경우 3D요소 아래 위치까지 변경할 수 있다. 
+*/
+.flip-container{
+    display: inline-block;
+}
+
+.flip-container:hover .flipper {
+    transform: rotateY(180deg);
+}
+
+.flip-container, .front, .back {
+	width: 100px;
+	height: 100px;
+}
+
+.flipper{
+    transition : 1s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.front, .back {
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.front {
+	z-index: 2;
+	transform: rotateY(0deg);
+    opacity: 0.9;
+    text-align: center;
+    line-height: 100px;
+    font-size: 10px;
+    color: #F8F8F8;
+}
+
+.back {
+	transform: rotateY(180deg);
+    background-size: contain;
+/*    background-image: url(./7.jpg);*/
+}
