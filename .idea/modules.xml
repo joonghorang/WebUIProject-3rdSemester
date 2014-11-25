@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< Updated upstream
       <module fileurl="file://$PROJECT_DIR$/.idea/WebUIProject-3rdSemester.iml" filepath="$PROJECT_DIR$/.idea/WebUIProject-3rdSemester.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/webuiproject.iml" filepath="$PROJECT_DIR$/.idea/webuiproject.iml" />
+>>>>>>> Stashed changes
     </modules>
   </component>
 </project>

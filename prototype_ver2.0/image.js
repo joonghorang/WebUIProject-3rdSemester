@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 (function main() {
+=======
+(function imageProcessing() {
+>>>>>>> Stashed changes
     //var ORIGINIMAGE_HEIGHT = 300;
     var fileInput = document.getElementById("file-input");
     var submitButton = document.getElementById("submit-button");  
@@ -11,7 +15,11 @@
         var file = this.files.item(0);
         var imageURL = URL.createObjectURL(file);
         inputImage = document.createElement("img");
+        
+        inputImage.setAttribute("class","inputImage");   // commented by 썬
+        
         inputImage.src = imageURL;
+<<<<<<< Updated upstream
         inputImage.setAttribute("class", "inputImage");
         inputImage.style.opacity = 0; 
         
@@ -34,6 +42,23 @@
         submitButton.style.display = 'block';
         text_input.style.display = 'block';
         text_input.value = "Input your text here.";
+=======
+        //inputImage.height = ORIGINIMAGE_HEIGHT;
+        content.appendChild(inputImage);
+        
+        //<animation test> : TODO 파일 분리했을 때 왜 안됐지.......???
+        inputImage.addEventListener('click',function(){
+            this.style.transition = 'opacity .5s ease-in-out';
+            if(this.style.opacity==="0"){
+                this.style.opacity=1;
+            }
+            else{
+                this.style.opacity=0;
+            }
+        },false);
+        //</animation test>
+        
+>>>>>>> Stashed changes
     }, false);
     
     submitButton.addEventListener("click", function(){

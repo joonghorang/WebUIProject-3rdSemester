@@ -100,3 +100,7 @@ body{   /*사용자 마우스 드래그시 파란색 생기는 것 제거*/
     top:100px;
 }
 
+.inputImage{
+    position: absolute;
+}
+

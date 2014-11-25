@@ -10,6 +10,7 @@ function mainText(setPixel){
 
         var context = drawing.getContext("2d");
 
+<<<<<<< Updated upstream
         // 이미지 데이터의 URI
         var imgURI = drawing.toDataURL("image/png"); // 여기서 png는 내보낼 데이터 형식이다. 기본적으로 브라우저는 png를 받는다.
 
@@ -26,6 +27,23 @@ function mainText(setPixel){
         }
         context.putImageData(rImageData, 0, 0);
         document.getElementById("content").appendChild(drawing);
+=======
+            // 이미지 표시
+            var image = document.createElement("img");  // 임의의 img태그를 하나 생성하고 그걸 image 변수에 삽입
+            image.src = imgURI; 						// 저장해둔 imgURI 를 경로에 삽입
+            
+            //image colorData -> canvas imagedata
+            var rImageData = context.createImageData(CANVAS_WIDTH, CANVAS_HEIGHT);
+            for(var x = 0; x<CANVAS_WIDTH; ++x){
+                for(var y = 0; y < CANVAS_HEIGHT; ++y){
+                    setPixel(rImageData, x, y, avgR, avgG, avgB, avgA);
+                }
+            }
+            context.putImageData(rImageData, 0, 0);
+            document.getElementById("content").appendChild(drawing);
+        } 
+    
+>>>>>>> Stashed changes
         textWriter();
     }
 
