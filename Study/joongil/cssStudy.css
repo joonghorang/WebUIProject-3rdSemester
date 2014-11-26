@@ -1,0 +1,10 @@
+absolute 는 문서전체를 기준으로 잡는 것이고 
+relative는 바로 윗 부모의 위치를 기준으로 위치를 잡는 것. 
+
+#ex{
+display : block;
+display : none; // 아예 그 해당 객체가 사라짐. 이러면 relative로 잡혔던 형제 객체들이 이동함 
+visibility : hidden; // 얘는 해당 객체의 투명도만 0 
+visibility : visible; // 얘는 보이도록 함.  
+
+}
