@@ -57,6 +57,9 @@ EventUtil.addHandler(submitButton, "click", function(event){		// 전송버튼 �
 	console.log(textValue); //testcode
 });
 
+// textInput.onchange = function(){
+// 	console.log("ddd");
+// }
 document.onkeydown = function(){
 	if(event.keyCode === 8){
 		switch(textInput.value.length){
@@ -199,6 +202,7 @@ document.onkeydown = function(){
 				fB = 88;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#000000"; 
 				break;	
 			case 21 : 
 				fR = 80;
@@ -206,13 +210,15 @@ document.onkeydown = function(){
 				fB = 80;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#000010"; 
 				break;
 			case 23 :
 				fR = 72;
 				fG = 72;
 				fB = 72;
 				setGradationColor(fR, fG, fB);
-				draw_canvas(firstColor, secondColor);  
+				draw_canvas(firstColor, secondColor);
+				textInput.style.color = "#001020";  
 				break;
 			case 24 :
 				fR = 64;
@@ -220,6 +226,7 @@ document.onkeydown = function(){
 				fB = 64;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#002030";
 				break;
 			case 25 :
 				fR = 56;
@@ -227,6 +234,7 @@ document.onkeydown = function(){
 				fB = 56;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#003040"; 
 				break;
 			case 26 :
 				fR = 48;
@@ -234,6 +242,7 @@ document.onkeydown = function(){
 				fB = 48;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#004050"; 
 				break;	
 			case 27 : 
 				fR = 40;
@@ -241,6 +250,7 @@ document.onkeydown = function(){
 				fB = 40;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#005060"; 
 				break;
 			case 28 :
 				fR = 32;
@@ -248,13 +258,15 @@ document.onkeydown = function(){
 				fB = 32;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#006070"; 
 				break;
 			case 29 :
 				fR = 24;
 				fG = 24;
 				fB = 24;
 				setGradationColor(fR, fG, fB);
-				draw_canvas(firstColor, secondColor);  
+				draw_canvas(firstColor, secondColor);
+				textInput.style.color = "#007080";  
 				break;
 			case 30 :
 				fR = 16;
@@ -420,14 +432,16 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fG = 80;
 				fB = 80;
 				setGradationColor(fR, fG, fB);
-				draw_canvas(firstColor, secondColor);  
+				draw_canvas(firstColor, secondColor);
+				textInput.style.color = "#000010"; 
 				break;
 			case 23 :
 				fR = 72;
 				fG = 72;
 				fB = 72;
 				setGradationColor(fR, fG, fB);
-				draw_canvas(firstColor, secondColor);  
+				draw_canvas(firstColor, secondColor);
+				textInput.style.color = "#001020"; 
 				break;
 			case 24 :
 				fR = 64;
@@ -435,6 +449,7 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fB = 64;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#002030"; 
 				break;
 			case 25 :
 				fR = 56;
@@ -442,6 +457,7 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fB = 56;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#003040"; 
 				break;
 			case 26 :
 				fR = 48;
@@ -449,6 +465,7 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fB = 48;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#004050"; 
 				break;	
 			case 27 : 
 				fR = 40;
@@ -456,6 +473,7 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fB = 40;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#005060"; 
 				break;
 			case 28 :
 				fR = 32;
@@ -463,6 +481,7 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fB = 32;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#006070"; 
 				break;
 			case 29 :
 				fR = 24;
@@ -470,6 +489,7 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fB = 24;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#007080"; 
 				break;
 			case 30 :
 				fR = 16;
@@ -477,6 +497,7 @@ EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누�
 				fB = 16;
 				setGradationColor(fR, fG, fB);
 				draw_canvas(firstColor, secondColor);  
+				textInput.style.color = "#008090"; 
 				break;
 			defalut : 
 				break;
