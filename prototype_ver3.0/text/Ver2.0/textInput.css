@@ -1,0 +1,52 @@
+
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+
+html{
+	width : 100%;
+	height : 100%;
+}
+body{   /*사용자 마우스 드래그시 파란색 생기는 것 제거*/
+    -moz-user-select: none;
+    -webkit-user-select: none;
+	width : 100%;
+	height : 100%;
+}
+#wrapper{
+	height : 100%;
+	width : 100%;
+	position : absolute;
+	z-index : 2;
+}
+#submit-button{
+	float : left;
+	display :block;
+	vertical-align: middle;
+	width : 5%;
+	height : 100%;
+
+
+	position : relative;
+}
+
+#text-input{
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100%;
+	width : 95%;
+	height : 100%;
+	float : left;
+	display : block;
+	font-family: "NanumMyeongjo";
+	font-size : 60px;
+	color : #101010;
+	background-color: rgba(0, 0, 0, 0);
+	position : relative;
+}
+
+#canvas{
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	z-index : 1;
+}

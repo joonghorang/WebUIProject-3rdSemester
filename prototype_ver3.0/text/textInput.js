@@ -2,7 +2,7 @@ var MAX_WIDTH = window.innerWidth;
 var MAX_HEIGHT = window.innerHeight;
 
 var html = document.getElementById("html");
-var wraper = document.getElementById("wraper");
+var wrapper = document.getElementById("wrapper");
 var textInput = document.getElementById("textInput");
 var button = document.getElementById("button");
 var textValue;
@@ -12,13 +12,14 @@ window.onload = function(){						// 기본 동적 스타일
 	// html.style.width = MAX_WIDTH + "px";
 	// html.style.height = MAX_HEIGHT + "px";
 
-	wraper.style.lineHeight = MAX_HEIGHT + "px";
-	wraper.style.height = MAX_HEIGHT + "px";
+	wrapper.style.lineHeight = MAX_HEIGHT + "px";
+	wrapper.style.height = MAX_HEIGHT + "px";
 	wraper.style.width = MAX_WIDTH + "px";
 
-	wraper.style.verticalAlign = "middle";
+	wrapper.style.verticalAlign = "middle";
 
 	button.style.verticalAlign = "middle";
+	button.style.width = "50px";
 
 	textInput.style.backgroundColor = "yellow";
 	
@@ -29,13 +30,13 @@ window.onload = function(){						// 기본 동적 스타일
 	textInput.style.width = MAX_WIDTH-50 + "px";
 	textInput.style.height = MAX_HEIGHT + "px";
 
-	textInput.textContent = "30자 이내로 입력해주세요.";
+	textInput.value = "30자 이내로 입력해주세요.";
 	// textInput.fontSize = "100px";
 	// textInput.style.color = "#303030";
 };
 
-EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
-	textInput.textContent = "+";
+EventUtil.addHandler(textInput, "click", function(event){	// 입력창 포커스시 
+	textInput.value = "";
 	textInput.style.textAlign = "left";
 
 	textInput.style.paddingLeft = MAX_WIDTH/4 + "px";
