@@ -1,0 +1,35 @@
+
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+
+html{
+	width : 100%;
+	height : 100%;
+}
+body{   /*사용자 마우스 드래그 불가*/
+    -moz-user-select: none;
+    -webkit-user-select: none;
+	width : 100%;
+	height : 100%;
+}
+
+#text-input{
+	display : none;
+}
+
+#wrapper{
+	width : 800px;
+	height : 600px;
+	position : absolute;
+}
+
+#output-canvas{
+	width : 100%;
+	height : 100%;
+
+	/*캔버스의 그리는 시작점*/
+	top : 0px;
+	left : 0px;
+	background-color: yellow;
+	position : relative;
+}
