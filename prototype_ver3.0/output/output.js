@@ -32,7 +32,6 @@ function textWriter(){
         var originTextArray = stringToWordList(originTextData);
         originTextArray = addEnterToWordList(originTextArray);
         displayWordList(context, originTextArray);
-
     }
 
     function displayWordList(context, wordArray){

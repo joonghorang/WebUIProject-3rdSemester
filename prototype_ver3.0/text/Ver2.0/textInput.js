@@ -5,7 +5,7 @@ var wrapper = document.getElementById("wrapper");
 var textInput = document.getElementById("text-input");
 var submitButton = document.getElementById("submit-button");
 var backGroundCanvas = document.getElementById("back-ground-canvas");
-backGroundCanvas.id = "canvas";
+
 var textValue;	// 입력받은 문자열 저장 변수 
 
 var fR = 255;
@@ -68,10 +68,22 @@ function EventManager(){
 	textInput.oninput = function(){
 		if(textInput.value.length < 30){
 			var num = textInput.value.length;
-			if(num < 20)
+			if(num < 5){
 				changeGradationColor(num, 9);
-			else 
+				textInput.style.fontSize = "60px";
+			} else if(num < 10) {
+				changeGradationColor(num, 9);
+				textInput.style.fontSize = "55px";
+			} else if(num < 15) {
+				changeGradationColor(num, 9);
+				textInput.style.fontSize = "50px";
+			} else if(num < 20) {
+				changeGradationColor(num, 9);
+				textInput.style.fontSize = "45px";
+			} else {
 				changeGradationColor(num, 8);
+				textInput.style.fontSize = "40px";
+			}
 		} else {
 			alert("Please input under 30.");
 			EventUtil.preventDefault(event);
