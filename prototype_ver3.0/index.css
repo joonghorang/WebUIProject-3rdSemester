@@ -1,4 +1,3 @@
-/*폰트 지정 : 나눔명조 웹폰트가 기본*/
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 body {
     font-family: "Nanum Gothic", sans-serif;
@@ -8,8 +7,8 @@ body {
     height: 100%;
 }
 
-/*item factory Style*/
 #item-factory-wrapper {
+    display: none;
     width: 100%;
     height: 100%;
 }
@@ -21,12 +20,12 @@ body {
     height: 100%;
     background-color: transparent;
     opacity: 0.7;
-    transition:  all 0.5s ease-in;
+    transition: all 0.5s ease-in-out;
 }
 
 #item-factory-nav-open {
     position: absolute;
-    z-index: 14;
+    z-index: 15;
     top: 0;
     left: 0;
     width:40px;
@@ -44,7 +43,7 @@ body {
 
 #item-factory-nav-close {
     position: absolute;
-    z-index: 14;
+    z-index: 15;
     top: 0;
     right: 0;
     width:40px;
@@ -72,7 +71,7 @@ body {
     background-color: #ffffff;
     opacity: 0;
     border-radius: 8px;
-    transition: opacity 0.5s ease-in;
+    transition: opacity 0.5s ease-in-out;
 }
 
 #upload-button {
@@ -126,7 +125,6 @@ body {
     z-index: 30;
     position: absolute;
 }
-
 #submit-button {
     width: 100px;
     height: 40px;
@@ -139,7 +137,6 @@ body {
     margin-left: 515px;
 }
 
-/*grid items Style*/
 #contents {
     width: 880px;   
     height: 670px;
@@ -165,7 +162,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #999999;
+    background-color: rgb(80,180,170);
     transition: all 0.5s ease-in-out;
     opacity: 1;
 }
@@ -181,5 +178,6 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url(./7.jpg)
+    background-image: url(./7.jpg);
+    background-size: cover;
 }
