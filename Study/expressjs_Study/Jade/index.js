@@ -28,14 +28,14 @@ function User(name, email) {
 }
 
 // Dummy users
-var users = [
+var usersv = [
     new User('tj', 'tj@vision-media.ca')
   , new User('ciaran', 'ciaranj@gmail.com')
   , new User('aaron', 'aaron.heckmann+github@gmail.com')
 ];
 
 app.get('/', function(req, res){
-  res.render('users', { users: users });
+  res.render('users', { users: usersv});
 });
 
 // change this to a better error handler in your code
