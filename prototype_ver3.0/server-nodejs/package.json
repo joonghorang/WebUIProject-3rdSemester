@@ -9,10 +9,11 @@
   "author": "GeulGeurimNetwork",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^1.1.6",
+    "canvas": "~1.1.6",
     "express": "^4.10.3",
     "formidable": "^1.0.15",
     "fs": "0.0.2",
-    "tinycolor": "0.0.1"
+    "tinycolor": "0.0.1",
+    "ejs": "~1.0.0"
   }
 }
