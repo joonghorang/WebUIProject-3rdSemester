@@ -18,7 +18,7 @@ body{   /*사용자 마우스 드래그 불가*/
 }
 
 #wrapper{
-	width : 600px;
+	width : 800px;
 	height : 600px;
 	position : absolute;
 }
@@ -30,7 +30,6 @@ body{   /*사용자 마우스 드래그 불가*/
 	/*캔버스의 그리는 시작점*/
 	top : 0px;
 	left : 0px;
-	
-	position : relative;
 	background-color: yellow;
+	position : relative;
 }

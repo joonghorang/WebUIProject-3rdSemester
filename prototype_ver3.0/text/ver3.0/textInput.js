@@ -51,7 +51,6 @@ function changeGradationColor(num, offset){
 	var fontG = decimalToHex(0 + offset * num * 1.5);
 	var fontB = decimalToHex(0 + offset * num * 2);
 	textInput.style.color = combineRgbString(fontR, fontG, fontB);
-	console.log(textInput.style.color);
 
 	function decimalToHex(num){
 		var hexnum = (num).toString(16);
@@ -89,11 +88,14 @@ function EventManager(){
 		}	
 	};
 
-	EventUtil.addHandler(textInput, "keypress", function(event){
-		if(textInput.value.length >= 30){
+	EventUtil.addHandler(textInput, "textInput", function(event){
+		event = EventUtil.getEvent(event);
+		if(textInput.value.length > 30){
 			EventUtil.preventDefault(event);
 		}
-	})
+	});
+
+
 	EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 		textInput.value = "";
 		textInput.style.fontSize = "60px";
@@ -106,7 +108,10 @@ function EventManager(){
 
 	EventUtil.addHandler(submitButton, "click", function(event){		// 전송버튼 이벤트 
 		textValue = textInput.textContent;
-		console.log(textValue); //testcode
+		textInput.style.display = "none";
+		submitButton.style.display = "none";
+		outputCanvas.style.display = "block";
+		textWriter(); // 글자 쏴주는 함수 
 	});
 
 	EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누르면 전송하게 하는 이벤트 
@@ -116,4 +121,6 @@ function EventManager(){
 			textValue = textInput.textContent;
 		} 
 	});
+
 };
+

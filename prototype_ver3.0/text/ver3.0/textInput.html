@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="reset.css" rel='stylesheet' type='text/css'>
+        <link href='textInput.css' rel='stylesheet' type='text/css'>
+        <meta charset="utf-8">
+        <title>Text Input</title>
+    </head>
+    <body>
+        <div id = "wrapper">
+            <input id = "text-input" type = "text" value = "30자 이내로 입력하세요." style="ime-mode: disabled;">
+            <button id = "submit-button" type = "submit">Submit</button>
+            <canvas id = "output-canvas"></canvas>
+        </div>
+
+        <canvas id = "back-ground-canvas"></canvas>
+
+        <div id = "content">
+        </div>
+        <script src="EventUtil.js"></script>
+        <script src="textInput.js"></script>
+        <script src="output.js"></script>
+    </body>
+</html>
