@@ -11,7 +11,7 @@
   "dependencies": {
     "canvas": "^1.1.6",
     "ejs": "~1.0.0",
-    "express": "^4.10.3",
+    "express": "^4.10.4",
     "formidable": "^1.0.15",
     "fs": "0.0.2",
     "tinycolor": "0.0.1"
