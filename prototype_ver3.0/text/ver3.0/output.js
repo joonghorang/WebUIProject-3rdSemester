@@ -1,13 +1,16 @@
-
+// CSS 100%와 가장 근사한 전체 창크기 
 var MAX_WIDTH = window.innerWidth * 99/100;
 var MAX_HEIGHT = window.innerHeight * 99.8/100;
-var CANVAS_WIDTH = 800;
-var CANVAS_HEIGHT = 600;
 
+// 임의로 정한 캔버스 크기 
+var CANVAS_WIDTH = MAX_WIDTH;
+var CANVAS_HEIGHT = MAX_HEIGHT;
+
+// 전역변수 
 var textInput = document.getElementById("text-input");
 var fontSize = 36;
-var fontName = "NanumMyeongjo";
-var fontColor = "#202020";
+var fontName;// = "NanumMyeongjo";
+var fontColor = "#ffffff";
     
 //캔버스를 생성한다.  
 var outputCanvas = document.getElementById("output-canvas");
@@ -29,18 +32,31 @@ function textWriter(){
         var originTextArray = stringToWordList(originTextData);
         originTextArray = addEnterToWordList(originTextArray);
         displayWordList(context, originTextArray);
+
+        function stringToWordList(String){
+            var result = [];
+            result = String.split(" ");
+            return result;
+        };
+
+        function addEnterToWordList(WordArray){
+            for(var i = 0; i < WordArray.length; i++){
+                WordArray[i] += "\n";
+            }
+            return WordArray;
+        };
     }
 
     function displayWordList(context, wordArray){
         switch(wordArray.length){
             case 1 :
-                fontSize = 72;
+                fontSize = 120;
                 if(wordArray[0].length > 8 && wordArray[0].length <= 9){
-                    fontSize = 60;
+                    fontSize = 72;
                 } else if(wordArray[0].length > 9 && wordArray[0].length <= 15){
-                    fontSize = 36;
+                    fontSize = 60;
                 } else if(wordArray[0].length > 15){
-                    fontSize = 16;
+                    fontSize = 36;
                 }
                 textX = repositionTextX(wordArray, textX, fontSize);
                 setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
@@ -105,9 +121,10 @@ function textWriter(){
         }
         
         function setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY){
+
+            checkOneWordBug();                              // 연속해서 한 단어가 있는지 검사. 
             var wordPointer = 0;
             var temp = 1;
-
             if(wordArray.length % 2 === 0){                 // 줄이 짝수 일 때 
                 temp = 0;
                 for(var i = 0; i < wordArray.length/2; i++){
@@ -131,19 +148,27 @@ function textWriter(){
                     temp++;
                 }
             }
+
+            function setText(context, text, color, font, fontSize, x, y){
+                context.fillStyle = fontColor;
+                context.font = fontSize + "px " + fontName; //fontWeight + " " + 
+                context.textAlign = "left";
+                context.textBaseline = "middle";
+                context.fillText(text, x + 8, y);
+            };
+
+            function checkOneWordBug(){
+                for(var i = 0; i < wordArray.length - 1; i++){
+                    if(parseInt(wordArray[i].length) + parseInt(wordArray[i+1].length) === 4){
+                        wordArray[i] = wordArray[i] + wordArray[i+1];
+                        wordArray[i+1] = "";
+                    }
+                }
+            }
         };
     };
 
-    function findMostLongWord(wordArray){
-        var mostLongWord = wordArray[0];
 
-        for(var i = 0; i < wordArray.length - 1; i++){
-            if(wordArray[i].length < wordArray[i+1].length){
-                mostLongWord = wordArray[i+1];
-            }
-        }
-        return mostLongWord;
-    }
 
     function repositionTextX(wordArray, textX, fontSize){
         context = outputCanvas.getContext("2d");
@@ -151,26 +176,16 @@ function textWriter(){
         addTextX = (context.measureText(findMostLongWord(wordArray)).width) / 2;
         textX -= addTextX;
         return textX;
-    }
 
-    function setText(context, text, color, font, fontSize, x, y){
-        context.fillStyle = fontColor;
-        context.font = fontSize + "px " + fontName; //fontWeight + " " + 
-        context.textAlign = "left";
-        context.textBaseline = "middle";
-        context.fillText(text, x + 8, y);
-    };
+        function findMostLongWord(wordArray){
+            var mostLongWord = wordArray[0];
 
-    function stringToWordList(String){
-        var result = [];
-        result = String.split(" ");
-        return result;
-    };
-
-    function addEnterToWordList(WordArray){
-        for(var i = 0; i < WordArray.length; i++){
-            WordArray[i] += "\n";
+            for(var i = 0; i < wordArray.length - 1; i++){
+                if(wordArray[i].length < wordArray[i+1].length){
+                    mostLongWord = wordArray[i+1];
+                }
+            }
+            return mostLongWord;
         }
-        return WordArray;
-    };
+    }
 }

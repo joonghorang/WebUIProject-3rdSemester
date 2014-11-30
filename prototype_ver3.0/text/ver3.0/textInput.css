@@ -46,15 +46,15 @@ body{   /*사용자 마우스 드래그시 파란색 생기는 것 제거*/
 
 #output-canvas{
 	display : none;
-	width : 100%;
-	height : 100%;
+/*	width : 600px;
+	height : 600px;*/
 
 	/*캔버스의 그리는 시작점*/
 	top : 0px;
 	left : 0px;
-	background-color: yellow;
 	position : relative;
 }
+
 #back-ground-canvas{
 	width : 100%;
 	height : 100%;

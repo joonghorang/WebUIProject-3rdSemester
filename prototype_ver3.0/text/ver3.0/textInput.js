@@ -111,6 +111,23 @@ function EventManager(){
 		textInput.style.display = "none";
 		submitButton.style.display = "none";
 		outputCanvas.style.display = "block";
+		
+		//현재 時를 HH형식으로 리턴
+		function getHour() {		
+		    var now = new Date();
+		    var hour = now.getHours();
+		    if (("" + hour).length == 1) { hour = "0" + hour; }
+		    return hour;		
+		    return getCurrentTime().substr(8,2);
+		}
+
+		var presentTime = parseInt(getHour());
+		console.log(presentTime);
+		if(presentTime > 12){
+			fontName = "NanumMyeongjo";
+		} else{
+			fontName = "NanumBarunGothic";
+		}
 		textWriter(); // 글자 쏴주는 함수 
 	});
 
