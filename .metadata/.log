@@ -1,0 +1,425 @@
+!SESSION 2014-12-01 01:15:30.720 -----------------------------------------------
+eclipse.buildId=4.4.0.I20140606-1215
+java.version=1.8.0_20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2014-12-01 01:18:46.121
+!MESSAGE Server returned lastModified <= 0 for http://market.eclipsesource.com/yoxos/mpc/latestrepo/org.eclipse.jdt.feature.group/4.4.0.v20140606-1215/compositeContent.xml
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2014-12-01 01:18:46.187
+!MESSAGE Server returned lastModified <= 0 for http://market.eclipsesource.com/yoxos/mpc/latestrepo/org.eclipse.egit.feature.group/4.4.0.v20140606-1215/compositeContent.xml
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2014-12-01 01:22:15.161
+!MESSAGE Server returned lastModified <= 0 for http://market.eclipsesource.com/yoxos/mpc/latestrepo/org.eclipse.jdt.feature.group/4.4.0.v20140606-1215/compositeContent.xml
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2014-12-01 01:23:17.704
+!MESSAGE Server returned lastModified <= 0 for http://market.eclipsesource.com/yoxos/mpc/latestrepo/org.eclipse.egit.feature.group/4.4.0.v20140606-1215/compositeContent.xml
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2014-12-01 01:25:41.650
+!MESSAGE Server returned lastModified <= 0 for http://market.eclipsesource.com/yoxos/mpc/latestrepo/org.eclipse.jdt.feature.group/4.4.0.v20140606-1215/compositeArtifacts.xml
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2014-12-01 01:26:55.472
+!MESSAGE Server returned lastModified <= 0 for http://market.eclipsesource.com/yoxos/mpc/latestrepo/org.eclipse.egit.feature.group/4.4.0.v20140606-1215/compositeArtifacts.xml
+!SESSION 2014-12-01 01:36:14.752 -----------------------------------------------
+eclipse.buildId=4.4.0.I20140606-1215
+java.version=1.8.0_20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  -product org.eclipse.epp.package.standard.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.standard.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2014-12-01 01:38:26.688
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\JOONG'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jface 2 0 2014-12-01 01:38:38.297
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2014-12-01 01:38:38.297
+!MESSAGE A conflict occurred for CTRL+D:
+Binding(CTRL+D,
+	ParameterizedCommand(Command(org.eclipse.ui.edit.text.delete.line,Delete Line,
+		Delete a line of text,
+		Category(org.eclipse.ui.category.textEditor,Text Editing,Text Editing Commands,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4e7e7763,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+Binding(CTRL+D,
+	ParameterizedCommand(Command(io.emmet.eclipse.commands.match_pair_outward,Match Pair Outward,
+		,
+		Category(io.emmet.eclipse.commands.category,Emmet,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4ecc4b43,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.textEditorScope,,,system)
+
+!ENTRY org.eclipse.debug.ui 4 120 2014-12-01 01:38:38.475
+!MESSAGE org.eclipse.debug.ui.toggleBreakpointsTargetFactory extension failed to load breakpoint toggle target because the specified id is already registered.  Specified ID is: org.chromium.debug.ui.ChromiumToggleBreakpointTargetFactory
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:50.114
+!MESSAGE templateRoot: C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:50.240
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.jshintrc
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:50.270
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\.jsdtscope
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:50.273
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\com.eclipsesource.jshint.ui.prefs
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.174
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.core.prefs
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.182
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.ui.superType.container
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.185
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.ui.superType.name
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.187
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\README.md
+
+!ENTRY tern.eclipse.ide.jsdt 4 0 2014-12-01 01:39:51.287
+!MESSAGE Error while JSDT ClassPath changed.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: The resource tree is locked for modifications.
+	at org.eclipse.core.internal.resources.WorkManager.checkIn(WorkManager.java:116)
+	at org.eclipse.core.internal.resources.Workspace.prepareOperation(Workspace.java:2251)
+	at org.eclipse.core.internal.resources.Project.setDescription(Project.java:1322)
+	at org.eclipse.core.internal.resources.Project.setDescription(Project.java:1376)
+	at tern.eclipse.ide.core.TernNature.configure(TernNature.java:59)
+	at tern.eclipse.ide.internal.core.IDETernProject.ensureNatureIsConfigured(IDETernProject.java:818)
+	at tern.eclipse.ide.internal.core.IDETernProject.<init>(IDETernProject.java:112)
+	at tern.eclipse.ide.internal.core.IDETernProject.getTernProject(IDETernProject.java:135)
+	at tern.eclipse.ide.core.TernCorePlugin.getTernProject(TernCorePlugin.java:102)
+	at tern.eclipse.ide.jsdt.internal.JSDTClassPathManager.elementChanged(JSDTClassPathManager.java:67)
+	at org.eclipse.wst.jsdt.internal.core.DeltaProcessor$3.run(DeltaProcessor.java:1591)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.wst.jsdt.internal.core.DeltaProcessor.notifyListeners(DeltaProcessor.java:1581)
+	at org.eclipse.wst.jsdt.internal.core.DeltaProcessor.firePostChangeDelta(DeltaProcessor.java:1416)
+	at org.eclipse.wst.jsdt.internal.core.DeltaProcessor.fire(DeltaProcessor.java:1392)
+	at org.eclipse.wst.jsdt.internal.core.DeltaProcessor.resourceChanged(DeltaProcessor.java:1945)
+	at org.eclipse.wst.jsdt.internal.core.DeltaProcessingState.resourceChanged(DeltaProcessingState.java:389)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:291)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:285)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:149)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:378)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1498)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2322)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation.run(WorkspaceModifyOperation.java:118)
+	at org.nodeclipse.ui.wizards.AbstractNodeProjectWizard.generateTemplates(AbstractNodeProjectWizard.java:149)
+	at org.nodeclipse.ui.wizards.NodeProjectWizard$2.run(NodeProjectWizard.java:106)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+!SUBENTRY 1 org.eclipse.core.resources 4 380 2014-12-01 01:39:51.288
+!MESSAGE The resource tree is locked for modifications.
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.318
+!MESSAGE templateRoot: C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\hello-world
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.320
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\hello-world\build.gradle
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.344
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\hello-world\hello-world-server.js
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.346
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\hello-world\package.json
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.422
+!MESSAGE templateRoot: C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\tern-node
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:39:51.424
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\tern-node\.tern-project
+
+!ENTRY org.eclipse.ltk.ui.refactoring 4 10000 2014-12-01 01:42:54.835
+!MESSAGE Internal Error
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:816)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:168)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation$1.run(PerformChangeOperation.java:258)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:306)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:92)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:218)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:87)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+Contains: Could not delete '/test/test'.
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.delete(FileSystemResourceManager.java:351)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteFolder(ResourceTree.java:352)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteFolder(ResourceTree.java:798)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1983)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:803)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:168)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation$1.run(PerformChangeOperation.java:258)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:306)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:92)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:218)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:87)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+Contains: Problems encountered while deleting files.
+Contains: Could not delete: C:\Users\JOONG\Documents\GitHub\WebUIProject-3rdSemester\prototype_ver3.0\db\test.
+!SUBENTRY 1 org.eclipse.core.resources 4 273 2014-12-01 01:42:54.836
+!MESSAGE Problems encountered while deleting resources.
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2014-12-01 01:42:54.836
+!MESSAGE Could not delete '/test/test'.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.delete(FileSystemResourceManager.java:351)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteFolder(ResourceTree.java:352)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteFolder(ResourceTree.java:798)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1983)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:803)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:168)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation$1.run(PerformChangeOperation.java:258)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:306)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:92)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:218)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:87)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+Contains: Problems encountered while deleting files.
+Contains: Could not delete: C:\Users\JOONG\Documents\GitHub\WebUIProject-3rdSemester\prototype_ver3.0\db\test.
+!SUBENTRY 3 org.eclipse.core.resources 4 273 2014-12-01 01:42:54.836
+!MESSAGE Problems encountered while deleting resources.
+!SUBENTRY 4 org.eclipse.core.filesystem 4 273 2014-12-01 01:42:54.836
+!MESSAGE Problems encountered while deleting files.
+!SUBENTRY 5 org.eclipse.core.filesystem 4 273 2014-12-01 01:42:54.836
+!MESSAGE Could not delete: C:\Users\JOONG\Documents\GitHub\WebUIProject-3rdSemester\prototype_ver3.0\db\test.
+
+!ENTRY org.eclipse.ltk.ui.refactoring 4 10000 2014-12-01 01:43:07.586
+!MESSAGE Internal Error
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:816)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:168)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation$1.run(PerformChangeOperation.java:258)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:306)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:92)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:218)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:87)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+Contains: Could not delete '/test/test'.
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.delete(FileSystemResourceManager.java:351)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteFolder(ResourceTree.java:352)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteFolder(ResourceTree.java:798)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1983)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:803)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:168)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation$1.run(PerformChangeOperation.java:258)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:306)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:92)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:218)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:87)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+Contains: Problems encountered while deleting files.
+Contains: Could not delete: C:\Users\JOONG\Documents\GitHub\WebUIProject-3rdSemester\prototype_ver3.0\db\test.
+!SUBENTRY 1 org.eclipse.core.resources 4 273 2014-12-01 01:43:07.595
+!MESSAGE Problems encountered while deleting resources.
+!SUBENTRY 2 org.eclipse.core.resources 4 273 2014-12-01 01:43:07.595
+!MESSAGE Could not delete '/test/test'.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: Problems encountered while deleting resources.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.delete(FileSystemResourceManager.java:351)
+	at org.eclipse.core.internal.resources.ResourceTree.internalDeleteFolder(ResourceTree.java:352)
+	at org.eclipse.core.internal.resources.ResourceTree.standardDeleteFolder(ResourceTree.java:798)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1983)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:803)
+	at org.eclipse.ltk.core.refactoring.resource.DeleteResourceChange.perform(DeleteResourceChange.java:168)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.CompositeChange.perform(CompositeChange.java:278)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation$1.run(PerformChangeOperation.java:258)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.executeChange(PerformChangeOperation.java:306)
+	at org.eclipse.ltk.internal.ui.refactoring.UIPerformChangeOperation.executeChange(UIPerformChangeOperation.java:92)
+	at org.eclipse.ltk.core.refactoring.PerformChangeOperation.run(PerformChangeOperation.java:218)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:87)
+	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+Contains: Problems encountered while deleting files.
+Contains: Could not delete: C:\Users\JOONG\Documents\GitHub\WebUIProject-3rdSemester\prototype_ver3.0\db\test.
+!SUBENTRY 3 org.eclipse.core.resources 4 273 2014-12-01 01:43:07.596
+!MESSAGE Problems encountered while deleting resources.
+!SUBENTRY 4 org.eclipse.core.filesystem 4 273 2014-12-01 01:43:07.596
+!MESSAGE Problems encountered while deleting files.
+!SUBENTRY 5 org.eclipse.core.filesystem 4 273 2014-12-01 01:43:07.596
+!MESSAGE Could not delete: C:\Users\JOONG\Documents\GitHub\WebUIProject-3rdSemester\prototype_ver3.0\db\test.
+
+!ENTRY org.eclipse.core.resources 2 2 2014-12-01 01:43:54.634
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2014-12-01 01:43:54.634
+!MESSAGE The project description file (.project) for 'nodeJstest' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.898
+!MESSAGE RelativityFileSystemStructureProvider.cllectFiles() called. file count=7
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.900
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417365834582\testExpress\app.js
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.903
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417365834582\testExpress\package.json
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.925
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417365834582\testExpress\public\stylesheets\style.css
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.929
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417365834582\testExpress\routes\index.js
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.932
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417365834582\testExpress\routes\user.js
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.935
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417365834582\testExpress\views\index.jade
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.938
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417365834582\testExpress\views\layout.jade
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.981
+!MESSAGE templateRoot: C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.982
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.jshintrc
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.986
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\.jsdtscope
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:54.989
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\com.eclipsesource.jshint.ui.prefs
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:55.005
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.core.prefs
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:55.023
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.ui.superType.container
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:55.046
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.ui.superType.name
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:55.055
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\README.md
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:55.121
+!MESSAGE templateRoot: C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\tern-node
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 01:43:55.123
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\tern-node\.tern-project
+
+!ENTRY org.eclipse.core.jobs 4 2 2014-12-01 01:47:28.749
+!MESSAGE An internal error occurred during: "Launching test-test-hello-world-server.js".
+!STACK 0
+java.lang.NullPointerException
+	at org.nodeclipse.debug.launch.LaunchConfigurationDelegate.launch(LaunchConfigurationDelegate.java:185)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:883)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:739)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1039)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$8.run(DebugUIPlugin.java:1256)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY tern.eclipse.ide.ui 4 0 2014-12-01 01:52:40.428
+!MESSAGE   Could not load ternDescriptor: browser
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.jface.resource.JFaceResources.getResources(JFaceResources.java:210)
+	at org.eclipse.jface.resource.ImageRegistry.<init>(ImageRegistry.java:156)
+	at org.eclipse.jface.resource.ImageRegistry.<init>(ImageRegistry.java:128)
+	at tern.eclipse.ide.ui.ImageResource.initializeImageRegistry(ImageResource.java:128)
+	at tern.eclipse.ide.ui.ImageResource.registerImageDescriptor(ImageResource.java:162)
+	at tern.eclipse.ide.internal.ui.descriptors.TernModuleImage.getImageKey(TernModuleImage.java:50)
+	at tern.eclipse.ide.internal.ui.descriptors.TernModuleImage.<init>(TernModuleImage.java:33)
+	at tern.eclipse.ide.internal.ui.descriptors.TernModuleDescriptorManager.addTernDescriptors(TernModuleDescriptorManager.java:166)
+	at tern.eclipse.ide.internal.ui.descriptors.TernModuleDescriptorManager.loadTernDescriptors(TernModuleDescriptorManager.java:141)
+	at tern.eclipse.ide.internal.ui.descriptors.TernModuleDescriptorManager.getTernModuleImage(TernModuleDescriptorManager.java:115)
+	at tern.eclipse.ide.internal.ui.descriptors.TernModuleDescriptorManager.getImageDescriptor(TernModuleDescriptorManager.java:99)
+	at tern.eclipse.ide.internal.ui.descriptors.TernModuleDescriptorManager.getImageDescriptor(TernModuleDescriptorManager.java:251)
+	at tern.eclipse.ide.ui.utils.HTMLTernPrinter.getAdditionalProposalInfo(HTMLTernPrinter.java:50)
+	at tern.eclipse.ide.ui.hover.HTMLTernTypeCollector.setType(HTMLTernTypeCollector.java:38)
+	at tern.server.nodejs.NodejsTernServer.request(NodejsTernServer.java:312)
+	at tern.eclipse.ide.internal.core.IDETernProject.request(IDETernProject.java:643)
+	at tern.eclipse.ide.internal.core.IDETernProject.request(IDETernProject.java:637)
+	at tern.eclipse.ide.ui.hover.TernHover.getHoverInfo2(TernHover.java:72)
+	at tern.eclipse.ide.ui.hover.TernHover.getHoverInfo(TernHover.java:47)
+	at org.eclipse.wst.jsdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo(BestMatchHover.java:99)
+	at org.eclipse.wst.jsdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo(JavaEditorTextHoverProxy.java:67)
+	at org.eclipse.jface.text.TextViewerHoverManager$4.run(TextViewerHoverManager.java:168)
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.728
+!MESSAGE RelativityFileSystemStructureProvider.cllectFiles() called. file count=7
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.729
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417367822496\testExpress2\app.js
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.732
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417367822496\testExpress2\package.json
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.737
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417367822496\testExpress2\public\stylesheets\style.css
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.741
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417367822496\testExpress2\routes\index.js
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.747
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417367822496\testExpress2\routes\user.js
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.751
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417367822496\testExpress2\views\index.jade
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.758
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\AppData\Local\Temp\express-work\1417367822496\testExpress2\views\layout.jade
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.827
+!MESSAGE templateRoot: C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.828
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.jshintrc
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.833
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\.jsdtscope
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.835
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\com.eclipsesource.jshint.ui.prefs
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.839
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.core.prefs
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.851
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.ui.superType.container
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.854
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\.settings\org.eclipse.wst.jsdt.ui.superType.name
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.857
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\common-templates\README.md
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.900
+!MESSAGE templateRoot: C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\tern-node
+
+!ENTRY org.nodeclipse.ui 1 0 2014-12-01 02:17:02.981
+!MESSAGE RelativityFileSystemStructureProvider.getContents() called. elemnt=C:\Users\JOONG\Desktop\NHNNEXT\지난학기\2학기\JAVA_LAB\eclipse\configuration\org.eclipse.osgi\336\0\.cp\templates\tern-node\.tern-project
