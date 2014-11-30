@@ -2,7 +2,7 @@
   "name": "server-nodejs",
   "version": "3.0.0",
   "description": "prototype",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
