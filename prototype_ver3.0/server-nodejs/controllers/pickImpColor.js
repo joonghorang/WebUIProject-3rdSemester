@@ -1,6 +1,20 @@
-var canvas = require("canvas");
-var tinycolor = require("tinycolor");
+var requirejs = require('requirejs');
+requirejs.config({
+    baseUrl: __dirname + "/js",
+    nodeRequire: require
+});
 
+var Canvas = requirejs("canvas");
+var tinycolor = requirejs("tinycolor");
+
+var createCanvasByImage = function(img){
+    var rCanvas = document.createElement("canvas");
+    rCanvas.width = image.naturalWidth;
+    rCanvas.height = image.naturalHeight;
+    var rCanvasCtx = rCanvas.getContext("2d");
+    rCanvasCtx.drawImage(image, 0, 0);
+    return rCanvas;
+}
 var pickColors = function(canvas){
     ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0,0, canvas.width, canvas.height);    

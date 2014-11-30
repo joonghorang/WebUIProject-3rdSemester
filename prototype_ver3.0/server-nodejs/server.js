@@ -21,11 +21,19 @@ app.get(['/', '/index'], function(req, res){
     res.render("index.html");
 });
 app.get('/colorLab', function(req, res){
+    var imageFile = fs.readFileSync(static + '/image/1.jpg');
+    var img = new Image();
+    img.src = imageFile;
+    var canvas = new Canvas(img.width, img.height);
+    var ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    var colors = pickColors.pickColors(canvas);
+
+    res.render("colorLab.html", {"colors" : colors});
     
 });
 app.post('/itemFactory', function(req, res){
-    
-});
+    });
 app.post('/itemFactory/image', function(req, res){
     
     var form = new formidable.IncomingForm();

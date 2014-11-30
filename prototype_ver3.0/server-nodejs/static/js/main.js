@@ -1,3 +1,11 @@
+var requirejs = require('requirejs');
+requirejs.config({
+    baseUrl: __dirname + "/js",
+    nodeRequire: require
+});
+
+var Canvas = requirejs("canvas");
+
 var item_factory = document.getElementById("item-factory");
 var XHR = new XMLHttpRequest();
 
