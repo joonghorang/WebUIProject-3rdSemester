@@ -9,8 +9,8 @@ var CANVAS_HEIGHT = MAX_HEIGHT;
 // 전역변수 
 var textInput = document.getElementById("text-input");
 var fontSize = 36;
-var fontName;// = "NanumMyeongjo";
-var fontColor = "#ffffff";
+var fontName;
+var fontColor = "#000000";
     
 //캔버스를 생성한다.  
 var outputCanvas = document.getElementById("output-canvas");

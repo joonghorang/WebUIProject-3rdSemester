@@ -111,6 +111,7 @@ function EventManager(){
 		textInput.style.display = "none";
 		submitButton.style.display = "none";
 		outputCanvas.style.display = "block";
+		backGroundCanvas.style.display = "none";
 		
 		//현재 時를 HH형식으로 리턴
 		function getHour() {		
