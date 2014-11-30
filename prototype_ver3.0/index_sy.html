@@ -3,6 +3,7 @@
 	<head>
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="./index.css">
+        <link rel="stylesheet" type="text/css" href="./reset.css">
         <title>Prototype_ver3</title>
 	</head>
 	<body>
@@ -18,15 +19,16 @@
                 
 				<div id = "item-factory">
                     <div id = "upload">
-                        <div id="upload-button">사진 고르기</div>>
+                        <div id="upload-button">사진 고르기</div>
 						<input type = "file" id = "upload-hidden">
 					</div>
 					<div id = "preview">
 						<canvas id = "preview-canvas"></canvas>
 						<div id = "preview-image"></div>
-                        <textarea type = "text" id = "text-input"></textarea>
+                        <input type = "text" id = "text-input">
 					</div>
-					<button id = "submit-button">submit</button>
+					<button id = "confirm-button">confirm</button>
+                    <button id = "submit-button">submit</button>
 				</div>
 			</div>
 			<div id = "contents">

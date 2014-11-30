@@ -1,6 +1,4 @@
-
-window.addEventListener('DOMContentLoaded', function(){
-
+window.addEventListener('DOMContentLoaded', function(){    
     var wrapper = document.getElementById('item-factory-wrapper');
     var itemFactory = document.getElementById('item-factory');
     var bg = document.getElementById('item-factory-background');
@@ -19,21 +17,31 @@ window.addEventListener('DOMContentLoaded', function(){
 },false);
 
 /*submit 클릭 시 itemFactory 확장 - output페이지로(html전환)*/
-    var submit = document.getElementById('submit-button');
-    submit.addEventListener('click',function(){
+    var confirm = document.getElementById('confirm-button');
+    confirm.addEventListener('click',function(){
         itemFactory.style.backgroundColor = '#ffffff';
         itemFactory.style.opacity = '1';
         itemFactory.style.transition = 'all 0.8s ease-in-out';
-        itemFactory.style.transform = 'scale(2.2)';
+        itemFactory.style.position = 'absolute';
+        itemFactory.style.top = '0';
+        itemFactory.style.left = '0';
+        itemFactory.style.width = '100%';
+        itemFactory.style.height = '100%';
+        
+        var uploadButton = document.getElementById('upload-button');
+        uploadButton.style.transition = 'opacity 0.4s ease-in-out';
+        uploadButton.style.opacity = '0';
+        confirm.style.transition='opacity 0.4s ease-in-out';
+        confirm.style.opacity = '0';
+        
+        var submitButton = document.getElementById('submit-button');
+        submitButton.style.transition = 'display 0.8s ease-in-out';
+        submitButton.style.display = 'block';
+        
+        var tempImg = document.getElementById('preview-image');
+        tempImg.style.transition = 'display 0.8s ease-in-out';
+        tempImg.style.display = 'none';
     },false);
-    
-/*gridItem 클릭 시 확대 - output페이지로*/
-    var gridItem = document.querySelector('.grid-item');
-    gridItem.addEventListener('click', function(){
-        gridItem.style.transition = 'all 0.5s ease-in-out';
-        gridItem.style.width = '100%';
-        gridItem.style.height = '100%';
-    } ,false);
     
 function setItemFactory(opacity, displayState, openBar, closeBar, bgColor){
     itemFactory.style.opacity = opacity;
@@ -43,4 +51,35 @@ function setItemFactory(opacity, displayState, openBar, closeBar, bgColor){
     bg.style.backgroundColor = bgColor;
 }
     
+/*gridItem 클릭 시 확대 - output페이지로*/
+    var gridItem = document.querySelector('.grid-item');
+    gridItem.addEventListener('click', function(){
+        gridItem.style.transition = 'all 0.5s ease-in-out';
+        gridItem.style.width = '100%';
+        gridItem.style.height = '100%';
+    } ,false);    
+  
+/*파일 선택시 선택한 이미지를 preview에 보여주기*/
+    var fileInput = document.getElementById('upload-hidden');
+    fileInput.addEventListener('change', function(){
+        
+        /*파일 없을때 에러처리*/
+        if(this.files.item(0)===null){
+            alert('no image');
+        }
+        var imgFile = this.files.item(0);
+        var imgURL = URL.createObjectURL(imgFile);
+        
+        var previewImg = document.getElementById('preview-image');
+        if(previewImg.childNodes[0] !== undefined){
+            previewImg.removeChild(previewImg.childNodes[0]);
+        }  
+        var imgElement = document.createElement('img');
+        imgElement.setAttribute('class', 'inputImage');
+        imgElement.src=imgURL;
+    
+        document.getElementById('preview-image').appendChild(imgElement);
+ 
+    },false);
+
 },false)
