@@ -18,7 +18,7 @@ app.engine('.html', require('ejs').__express);
 //app.set('view engine', 'jade');
 
 app.get(['/', '/index'], function(req, res){
-    res.render("index.html");
+    res.render("index_sy.html");
 });
 app.get('/colorLab', function(req, res){
     var imageFile = fs.readFileSync(static + '/image/1.jpg');
