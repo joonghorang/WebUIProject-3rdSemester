@@ -11,7 +11,6 @@ var addEventToItemFactory = function(){
         formData.append("image", this.files[0]);
         
         XHR.open("post", "/itemFactory/image", true);
-        XHR.setRequestHeader("Content-Type", "multipart/form-data");
         XHR.send(formData);
     });
     
@@ -19,7 +18,7 @@ var addEventToItemFactory = function(){
     {
         if (XHR.readyState == 4 && XHR.status == 200) 
         {
-            alert(XHR.statusText);
+            alert(XHR.response);
         }
     }
 }
