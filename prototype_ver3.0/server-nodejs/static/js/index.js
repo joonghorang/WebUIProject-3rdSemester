@@ -5,6 +5,8 @@ window.addEventListener('DOMContentLoaded', function(){
     var itemFactoryOpen = document.querySelector('#item-factory-nav-open');
     var itemFactoryClose = document.querySelector('#item-factory-nav-close');
 
+    var XHR = new XMLHttpRequest();   
+    
 /*itemFactory 열기*/
     itemFactoryOpen.addEventListener('click',function(){
         wrapper.style.display = 'block';
@@ -129,7 +131,23 @@ var submit = document.getElementById('submit-button');
         imgElement.src=imgURL;
     
         document.getElementById('preview-image').appendChild(imgElement);
- 
+         
+        var formData = new FormData();
+        formData.append("image", this.files[0]);
+
+        XHR.open("post", "/itemFactory/image", true);
+        XHR.send(formData);
+        
+        XHR.onreadystatechange = function() 
+        {
+            if (XHR.readyState == 4 && XHR.status == 200) 
+            {
+                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
+                var ddd = JSON.parse(XHR.response);
+                alert(ddd.r);
+                alert(XHR.response);
+            }
+        }
     },false);
 
 },false)
