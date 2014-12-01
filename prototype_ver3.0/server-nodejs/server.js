@@ -21,7 +21,7 @@ app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
 app.get('/colorLab', function(req, res){
-    var imageFile = fs.readFileSync(static + '/image/10.jpg');
+    var imageFile = fs.readFileSync(static + '/image/9.jpg');
     
     var img = new Image();
     img.src = imageFile;
@@ -30,7 +30,7 @@ app.get('/colorLab', function(req, res){
     var hsvHist = pickColors.histogram("hsv", imageCanvas);
     res.render("colorLab.html", 
                {"colors" : colors,
-                "imageSrc" : '/image/10.jpg', 
+                "imageSrc" : '/image/9.jpg', 
                 "hist" : hsvHist});
     
 });

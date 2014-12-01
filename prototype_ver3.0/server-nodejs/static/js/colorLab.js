@@ -1,3 +1,18 @@
+//12. 1. 20:43 commit : 
+//add "circleIndexOf" method to Array.prototype
+//add "smoothing" function
+
+Array.prototype.circleIndexOf = function(idx){
+//    // circleIndexOf(-1) = circleIndexOf( arrlen - 1 )
+    if( idx >= 0 && idx < this.length){
+        return this[idx];
+    }else if(idx < 0){
+        return this.circleIndexOf(this.length + idx);
+    }else{
+        return this.circleIndexOf(idx - this.length);
+    }    
+}
+
 var histo = document.getElementById("histo");
 window.addEventListener('DOMContentLoaded', function(){
     
@@ -14,9 +29,23 @@ window.addEventListener('DOMContentLoaded', function(){
 //    xhr.open("get", "/itemFactory/image", false);
 //    xhr.send("
 //    console.log(histo.width, histo.clientWidth, histo.offsetWidth, histo.scrollWidth);
-    var histCanvas = drawHistogram(histData);
+    var histCanvas = drawHistogram(smoothing(smoothing(smoothing(smoothing(smoothing(histData))))));
     histo.appendChild(histCanvas);
 },false);
+
+var smoothing = function(histData){
+//    var resultHistData = histData.slice(0);
+    resultHistData = [];
+    var cvRange = 5;
+    for( var i = 0; i< histData.length; ++i){
+        var sum = 0;
+        for( var cvIdx = i - 2; cvIdx < i + 2; ++cvIdx){
+            sum += histData.circleIndexOf(cvIdx);
+        }
+        resultHistData[i] = sum/cvRange;
+    }
+    return resultHistData;
+}
 
 var drawHistogram = function(histData){
     var histCanvas = document.createElement("canvas");
