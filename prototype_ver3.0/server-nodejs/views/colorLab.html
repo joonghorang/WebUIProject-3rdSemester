@@ -4,16 +4,29 @@
         <meta charset = "utf-8">
         <link rel = "stylesheet" type = "text/css" href = "./css/colorLab.css">
         <script src = "./js/require.js"></script>
-        <script src = "./js/colorLab.js"></script>
+        
         <title>Deok's ColorLab</title>
     </head>
     <body>
         <div id = "wrapper">
-        
+            <div id = "target-container">
+                <img src = "<%= imageSrc %>">
+            </div>
+            <div id = "result-container">
+                <div id = "colors">
+                
+                </div>
+                <div id = "histo">
+                    
+                </div>
+            </div>
         </div>
         <script>
             var color = <%-JSON.stringify(colors) %>;
+            var histData = <%= JSON.stringify(hist) %>;
         </script>
+        <script src = "./js/colorLab.js"></script>
+        
     </body>
     
 </html>

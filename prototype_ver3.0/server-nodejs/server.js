@@ -21,15 +21,17 @@ app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
 app.get('/colorLab', function(req, res){
-    var imageFile = fs.readFileSync(static + '/image/1.jpg');
+    var imageFile = fs.readFileSync(static + '/image/10.jpg');
+    
     var img = new Image();
     img.src = imageFile;
-    var canvas = new Canvas(img.width, img.height);
-    var ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    var colors = pickColors.pickColors(canvas);
-
-    res.render("colorLab.html", {"colors" : colors});
+    var imageCanvas = pickColors.createCanvasByImage(img);
+    var colors = pickColors.pickColors(imageCanvas);
+    var hsvHist = pickColors.histogram("hsv", imageCanvas);
+    res.render("colorLab.html", 
+               {"colors" : colors,
+                "imageSrc" : '/image/10.jpg', 
+                "hist" : hsvHist});
     
 });
 app.post('/itemFactory', function(req, res){
