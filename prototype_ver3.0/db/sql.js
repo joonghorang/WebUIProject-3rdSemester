@@ -11,6 +11,10 @@ var connection = mysql.createConnection({
     database: 'joongdb'
 });
  
+ exports.list = function(req, res){
+ 	res.send({ title : 'Express', veiw_engin : 'ejs', author : 'saebyeok'});
+ 	
+ }
 connection.connect();		// db연결한다. 
  
 connection.query('select * from color', function(err, rows, cols){ //query 함수의 첫 번째 인자에 sql 문을 작성하고 두 번째 인자는 질의문 수행 결과를 처리할 함수를 넘겨준다. 

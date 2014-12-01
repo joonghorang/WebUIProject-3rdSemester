@@ -12,7 +12,7 @@ var express = require('express')
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3407);
+app.set('port', process.env.PORT || 3403);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -32,6 +32,19 @@ app.get('/users', user.list);
 app.get('/login', user.login); 
 
 
+app.post('/users',function(req,res){
+    var user = {'userid':req.body.userid,
+                'name':req.body.name,
+                'address':req.body.address};
+    var query = connection.query('insert into users set ?',user,function(err,result){
+        if (err) {
+            console.error(err);
+            throw err;
+        }
+        console.log(query);
+        res.send(200,'success');
+    });
+});
 
 
 http.createServer(app).listen(app.get('port'), function(){
