@@ -8,14 +8,14 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR = 255;
-var fG = 255;
-var fB = 255;
+var fR = 200;
+var fG = 32;
+var fB = 120;
 var firstColorR = (fR).toString(16);
 var firstColorG = (fG).toString(16);
 var firstColorB = (fB).toString(16);
 var firstColor = "#" + firstColorR + firstColorG + firstColorB;	// 그라데이션 칼라 초기값
-var secondColor = "#000000";
+var secondColor = "#201190";
 
 // 초기화 코드
 window.onload = function(){						

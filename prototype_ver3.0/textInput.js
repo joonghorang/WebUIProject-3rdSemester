@@ -8,14 +8,14 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR = 255;
-var fG = 255;
-var fB = 255;
+var fR = 80;
+var fG = 240;
+var fB = 200;
 var firstColorR = (fR).toString(16);
 var firstColorG = (fG).toString(16);
 var firstColorB = (fB).toString(16);
 var firstColor = "#" + firstColorR + firstColorG + firstColorB;	// 그라데이션 칼라 초기값
-var secondColor = "#000000";
+var secondColor = "#204090";
 
 // 초기화 코드
 window.onload = function(){						
@@ -41,15 +41,43 @@ function draw_canvas() {
 }
 
 function changeGradationColor(num, offset){
-	var R = decimalToHex(fR - offset * num);
-	var G = decimalToHex(fG - offset * num);
-	var B = decimalToHex(fB - offset * num);	
+	var R, G, B;
+	if((fR - offset * num) < 10){
+		R = 10;
+	} else {
+		R = decimalToHex(fR - offset * num);
+	}
+	if((fG - offset * num) < 10){
+		G = 10;
+	} else {
+		G = decimalToHex(fG - offset * num);
+	}
+	if((fB - offset * num) < 10){
+		B = 10;
+	} else {
+		B = decimalToHex(fB - offset * num);
+	}  	
 	firstColor = combineRgbString(R, G, B);
 	draw_canvas(firstColorR, secondColor);
 	
-	var fontR = decimalToHex(0 + offset * num / 2);
-	var fontG = decimalToHex(0 + offset * num * 1.5);
-	var fontB = decimalToHex(0 + offset * num * 2);
+	var fontR, fontG, fontB;
+
+	if((0 + offset * num / 2) > 255){
+		fontR = 255;
+	} else {
+		fontR = decimalToHex(0 + offset * num / 2);
+	}
+	if((0 + offset * num * 1) > 255){
+		fontG = 255;
+	} else {
+		fontG = decimalToHex(0 + offset * num * 1);
+	}
+	if((0 + offset * num * 2) > 255){
+		fontB = 255;
+	} else {
+		fontB = decimalToHex(0 + offset * num * 2);
+	}		
+
 	textInput.style.color = combineRgbString(fontR, fontG, fontB);
 
 	function decimalToHex(num){
@@ -68,23 +96,24 @@ function EventManager(){
 		if(textInput.value.length < 30){
 			var num = textInput.value.length;
 			if(num < 5){
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 8);
 				textInput.style.fontSize = "60px";
 			} else if(num < 10) {
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 8);
 				textInput.style.fontSize = "55px";
 			} else if(num < 15) {
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 8);
 				textInput.style.fontSize = "50px";
 			} else if(num < 20) {
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 8);
 				textInput.style.fontSize = "45px";
 			} else {
 				changeGradationColor(num, 8);
 				textInput.style.fontSize = "40px";
 			}
 		} else {
-			alert("Please input under 30.");
+			preventDefault();
+			//alert("Please input under 30.");
 		}	
 	};
 
@@ -99,7 +128,6 @@ function EventManager(){
 	EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 		textInput.value = "";
 		textInput.style.fontSize = "60px";
-        console.log(111);
 	});
 
 	EventUtil.addHandler(textInput, "paste", function(event){ // 붙이기 방지 

@@ -160,12 +160,31 @@ function textWriter(){
             };
 
             function checkOneWordBug(){
-                for(var i = 0; i < wordArray.length - 1; i++){
+                for(var i = 0; i < wordArray.length - 1; i++){ // 연속적으로 1글자 짜리가 오면 뒷 단어를 복사하고 
                     if(parseInt(wordArray[i].length) + parseInt(wordArray[i+1].length) === 4){
                         wordArray[i] = wordArray[i] + wordArray[i+1];
-                        wordArray[i+1] = "";
+                        wordArray[i + 1] = "";  
                     }
                 }
+                for(var j = 0; j < wordArray.length - 1; j++){ // 복사하고 공백이 생기면 공백을 가장 뒷쪽으로 밀고.
+                    if(wordArray[j] === ""){
+                        console.log("in");
+                        for(var k = j; k < wordArray.length - 1; k++){
+                            wordArray[k] = wordArray[k + 1];
+                            wordArray[k + 1] = "";
+                        }
+                    }
+                }
+
+                for(var l = 0; l <= wordArray.length; l++){ // 가장 뒤로 밀린 공백을 삭제한다. 
+                    console.log(wordArray[l]);
+                    if(wordArray[l] === ""){
+                        console.log(wordArray[l] + "here");
+                        wordArray.splice(l, 0);
+                        console.log(wordArray.length);
+                    }
+                }
+
             }
         };
     };
