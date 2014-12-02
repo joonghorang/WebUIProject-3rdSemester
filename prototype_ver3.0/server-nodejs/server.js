@@ -6,12 +6,14 @@ var Image = Canvas.Image;
 var fs = require("fs");
 var mime = require("mime");
 var tinycolor = require("tinycolor2");
+var path = require("path");
 
 var app = express();
 
 //static 폴더 위치
 var static = __dirname + '/static';
 app.use(express.static(static));
+//동일출처문젠가? 다른 url에서도 이 서버의 url로 ajax요청을 보낼 수 있게함.
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -27,7 +29,8 @@ app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
 app.get('/colorLab', function(req, res){
-    var imageFile = fs.readFileSync(static + '/image/11.jpg');
+    var fileName = "colorLab-current-image";
+    var imageFile = fs.readFileSync(static + '/image/' +fileName);
     
     var img = new Image();
     img.src = imageFile;
@@ -36,20 +39,17 @@ app.get('/colorLab', function(req, res){
     var hsvHistData = imgP.histogram("hsv", imageCanvas);
     var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
     var pickedColors = [];
+
     for(var i = 0; i< pickedHues.length; ++i){
-        pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toHexString());
-//        pickedColors.push({"r":rgb.r,
-//                           "g":rgb.g,
-//                           "b":rgb.b,
-//                           "a":rgb.a});
+        pickedColors[i] = tinycolor({h : pickedHues[i], s :100, v:100}).toHexString();
     }
-    console.log(JSON.stringify(pickedColors));
-    res.render("colorLab.html", 
-               {"colors" : colors,
-                "imageSrc" : '/image/11.jpg', 
-                "histData" : hsvHistData,
-                "pickedColors" : pickedColors });
     
+    console.log(JSON.stringify(pickedColors));
+    res.render("colorLab.html", {
+        "colors" : colors,
+        "imageSrc" : '/image/' + fileName, 
+        "histData" : hsvHistData,
+        "pickedColors" : pickedColors });
 });
 app.post('/itemFactory', function(req, res){
     });
@@ -65,19 +65,40 @@ app.post('/itemFactory/image', function(req, res){
             var imageFile = fs.readFileSync(files.image.path);
             var img = new Image();
             img.src = imageFile;
+//            move to imgP.pickColors
+//            var imageCanvas = imgP.createCanvasByImage(img);
+//            var hsvHistData = imgP.histogram("hsv", imageCanvas);
+//            var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
+//            console.log("/itemFactory/image pickedHue Finish. Hue.leng : " + pickedHues.length);
+//            var pickedColors = [];
+//            for(var i = 0; i< pickedHues.length; ++i){
+//                pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toRgb());
+//            }
+//            console.log("/itemFactory/image pickedColors Finish pickedColor : " + pickedColors);
             
-            var imageCanvas = imgP.createCanvasByImage(img);
-            var hsvHistData = imgP.histogram("hsv", imageCanvas);
-            var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
-            console.log("/itemFactory/image pickedHue Finish. Hue.leng : " + pickedHues.length);
-            var pickedColors = [];
-            for(var i = 0; i< pickedHues.length; ++i){
-                pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toRgb());
-            }
-            console.log("/itemFactory/image pickedColors Finish pickedColor : " + pickedColors);
+            var pickedColors = imgP.pickColors(img);
             
             res.send(JSON.stringify(pickedColors));
+        
+            var fileImageData = fs.readFileSync(files.image.path);
+            fs.writeFile(static + "/image/colorLab-current-image", fileImageData, function(err){
+                if(err){
+                    console.log("server.js - err : test for ColorLab image save Err");
+                }else{
+                    console.log("server.js - test for ColorLab image saved");
+                }
+            });
+            fs.writeFile(static + "/image/uploaded/" + files.image.name, fileImageData, function(err){
+                if(err){
+                    console.log("server.js - err : test for ColorLab image save Err");
+                }else{
+                    console.log("server.js - test for ColorLab image saved");
+                }
+            });          
         }
+                         
+            
+                         
         
 //        console.log("Parsing Done."); 
 //        var outputData = {"text" : fields.text};

@@ -46,30 +46,36 @@ var createCanvasByImage = function(img){
     return rCanvas;
 }
 
-var pickColors = function(canvas){
-    ctx = canvas.getContext("2d");
-    var imageData = ctx.getImageData(0,0, canvas.width, canvas.height);    
-    var tmpR = 0;
-    var tmpG = 0;
-    var tmpB = 0;
-    
-    for(var x = 0; x < imageData.width; ++x){
-        for(var y = 0; y < imageData.height; ++y){
-            var index = (x + y * imageData.width) * 4;
-            tmpR += imageData.data[index + 0];
-            tmpG += imageData.data[index + 1];
-            tmpB += imageData.data[index + 2];
-        }
+var pickColors = function(img){
+    var imageCanvas = createCanvasByImage(img);
+    var hsvHistData = histogram("hsv", imageCanvas);
+    var pickedHues = pickPeaks(smoothing(hsvHistData, 7));
+    console.log("/itemFactory/image pickedHue Finish. Hue.leng : " + pickedHues.length);
+    var pickedColors = [];
+    for(var i = 0; i< pickedHues.length; ++i){
+        pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toRgb());
     }
-    var pixelNum = imageData.width * imageData.height;
-    var r = parseInt(tmpR / pixelNum);
-    var g = parseInt(tmpG / pixelNum);
-    var b = parseInt(tmpB / pixelNum);
-    return {"r": r, "g": g, "b": b, "a": 255};
-}
-
-var test_pickColors = function(canvas){
-    
+    console.log("/itemFactory/image pickedColors Finish pickedColor : " + pickedColors);
+    return pickedColors;
+//    ctx = canvas.getContext("2d");
+//    var imageData = ctx.getImageData(0,0, canvas.width, canvas.height);    
+//    var tmpR = 0;
+//    var tmpG = 0;
+//    var tmpB = 0;
+//    
+//    for(var x = 0; x < imageData.width; ++x){
+//        for(var y = 0; y < imageData.height; ++y){
+//            var index = (x + y * imageData.width) * 4;
+//            tmpR += imageData.data[index + 0];
+//            tmpG += imageData.data[index + 1];
+//            tmpB += imageData.data[index + 2];
+//        }
+//    }
+//    var pixelNum = imageData.width * imageData.height;
+//    var r = parseInt(tmpR / pixelNum);
+//    var g = parseInt(tmpG / pixelNum);
+//    var b = parseInt(tmpB / pixelNum);
+//    return {"r": r, "g": g, "b": b, "a": 255};
 }
 
 var histogram = function( type, canvas ){
@@ -151,4 +157,3 @@ exports.smoothing = smoothing;
 exports.createCanvasByImage = createCanvasByImage;
 exports.pickColors = pickColors;
 exports.histogram = histogram;
-exports.test_picColors = test_pickColors;
