@@ -22,6 +22,7 @@
 */
 
 // 색상 받아오는 전역변수 선언 
+var colorSetBackup = new Array();
 var colorSet = new Array();
 var colorSetHex = new Array();
 var contents = document.getElementById('contents');
@@ -286,10 +287,8 @@ window.addEventListener('DOMContentLoaded', function(){
         addGridItem.firstChild.appendChild(addColorElement);
         addColorElement.style.display = "block";
         addColorElement.value = textInput.value;
-        console.log(colorSet[0]);
-        console.log(colorSet[0].r);
-        addColorElement.style.backgroundColor = colorSetHex[0];//"#" + colorSet[0].r + colorSet[0].g + colorSet[0].b;
-        addColorElement.style.opacity = "0.5";
+        addColorElement.style.backgroundColor = colorSetBackup[0];//"#" + colorSet[0].r + colorSet[0].g + colorSet[0].b;
+        addColorElement.style.opacity = "1";
 
         console.log(addImgElement);
 
