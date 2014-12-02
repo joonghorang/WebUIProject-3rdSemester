@@ -164,33 +164,13 @@ window.addEventListener('DOMContentLoaded', function(){
                 textInputEventManager();
                 drawGradation(firstColor, secondColor);
                 console.log("XHR onready");
+                console.log(colorSetHex);
            } 
         }
 
         //캔버스 초기화 
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);        // 픽셀 정리
         context.beginPath();                                         // 컨텍스트 리셋
-
-        // canvasParent.removeChild(outputCanvas);
-        // canvasParent.removeChild(outputBackCanvas);
-        // canvasParent.removeChild(backGroundCanvas);
-        // var newOutputCanvas = document.createElement('canvas');
-        // newOutputCanvas.setAttribute('id', 'output-canvas');
-        // var newOutputBackCanvas = document.createElement('canvas');
-        // newOutputBackCanvas.setAttribute('id', 'output-backCanvas');        
-        // var newBackGroundCanvas = document.createElement('canvas');
-        // newBackGroundCanvas.setAttribute('id', 'back-ground-canvas');
-        // newOutputCanvas.width = CANVAS_WIDTH;
-        // newOutputCanvas.height = CANVAS_HEIGHT;
-        // newOutputBackCanvas.width = CANVAS_WIDTH;
-        // newOutputBackCanvas.height = CANVAS_HEIGHT;
-
-        // newOutputCanvas.style.display = "block";
-        // newOutputBackCanvas.style.display = "block";
-        // newBackGroundCanvas.style.display = "block";
-        // canvasParent.insertBefore(newOutputCanvas, textInput);
-        // canvasParent.insertBefore(newOutputBackCanvas, textInput);
-        // canvasParent.insertBefore(newBackGroundCanvas, textInput);
     },false);
        
     /*confirm 클릭 시 itemFactory 확장 -사진 미리보기 사라지기 - text입력받기*/
@@ -273,14 +253,6 @@ window.addEventListener('DOMContentLoaded', function(){
             itemFactoryOpen.style.display = 'block';
         }, 2100);
 
-
-        
-        //이전에 캔버스에 쓴 글씨는 지워준다. 
-        // context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        // backGroundCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        //outputCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-
         /*itemFactoryNav display상태 초기상태로*/
 //        itemFactoryOpen.style.display = 'block';
         
@@ -321,35 +293,44 @@ window.addEventListener('DOMContentLoaded', function(){
         addColorElement.value = textInput.value;
         addColorElement.style.backgroundColor = colorSetBackup[0];//"#" + colorSet[0].r + colorSet[0].g + colorSet[0].b;
         addColorElement.style.opacity = "1";
+        console.log(colorSetBackup[0]);
+        console.log(colorSetHex[0]);
+        console.log(colorSetHex[1]);
 
         //textInput에 있던 값을 원래 초기값으로 
         textInput.value = "30자 이내로 입력하세요.";
 
-    },false);
-    
-    /*gridItem 클릭 시 확대 - output페이지로*/
-    /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
-    var gridItems = document.querySelectorAll('.grid-item');
-    var front = document.querySelectorAll('.front');
+        /*gridItem 클릭 시 확대 - output페이지로*/
+        /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
+        var gridItems = document.querySelectorAll('.grid-item');
+        var front = document.querySelectorAll('.front');
 
-    for(var id = 0; id < front.length; id++){
-        front[id].addEventListener('click',function(e){
+        for(var id = 0; id < gridItems.length; id++){
+            gridItems[id].addEventListener('click',function(e){
             console.log("in");
 //            e.preventDefault();
 //            var front = this.firstChild;
 //            var back = this.lastChild;
 //            this.removeChild(this.firstChild);
 //            this.removeChild(this.lastChild);
-            this.style.zIndex = '500';
-            this.style.width = '100%';
-            this.style.height = '100%';
-            this.style.position = 'absolute';
-            this.style.backgroundColor = '#FFFFFF';
-            this.style.top = '0';
-            this.style.left = '0';
-            
+            //e.target.style.zIndex = '500';
+            e.target.style.width = '100%';
+            e.target.style.height = '100%';
+            e.target.style.position = 'absolute';
+            //e.target.style.backgroundColor = '#50F090';
+            e.target.style.top = '0';
+            e.target.style.left = '0';
+            e.target.parentNode.parentNode.style.width = '100%';
+            e.target.parentNode.parentNode.style.height = '100%';
+            e.target.parentNode.parentNode.style.position = 'absolute';
+            e.target.style.zIndex= '600';
+            e.stopPropagation();
         }, false);
     }
     //확대되면서 this(클릭한 그리드) 말고 다 날려버림???? 일단은 흰색으로 fadeout형식
+
+    },false);
+    
+
 
 },false)
