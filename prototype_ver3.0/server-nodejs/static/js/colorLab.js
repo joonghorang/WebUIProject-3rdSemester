@@ -1,19 +1,20 @@
-//12. 1. 20:43 commit : 
+//12. 1. 20:43 
 //add "circleIndexOf" method to Array.prototype
 //add "smoothing" function
+//12. 2. 06:00
+//add "pickPeaks" function
 
-Array.prototype.circleIndexOf = function(idx){
+Array.prototype.circleIndex = function(idx){
 //    // circleIndexOf(-1) = circleIndexOf( arrlen - 1 )
     if( idx >= 0 && idx < this.length){
         return this[idx];
     }else if(idx < 0){
-        return this.circleIndexOf(this.length + idx);
+        return this.circleIndex(this.length + idx);
     }else{
-        return this.circleIndexOf(idx - this.length);
+        return this.circleIndex(idx - this.length);
     }    
 }
-
-var histo = document.getElementById("histo");
+document.getElementById("histo");
 window.addEventListener('DOMContentLoaded', function(){
     
 //    var xhr = new XMLHttpRequest();
@@ -29,22 +30,60 @@ window.addEventListener('DOMContentLoaded', function(){
 //    xhr.open("get", "/itemFactory/image", false);
 //    xhr.send("
 //    console.log(histo.width, histo.clientWidth, histo.offsetWidth, histo.scrollWidth);
-    var histCanvas = drawHistogram(smoothing(smoothing(smoothing(smoothing(smoothing(histData))))));
-    histo.appendChild(histCanvas);
+    
+    var histCanvas = drawHistogram(smoothing(histData, 3));
+    histo.appendChild(drawHistogram(histData));
+    pickPeaks(histData);
+    histo.appendChild(drawHistogram(smoothing(histData, 7)));
+    pickPeaks(smoothing(histData, 7));
+    histo.appendChild(drawHistogram(smoothing(histData, 7, [1, 4, 6, 4, 1])));
+    pickPeaks(smoothing(histData, 7, [1, 4, 6, 4, 1]));
+    
 },false);
 
-var smoothing = function(histData){
-//    var resultHistData = histData.slice(0);
-    resultHistData = [];
-    var cvRange = 5;
-    for( var i = 0; i< histData.length; ++i){
-        var sum = 0;
-        for( var cvIdx = i - 2; cvIdx < i + 2; ++cvIdx){
-            sum += histData.circleIndexOf(cvIdx);
+var smoothing = function(histData, repeat, cvCoeff){
+
+    //set default
+    repeat = typeof repeat !== "number" ? 1 : repeat;
+    cvCoeff = typeof cvCoeff === "undefined" || cvCoeff.length%2 !== 1 ? [1, 1, 1, 1, 1] : cvCoeff; 
+    
+    var beforeHistData = histData.slice(0);
+    var resultHistData;
+    var cvSum = cvCoeff.reduce(function(pv, cv){return pv + cv});
+    
+    for( var r = 0; r < repeat; ++r){
+        resultHistData = [];
+        for( var i = 0; i< beforeHistData.length; ++i){
+            var sum = 0;
+            for( var cvIdx = -2; cvIdx < 2; ++cvIdx){
+                sum += beforeHistData.circleIndex(i + cvIdx) * cvCoeff[cvIdx + 2];
+            }
+
+//            Average Convolution
+//            for( var cvIdx = -2; cvIdx < 2; ++cvIdx){
+//                sum += beforeHistData.circleIndexOf(i + cvIdx);
+//            }
+            resultHistData[i] = sum/cvSum;
         }
-        resultHistData[i] = sum/cvRange;
+        beforeHistData = resultHistData;
     }
     return resultHistData;
+}
+
+var pickPeaks = function(histData){
+    var peaks = [];
+    var minDataIndex = histData.indexOf(Math.min(histData)); // min is zero. ordinally
+    for(var i = minDataIndex; i< histData.length + minDataIndex; ++i){
+        if( histData.circleIndex(i-1) < histData.circleIndex(i) && 
+           histData.circleIndex(i) > histData.circleIndex(i+1)){
+            peaks.push({ x : i, size : histData.circleIndex(i)});   
+        }
+    }
+    peaks.sort(function(f,b){ return b.size - f.size });
+    for( var i = 0; i< peaks.length; ++i){
+        peaks[i] = peaks[i].x;    
+    }
+    return peaks;
 }
 
 var drawHistogram = function(histData){
@@ -67,7 +106,8 @@ var drawHistogram = function(histData){
     
     for(var histIdx = 0; histIdx < histData.length; ++histIdx){
         for(var x = parseInt(histIdx * dataWidth); x < (histIdx+1) * dataWidth ; ++x){
-            for(var y = 0; y < histData[histIdx] * dataHeightRate; ++y){
+//            for(var y = 0; y< histData[histIdx] * dataHeightRate; ++y){
+            for(var y = imageData.height; y > imageData.height - (histData[histIdx] * dataHeightRate); --y){
                 var index = (y * imageData.width + x) * 4;
             
                 imageData.data[index + 0] = 197;
@@ -78,10 +118,7 @@ var drawHistogram = function(histData){
         }
     }
     histCanvas.width = imageData.width;
-    histCanvas.height = 400;
-
+    histCanvas.height = imageData.height;
     ctx.putImageData(imageData, 0, 0);
-    console.log(imageData.width, ctx.width, histCanvas.width);
-    
     return histCanvas;
 }

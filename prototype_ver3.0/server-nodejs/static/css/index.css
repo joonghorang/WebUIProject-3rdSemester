@@ -15,7 +15,7 @@ body {
 
 #item-factory-background {
     position: absolute;
-    z-index: 14;
+    z-index: 2;
     width: 100%;
     height: 100%;
     background-color: transparent;
@@ -25,7 +25,7 @@ body {
 
 #item-factory-nav-open {
     position: absolute;
-    z-index: 15;
+    z-index: 3;
     top: 0;
     left: 0;
     width:40px;
@@ -43,7 +43,7 @@ body {
 
 #item-factory-nav-close {
     position: absolute;
-    z-index: 15;
+    z-index: 3;
     top: 0;
     right: 0;
     width:40px;
@@ -61,7 +61,7 @@ body {
 }
 
 #item-factory {
-    z-index: 15;
+    z-index: 4;
     width: 50%;
     height: 500px;
     position: absolute;
@@ -116,7 +116,7 @@ body {
 
 #output-canvas {
     border: 0;
-    z-index: 20;
+    z-index: 30;
     position: absolute;
 }
 
@@ -125,7 +125,6 @@ body {
 	width : 100%;
 	height : 100%;
     transition:  all 2s ease-in-out;
-    
 	/*캔버스의 그리는 시작점*/
 	top : 0px;
 	left : 0px;
@@ -134,10 +133,10 @@ body {
 #back-ground-canvas {
     display: none;
     position: absolute;
-    z-index: 22;
+    z-index: 20;
 }
 #text-input {
-    z-index: 24;
+    z-index: 21;
     display: none;
     text-align: center;
 	vertical-align: middle;
@@ -152,8 +151,8 @@ body {
 	position : relative;
 }
 #preview-image {
-    border: 0;
-    z-index: 30;
+    border: 5;
+    z-index: 5;
     position: absolute;
     transition: display 0.8s ease-in-out;
 }
@@ -165,6 +164,7 @@ body {
 }
 
 #confirm-button {
+    z-index: 100;
     position: absolute;
     right: 10px;
     bottom: 10px;
@@ -180,7 +180,7 @@ body {
     transition: display 0.4s ease-in-out;
 }
 #submit-button {
-    z-index: 26;
+    z-index: 200;
     position: absolute;
     right: 20px;
     bottom: 20px;
@@ -217,7 +217,7 @@ body {
 }
 
 .front {
-    z-index: 0;
+    z-index: 1;
     position: absolute;
     top: 0;
     left: 0;
@@ -233,7 +233,7 @@ body {
 }
 
 .back {
-    z-index: -5;
+    z-index: 0;
     position: absolute;
     top: 0;
     left: 0;

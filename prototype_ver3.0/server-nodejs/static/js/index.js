@@ -1,17 +1,24 @@
 /*
 141202. Prototype_ver3.0/GeulGeurimNetwork_ver1.0 TODO list
 [frontend]
-- 재업로드시 preview-image 보이지 않음. confirm 버튼 동작하지 않음. 문제 해결하기
-- itemFactory에서 생성한 output을 grid-item으로 추가하기
-- itemFactory 각 단계에서 이전단계로 돌아가기
+- 재업로드시 preview-image 보이지 않음 (o)
+- 재업로드시 confirm 버튼 동작하지 않음 (o)
+- itemFactory에서 생성한 output을 grid-item으로 추가하기 : 신영
+- 팀장님의 color코드와 연동하기 : 중일
 - grid view에서 각 grid-item 클릭 시 나타나는 페이지 논의(output?)
+- z-index 통째로 수정 (o)
+- itemFactory 각 단계에서 이전단계로 돌아가기
 
 [backend]
-- text input, output 에서 background-color Ajax로 서버랑 통신해서 받아오기
-- server side complete - web hosting(Heroku)
+- text input, output 에서 background-color Ajax로 서버랑 통신해서 받아오기 -일단보류
+- server side complete - web hosting(Heroku) : 덕성
 - DB연동
 
+<<<<<<< HEAD
 + server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....? 
+=======
++ server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....?
+>>>>>>> origin/master
 
 [overall]
 - 전체적인 스타일 조정(text input 활성화 될 때 가운데부터 나타나는 것, 동적 레이아웃 등)
@@ -25,11 +32,13 @@ window.addEventListener('DOMContentLoaded', function(){
     var itemFactoryOpen = document.querySelector('#item-factory-nav-open');
     var itemFactoryClose = document.querySelector('#item-factory-nav-close');
 
-    var XHR = new XMLHttpRequest();   
+//    var XHR = new XMLHttpRequest();   
     
     /*itemFactory 열기*/
     itemFactoryOpen.addEventListener('click',function(){
         wrapper.style.display = 'block';
+        var tempImg = document.getElementById('preview-image');
+        tempImg.style.display = 'block';
         minimizeItemFactory();
         setUploadButtonAtFirst();
         setSubmitButtonAtFirst();
@@ -107,6 +116,7 @@ window.addEventListener('DOMContentLoaded', function(){
         preview.style.width = '100%';
         preview.style.height = '100%';
         background.style.display = 'block';
+<<<<<<< HEAD
 
 
     // AJAX 통신으로 색을 받아오는 함수. 
@@ -126,14 +136,20 @@ window.addEventListener('DOMContentLoaded', function(){
 
     // colors[0]["r"] = 255;
     //     },false);
+=======
+        
+    },false);
+>>>>>>> origin/master
     
     /*submit버튼으로 전송하면 output 보여주기*/    
     var submit = document.getElementById('submit-button');
     submit.addEventListener('click',function(){
         
+        wrapper.style.display = 'block';
         textValue = textInput.textContent;
 		textInput.style.display = 'none';
 		submitButton.style.display = 'none';
+        outputCanvas.style.opacity = '1';
         outputCanvas.style.display = 'block';
         backGroundCanvas.style.display='none';
         
@@ -161,10 +177,11 @@ window.addEventListener('DOMContentLoaded', function(){
             wrapper.style.display = 'none';
         }, 2000);
         
+        /*itemFactoryNav display상태 초기상태로*/
         itemFactoryOpen.style.display = 'block';
         itemFactoryClose.style.display = 'none';
 
-        /*TODO preview-image 의 자식 노드를 지우기*/
+        /*preview-image 의 자식 노드를 지우기*/
         var tempImage = document.getElementById('preview-image');
         tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
 
@@ -175,17 +192,21 @@ window.addEventListener('DOMContentLoaded', function(){
     
     /*gridItem 클릭 시 확대 - output페이지로*/
     /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
-    var gridItem = document.querySelector('.grid-item');
-    gridItem.addEventListener('click', function(e){
-        gridItem.style.width = '100%';
-        gridItem.style.height = '100%';
-    } ,false);    
-  
+//    var gridItem = document.getElementsByClassName('grid-item');
+//    gridItem.addEventListener('click', function(e){
+//        
+//        e.target.style.width = '50%';
+//        e.target.style.height = '50%';
+//    } ,false);    
+
     
-/*파일 선택시 선택한 이미지를 preview에 보여주기*/
+    /*파일 선택시 선택한 이미지를 preview에 보여주기*/
     var fileInput = document.getElementById('upload-hidden');
+    fileInput.addEventListener('click', function(){
+        fileInput.value = null;
+    })
     fileInput.addEventListener('change', function(){
-        
+                
         /*파일 없을때 에러처리*/
         if(this.files.item(0)===null){
             alert('no image');
@@ -202,23 +223,29 @@ window.addEventListener('DOMContentLoaded', function(){
         imgElement.src=imgURL;
     
         document.getElementById('preview-image').appendChild(imgElement);
-         
-        /*AJAX로 데이터 받아오기*/
-        var formData = new FormData();
-        formData.append("image", this.files[0]);
-
-        XHR.open("post", "/itemFactory/image", true);
-        XHR.send(formData);
         
-        XHR.onreadystatechange = function() 
-        {
-            if (XHR.readyState == 4 && XHR.status == 200) 
-            {
-                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
-                var ddd = JSON.parse(XHR.response);
-                alert(ddd.r);
-                alert(XHR.response);
-            }
-        }
+        var tempImg = document.getElementById('preview-image');
+        tempImg.style.display = 'block';
+        
+        /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
+        outputCanvas.style.display = 'none';
+//        
+//        /*AJAX로 데이터 받아오기*/
+//        var formData = new FormData();
+//        formData.append("image", this.files[0]);
+//
+//        XHR.open("post", "/itemFactory/image", true);
+//        XHR.send(formData);
+//        
+//        XHR.onreadystatechange = function() 
+//        {
+//            if (XHR.readyState == 4 && XHR.status == 200) 
+//            {
+//                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
+//                var ddd = JSON.parse(XHR.response);
+//                alert(ddd.r);
+//                alert(XHR.response);
+//            }
+//        }
     },false);
 },false)

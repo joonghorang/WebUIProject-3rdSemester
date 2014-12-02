@@ -14,7 +14,9 @@
             </div>
             <div id = "result-container">
                 <div id = "colors">
-                
+                    <% for(var i=0; i<pickedColors.length; i++) {%>
+   <div class = "color" style = "background-color :<%= pickedColors[i] %>;"></div>
+<% } %>
                 </div>
                 <div id = "histo">
                     
@@ -23,7 +25,8 @@
         </div>
         <script>
             var color = <%-JSON.stringify(colors) %>;
-            var histData = <%= JSON.stringify(hist) %>;
+            var histData = <%= JSON.stringify(histData) %>;
+            //var pickedColors = <%- pickedColors %>;
         </script>
         <script src = "./js/colorLab.js"></script>
         

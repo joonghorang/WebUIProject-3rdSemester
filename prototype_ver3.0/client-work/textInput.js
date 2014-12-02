@@ -8,14 +8,14 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR = 80;
-var fG = 240;
-var fB = 200;
+var fR = 255;
+var fG = 255;
+var fB = 255;
 var firstColorR = (fR).toString(16);
 var firstColorG = (fG).toString(16);
 var firstColorB = (fB).toString(16);
-var firstColor = combineColorString(firstColorR, firstColorG, firstColorB);	// 그라데이션 칼라 초기값
-var secondColor = "#204090";
+var firstColor = "#" + firstColorR + firstColorG + firstColorB;	// 그라데이션 칼라 초기값
+var secondColor = "#000000";
 
 // 초기화 코드
 window.onload = function(){						
@@ -24,11 +24,6 @@ window.onload = function(){
 	draw_canvas(firstColor, secondColor);
 	EventManager();
 };
-
-function combineColorString(r, g, b, a){
-	var color = "#" + r + g + b;
-	return color; 
-}
 
 function draw_canvas() {
 	var ctx = backGroundCanvas.getContext('2d');
@@ -46,43 +41,15 @@ function draw_canvas() {
 }
 
 function changeGradationColor(num, offset){
-	var R, G, B;
-	if((fR - offset * num) < 10){
-		R = 10;
-	} else {
-		R = decimalToHex(fR - offset * num);
-	}
-	if((fG - offset * num) < 10){
-		G = 10;
-	} else {
-		G = decimalToHex(fG - offset * num);
-	}
-	if((fB - offset * num) < 10){
-		B = 10;
-	} else {
-		B = decimalToHex(fB - offset * num);
-	}  	
+	var R = decimalToHex(fR - offset * num);
+	var G = decimalToHex(fG - offset * num);
+	var B = decimalToHex(fB - offset * num);	
 	firstColor = combineRgbString(R, G, B);
 	draw_canvas(firstColorR, secondColor);
 	
-	var fontR, fontG, fontB;
-
-	if((0 + offset * num / 2) > 255){
-		fontR = 255;
-	} else {
-		fontR = decimalToHex(0 + offset * num / 2);
-	}
-	if((0 + offset * num * 1) > 255){
-		fontG = 255;
-	} else {
-		fontG = decimalToHex(0 + offset * num * 1);
-	}
-	if((0 + offset * num * 2) > 255){
-		fontB = 255;
-	} else {
-		fontB = decimalToHex(0 + offset * num * 2);
-	}		
-
+	var fontR = decimalToHex(0 + offset * num / 2);
+	var fontG = decimalToHex(0 + offset * num * 1.5);
+	var fontB = decimalToHex(0 + offset * num * 2);
 	textInput.style.color = combineRgbString(fontR, fontG, fontB);
 
 	function decimalToHex(num){
@@ -94,6 +61,7 @@ function changeGradationColor(num, offset){
 		return Color;
 	}
 }
+
 // 이벤트를 관리하는 걸 모아둔 함수. 
 function EventManager(){
 	textInput.oninput = function(){
@@ -116,7 +84,7 @@ function EventManager(){
 				textInput.style.fontSize = "40px";
 			}
 		} else {
-			preventDefault();
+			alert("Please input under 30.");
 		}	
 	};
 
@@ -131,6 +99,7 @@ function EventManager(){
 	EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 		textInput.value = "";
 		textInput.style.fontSize = "60px";
+        console.log(111);
 	});
 
 	EventUtil.addHandler(textInput, "paste", function(event){ // 붙이기 방지 
@@ -138,13 +107,13 @@ function EventManager(){
 		EventUtil.preventDefault(event);
 	});
 
-//	EventUtil.addHandler(submitButton, "click", function(event){		// 전송버튼 이벤트 
-//		textValue = textInput.textContent;
-//		textInput.style.display = "none";
-//		submitButton.style.display = "none";
-//		outputCanvas.style.display = "block";
-//		textWriter(); // 글자 쏴주는 함수 
-//	});
+	EventUtil.addHandler(submitButton, "click", function(event){		// 전송버튼 이벤트 
+		textValue = textInput.textContent;
+		textInput.style.display = "none";
+		submitButton.style.display = "none";
+		outputCanvas.style.display = "block";
+		textWriter(); // 글자 쏴주는 함수 
+	});
 
 	EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누르면 전송하게 하는 이벤트 
 		event = EventUtil.getEvent(event);
