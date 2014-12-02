@@ -14,11 +14,7 @@
 - server side complete - web hosting(Heroku) : 덕성
 - DB연동
 
-<<<<<<< HEAD
-+ server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....? 
-=======
 + server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....?
->>>>>>> origin/master
 
 [overall]
 - 전체적인 스타일 조정(text input 활성화 될 때 가운데부터 나타나는 것, 동적 레이아웃 등)
@@ -32,7 +28,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var itemFactoryOpen = document.querySelector('#item-factory-nav-open');
     var itemFactoryClose = document.querySelector('#item-factory-nav-close');
 
-//    var XHR = new XMLHttpRequest();   
+    var XHR = new XMLHttpRequest();   
     
     /*itemFactory 열기*/
     itemFactoryOpen.addEventListener('click',function(){
@@ -116,27 +112,6 @@ window.addEventListener('DOMContentLoaded', function(){
         preview.style.width = '100%';
         preview.style.height = '100%';
         background.style.display = 'block';
-<<<<<<< HEAD
-
-
-    // AJAX 통신으로 색을 받아오는 함수. 
-    var request = new XMLHttpRequest();
-    request.open("POST" , "./imageFactory/image" , false);
-    request.send(tempImg);
-    console.log(request.responseText);
-
-
-    // // 덕성이가 보내주는 JSON형식 
-    // {
-    //     "r" : 255,
-    //     "g" : 255, 
-    //     "b" : 100,
-    //     "a" : 255
-    // }
-
-    // colors[0]["r"] = 255;
-    //     },false);
-=======
         
     },false);
 >>>>>>> origin/master
@@ -231,21 +206,35 @@ window.addEventListener('DOMContentLoaded', function(){
         outputCanvas.style.display = 'none';
 //        
 //        /*AJAX로 데이터 받아오기*/
-//        var formData = new FormData();
-//        formData.append("image", this.files[0]);
-//
-//        XHR.open("post", "/itemFactory/image", true);
-//        XHR.send(formData);
-//        
-//        XHR.onreadystatechange = function() 
-//        {
-//            if (XHR.readyState == 4 && XHR.status == 200) 
-//            {
-//                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
-//                var ddd = JSON.parse(XHR.response);
-//                alert(ddd.r);
-//                alert(XHR.response);
-//            }
-//        }
+
+
+    // // 덕성이가 보내주는 JSON형식 
+    // {
+    //     "r" : 255,
+    //     "g" : 255, 
+    //     "b" : 100,
+    //     "a" : 255
+    // }
+
+    // colors[0]["r"] = 255;
+    //     },false);
+
+    
+       var formData = new FormData();
+       formData.append("image", this.files[0]);
+
+       XHR.open("post", "/itemFactory/image", true);
+       XHR.send(formData);
+       
+       XHR.onreadystatechange = function() 
+       {
+           if (XHR.readyState == 4 && XHR.status == 200) 
+           {
+               /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
+               var ddd = JSON.parse(XHR.response);
+               alert(ddd.r);
+               alert(XHR.response);
+           }
+       }
     },false);
 },false)

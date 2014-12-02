@@ -138,14 +138,6 @@ function EventManager(){
 		EventUtil.preventDefault(event);
 	});
 
-//	EventUtil.addHandler(submitButton, "click", function(event){		// 전송버튼 이벤트 
-//		textValue = textInput.textContent;
-//		textInput.style.display = "none";
-//		submitButton.style.display = "none";
-//		outputCanvas.style.display = "block";
-//		textWriter(); // 글자 쏴주는 함수 
-//	});
-
 	EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누르면 전송하게 하는 이벤트 
 		event = EventUtil.getEvent(event);
 		if(event.keyCode === 13){
