@@ -1,10 +1,11 @@
 var express = require("express");
 var formidable = require("formidable");
-var pickColors = require("./controllers/pickImpColor.js");
+var imgP = require("./controllers/pickImpColor.js");
 var Canvas = require("canvas");
 var Image = Canvas.Image;
 var fs = require("fs");
 var mime = require("mime");
+var tinycolor = require("tinycolor2");
 
 var app = express();
 
@@ -21,17 +22,29 @@ app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
 app.get('/colorLab', function(req, res){
-    var imageFile = fs.readFileSync(static + '/image/9.jpg');
+    var imageFile = fs.readFileSync(static + '/image/7.jpg');
     
     var img = new Image();
     img.src = imageFile;
-    var imageCanvas = pickColors.createCanvasByImage(img);
-    var colors = pickColors.pickColors(imageCanvas);
-    var hsvHist = pickColors.histogram("hsv", imageCanvas);
+    var imageCanvas = imgP.createCanvasByImage(img);
+    var colors = imgP.pickColors(imageCanvas);
+    var hsvHistData = imgP.histogram("hsv", imageCanvas);
+    
+    var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
+    var pickedColors = [];
+    for(var i = 0; i< pickedHues.length; ++i){
+        pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toHexString());
+//        pickedColors.push({"r":rgb.r,
+//                           "g":rgb.g,
+//                           "b":rgb.b,
+//                           "a":rgb.a});
+    }
+    console.log(JSON.stringify(pickedColors));
     res.render("colorLab.html", 
                {"colors" : colors,
-                "imageSrc" : '/image/9.jpg', 
-                "hist" : hsvHist});
+                "imageSrc" : '/image/7.jpg', 
+                "histData" : hsvHistData,
+                "pickedColors" : pickedColors });
     
 });
 app.post('/itemFactory', function(req, res){
@@ -54,7 +67,7 @@ app.post('/itemFactory/image', function(req, res){
             
             ctx.drawImage(img, 0, 0);
 //            ctx.getImageData(0,
-            res.send(pickColors.pickColors(canvas));
+            res.send(imgP.pickColors(canvas));
             
         }
         
