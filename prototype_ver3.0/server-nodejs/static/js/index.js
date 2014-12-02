@@ -26,6 +26,7 @@ var colorSetBackup = new Array();
 var colorSet = new Array();
 var colorSetHex = new Array();
 var contents = document.getElementById('contents');
+var canvasParent = document.getElementById("preview");
 
 window.addEventListener('DOMContentLoaded', function(){    
     var wrapper = document.getElementById('item-factory-wrapper');
@@ -141,7 +142,7 @@ window.addEventListener('DOMContentLoaded', function(){
 //       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
 
        // 서버용 
-        XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
+       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
        XHR.send(formData);
        
        XHR.onreadystatechange = function() 
@@ -162,40 +163,75 @@ window.addEventListener('DOMContentLoaded', function(){
                 secondColor = colorSetHex[0];
                 textInputEventManager();
                 drawGradation(firstColor, secondColor);
-           }
-       }
-    },false);0
+                console.log("XHR onready");
+           } 
+        }
+
+        //캔버스 초기화 
+        context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);        // 픽셀 정리
+        context.beginPath();                                         // 컨텍스트 리셋
+
+        // canvasParent.removeChild(outputCanvas);
+        // canvasParent.removeChild(outputBackCanvas);
+        // canvasParent.removeChild(backGroundCanvas);
+        // var newOutputCanvas = document.createElement('canvas');
+        // newOutputCanvas.setAttribute('id', 'output-canvas');
+        // var newOutputBackCanvas = document.createElement('canvas');
+        // newOutputBackCanvas.setAttribute('id', 'output-backCanvas');        
+        // var newBackGroundCanvas = document.createElement('canvas');
+        // newBackGroundCanvas.setAttribute('id', 'back-ground-canvas');
+        // newOutputCanvas.width = CANVAS_WIDTH;
+        // newOutputCanvas.height = CANVAS_HEIGHT;
+        // newOutputBackCanvas.width = CANVAS_WIDTH;
+        // newOutputBackCanvas.height = CANVAS_HEIGHT;
+
+        // newOutputCanvas.style.display = "block";
+        // newOutputBackCanvas.style.display = "block";
+        // newBackGroundCanvas.style.display = "block";
+        // canvasParent.insertBefore(newOutputCanvas, textInput);
+        // canvasParent.insertBefore(newOutputBackCanvas, textInput);
+        // canvasParent.insertBefore(newBackGroundCanvas, textInput);
+    },false);
        
     /*confirm 클릭 시 itemFactory 확장 -사진 미리보기 사라지기 - text입력받기*/
     /*TODO 각 단계에서 뒤로가기*/
     var confirm = document.getElementById('confirm-button');
     confirm.addEventListener('click',function(){
-        maximizeItemFactory();
-        setUploadButtonOnConfirm();
-        setSubmitButtonOnConfirm();
-        
-        var tempImg = document.getElementById('preview-image');
-        tempImg.style.display = 'none';
-        
-        var background = document.getElementById('back-ground-canvas');
-        var preview = document.getElementById('preview');
-        var textInput = document.getElementById('text-input');
-        textInput.style.display = 'block';
-        preview.style.position = 'absolute';
-        preview.style.width = '100%';
-        preview.style.height = '100%';
-        background.style.display = 'block';
-        
-        var uploadSection = document.getElementById('upload-wrapper');
-        uploadSection.style.display = 'none';
-        itemFactoryClose.style.display = 'none';
-        
-        //textInput창 초기화 코드 
-        backGroundCanvas.width = MAX_WIDTH;
-        backGroundCanvas.height = MAX_HEIGHT;
+        if(XHR.status !== 200 ){       // 일단 방어코드로 급하게 버튼을 누르는 순간 전송이 완료되지 않았으면 대기하는 코드를 짰따. 
+            setTimeout(function(){
+                confirmdo();
+            }, 3000); // 3초 대기. 
+        } else {
+            confirmdo();
+        }
+        function confirmdo(){
+            maximizeItemFactory();
+            setUploadButtonOnConfirm();
+            setSubmitButtonOnConfirm();
+            
+            var tempImg = document.getElementById('preview-image');
+            tempImg.style.display = 'none';
+            
+            var background = document.getElementById('back-ground-canvas');
+            var preview = document.getElementById('preview');
+            var textInput = document.getElementById('text-input');
+            textInput.style.display = 'block';
+            preview.style.position = 'absolute';
+            preview.style.width = '100%';
+            preview.style.height = '100%';
+            background.style.display = 'block';
+            
+            var uploadSection = document.getElementById('upload-wrapper');
+            uploadSection.style.display = 'none';
+            itemFactoryClose.style.display = 'none';
+            
+            //textInput창 초기화 코드 
+            backGroundCanvas.width = MAX_WIDTH;
+            backGroundCanvas.height = MAX_HEIGHT;
 
-        drawGradation(firstColor, secondColor);
-        textInputEventManager();
+            drawGradation(firstColor, secondColor);
+            textInputEventManager();
+        }
     },false);
     
     /*submit버튼으로 전송하면 output 보여주기*/    
@@ -277,10 +313,6 @@ window.addEventListener('DOMContentLoaded', function(){
         addGridItem.lastChild.appendChild(addImgElement);
         addImgElement.style.display = "block";
 
-
-    //    var addOutputCanvas = outputCanvas.cloneNode(true);
-   //     outputCanvas.removeChild(addOutputCanvas.firstChild);
-
         var addColorElement = document.createElement('p');
         addColorElement.setAttribute('class', 'front');
         addColorElement.setAttribute('id', "contents-front-" + (contents.childNodes.length - 1).toString());
@@ -290,8 +322,6 @@ window.addEventListener('DOMContentLoaded', function(){
         addColorElement.style.backgroundColor = colorSetBackup[0];//"#" + colorSet[0].r + colorSet[0].g + colorSet[0].b;
         addColorElement.style.opacity = "1";
 
-        console.log(addImgElement);
-
         //textInput에 있던 값을 원래 초기값으로 
         textInput.value = "30자 이내로 입력하세요.";
 
@@ -300,9 +330,11 @@ window.addEventListener('DOMContentLoaded', function(){
     /*gridItem 클릭 시 확대 - output페이지로*/
     /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
     var gridItems = document.querySelectorAll('.grid-item');
-    
-    for(var id=0;id<gridItems.length;id++){
-        gridItems[id].addEventListener('click',function(e){
+    var front = document.querySelectorAll('.front');
+
+    for(var id = 0; id < front.length; id++){
+        front[id].addEventListener('click',function(e){
+            console.log("in");
 //            e.preventDefault();
 //            var front = this.firstChild;
 //            var back = this.lastChild;

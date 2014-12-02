@@ -31,7 +31,6 @@ function drawGradation(firstColor, secondColor) {
 	// 그라데이션 영역 정의 및 객체 생성
 	//var grd = ctx.createLinearGradient(0, MAX_HEIGHT/40, MAX_WIDTH, MAX_HEIGHT*2/3);	// 일부 스크린만 그라데이션 
 	var grd = grdContext.createLinearGradient(0, MAX_HEIGHT, MAX_WIDTH, MAX_HEIGHT); 			// 풀스크린용
-	console.log(firstColor);
 	grd.addColorStop(0, firstColor);
 	grd.addColorStop(1, secondColor);
 
@@ -61,7 +60,6 @@ function changeGradationColor(num, offset){
 	} else {
 		B = decimalToHex(zeroCheck(fB - offset * num));
 	}
-	console.log(R);
 	firstColor = combineRgbString(R, G, B);
 	drawGradation(firstColor, secondColor);
 		
