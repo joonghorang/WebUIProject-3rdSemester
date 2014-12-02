@@ -114,7 +114,6 @@ window.addEventListener('DOMContentLoaded', function(){
         background.style.display = 'block';
         
     },false);
->>>>>>> origin/master
     
     /*submit버튼으로 전송하면 output 보여주기*/    
     var submit = document.getElementById('submit-button');

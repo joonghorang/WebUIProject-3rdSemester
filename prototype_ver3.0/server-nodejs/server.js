@@ -12,6 +12,11 @@ var app = express();
 //static 폴더 위치
 var static = __dirname + '/static';
 app.use(express.static(static));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 //render할 파일을 어디서 읽어올거냐
 app.set('views', __dirname + '/views');
 //render할 파일 엔진이 뭐냐
@@ -59,14 +64,21 @@ app.post('/itemFactory/image', function(req, res){
             var imageFile = fs.readFileSync(files.image.path);
             var img = new Image();
             img.src = imageFile;
-            console.log(img.width);
-            console.log(img.height);
-            var canvas = new Canvas(img.width, img.height);
-            var ctx = canvas.getContext('2d');
-            
-            ctx.drawImage(img, 0, 0);
-//            ctx.getImageData(0,
-            res.send(imgP.pickColors(canvas));
+//            console.log(img.width);
+//            console.log(img.height);
+//            var canvas = new Canvas(img.width, img.height);
+//            var ctx = canvas.getContext('2d');
+//            
+//            ctx.drawImage(img, 0, 0);
+////            ctx.getImageData(0,
+            var imageCanvas = imgP.createCanvasByImage(img);
+            var hsvHistData = imgP.histogram("hsv", imageCanvas);
+            var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
+            var pickedColors = [];
+            for(var i = 0; i< pickedHues.length; ++i){
+                pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toRgb());
+            }
+            res.send(imgP.pickColors(imageCanvas));
             
         }
         
