@@ -34,24 +34,27 @@ app.get(['/', '/index'], function(req, res){
 app.get('/colorLab', function(req, res){
     var fileName = "colorLab-current-image";
     var imageFile = fs.readFileSync(static + '/image/' +fileName);
-    
     var img = new Image();
     img.src = imageFile;
+    
     var imageCanvas = imgP.createCanvasByImage(img);
     var colors = imgP.pickColors(imageCanvas);
-    var hsvHistData = imgP.histogram("hsv", imageCanvas);
-    var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
-    var pickedColors = [];
-
-    for(var i = 0; i< pickedHues.length; ++i){
-        pickedColors[i] = tinycolor({h : pickedHues[i], s :100, v:100}).toHexString();
-    }
+    var rawHistData = imgP.histogram("hsv", imageCanvas);
+    var resultHistData = imgP.smoothing(rawHistData, 7);
+    var cmpHistData = imgP.smoothing(rawHistData, 7, [1,4,6,4,1]);
+    var pickedHues = imgP.pickPeaks(resultHistData);
     
+    var pickedColors = [];
+    for(var i = 0; i< pickedHues.length; ++i){
+        pickedColors[i] = tinycolor({h : pickedHues[i]["x"], s :100, v:100}).toHexString();
+    }
     console.log(JSON.stringify(pickedColors));
     res.render("colorLab.html", {
         "colors" : colors,
         "imageSrc" : '/image/' + fileName, 
-        "histData" : hsvHistData,
+        "histData1" : rawHistData,
+        "histData2" : resultHistData,
+        "histData3" : cmpHistData,
         "pickedColors" : pickedColors });
 });
 app.post('/itemFactory', function(req, res){

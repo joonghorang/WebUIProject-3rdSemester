@@ -1,8 +1,4 @@
-//12. 1. 20:43 
-//add "circleIndexOf" method to Array.prototype
-//add "smoothing" function
-//12. 2. 06:00
-//add "pickPeaks" function
+
 
 //Array.prototype.circleIndex = function(idx){
 ////    // circleIndexOf(-1) = circleIndexOf( arrlen - 1 )
@@ -32,20 +28,20 @@ window.addEventListener('DOMContentLoaded', function(){
 //    xhr.send("
 //    console.log(histo.width, histo.clientWidth, histo.offsetWidth, histo.scrollWidth);
     
-    var histCanvas = drawHistogram(smoothing(histData, 3));
-    histo.appendChild(drawHistogram(histData));
-    pickPeaks(histData);
-    histo.appendChild(drawHistogram(smoothing(histData, 7)));
-    pickPeaks(smoothing(histData, 7));
-    histo.appendChild(drawHistogram(smoothing(histData, 7, [1, 4, 6, 4, 1])));
-    pickPeaks(smoothing(histData, 7, [1, 4, 6, 4, 1]));
+//    var histCanvas = drawHistogram(smoothing(histData, 3));
+    histo.appendChild(drawHistogram(histData1));
+    //pickPeaks(histData);
+    histo.appendChild(drawHistogram(histData2));
+    //pickPeaks(smoothing(histData, 7));
+    histo.appendChild(drawHistogram(histData3));
+    //pickPeaks(smoothing(histData, 7, [1, 4, 6, 4, 1]));
     
 },false);
 
 var drawHistogram = function(histData){
     var histCanvas = document.createElement("canvas");
     var ctx = histCanvas.getContext("2d");
-    var imageData = ctx.createImageData(histo.clientWidth, 400)
+    var imageData = ctx.createImageData(histo.clientWidth, 200)
     var maxDataSize = Math.max.apply(null, histData);
     var dataWidth = imageData.width / histData.length;
     var dataHeightRate = imageData.height / maxDataSize;

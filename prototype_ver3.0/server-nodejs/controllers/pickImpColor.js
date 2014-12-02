@@ -169,6 +169,7 @@ var pickPeaks = function(histData){
     }
     return peaks;
 }
+//for node.js
 if(typeof module !== "undefined" && module.exports){
     exports.pickPeaks = pickPeaks;
     exports.smoothing = smoothing;

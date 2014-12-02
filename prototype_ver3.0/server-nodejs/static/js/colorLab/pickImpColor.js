@@ -29,6 +29,21 @@ var __basename = typeof module === "undefined" || !module.exports ? (function(){
     return path.basename(module.filename);
 })();
 
+
+var pickColors = function(img){
+    console.log(__basename + " - function() pickColors start ...");
+    var imageCanvas = createCanvasByImage(img);
+    var hsvHistData = histogram("hsv", imageCanvas);
+    var pickedHues = pickPeaks(smoothing(hsvHistData, 7));
+    console.log(" pickedHue Finish. Hue.leng : " + pickedHues.length);
+    var pickedColors = [];
+    for(var i = 0; i< pickedHues.length; ++i){
+        pickedColors.push(tinycolor({h : pickedHues[i]["x"], s :100, v:100}).toRgb());
+    }
+    console.log(__basename + " - function() pickColors end ");
+    return pickedColors;
+}
+
 Array.prototype.circleIndex = function(idx){
 //    // circleIndexOf(-1) = circleIndexOf( arrlen - 1 )
     if( idx >= 0 && idx < this.length){
@@ -67,47 +82,12 @@ var createCanvasByImage = function(img){
     var rCanvas = new Canvas(canvasWidth, canvasHeight);
     var rCanvasCtx = rCanvas.getContext("2d");
     rCanvasCtx.drawImage(img, 0,0, img.width, img.height, 0,0, canvasWidth, canvasHeight);
-    return rCanvas;
     console.log(__basename + " - function() createCanvasByImage end");
-}
-
-var pickColors = function(img){
-    console.log(__basename + " - function() pickColors start ...");
-    var imageCanvas = createCanvasByImage(img);
-    var hsvHistData = histogram("hsv", imageCanvas);
-    var pickedHues = pickPeaks(smoothing(hsvHistData, 7));
-    console.log(" pickedHue Finish. Hue.leng : " + pickedHues.length);
-    var pickedColors = [];
-    for(var i = 0; i< pickedHues.length; ++i){
-        pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toRgb());
-    }
-    console.log(" pickedColors Finish pickedColor : " + pickedColors);
-    return pickedColors;
-//    ctx = canvas.getContext("2d");
-//    var imageData = ctx.getImageData(0,0, canvas.width, canvas.height);    
-//    var tmpR = 0;
-//    var tmpG = 0;
-//    var tmpB = 0;
-//    
-//    for(var x = 0; x < imageData.width; ++x){
-//        for(var y = 0; y < imageData.height; ++y){
-//            var index = (x + y * imageData.width) * 4;
-//            tmpR += imageData.data[index + 0];
-//            tmpG += imageData.data[index + 1];
-//            tmpB += imageData.data[index + 2];
-//        }
-//    }
-//    var pixelNum = imageData.width * imageData.height;
-//    var r = parseInt(tmpR / pixelNum);
-//    var g = parseInt(tmpG / pixelNum);
-//    var b = parseInt(tmpB / pixelNum);
-//    return {"r": r, "g": g, "b": b, "a": 255};
-    console.log(__basename + " - function() pickColors end ");
-}
+    return rCanvas;
+}    
 
 var histogram = function( type, canvas ){
     var color = new tinycolor("#0000ff");
-    console.log(color.toHsv());
     if(type === "hsv"){
         var ctx = canvas.getContext("2d");
         var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
@@ -138,7 +118,7 @@ var smoothing = function(histData, repeat, cvCoeff){
     //set default
     repeat = typeof repeat !== "number" ? 1 : repeat;
     cvCoeff = typeof cvCoeff === "undefined" || cvCoeff.length%2 !== 1 ? [1, 1, 1, 1, 1] : cvCoeff; 
-    
+    console.log(cvCoeff);
     var beforeHistData = histData.slice(0);
     var resultHistData;
     var cvSum = cvCoeff.reduce(function(pv, cv){return pv + cv});
@@ -171,12 +151,13 @@ var pickPeaks = function(histData){
             peaks.push({ x : i, size : histData.circleIndex(i)});   
         }
     }
-    peaks.sort(function(f,b){ return b.size - f.size });
-    for( var i = 0; i< peaks.length; ++i){
-        peaks[i] = peaks[i].x;    
-    }
+//    peaks.sort(function(f,b){ return b.size - f.size });
+//    for( var i = 0; i< peaks.length; ++i){
+//        peaks[i] = peaks[i].x;    
+//    }
     return peaks;
 }
+
 if(typeof module !== "undefined" && module.exports){
     exports.pickPeaks = pickPeaks;
     exports.smoothing = smoothing;
