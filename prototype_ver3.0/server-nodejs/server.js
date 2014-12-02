@@ -39,14 +39,33 @@ app.get('/colorLab', function(req, res){
     
     var imageCanvas = imgP.createCanvasByImage(img);
     var colors = imgP.pickColors(imageCanvas);
-    var rawHistData = imgP.histogram("hsv", imageCanvas);
+    var rawHistData = imgP.histogram("hue", imageCanvas, { sL : 0.3, vL : 0.3});
     var resultHistData = imgP.smoothing(rawHistData, 7);
     var cmpHistData = imgP.smoothing(rawHistData, 7, [1,4,6,4,1]);
     var pickedHues = imgP.pickPeaks(resultHistData);
     
     var pickedColors = [];
-    for(var i = 0; i< pickedHues.length; ++i){
-        pickedColors[i] = tinycolor({h : pickedHues[i]["x"], s :100, v:100}).toHexString();
+    for(var i = 0; i< pickedHues.length && i < 5; ++i){
+        pickedColors[i] = tinycolor({h : pickedHues[i]["x"], 
+                                     s : 
+                                     (function(){
+                                         var rawSatData = imgP.histogram("sat", imageCanvas, { hL : pickedHues[i]["rangeL"], hR : pickedHues[i]["rangeR"], sL : 0.3, vl : 0.3});
+                                         var pickedSats = imgP.pickPeaks(rawSatData);
+                                         console.log(pickedSats[0]["x"]);
+                                         return pickedSats[0]["x"]; 
+                                     })(), 
+//                                     (function(){
+//                                         var rawSatData = imgP.histogram("sat", imageCanvas, { hL : pickedHues[i]["rangeL"], hR : pickedHues[i]["rangeR"], sL : 0.3, vl : 0.3});
+//                                         //console.log(rawSatData, rawSatData.length);
+//                                         var resultSatData = rawSatData;
+//                                         console.log(resultSatData, resultSatData.length);
+//                                         var pickedSats = imgP.pickPeaks(resultSatData);
+//                                         pickedSats.sort(function(f,b){
+//                                            return b["x"] - f["x"];
+//                                         });
+//                                         return pickedSats[0]["x"]; 
+//                                     })(), 
+                                     v : 100}).toHexString();
     }
     console.log(JSON.stringify(pickedColors));
     res.render("colorLab.html", {

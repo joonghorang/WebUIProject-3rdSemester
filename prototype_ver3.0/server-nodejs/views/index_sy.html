@@ -18,10 +18,12 @@
                 <div id = "item-factory-background"></div>
                 
 				<div id = "item-factory">
-                    <div id = "upload">
-                        <div id="upload-button">사진 고르기</div>
-						<input type = "file" id = "upload-hidden">
-					</div>
+                    <div id = "upload-wrapper">
+                        <div id = "upload">
+                            <div id="upload-button">사진 고르기</div>
+                            <input type = "file" id = "upload-hidden">
+                        </div>
+                    </div>
 					<div id = "preview">
 						<canvas id = "output-canvas"></canvas>
                         <canvas id = "output-backCanvas"></canvas>
@@ -35,7 +37,12 @@
 				</div>
 			</div>
 			<div id = "contents">
-                
+ <!--               
+                <div class="grid-item">
+                    <div class="front"></div>
+                    <div class="back"></div>
+                </div>
+
                 <div class="grid-item">
                     <div class="front"></div>
                     <div class="back"></div>
@@ -72,16 +79,6 @@
                     <div class="front"></div>
                     <div class="back"></div>
                 </div>
-                <div class="grid-item">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="grid-item">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                
-<!--
                 <div class="grid-item">
                     <canvas class="front"></canvas>
                     <canvas class="back"></canvas>
