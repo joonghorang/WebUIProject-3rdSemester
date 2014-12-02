@@ -17,16 +17,19 @@ var outputCanvas = document.getElementById("output-canvas");
 outputCanvas.width = CANVAS_WIDTH;
 outputCanvas.height = CANVAS_HEIGHT;
 var context = outputCanvas.getContext("2d");
+var backCanvas = document.getElementById("output-backCanvas");
+backCanvas.width = CANVAS_WIDTH;
+backCanvas.height = CANVAS_HEIGHT;
+var backContext = backCanvas.getContext("2d");
 
 
 function textWriter(){
 
     console.log("textWrite");
-    ctx.fillStyle = "rgb(0, 0, 0)";
-    ctx.fillRect(100, 50, 50, 50); // 사각형 그리기
+    backContext.fillStyle = colorSetHex[0];//"rgb(0, 0, 0)";
+    backContext.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // 사각형 그리기
     // 비동기 통신으로 받아온 칼라값을 넣어준다. 
-    fontColor = colorSetHex[1];
-    outputCanvas.style.backGroundColor = colorSetHex[0];
+    fontColor = "#FFFFFF";
 
     var originTextData = textInput.value;
     var textX = CANVAS_WIDTH/2;

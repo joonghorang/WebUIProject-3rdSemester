@@ -116,6 +116,12 @@ body {
 
 #output-canvas {
     border: 0;
+    z-index: 35;
+    position: absolute;
+}
+
+#output-backCanvas {
+    border: 0;
     z-index: 30;
     position: absolute;
 }
