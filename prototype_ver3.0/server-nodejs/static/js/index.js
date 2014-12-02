@@ -243,14 +243,14 @@ window.addEventListener('DOMContentLoaded', function(){
         // backGroundCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         //outputCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-<<<<<<< HEAD
+
         /*itemFactoryNav display상태 초기상태로*/
 //        itemFactoryOpen.style.display = 'block';
         
         /*preview-image 의 자식 노드를 지우고 노드에 추가하기*/
-=======
+
         /*preview-image 의 자식 노드를 지우기*/
->>>>>>> origin/master
+
         var tempImage = document.getElementById('preview-image');
 
         var addGridItem = document.createElement('div');
