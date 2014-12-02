@@ -233,17 +233,18 @@ window.addEventListener('DOMContentLoaded', function(){
        {
            if (XHR.readyState == 4 && XHR.status == 200) 
            {
+                alert("in");
                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
                var inColor = JSON.parse(XHR.response);
+               alert(inColor);
                for(var i = 0; i < inColor.length; i++){
                     colorSet.push(inColor[i]);
-                    colorSetHex.push(changeDecToHexColor(inColor[i][0], inColor[i][1], inColor[i][2]));
+                    colorSetHex.push(changeDecToHexColor(inColor[i]["r"], inColor[i]["g"], inColor[i]["b"]));
                     console.log(colorSet[i]);
                     console.log(colorSetHex[i]);
                }
-
                function changeDecToHexColor(r, g, b){
-                    var result = "#" + r + g + b;
+                    var result = "#" + (r).toString(16) + (g).toString(16) + (b).toString(16);
                     return result;
                }
            }

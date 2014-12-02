@@ -20,7 +20,14 @@ var context = outputCanvas.getContext("2d");
 
 
 function textWriter(){
-    
+
+    console.log("textWrite");
+    ctx.fillStyle = "rgb(0, 0, 0)";
+    ctx.fillRect(100, 50, 50, 50); // 사각형 그리기
+    // 비동기 통신으로 받아온 칼라값을 넣어준다. 
+    fontColor = colorSetHex[1];
+    outputCanvas.style.backGroundColor = colorSetHex[0];
+
     var originTextData = textInput.value;
     var textX = CANVAS_WIDTH/2;
     var textY = CANVAS_HEIGHT/2;
@@ -152,7 +159,10 @@ function textWriter(){
             }
 
             function setText(context, text, color, font, fontSize, x, y){
-                context.fillStyle = fontColor;
+                console.log("color");
+                console.log(colorSetHex[0]);
+                context.fillStyle = colorSetHex[0];
+
                 context.font = fontSize + "px " + fontName; //fontWeight + " " + 
                 context.textAlign = "left";
                 context.textBaseline = "middle";
@@ -178,9 +188,7 @@ function textWriter(){
                 for(var l = 0; l <= wordArray.length; l++){ // 가장 뒤로 밀린 공백을 삭제한다. 
                     console.log(wordArray[l]);
                     if(wordArray[l] === ""){
-                        console.log(wordArray[l] + "here");
                         wordArray.splice(l, 0);
-                        console.log(wordArray.length);
                     }
                 }
             }

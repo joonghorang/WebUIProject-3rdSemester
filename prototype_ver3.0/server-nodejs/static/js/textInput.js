@@ -8,9 +8,9 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR = 80;
-var fG = 240;
-var fB = 200;
+var fR =255;
+var fG = 255;
+var fB = 255;
 var firstColorR = (fR).toString(16);
 var firstColorG = (fG).toString(16);
 var firstColorB = (fB).toString(16);
