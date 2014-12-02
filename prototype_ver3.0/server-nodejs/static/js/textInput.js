@@ -14,7 +14,7 @@ var fB = 200;
 var firstColorR = (fR).toString(16);
 var firstColorG = (fG).toString(16);
 var firstColorB = (fB).toString(16);
-var firstColor = "#" + firstColorR + firstColorG + firstColorB;	// 그라데이션 칼라 초기값
+var firstColor = combineColorString(firstColorR, firstColorG, firstColorB);	// 그라데이션 칼라 초기값
 var secondColor = "#204090";
 
 // 초기화 코드
@@ -24,6 +24,11 @@ window.onload = function(){
 	draw_canvas(firstColor, secondColor);
 	EventManager();
 };
+
+function combineColorString(r, g, b, a){
+	var color = "#" + r + g + b;
+	return color; 
+}
 
 function draw_canvas() {
 	var ctx = backGroundCanvas.getContext('2d');

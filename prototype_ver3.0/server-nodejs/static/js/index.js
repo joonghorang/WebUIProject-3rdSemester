@@ -11,8 +11,7 @@
 - server side complete - web hosting(Heroku)
 - DB연동
 
-+ server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....?
-네, 그것은 웹에서 돌고 있지 않기 때문입니다. 
++ server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....? 
 
 [overall]
 - 전체적인 스타일 조정(text input 활성화 될 때 가운데부터 나타나는 것, 동적 레이아웃 등)
@@ -108,7 +107,25 @@ window.addEventListener('DOMContentLoaded', function(){
         preview.style.width = '100%';
         preview.style.height = '100%';
         background.style.display = 'block';
-    },false);
+
+
+    // AJAX 통신으로 색을 받아오는 함수. 
+    var request = new XMLHttpRequest();
+    request.open("POST" , "./imageFactory/image" , false);
+    request.send(tempImg);
+    console.log(request.responseText);
+
+
+    // // 덕성이가 보내주는 JSON형식 
+    // {
+    //     "r" : 255,
+    //     "g" : 255, 
+    //     "b" : 100,
+    //     "a" : 255
+    // }
+
+    // colors[0]["r"] = 255;
+    //     },false);
     
     /*submit버튼으로 전송하면 output 보여주기*/    
     var submit = document.getElementById('submit-button');
@@ -150,6 +167,8 @@ window.addEventListener('DOMContentLoaded', function(){
         /*TODO preview-image 의 자식 노드를 지우기*/
         var tempImage = document.getElementById('preview-image');
         tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
+
+        // 근데 생각해보면 차라리 해당 노드를 '이동'시키는 개념이 더 좋지 않을까? 
         
     },false);
 
@@ -202,5 +221,4 @@ window.addEventListener('DOMContentLoaded', function(){
             }
         }
     },false);
-
 },false)
