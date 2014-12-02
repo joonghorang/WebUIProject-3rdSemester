@@ -8,22 +8,14 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR =255;
+var fR = 255;
 var fG = 255;
 var fB = 255;
 var firstColorR = (fR).toString(16);
 var firstColorG = (fG).toString(16);
 var firstColorB = (fB).toString(16);
 var firstColor = combineColorString(firstColorR, firstColorG, firstColorB);	// 그라데이션 칼라 초기값
-var secondColor = "#204090";
-
-// 초기화 코드
-window.onload = function(){						
-	backGroundCanvas.width = MAX_WIDTH;
-	backGroundCanvas.height = MAX_HEIGHT;
-	draw_canvas(firstColor, secondColor);
-	EventManager();
-};
+var secondColor;
 
 function combineColorString(r, g, b, a){
 	var color = "#" + r + g + b;
@@ -95,7 +87,7 @@ function changeGradationColor(num, offset){
 	}
 }
 // 이벤트를 관리하는 걸 모아둔 함수. 
-function EventManager(){
+function textInputEventManager(){
 	textInput.oninput = function(){
 		if(textInput.value.length < 30){
 			var num = textInput.value.length;

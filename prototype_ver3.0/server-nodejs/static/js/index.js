@@ -36,6 +36,7 @@ window.addEventListener('DOMContentLoaded', function(){
     
     /*itemFactory 열기*/
     itemFactoryOpen.addEventListener('click',function(){
+        backCanvas.style.display = 'none';
         wrapper.style.display = 'block';
         var tempImg = document.getElementById('preview-image');
         tempImg.style.display = 'block';
@@ -117,6 +118,14 @@ window.addEventListener('DOMContentLoaded', function(){
         preview.style.height = '100%';
         background.style.display = 'block';
         
+        //textInput창 초기화 코드 
+        backGroundCanvas.width = MAX_WIDTH;
+        backGroundCanvas.height = MAX_HEIGHT;
+
+        setTimeout(function(){      // 비동기 대신 일단 급하게 2초만 기다렸다가 색상정보를 받는 함수. 
+
+        }, 2000);
+        textInputEventManager();
     },false);
     
     /*submit버튼으로 전송하면 output 보여주기*/    
@@ -129,6 +138,7 @@ window.addEventListener('DOMContentLoaded', function(){
 		submitButton.style.display = 'none';
         outputCanvas.style.opacity = '1';
         outputCanvas.style.display = 'block';
+
         backGroundCanvas.style.display='none';
         
         function getHour(){
@@ -151,6 +161,7 @@ window.addEventListener('DOMContentLoaded', function(){
         textWriter();
         
         outputCanvas.style.opacity = '0';
+        //backCanvas.style.opacity = '0';
         setTimeout(function(){
             wrapper.style.display = 'none';
         }, 2000);
@@ -184,7 +195,7 @@ window.addEventListener('DOMContentLoaded', function(){
         fileInput.value = null;
     })
     fileInput.addEventListener('change', function(){
-                
+        
         /*파일 없을때 에러처리*/
         if(this.files.item(0)===null){
             alert('no image');
@@ -207,21 +218,9 @@ window.addEventListener('DOMContentLoaded', function(){
         
         /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
         outputCanvas.style.display = 'none';
+        backCanvas.style.display = 'none';
 //        
 //        /*AJAX로 데이터 받아오기*/
-
-
-    // // 덕성이가 보내주는 JSON형식 
-    // {
-    //     "r" : 255,
-    //     "g" : 255, 
-    //     "b" : 100,
-    //     "a" : 255
-    // }
-
-    // colors[0]["r"] = 255;
-    //     },false);
-
 
        var formData = new FormData();
        formData.append("image", this.files[0]);
@@ -238,8 +237,6 @@ window.addEventListener('DOMContentLoaded', function(){
                for(var i = 0; i < inColor.length; i++){
                     colorSet.push(inColor[i]);
                     colorSetHex.push(changeDecToHexColor(inColor[i]["r"], inColor[i]["g"], inColor[i]["b"]));
-                    console.log(colorSet[i]);
-                    console.log(colorSetHex[i]);
                }
                function changeDecToHexColor(r, g, b){
                     var result = "#" + zeroCheck((r).toString(16)) 
@@ -254,6 +251,9 @@ window.addEventListener('DOMContentLoaded', function(){
                     }
                     return result;
                }
+               //그라데이션 칼라 셋팅 
+                secondColor = colorSetHex[0];
+                draw_canvas(firstColor, secondColor);
            }
        }
     },false);

@@ -11,7 +11,6 @@ var textInput = document.getElementById('text-input');
 var fontSize = 36;
 var fontName;
 var fontColor = "#000000";
-
 //캔버스를 생성한다.  
 var outputCanvas = document.getElementById("output-canvas");
 outputCanvas.width = CANVAS_WIDTH;
@@ -25,11 +24,13 @@ var backContext = backCanvas.getContext("2d");
 
 function textWriter(){
 
-    console.log("textWrite");
-    backContext.fillStyle = colorSetHex[0];//"rgb(0, 0, 0)";
-    backContext.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // 사각형 그리기
     // 비동기 통신으로 받아온 칼라값을 넣어준다. 
-    fontColor = "#FFFFFF";
+    backCanvas.style.display = 'block';
+    backContext.fillStyle = colorSetHex[0]; // or "rgb(0, 0, 0)";
+    backContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    colorSetHex = new Array; // 다음 값을 받기 위해 일단 배열을 초기화 좋은 방법이 아님 나중에 리팩토링 
+    color = new Array();
+    fontColor = "#000000";// colorSetHex[1];//
 
     var originTextData = textInput.value;
     var textX = CANVAS_WIDTH/2;
@@ -162,10 +163,7 @@ function textWriter(){
             }
 
             function setText(context, text, color, font, fontSize, x, y){
-                console.log("color");
-                console.log(colorSetHex[0]);
-                context.fillStyle = colorSetHex[0];
-
+                context.fillStyle = color;
                 context.font = fontSize + "px " + fontName; //fontWeight + " " + 
                 context.textAlign = "left";
                 context.textBaseline = "middle";
