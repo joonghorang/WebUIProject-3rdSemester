@@ -122,20 +122,21 @@ window.addEventListener('DOMContentLoaded', function(){
         backGroundCanvas.width = MAX_WIDTH;
         backGroundCanvas.height = MAX_HEIGHT;
 
-        setTimeout(function(){      // 비동기 대신 일단 급하게 2초만 기다렸다가 색상정보를 받는 함수. 
-
-        }, 2000);
+        drawGradation(firstColor, secondColor);
         textInputEventManager();
     },false);
     
     /*submit버튼으로 전송하면 output 보여주기*/    
     var submit = document.getElementById('submit-button');
     submit.addEventListener('click',function(){
-        
+
         wrapper.style.display = 'block';
         textValue = textInput.textContent;
 		textInput.style.display = 'none';
 		submitButton.style.display = 'none';
+
+
+
         outputCanvas.style.opacity = '1';
         outputCanvas.style.display = 'block';
 
@@ -165,7 +166,15 @@ window.addEventListener('DOMContentLoaded', function(){
         setTimeout(function(){
             wrapper.style.display = 'none';
         }, 2000);
+
+        //textInput에 있던 값을 원래 초기값으로 
+        textInput.value = "30자 이내로 입력하세요.";
         
+        //이전에 캔버스에 쓴 글씨는 지워준다. 
+        // context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        // backGroundCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        //outputCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
         /*itemFactoryNav display상태 초기상태로*/
         itemFactoryOpen.style.display = 'block';
         itemFactoryClose.style.display = 'none';
@@ -219,19 +228,18 @@ window.addEventListener('DOMContentLoaded', function(){
         /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
         outputCanvas.style.display = 'none';
         backCanvas.style.display = 'none';
-//        
-//        /*AJAX로 데이터 받아오기*/
 
+//        /*AJAX로 데이터 받아오기*/
        var formData = new FormData();
        formData.append("image", this.files[0]);
 
-       XHR.open("post", "http://192.168.0.7:3000/itemFactory/image", true);
+       XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
        XHR.send(formData);
        
        XHR.onreadystatechange = function() 
        {
            if (XHR.readyState == 4 && XHR.status == 200) 
-           {
+           {            
                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
                var inColor = JSON.parse(XHR.response);
                for(var i = 0; i < inColor.length; i++){
@@ -251,9 +259,15 @@ window.addEventListener('DOMContentLoaded', function(){
                     }
                     return result;
                }
+               console.log(inColor);
                //그라데이션 칼라 셋팅 
+                fR = colorSet[1]["r"];
+                fG = colorSet[1]["g"];
+                fB = colorSet[1]["b"];
+                firstColor = colorSetHex[1];
                 secondColor = colorSetHex[0];
-                draw_canvas(firstColor, secondColor);
+                textInputEventManager();
+                drawGradation(firstColor, secondColor);
            }
        }
     },false);

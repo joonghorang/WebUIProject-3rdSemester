@@ -8,33 +8,26 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR = 255;
-var fG = 255;
-var fB = 255;
-var firstColorR = (fR).toString(16);
-var firstColorG = (fG).toString(16);
-var firstColorB = (fB).toString(16);
-var firstColor = combineColorString(firstColorR, firstColorG, firstColorB);	// 그라데이션 칼라 초기값
+var fR, fG, fB;
+var firstColor;	// 그라데이션 칼라 초기값
 var secondColor;
 
-function combineColorString(r, g, b, a){
-	var color = "#" + r + g + b;
-	return color; 
-}
-
-function draw_canvas() {
-	var ctx = backGroundCanvas.getContext('2d');
-	
+function drawGradation(firstColor, secondColor) {
+	var grdContext = backGroundCanvas.getContext('2d');
 	// 그라데이션 영역 정의 및 객체 생성
 	//var grd = ctx.createLinearGradient(0, MAX_HEIGHT/40, MAX_WIDTH, MAX_HEIGHT*2/3);	// 일부 스크린만 그라데이션 
-	var grd = ctx.createLinearGradient(0, MAX_HEIGHT, MAX_WIDTH, MAX_HEIGHT); 			// 풀스크린용
-	grd.addColorStop(0, secondColor);
-	grd.addColorStop(1, firstColor);
+	var grd = grdContext.createLinearGradient(0, MAX_HEIGHT, MAX_WIDTH, MAX_HEIGHT); 			// 풀스크린용
+	console.log(firstColor);
+	grd.addColorStop(0, firstColor);
+	grd.addColorStop(1, secondColor);
 
 	// 도형의채우는 색상 속성에 그라데이션 객체 설정
-	ctx.fillStyle = grd;
+	grdContext.fillStyle = grd;
 	//ctx.fillRect(0, MAX_HEIGHT/2 - MAX_HEIGHT/16, MAX_WIDTH, MAX_HEIGHT/8);			// 일부 스크린만
-	ctx.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);											// 풀스크린용
+	grdContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);											// 풀스크린용
+	// grd.addColorStop(0, colorSetHex[1]);
+	// grd.addColorStop(1, colorSetHex[0]);
+	// context.fillRect(0, MAX_HEIGHT/2, MAX_WIDTH, MAX_HEIGHT/2);
 }
 
 function changeGradationColor(num, offset){
@@ -42,40 +35,47 @@ function changeGradationColor(num, offset){
 	if((fR - offset * num) < 10){
 		R = 10;
 	} else {
-		R = decimalToHex(fR - offset * num);
+		R = decimalToHex(zeroCheck(fR - offset * num));
 	}
 	if((fG - offset * num) < 10){
 		G = 10;
 	} else {
-		G = decimalToHex(fG - offset * num);
+		G = decimalToHex(zeroCheck(fG - offset * num));
 	}
 	if((fB - offset * num) < 10){
 		B = 10;
 	} else {
-		B = decimalToHex(fB - offset * num);
+		B = decimalToHex(zeroCheck(fB - offset * num));
 	}  	
 	firstColor = combineRgbString(R, G, B);
-	draw_canvas(firstColorR, secondColor);
+	drawGradation(firstColor, secondColor);
 	
-	var fontR, fontG, fontB;
+	// var fontR, fontG, fontB;
 
-	if((0 + offset * num / 2) > 255){
-		fontR = 255;
-	} else {
-		fontR = decimalToHex(0 + offset * num / 2);
-	}
-	if((0 + offset * num * 1) > 255){
-		fontG = 255;
-	} else {
-		fontG = decimalToHex(0 + offset * num * 1);
-	}
-	if((0 + offset * num * 2) > 255){
-		fontB = 255;
-	} else {
-		fontB = decimalToHex(0 + offset * num * 2);
-	}		
+	// if((0 + offset * num) > 255){
+	// 	fontR = 255;
+	// } else {
+	// 	fontR = decimalToHex(zeroCheck(0 + offset * num));
+	// }
+	// if((0 + offset * num) > 255){
+	// 	fontG = 255;
+	// } else {
+	// 	fontG = decimalToHex(zeroCheck(0 + offset * num));
+	// }
+	// if((0 + offset * num) > 255){
+	// 	fontB = 255;
+	// } else {
+	// 	fontB = decimalToHex(zeroCheck(0 + offset * num));
+	// }		
+    function zeroCheck(num){
+        if(num < 10){
+            return "0" + num;
+        } else {
+            return num;
+        }
+    }
 
-	textInput.style.color = combineRgbString(fontR, fontG, fontB);
+	//textInput.style.color = combineRgbString(FF, FF, FF);
 
 	function decimalToHex(num){
 		var hexnum = (num).toString(16);
@@ -86,35 +86,34 @@ function changeGradationColor(num, offset){
 		return Color;
 	}
 }
-// 이벤트를 관리하는 걸 모아둔 함수. 
+
 function textInputEventManager(){
 	textInput.oninput = function(){
 		if(textInput.value.length < 30){
 			var num = textInput.value.length;
 			if(num < 5){
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 4);
 				textInput.style.fontSize = "60px";
 			} else if(num < 10) {
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 4);
 				textInput.style.fontSize = "55px";
 			} else if(num < 15) {
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 4);
 				textInput.style.fontSize = "50px";
 			} else if(num < 20) {
-				changeGradationColor(num, 9);
+				changeGradationColor(num, 4);
 				textInput.style.fontSize = "45px";
 			} else {
-				changeGradationColor(num, 8);
+				changeGradationColor(num, 4);
 				textInput.style.fontSize = "40px";
 			}
 		} else {
-			preventDefault();
 		}	
 	};
 
 	EventUtil.addHandler(textInput, "textInput", function(event){
 		event = EventUtil.getEvent(event);
-		if(textInput.value.length > 30){
+		if(textInput.value.length > 29){
 			EventUtil.preventDefault(event);
 		}
 	});
