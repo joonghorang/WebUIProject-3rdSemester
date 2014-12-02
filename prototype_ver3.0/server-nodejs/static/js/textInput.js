@@ -32,21 +32,22 @@ function drawGradation(firstColor, secondColor) {
 
 function changeGradationColor(num, offset){
 	var R, G, B;
-	if((fR - offset * num) < 10){
-		R = 10;
+	if((fR - offset * num) < 16){
+		R = 16;
 	} else {
 		R = decimalToHex(zeroCheck(fR - offset * num));
 	}
-	if((fG - offset * num) < 10){
-		G = 10;
+	if((fG - offset * num) < 16){
+		G = 16;
 	} else {
 		G = decimalToHex(zeroCheck(fG - offset * num));
 	}
-	if((fB - offset * num) < 10){
-		B = 10;
+	if((fB - offset * num) < 16){
+		B = 16;
 	} else {
 		B = decimalToHex(zeroCheck(fB - offset * num));
-	}  	
+	}
+	console.log(R);
 	firstColor = combineRgbString(R, G, B);
 	drawGradation(firstColor, secondColor);
 	

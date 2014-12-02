@@ -226,7 +226,7 @@ window.addEventListener('DOMContentLoaded', function(){
         
         /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
         outputCanvas.style.display = 'none';
-        backCanvas.style.display = 'none';
+        outputBackCanvas.style.display = 'none';
 
 //        /*AJAX로 데이터 받아오기*/
        var formData = new FormData();
