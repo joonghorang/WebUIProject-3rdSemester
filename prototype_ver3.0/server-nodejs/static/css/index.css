@@ -259,7 +259,6 @@ border-bottom-left-radius:5px;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(80,180,170);
     transition: all 0.5s ease-in-out;
     opacity: 1;
 }
