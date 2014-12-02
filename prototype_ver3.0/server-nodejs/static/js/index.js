@@ -142,7 +142,7 @@ window.addEventListener('DOMContentLoaded', function(){
 //       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
 
        // 서버용 
-       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
+       XHR.open("post", "/itemFactory/image", true);
        XHR.send(formData);
        
        XHR.onreadystatechange = function() 
