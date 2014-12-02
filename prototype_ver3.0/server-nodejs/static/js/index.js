@@ -24,6 +24,7 @@
 // 색상 받아오는 전역변수 선언 
 var colorSet = new Array();
 var colorSetHex = new Array();
+var contents = document.getElementById('contents');
 
 window.addEventListener('DOMContentLoaded', function(){    
     var wrapper = document.getElementById('item-factory-wrapper');
@@ -262,10 +263,11 @@ window.addEventListener('DOMContentLoaded', function(){
         
         /*preview-image 의 자식 노드를 지우기*/
         var tempImage = document.getElementById('preview-image');
-        tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
+//        tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
 
         // 근데 생각해보면 차라리 해당 노드를 '이동'시키는 개념이 더 좋지 않을까? 
-        
+        cloneNode(tempImage);
+        contents.insertBefore(contents.firstChild, contents.);
     },false);
 
     
