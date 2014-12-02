@@ -21,6 +21,10 @@
 - 코드 정리(전역변수 통합관리, 전체 흐름 체크? 포함)
 */
 
+// 색상 받아오는 전역변수 선언 
+var colorSet = new Array();
+var colorSetHex = new Array();
+
 window.addEventListener('DOMContentLoaded', function(){    
     var wrapper = document.getElementById('item-factory-wrapper');
     var itemFactory = document.getElementById('item-factory');
@@ -114,7 +118,6 @@ window.addEventListener('DOMContentLoaded', function(){
         background.style.display = 'block';
         
     },false);
->>>>>>> origin/master
     
     /*submit버튼으로 전송하면 output 보여주기*/    
     var submit = document.getElementById('submit-button');
@@ -219,11 +222,11 @@ window.addEventListener('DOMContentLoaded', function(){
     // colors[0]["r"] = 255;
     //     },false);
 
-    
+
        var formData = new FormData();
        formData.append("image", this.files[0]);
 
-       XHR.open("post", "/itemFactory/image", true);
+       XHR.open("post", "http://192.168.0.7:3000/itemFactory/image", true);
        XHR.send(formData);
        
        XHR.onreadystatechange = function() 
@@ -231,9 +234,18 @@ window.addEventListener('DOMContentLoaded', function(){
            if (XHR.readyState == 4 && XHR.status == 200) 
            {
                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
-               var ddd = JSON.parse(XHR.response);
-               alert(ddd.r);
-               alert(XHR.response);
+               var inColor = JSON.parse(XHR.response);
+               for(var i = 0; i < inColor.length; i++){
+                    colorSet.push(inColor[i]);
+                    colorSetHex.push(changeDecToHexColor(inColor[i][0], inColor[i][1], inColor[i][2]));
+                    console.log(colorSet[i]);
+                    console.log(colorSetHex[i]);
+               }
+
+               function changeDecToHexColor(r, g, b){
+                    var result = "#" + r + g + b;
+                    return result;
+               }
            }
        }
     },false);
