@@ -50,24 +50,7 @@ function changeGradationColor(num, offset){
 	console.log(R);
 	firstColor = combineRgbString(R, G, B);
 	drawGradation(firstColor, secondColor);
-	
-	// var fontR, fontG, fontB;
-
-	// if((0 + offset * num) > 255){
-	// 	fontR = 255;
-	// } else {
-	// 	fontR = decimalToHex(zeroCheck(0 + offset * num));
-	// }
-	// if((0 + offset * num) > 255){
-	// 	fontG = 255;
-	// } else {
-	// 	fontG = decimalToHex(zeroCheck(0 + offset * num));
-	// }
-	// if((0 + offset * num) > 255){
-	// 	fontB = 255;
-	// } else {
-	// 	fontB = decimalToHex(zeroCheck(0 + offset * num));
-	// }		
+		
     function zeroCheck(num){
         if(num < 10){
             return "0" + num;

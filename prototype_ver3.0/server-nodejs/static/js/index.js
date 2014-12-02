@@ -97,6 +97,84 @@ window.addEventListener('DOMContentLoaded', function(){
         var submitButton = document.getElementById('submit-button');
         submitButton.style.display = 'none';
     }
+
+    
+    /*파일 선택시 선택한 이미지를 preview에 보여주기*/
+    var fileInput = document.getElementById('upload-hidden');
+    fileInput.addEventListener('click', function(){
+        fileInput.value = null;
+    })
+    fileInput.addEventListener('change', function(){
+        
+        /*파일 없을때 에러처리*/
+        if(this.files.item(0)===null){
+            alert('no image');
+        }
+        var imgFile = this.files.item(0);
+        var imgURL = URL.createObjectURL(imgFile);
+        
+        var previewImg = document.getElementById('preview-image');
+        if(previewImg.childNodes[0] !== undefined){
+            previewImg.removeChild(previewImg.childNodes[0]);
+        }  
+        var imgElement = document.createElement('img');
+        imgElement.setAttribute('class', 'inputImage');
+        imgElement.src=imgURL;
+    
+        document.getElementById('preview-image').appendChild(imgElement);
+        
+        var tempImg = document.getElementById('preview-image');
+        tempImg.style.display = 'block';
+        
+        /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
+        outputCanvas.style.display = 'none';
+        outputBackCanvas.style.display = 'none';
+
+//        /*AJAX로 데이터 받아오기*/
+       var formData = new FormData();
+       formData.append("image", this.files[0]);
+
+       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
+
+       // 서버용 
+       //  XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
+       XHR.send(formData);
+       
+       XHR.onreadystatechange = function() 
+       {
+           if (XHR.readyState == 4 && XHR.status == 200) 
+           {            
+               /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
+               var inColor = JSON.parse(XHR.response);
+               for(var i = 0; i < inColor.length; i++){
+                    colorSet.push(inColor[i]);
+                    colorSetHex.push(changeDecToHexColor(inColor[i]["r"], inColor[i]["g"], inColor[i]["b"]));
+               }
+               function changeDecToHexColor(r, g, b){
+                    var result = "#" + zeroCheck((r).toString(16)) 
+                                     + zeroCheck((g).toString(16)) 
+                                     + zeroCheck((b).toString(16));
+                    function zeroCheck(num){
+                        if(num < 10){
+                            return "0" + num;
+                        } else {
+                            return num;
+                        }
+                    }
+                    return result;
+               }
+               console.log(inColor);
+               //그라데이션 칼라 셋팅 
+                fR = colorSet[1]["r"];
+                fG = colorSet[1]["g"];
+                fB = colorSet[1]["b"];
+                firstColor = colorSetHex[1];
+                secondColor = colorSetHex[0];
+                textInputEventManager();
+                drawGradation(firstColor, secondColor);
+           }
+       }
+    },false);0
        
     /*confirm 클릭 시 itemFactory 확장 -사진 미리보기 사라지기 - text입력받기*/
     /*TODO 각 단계에서 뒤로가기*/
@@ -196,78 +274,5 @@ window.addEventListener('DOMContentLoaded', function(){
 //        e.target.style.height = '50%';
 //    } ,false);    
 
-    
-    /*파일 선택시 선택한 이미지를 preview에 보여주기*/
-    var fileInput = document.getElementById('upload-hidden');
-    fileInput.addEventListener('click', function(){
-        fileInput.value = null;
-    })
-    fileInput.addEventListener('change', function(){
-        
-        /*파일 없을때 에러처리*/
-        if(this.files.item(0)===null){
-            alert('no image');
-        }
-        var imgFile = this.files.item(0);
-        var imgURL = URL.createObjectURL(imgFile);
-        
-        var previewImg = document.getElementById('preview-image');
-        if(previewImg.childNodes[0] !== undefined){
-            previewImg.removeChild(previewImg.childNodes[0]);
-        }  
-        var imgElement = document.createElement('img');
-        imgElement.setAttribute('class', 'inputImage');
-        imgElement.src=imgURL;
-    
-        document.getElementById('preview-image').appendChild(imgElement);
-        
-        var tempImg = document.getElementById('preview-image');
-        tempImg.style.display = 'block';
-        
-        /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
-        outputCanvas.style.display = 'none';
-        outputBackCanvas.style.display = 'none';
 
-//        /*AJAX로 데이터 받아오기*/
-       var formData = new FormData();
-       formData.append("image", this.files[0]);
-
-       XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
-       XHR.send(formData);
-       
-       XHR.onreadystatechange = function() 
-       {
-           if (XHR.readyState == 4 && XHR.status == 200) 
-           {            
-               /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
-               var inColor = JSON.parse(XHR.response);
-               for(var i = 0; i < inColor.length; i++){
-                    colorSet.push(inColor[i]);
-                    colorSetHex.push(changeDecToHexColor(inColor[i]["r"], inColor[i]["g"], inColor[i]["b"]));
-               }
-               function changeDecToHexColor(r, g, b){
-                    var result = "#" + zeroCheck((r).toString(16)) 
-                                     + zeroCheck((g).toString(16)) 
-                                     + zeroCheck((b).toString(16));
-                    function zeroCheck(num){
-                        if(num < 10){
-                            return "0" + num;
-                        } else {
-                            return num;
-                        }
-                    }
-                    return result;
-               }
-               console.log(inColor);
-               //그라데이션 칼라 셋팅 
-                fR = colorSet[1]["r"];
-                fG = colorSet[1]["g"];
-                fB = colorSet[1]["b"];
-                firstColor = colorSetHex[1];
-                secondColor = colorSetHex[0];
-                textInputEventManager();
-                drawGradation(firstColor, secondColor);
-           }
-       }
-    },false);
 },false)
