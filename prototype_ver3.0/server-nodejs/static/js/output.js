@@ -181,7 +181,6 @@ function textWriter(){
                 }
                 for(var j = 0; j < wordArray.length - 1; j++){ // 복사하고 공백이 생기면 공백을 가장 뒷쪽으로 밀고.
                     if(wordArray[j] === ""){
-                        console.log("in");
                         for(var k = j; k < wordArray.length - 1; k++){
                             wordArray[k] = wordArray[k + 1];
                             wordArray[k + 1] = "";
@@ -189,7 +188,6 @@ function textWriter(){
                     }
                 }
                 for(var l = 0; l <= wordArray.length; l++){ // 가장 뒤로 밀린 공백을 삭제한다. 
-                    console.log(wordArray[l]);
                     if(wordArray[l] === ""){
                         wordArray.splice(l, 0);
                     }
