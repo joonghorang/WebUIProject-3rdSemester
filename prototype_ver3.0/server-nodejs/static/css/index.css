@@ -1,5 +1,7 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 body {
+    width: 100%;
+    height: 100%;
     font-family: "Nanum Gothic", sans-serif;
 }
 #wrapper {
@@ -7,25 +9,10 @@ body {
     height: 100%;
 }
 
-#item-factory-wrapper {
-    display: none;
-    width: 100%;
-    height: 100%;
-}
-
-#item-factory-background {
-    position: absolute;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    opacity: 0.7;
-    transition: all 0.5s ease-in-out;
-}
-
+/*itemFactory open/close bar Style*/
 #item-factory-nav-open {
     position: absolute;
-    z-index: 3;
+    z-index: 5;
     top: 0;
     left: 0;
     width:40px;
@@ -43,7 +30,7 @@ body {
 
 #item-factory-nav-close {
     position: absolute;
-    z-index: 3;
+    z-index: 5;
     top: 0;
     right: 0;
     width:40px;
@@ -60,9 +47,28 @@ body {
     width: 100%;
 }
 
+/*itemFactory Style*/
+#item-factory-wrapper {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#item-factory-background {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    opacity: 0.7;
+    transition: all 0.5s ease-in-out;
+}
+
 #item-factory {
     z-index: 4;
     width: 50%;
+    min-width: 450px;
     height: 500px;
     position: absolute;
     top: 15%;
@@ -74,60 +80,61 @@ body {
     transition: all 0.7s ease-in-out;
 }
 
-#upload-button {
+#upload-wrapper {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+#upload {
     position: relative;
     top: 0;
     width: 200px;
     height: 50px;
-    line-height: 50px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 10px;
+}
+    /*사진고르기 button Style*/
+#upload-button {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 50px;
     color: #ffffff;
     font-size: 18px;
+    border-bottom-right-radius:5px;
+border-bottom-left-radius:5px;
     background-color: #999999;
     text-align: center;
     transition: display 0.4s ease-in-out;
 
 }
+    /*fileInput Style*/
 #upload-hidden {
-    position: absolute;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
-    top: 0;
-    left: 215px;
+    position: relative;
     width: 200px;
     height: 50px;
+    margin-bottom: 10px;
     opacity: 0;
     cursor: pointer;
 }
 
+    /*preview area Style*/
 #preview {
-    width: 573px;
-    height: 380px;
+    width: 100%;
+    height: 75%;
     margin: 0 auto;
-}
-
-#preview-canvas, #preview-image{
-    width: 573px;
-    height: 350px;
 }
 
 #output-canvas {
     border: 0;
     z-index: 35;
     position: absolute;
-}
-
-#output-backCanvas {
-    border: 0;
-    z-index: 30;
-    position: absolute;
-}
-
-#output-canvas{
-	display : none;
+    display : none;
 	width : 100%;
 	height : 100%;
     transition:  all 2s ease-in-out;
@@ -136,11 +143,33 @@ body {
 	left : 0px;
 }
 
-#back-ground-canvas {
-    display: none;
+#output-backCanvas {
+    border: 0;
+    z-index: 30;
     position: absolute;
-    z-index: 20;
 }
+
+#preview-image{
+    width: 100%;
+    height: 75%;
+    border: 5;
+    z-index: 5;
+    position: absolute;
+    transition: display 0.8s ease-in-out;
+}
+
+.inputImage {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 95%;
+    max-height: 100%;
+    display: block;
+}
+
 #text-input {
     z-index: 21;
     display: none;
@@ -156,18 +185,14 @@ body {
 	background-color: rgba(0, 0, 0, 0);
 	position : relative;
 }
-#preview-image {
-    border: 5;
-    z-index: 5;
+
+#back-ground-canvas {
+    display: none;
     position: absolute;
-    transition: display 0.8s ease-in-out;
+    z-index: 20;
 }
-.inputImage {
-    height: 100%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+
+
 
 #confirm-button {
     z-index: 100;
@@ -188,7 +213,7 @@ body {
 #submit-button {
     z-index: 200;
     position: absolute;
-    right: 20px;
+    right: 25px;
     bottom: 20px;
     display: none;
     width: 100px;
@@ -198,22 +223,29 @@ body {
     background-color: #ffffff;
     opacity: 0.7;
     border: 0;
+    border-radius: 5px;
     outline: none;
     cursor: pointer;
     transition: display 0.8s ease-in-out;
 }
 
+
+/*gridView Style*/
 #contents {
     z-index: inherit;
-    width: 70%;   
+    width: 70%;
+    height: 100%;
     margin: 0 auto;
+    overflow: auto;
 }
 
 .grid-item{
+    z-index: 2;
     position: relative;
     width: 202px;
 	height: 202px;
-    display: inline-block;
+    float : left;
+    /*display: inline-block;*/
     font-size: 50px;
     cursor: pointer;
     margin-top: 10px;
@@ -228,8 +260,8 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+    max-width: 100%;
     height: 100%;
-    background-color: rgb(80,180,170);
     transition: all 0.5s ease-in-out;
     opacity: 1;
 }
@@ -245,6 +277,5 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("image/7.jpg");
     background-size: cover;
 }

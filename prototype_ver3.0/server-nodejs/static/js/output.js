@@ -11,6 +11,7 @@ var textInput = document.getElementById('text-input');
 var fontSize = 36;
 var fontName;
 var fontColor = "#000000";
+
 //캔버스를 생성한다.  
 var outputCanvas = document.getElementById("output-canvas");
 outputCanvas.width = CANVAS_WIDTH;
@@ -28,8 +29,9 @@ function textWriter(){
     outputBackCanvas.style.display = 'block';
     outputBackContext.fillStyle = colorSetHex[0]; // or "rgb(0, 0, 0)";
     outputBackContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    colorSetBackup = colorSetHex.slice();       // 초기화 전에 아웃풋 페이지를 위해 배열을 복제해서 가지고 있는다. 
     colorSetHex = new Array; // 다음 값을 받기 위해 일단 배열을 초기화 좋은 방법이 아님 나중에 리팩토링 
-    color = new Array();
+    colorSet = new Array();
     fontColor = "#000000";// colorSetHex[1];//
 
     var originTextData = textInput.value;

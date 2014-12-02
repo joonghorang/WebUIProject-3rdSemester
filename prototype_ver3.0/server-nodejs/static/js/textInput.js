@@ -12,6 +12,20 @@ var fR, fG, fB;
 var firstColor;	// 그라데이션 칼라 초기값
 var secondColor;
 
+function changeDecToHexColor(r, g, b){
+    var result = "#" + zeroCheck((r).toString(16)) 
+                     + zeroCheck((g).toString(16)) 
+                     + zeroCheck((b).toString(16));
+    return result;
+}
+function zeroCheck(num){
+    if(num < 10){
+        return "0" + num;
+    } else {
+        return num;
+    }
+}
+
 function drawGradation(firstColor, secondColor) {
 	var grdContext = backGroundCanvas.getContext('2d');
 	// 그라데이션 영역 정의 및 객체 생성
@@ -50,34 +64,7 @@ function changeGradationColor(num, offset){
 	console.log(R);
 	firstColor = combineRgbString(R, G, B);
 	drawGradation(firstColor, secondColor);
-	
-	// var fontR, fontG, fontB;
-
-	// if((0 + offset * num) > 255){
-	// 	fontR = 255;
-	// } else {
-	// 	fontR = decimalToHex(zeroCheck(0 + offset * num));
-	// }
-	// if((0 + offset * num) > 255){
-	// 	fontG = 255;
-	// } else {
-	// 	fontG = decimalToHex(zeroCheck(0 + offset * num));
-	// }
-	// if((0 + offset * num) > 255){
-	// 	fontB = 255;
-	// } else {
-	// 	fontB = decimalToHex(zeroCheck(0 + offset * num));
-	// }		
-    function zeroCheck(num){
-        if(num < 10){
-            return "0" + num;
-        } else {
-            return num;
-        }
-    }
-
-	//textInput.style.color = combineRgbString(FF, FF, FF);
-
+		
 	function decimalToHex(num){
 		var hexnum = (num).toString(16);
 		return hexnum;

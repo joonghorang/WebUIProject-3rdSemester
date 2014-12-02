@@ -22,8 +22,10 @@
 */
 
 // 색상 받아오는 전역변수 선언 
+var colorSetBackup = new Array();
 var colorSet = new Array();
 var colorSetHex = new Array();
+var contents = document.getElementById('contents');
 
 window.addEventListener('DOMContentLoaded', function(){    
     var wrapper = document.getElementById('item-factory-wrapper');
@@ -40,6 +42,8 @@ window.addEventListener('DOMContentLoaded', function(){
         wrapper.style.display = 'block';
         var tempImg = document.getElementById('preview-image');
         tempImg.style.display = 'block';
+        var uploadSection = document.getElementById('upload-wrapper');
+        uploadSection.style.display = 'block';
         minimizeItemFactory();
         setUploadButtonAtFirst();
         setSubmitButtonAtFirst();
@@ -97,110 +101,12 @@ window.addEventListener('DOMContentLoaded', function(){
         var submitButton = document.getElementById('submit-button');
         submitButton.style.display = 'none';
     }
-       
-    /*confirm 클릭 시 itemFactory 확장 -사진 미리보기 사라지기 - text입력받기*/
-    /*TODO 각 단계에서 뒤로가기*/
-    var confirm = document.getElementById('confirm-button');
-    confirm.addEventListener('click',function(){
-        maximizeItemFactory();
-        setUploadButtonOnConfirm();
-        setSubmitButtonOnConfirm();
-        
-        var tempImg = document.getElementById('preview-image');
-        tempImg.style.display = 'none';
-        
-        var background = document.getElementById('back-ground-canvas');
-        var preview = document.getElementById('preview');
-        var textInput = document.getElementById('text-input');
-        textInput.style.display = 'block';
-        preview.style.position = 'absolute';
-        preview.style.width = '100%';
-        preview.style.height = '100%';
-        background.style.display = 'block';
-        
-        //textInput창 초기화 코드 
-        backGroundCanvas.width = MAX_WIDTH;
-        backGroundCanvas.height = MAX_HEIGHT;
-
-        drawGradation(firstColor, secondColor);
-        textInputEventManager();
-    },false);
-    
-    /*submit버튼으로 전송하면 output 보여주기*/    
-    var submit = document.getElementById('submit-button');
-    submit.addEventListener('click',function(){
-
-        wrapper.style.display = 'block';
-        textValue = textInput.textContent;
-		textInput.style.display = 'none';
-		submitButton.style.display = 'none';
-
-
-
-        outputCanvas.style.opacity = '1';
-        outputCanvas.style.display = 'block';
-
-        backGroundCanvas.style.display='none';
-        
-        function getHour(){
-            var now = new Date();
-            var hour = now.getHours();
-            if (("" + hour).length == 1) { hour = '0' + hour; }
-                return hour;
-            return getCurrentTime().substr(8,2);
-        }
-        
-        /*시간대에 따라 다른 폰트 사용*/
-        var presentTime = parseInt(getHour());
-        if(presentTime < 10 || presentTime > 6 ){
-            fontName = 'NanumMyeongjo';
-        } else {
-            fontName = 'NanumBarunGothic';
-        }
-        
-        /*입력받은 텍스트를 캔버스에 fillText 후 2초후 삭제 */
-        textWriter();
-        
-        outputCanvas.style.opacity = '0';
-        setTimeout(function(){
-            wrapper.style.display = 'none';
-        }, 2000);
-
-        //textInput에 있던 값을 원래 초기값으로 
-        textInput.value = "30자 이내로 입력하세요.";
-        
-        //이전에 캔버스에 쓴 글씨는 지워준다. 
-        // context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        // backGroundCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-        //outputCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-        /*itemFactoryNav display상태 초기상태로*/
-        itemFactoryOpen.style.display = 'block';
-        itemFactoryClose.style.display = 'none';
-
-        /*preview-image 의 자식 노드를 지우기*/
-        var tempImage = document.getElementById('preview-image');
-        tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
-
-        // 근데 생각해보면 차라리 해당 노드를 '이동'시키는 개념이 더 좋지 않을까? 
-        
-    },false);
-
-    
-    /*gridItem 클릭 시 확대 - output페이지로*/
-    /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
-//    var gridItem = document.getElementsByClassName('grid-item');
-//    gridItem.addEventListener('click', function(e){
-//        
-//        e.target.style.width = '50%';
-//        e.target.style.height = '50%';
-//    } ,false);    
 
     
     /*파일 선택시 선택한 이미지를 preview에 보여주기*/
     var fileInput = document.getElementById('upload-hidden');
     fileInput.addEventListener('click', function(){
-        fileInput.value = null;
+        fileInput.value = null; //input reset
     })
     fileInput.addEventListener('change', function(){
         
@@ -232,7 +138,10 @@ window.addEventListener('DOMContentLoaded', function(){
        var formData = new FormData();
        formData.append("image", this.files[0]);
 
-       XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
+//       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
+
+       // 서버용 
+        XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
        XHR.send(formData);
        
        XHR.onreadystatechange = function() 
@@ -245,20 +154,6 @@ window.addEventListener('DOMContentLoaded', function(){
                     colorSet.push(inColor[i]);
                     colorSetHex.push(changeDecToHexColor(inColor[i]["r"], inColor[i]["g"], inColor[i]["b"]));
                }
-               function changeDecToHexColor(r, g, b){
-                    var result = "#" + zeroCheck((r).toString(16)) 
-                                     + zeroCheck((g).toString(16)) 
-                                     + zeroCheck((b).toString(16));
-                    function zeroCheck(num){
-                        if(num < 10){
-                            return "0" + num;
-                        } else {
-                            return num;
-                        }
-                    }
-                    return result;
-               }
-               console.log(inColor);
                //그라데이션 칼라 셋팅 
                 fR = colorSet[1]["r"];
                 fG = colorSet[1]["g"];
@@ -269,5 +164,160 @@ window.addEventListener('DOMContentLoaded', function(){
                 drawGradation(firstColor, secondColor);
            }
        }
+    },false);0
+       
+    /*confirm 클릭 시 itemFactory 확장 -사진 미리보기 사라지기 - text입력받기*/
+    /*TODO 각 단계에서 뒤로가기*/
+    var confirm = document.getElementById('confirm-button');
+    confirm.addEventListener('click',function(){
+        maximizeItemFactory();
+        setUploadButtonOnConfirm();
+        setSubmitButtonOnConfirm();
+        
+        var tempImg = document.getElementById('preview-image');
+        tempImg.style.display = 'none';
+        
+        var background = document.getElementById('back-ground-canvas');
+        var preview = document.getElementById('preview');
+        var textInput = document.getElementById('text-input');
+        textInput.style.display = 'block';
+        preview.style.position = 'absolute';
+        preview.style.width = '100%';
+        preview.style.height = '100%';
+        background.style.display = 'block';
+        
+        var uploadSection = document.getElementById('upload-wrapper');
+        uploadSection.style.display = 'none';
+        itemFactoryClose.style.display = 'none';
+        
+        //textInput창 초기화 코드 
+        backGroundCanvas.width = MAX_WIDTH;
+        backGroundCanvas.height = MAX_HEIGHT;
+
+        drawGradation(firstColor, secondColor);
+        textInputEventManager();
     },false);
+    
+    /*submit버튼으로 전송하면 output 보여주기*/    
+    var submit = document.getElementById('submit-button');
+    submit.addEventListener('click',function(){
+
+        wrapper.style.display = 'block';
+        textValue = textInput.textContent;
+		textInput.style.display = 'none';
+		submitButton.style.display = 'none';
+
+        outputCanvas.style.opacity = '1';
+        outputCanvas.style.display = 'block';
+
+        backGroundCanvas.style.display='none';
+        
+        function getHour(){
+            var now = new Date();
+            var hour = now.getHours();
+            if (("" + hour).length == 1) { hour = '0' + hour; }
+                return hour;
+            return getCurrentTime().substr(8,2);
+        }
+        
+        /*시간대에 따라 다른 폰트 사용*/
+        var presentTime = parseInt(getHour());
+        if(presentTime < 10 || presentTime > 6 ){
+            fontName = 'NanumMyeongjo';
+        } else {
+            fontName = 'NanumBarunGothic';
+        }
+        
+        /*입력받은 텍스트를 캔버스에 fillText 후 2초후 삭제 */
+        textWriter();
+        
+        outputCanvas.style.opacity = '0';
+        setTimeout(function(){
+            wrapper.style.display = 'none';
+            itemFactoryOpen.style.display = 'block';
+        }, 2100);
+
+
+        
+        //이전에 캔버스에 쓴 글씨는 지워준다. 
+        // context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        // backGroundCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        //outputCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+
+        /*itemFactoryNav display상태 초기상태로*/
+//        itemFactoryOpen.style.display = 'block';
+        
+        /*preview-image 의 자식 노드를 지우고 노드에 추가하기*/
+
+        /*preview-image 의 자식 노드를 지우기*/
+
+        var tempImage = document.getElementById('preview-image');
+
+        var addGridItem = document.createElement('div');
+        addGridItem.setAttribute('class', 'grid-item');
+        contents.appendChild(addGridItem);
+        addGridItem.style.display = "block";
+
+        var addFront = document.createElement('div');
+        addFront.setAttribute('class', 'front');
+        addGridItem.appendChild(addFront);
+        addFront.style.display = "block";
+
+        var addBack = document.createElement('div');
+        addBack.setAttribute('class', 'back');
+        addGridItem.appendChild(addBack);
+        addBack.style.display = "block";
+
+        var addImgElement = tempImage.cloneNode(true); // 해당 노드를 복사한다. 
+        tempImage.removeChild(tempImage.firstChild);  // 기존 이미지를 지워준다. 
+
+        addImgElement.setAttribute('class', 'in-grid-image');
+        addImgElement.setAttribute('id', "contents-back-" + (contents.childNodes.length - 1).toString());  // 새로 생성되는 노드의 아이디는 전체 길이로 부여한다. 
+        addGridItem.lastChild.appendChild(addImgElement);
+        addImgElement.style.display = "block";
+
+
+    //    var addOutputCanvas = outputCanvas.cloneNode(true);
+   //     outputCanvas.removeChild(addOutputCanvas.firstChild);
+
+        var addColorElement = document.createElement('p');
+        addColorElement.setAttribute('class', 'front');
+        addColorElement.setAttribute('id', "contents-front-" + (contents.childNodes.length - 1).toString());
+        addGridItem.firstChild.appendChild(addColorElement);
+        addColorElement.style.display = "block";
+        addColorElement.value = textInput.value;
+        addColorElement.style.backgroundColor = colorSetBackup[0];//"#" + colorSet[0].r + colorSet[0].g + colorSet[0].b;
+        addColorElement.style.opacity = "1";
+
+        console.log(addImgElement);
+
+        //textInput에 있던 값을 원래 초기값으로 
+        textInput.value = "30자 이내로 입력하세요.";
+
+    },false);
+    
+    /*gridItem 클릭 시 확대 - output페이지로*/
+    /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
+    var gridItems = document.querySelectorAll('.grid-item');
+    
+    for(var id=0;id<gridItems.length;id++){
+        gridItems[id].addEventListener('click',function(e){
+//            e.preventDefault();
+//            var front = this.firstChild;
+//            var back = this.lastChild;
+//            this.removeChild(this.firstChild);
+//            this.removeChild(this.lastChild);
+            this.style.zIndex = '500';
+            this.style.width = '100%';
+            this.style.height = '100%';
+            this.style.position = 'absolute';
+            this.style.backgroundColor = '#FFFFFF';
+            this.style.top = '0';
+            this.style.left = '0';
+            
+        }, false);
+    }
+    //확대되면서 this(클릭한 그리드) 말고 다 날려버림???? 일단은 흰색으로 fadeout형식
+
 },false)
