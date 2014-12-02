@@ -1,6 +1,7 @@
 var express = require("express");
 var formidable = require("formidable");
-var imgP = require("./controllers/pickImpColor.js");
+//var imgP = require("./controllers/pickImpColor.js");
+var imgP = require("./static/js/colorLab/pickImpColor.js");
 var Canvas = require("canvas");
 var Image = Canvas.Image;
 var fs = require("fs");
@@ -10,6 +11,7 @@ var path = require("path");
 
 var app = express();
 
+var __basename = path.basename(__filename);
 //static 폴더 위치
 var static = __dirname + '/static';
 app.use(express.static(static));
@@ -25,6 +27,7 @@ app.set('views', __dirname + '/views');
 app.engine('.html', require('ejs').__express);
 //app.set('view engine', 'jade');
 
+//Route
 app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
@@ -52,7 +55,8 @@ app.get('/colorLab', function(req, res){
         "pickedColors" : pickedColors });
 });
 app.post('/itemFactory', function(req, res){
-    });
+
+});
 app.post('/itemFactory/image', function(req, res){
     
     var form = new formidable.IncomingForm();
@@ -65,34 +69,24 @@ app.post('/itemFactory/image', function(req, res){
             var imageFile = fs.readFileSync(files.image.path);
             var img = new Image();
             img.src = imageFile;
-//            move to imgP.pickColors
-//            var imageCanvas = imgP.createCanvasByImage(img);
-//            var hsvHistData = imgP.histogram("hsv", imageCanvas);
-//            var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
-//            console.log("/itemFactory/image pickedHue Finish. Hue.leng : " + pickedHues.length);
-//            var pickedColors = [];
-//            for(var i = 0; i< pickedHues.length; ++i){
-//                pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toRgb());
-//            }
-//            console.log("/itemFactory/image pickedColors Finish pickedColor : " + pickedColors);
             
             var pickedColors = imgP.pickColors(img);
-            
             res.send(JSON.stringify(pickedColors));
         
+            //for colorLab
             var fileImageData = fs.readFileSync(files.image.path);
             fs.writeFile(static + "/image/colorLab-current-image", fileImageData, function(err){
-                if(err){
-                    console.log("server.js - err : test for ColorLab image save Err");
+                if(err){ 
+                    console.log( __basename + " [err]  - test for ColorLab image save Err");
                 }else{
-                    console.log("server.js - test for ColorLab image saved");
+                    console.log( __basename + " [good] - test for ColorLab image saved");
                 }
             });
             fs.writeFile(static + "/image/uploaded/" + files.image.name, fileImageData, function(err){
                 if(err){
-                    console.log("server.js - err : test for ColorLab image save Err");
+                    console.log(__basename + " [err]  - test for ColorLab image save Err");
                 }else{
-                    console.log("server.js - test for ColorLab image saved");
+                    console.log(__basename + " [good] - test for ColorLab image saved");
                 }
             });          
         }

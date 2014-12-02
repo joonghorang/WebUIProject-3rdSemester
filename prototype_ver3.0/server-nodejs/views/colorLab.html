@@ -3,7 +3,7 @@
     <head>
         <meta charset = "utf-8">
         <link rel = "stylesheet" type = "text/css" href = "./css/colorLab.css">
-        <script src = "./js/require.js"></script>
+<!--        <script data-main="colorLab-app" src = "./js/lib/require.js"></script>-->
         
         <title>Deok's ColorLab</title>
     </head>
@@ -23,12 +23,16 @@
                 </div>
             </div>
         </div>
+            
         <script>
             var color = <%-JSON.stringify(colors) %>;
             var histData = <%= JSON.stringify(histData) %>;
-            //var pickedColors = <%- pickedColors %>;
         </script>
-        <script src = "./js/colorLab.js"></script>
+        <script src="./js/colorLab/tinycolor2.js" type="text/javascript"></script>
+        <script src="./js/colorLab/pickImpColor.js" type="text/javascript"></script>
+        <script src = "./js/colorLab/main.js"></script>
+        
+        
         
     </body>
     

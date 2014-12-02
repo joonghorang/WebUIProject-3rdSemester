@@ -1,3 +1,11 @@
+//12. 01. 20:43 
+//add "circleIndexOf" method to Array.prototype
+//add "smoothing" function
+//12. 02. 06:00
+//add "pickPeaks" function
+//12. 03. 04:07
+//try to make Server Client compatible js.
+
 //Server, Client js 호환 자작한 부분... 더 좋은 방법이 있는지 찾아보자.
 var Canvas;
 var requirejs;
