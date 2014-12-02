@@ -16,18 +16,18 @@ var outputCanvas = document.getElementById("output-canvas");
 outputCanvas.width = CANVAS_WIDTH;
 outputCanvas.height = CANVAS_HEIGHT;
 var context = outputCanvas.getContext("2d");
-var backCanvas = document.getElementById("output-backCanvas");
-backCanvas.width = CANVAS_WIDTH;
-backCanvas.height = CANVAS_HEIGHT;
-var backContext = backCanvas.getContext("2d");
+var outputBackCanvas = document.getElementById("output-backCanvas");
+outputBackCanvas.width = CANVAS_WIDTH;
+outputBackCanvas.height = CANVAS_HEIGHT;
+var outputBackContext = outputBackCanvas.getContext("2d");
 
 
 function textWriter(){
 
     // 비동기 통신으로 받아온 칼라값을 넣어준다. 
-    backCanvas.style.display = 'block';
-    backContext.fillStyle = colorSetHex[0]; // or "rgb(0, 0, 0)";
-    backContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    outputBackCanvas.style.display = 'block';
+    outputBackContext.fillStyle = colorSetHex[0]; // or "rgb(0, 0, 0)";
+    outputBackContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
     colorSetHex = new Array; // 다음 값을 받기 위해 일단 배열을 초기화 좋은 방법이 아님 나중에 리팩토링 
     color = new Array();
     fontColor = "#000000";// colorSetHex[1];//

@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function(){
     
     /*itemFactory 열기*/
     itemFactoryOpen.addEventListener('click',function(){
-        backCanvas.style.display = 'none';
+        outputBackCanvas.style.display = 'none';
         wrapper.style.display = 'block';
         var tempImg = document.getElementById('preview-image');
         tempImg.style.display = 'block';
@@ -162,7 +162,6 @@ window.addEventListener('DOMContentLoaded', function(){
         textWriter();
         
         outputCanvas.style.opacity = '0';
-        //backCanvas.style.opacity = '0';
         setTimeout(function(){
             wrapper.style.display = 'none';
         }, 2000);
