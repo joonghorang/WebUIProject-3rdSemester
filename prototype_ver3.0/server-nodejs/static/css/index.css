@@ -71,7 +71,7 @@ body {
     background-color: #ffffff;
     opacity: 0;
     border-radius: 8px;
-    transition: opacity 0.5s ease-in-out;
+    transition: all 0.7s ease-in-out;
 }
 
 #upload-button {
@@ -87,6 +87,8 @@ body {
     font-size: 18px;
     background-color: #999999;
     text-align: center;
+    transition: display 0.4s ease-in-out;
+
 }
 #upload-hidden {
     position: absolute;
@@ -105,7 +107,6 @@ body {
     width: 573px;
     height: 380px;
     margin: 0 auto;
-/*    border: 1px solid black;*/
 }
 
 #preview-canvas, #preview-image{
@@ -123,7 +124,8 @@ body {
 	display : none;
 	width : 100%;
 	height : 100%;
-
+    transition:  all 2s ease-in-out;
+    
 	/*캔버스의 그리는 시작점*/
 	top : 0px;
 	left : 0px;
@@ -153,6 +155,7 @@ body {
     border: 0;
     z-index: 30;
     position: absolute;
+    transition: display 0.8s ease-in-out;
 }
 .inputImage {
     height: 100%;
@@ -174,6 +177,7 @@ body {
     outline: none;
     cursor: pointer;
     margin-left: 515px;
+    transition: display 0.4s ease-in-out;
 }
 #submit-button {
     z-index: 26;
@@ -190,6 +194,7 @@ body {
     border: 0;
     outline: none;
     cursor: pointer;
+    transition: display 0.8s ease-in-out;
 }
 
 #contents {
@@ -208,6 +213,7 @@ body {
     margin-top: 10px;
     margin-left: 5px;
     margin-right: 5px;
+    transition: all 0.5s ease-in-out;
 }
 
 .front {
