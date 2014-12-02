@@ -240,6 +240,7 @@ border-bottom-left-radius:5px;
 }
 
 .grid-item{
+    z-index: 2;
     position: relative;
     width: 202px;
 	height: 202px;
@@ -258,6 +259,7 @@ border-bottom-left-radius:5px;
     top: 0;
     left: 0;
     width: 100%;
+    max-width: 100%;
     height: 100%;
     transition: all 0.5s ease-in-out;
     opacity: 1;
