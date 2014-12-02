@@ -27,7 +27,7 @@ app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
 app.get('/colorLab', function(req, res){
-    var imageFile = fs.readFileSync(static + '/image/9.jpg');
+    var imageFile = fs.readFileSync(static + '/image/11.jpg');
     
     var img = new Image();
     img.src = imageFile;
@@ -46,7 +46,7 @@ app.get('/colorLab', function(req, res){
     console.log(JSON.stringify(pickedColors));
     res.render("colorLab.html", 
                {"colors" : colors,
-                "imageSrc" : '/image/9.jpg', 
+                "imageSrc" : '/image/11.jpg', 
                 "histData" : hsvHistData,
                 "pickedColors" : pickedColors });
     
@@ -61,25 +61,22 @@ app.post('/itemFactory/image', function(req, res){
         if(err){
             console.log(err);
         }else{
+            //get Image from client
             var imageFile = fs.readFileSync(files.image.path);
             var img = new Image();
             img.src = imageFile;
-//            console.log(img.width);
-//            console.log(img.height);
-//            var canvas = new Canvas(img.width, img.height);
-//            var ctx = canvas.getContext('2d');
-//            
-//            ctx.drawImage(img, 0, 0);
-////            ctx.getImageData(0,
+            
             var imageCanvas = imgP.createCanvasByImage(img);
             var hsvHistData = imgP.histogram("hsv", imageCanvas);
             var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
+            console.log("/itemFactory/image pickedHue Finish. Hue.leng : " + pickedHues.length);
             var pickedColors = [];
             for(var i = 0; i< pickedHues.length; ++i){
                 pickedColors.push(tinycolor({h : pickedHues[i], s :100, v:100}).toRgb());
             }
-            res.send(imgP.pickColors(imageCanvas));
+            console.log("/itemFactory/image pickedColors Finish pickedColor : " + pickedColors);
             
+            res.send(JSON.stringify(pickedColors));
         }
         
 //        console.log("Parsing Done."); 

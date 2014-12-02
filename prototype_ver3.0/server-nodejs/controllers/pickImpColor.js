@@ -24,10 +24,25 @@ var createCanvasByImage = function(img){
 //    rCanvas.width = image.naturalWidth;
 //    rCanvas.height = image.naturalHeight;
     console.log(img);
+    var pixelNumResizingSaturation = 100000;
+    
+    var pixelNum = img.width * img.height;
+    var pixelNumRate = pixelNum / pixelNumResizingSaturation;
 
-    var rCanvas = new Canvas(img.width, img.height);
+    var canvasWidth = img.width;
+    var canvasHeight = img.height;
+    
+    if(pixelNumRate > 1){
+        console.log("resizing... pixelNumRate : " + pixelNumRate);
+        var lengthRate =  Math.sqrt(pixelNumRate);
+        canvasWidth = parseInt(canvasWidth/lengthRate);
+        canvasHeight = parseInt(canvasHeight / lengthRate);
+        console.log("resizing result - canvasWidth : " + canvasWidth + "canvasHeight : " + canvasHeight);
+    }
+
+    var rCanvas = new Canvas(canvasWidth, canvasHeight);
     var rCanvasCtx = rCanvas.getContext("2d");
-    rCanvasCtx.drawImage(img, 0, 0);
+    rCanvasCtx.drawImage(img, 0,0, img.width, img.height, 0,0, canvasWidth, canvasHeight);
     return rCanvas;
 }
 
