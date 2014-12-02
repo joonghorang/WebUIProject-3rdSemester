@@ -1,3 +1,23 @@
+/*
+141202. Prototype_ver3.0/GeulGeurimNetwork_ver1.0 TODO list
+[frontend]
+- 재업로드시 preview-image 보이지 않음. confirm 버튼 동작하지 않음. 문제 해결하기
+- itemFactory에서 생성한 output을 grid-item으로 추가하기
+- itemFactory 각 단계에서 이전단계로 돌아가기
+- grid view에서 각 grid-item 클릭 시 나타나는 페이지 논의(output?)
+
+[backend]
+- text input, output 에서 background-color Ajax로 서버랑 통신해서 받아오기
+- server side complete - web hosting(Heroku)
+- DB연동
+
++ server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....?
+
+[overall]
+- 전체적인 스타일 조정(text input 활성화 될 때 가운데부터 나타나는 것, 동적 레이아웃 등)
+- 코드 정리(전역변수 통합관리, 전체 흐름 체크? 포함)
+*/
+
 window.addEventListener('DOMContentLoaded', function(){    
     var wrapper = document.getElementById('item-factory-wrapper');
     var itemFactory = document.getElementById('item-factory');
@@ -7,17 +27,22 @@ window.addEventListener('DOMContentLoaded', function(){
 
     var XHR = new XMLHttpRequest();   
     
-/*itemFactory 열기*/
+    /*itemFactory 열기*/
     itemFactoryOpen.addEventListener('click',function(){
         wrapper.style.display = 'block';
+        minimizeItemFactory();
+        setUploadButtonAtFirst();
+        setSubmitButtonAtFirst();
         setItemFactory('0.9', 'block', 'none', 'block', '#101010');
-},false);
-/*itemFactory 닫기*/
+    },false);
+    
+    /*itemFactory 닫기*/
     itemFactoryClose.addEventListener('click',function(){
         wrapper.style.display = 'none';
         setItemFactory('0', 'none', 'block', 'none', 'transparent');
-},false);
+    },false);
 
+    /*itemFactory 열고 닫을 때 itemFactory의 스타일 설정*/
     function setItemFactory(opacity, displayState, openBar, closeBar, bgColor){
         itemFactory.style.opacity = opacity;
         itemFactory.style.display = displayState;
@@ -26,68 +51,93 @@ window.addEventListener('DOMContentLoaded', function(){
         bg.style.backgroundColor = bgColor;
     }
     
-/*confirm 클릭 시 itemFactory 확장 - text입력받기*/
-    var confirm = document.getElementById('confirm-button');
-    confirm.addEventListener('click',function(){
-        itemFactory.style.backgroundColor = '#ffffff';
-        itemFactory.style.opacity = '1';
-        itemFactory.style.transition = 'all 0.8s ease-in-out';
-        itemFactory.style.position = 'absolute';
+    /*confirm 클릭 시 itemFactory 확장*/
+    function maximizeItemFactory(){
         itemFactory.style.top = '0';
         itemFactory.style.left = '0';
         itemFactory.style.width = '100%';
         itemFactory.style.height = '100%';
-        
+        itemFactory.style.opacity = '1';
+    }
+    
+    /*grid화면에서 itemFactory open하는 경우 처음크기대로 보여주기*/
+    function minimizeItemFactory(){
+        itemFactory.style.top = '15%';
+        itemFactory.style.left = '25%';
+        itemFactory.style.width = '50%';
+        itemFactory.style.height = '500px';
+    }
+    
+    /*단계 변화에 따른 버튼 스타일 설정*/
+    function setUploadButtonOnConfirm(){
         var uploadButton = document.getElementById('upload-button');
-        uploadButton.style.transition = 'display 0.4s ease-in-out';
         uploadButton.style.display = 'none';
-        confirm.style.transition='display 0.4s ease-in-out';
         confirm.style.display = 'none';
-        
+    }
+    function setUploadButtonAtFirst(){
+        var uploadButton = document.getElementById('upload-button');
+        uploadButton.style.display = 'block';
+        confirm.style.display = 'block';
+    }
+    function setSubmitButtonOnConfirm(){
         var submitButton = document.getElementById('submit-button');
-        submitButton.style.transition = 'display 0.8s ease-in-out';
         submitButton.style.display = 'block';
+    }
+    function setSubmitButtonAtFirst(){
+        var submitButton = document.getElementById('submit-button');
+        submitButton.style.display = 'none';
+    }
+       
+    /*confirm 클릭 시 itemFactory 확장 -사진 미리보기 사라지기 - text입력받기*/
+    /*TODO 각 단계에서 뒤로가기*/
+    var confirm = document.getElementById('confirm-button');
+    confirm.addEventListener('click',function(){
+        maximizeItemFactory();
+        setUploadButtonOnConfirm();
+        setSubmitButtonOnConfirm();
         
         var tempImg = document.getElementById('preview-image');
-        tempImg.style.transition = 'display 0.8s ease-in-out';
         tempImg.style.display = 'none';
         
         var background = document.getElementById('back-ground-canvas');
         var preview = document.getElementById('preview');
         var textInput = document.getElementById('text-input');
         textInput.style.display = 'block';
+        preview.style.position = 'absolute';
         preview.style.width = '100%';
         preview.style.height = '100%';
         background.style.display = 'block';
     },false);
     
-var submit = document.getElementById('submit-button');
+    /*submit버튼으로 전송하면 output 보여주기*/    
+    var submit = document.getElementById('submit-button');
     submit.addEventListener('click',function(){
         
         textValue = textInput.textContent;
-		textInput.style.display = "none";
-		submitButton.style.display = "none";
-        outputCanvas.style.display = "block";
+		textInput.style.display = 'none';
+		submitButton.style.display = 'none';
+        outputCanvas.style.display = 'block';
         backGroundCanvas.style.display='none';
         
         function getHour(){
             var now = new Date();
             var hour = now.getHours();
-            if (("" + hour).length == 1) { hour = "0" + hour; }
+            if (("" + hour).length == 1) { hour = '0' + hour; }
                 return hour;
             return getCurrentTime().substr(8,2);
         }
         
+        /*시간대에 따라 다른 폰트 사용*/
         var presentTime = parseInt(getHour());
         if(presentTime < 10 || presentTime > 6 ){
-            fontName = "NanumMyeongjo";
+            fontName = 'NanumMyeongjo';
         } else {
-            fontName = "NanumBarunGothic";
+            fontName = 'NanumBarunGothic';
         }
         
-        textWriter(); // 글자 쏴주는 함수 
+        /*입력받은 텍스트를 캔버스에 fillText*/
+        textWriter();
         
-        outputCanvas.style.transition = 'opacity 2s ease-in-out';
         outputCanvas.style.opacity = '0';
         setTimeout(function(){
             wrapper.style.display = 'none';
@@ -102,10 +152,10 @@ var submit = document.getElementById('submit-button');
     },false);
 
     
-/*gridItem 클릭 시 확대 - output페이지로*/
+    /*gridItem 클릭 시 확대 - output페이지로*/
+    /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
     var gridItem = document.querySelector('.grid-item');
-    gridItem.addEventListener('click', function(){
-        gridItem.style.transition = 'all 0.5s ease-in-out';
+    gridItem.addEventListener('click', function(e){
         gridItem.style.width = '100%';
         gridItem.style.height = '100%';
     } ,false);    
@@ -132,6 +182,7 @@ var submit = document.getElementById('submit-button');
     
         document.getElementById('preview-image').appendChild(imgElement);
          
+        /*AJAX로 데이터 받아오기*/
         var formData = new FormData();
         formData.append("image", this.files[0]);
 
