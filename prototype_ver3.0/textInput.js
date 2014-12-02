@@ -113,7 +113,6 @@ function EventManager(){
 			}
 		} else {
 			preventDefault();
-			//alert("Please input under 30.");
 		}	
 	};
 

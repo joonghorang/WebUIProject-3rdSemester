@@ -12,6 +12,7 @@
 - DB연동
 
 + server.js를 실행시키려니 canvas를 또 깔라고 하던데, 무슨 일일까요....?
+네, 그것은 웹에서 돌고 있지 않기 때문입니다. 
 
 [overall]
 - 전체적인 스타일 조정(text input 활성화 될 때 가운데부터 나타나는 것, 동적 레이아웃 등)
@@ -135,19 +136,20 @@ window.addEventListener('DOMContentLoaded', function(){
             fontName = 'NanumBarunGothic';
         }
         
-        /*입력받은 텍스트를 캔버스에 fillText*/
+        /*입력받은 텍스트를 캔버스에 fillText 후 2초후 삭제 */
         textWriter();
         
         outputCanvas.style.opacity = '0';
         setTimeout(function(){
             wrapper.style.display = 'none';
-        },2000);
+        }, 2000);
         
         itemFactoryOpen.style.display = 'block';
         itemFactoryClose.style.display = 'none';
 
         /*TODO preview-image 의 자식 노드를 지우기*/
-        
+        var tempImage = document.getElementById('preview-image');
+        tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
         
     },false);
 

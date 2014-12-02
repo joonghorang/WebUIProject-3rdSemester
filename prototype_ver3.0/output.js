@@ -184,7 +184,6 @@ function textWriter(){
                         console.log(wordArray.length);
                     }
                 }
-
             }
         };
     };
