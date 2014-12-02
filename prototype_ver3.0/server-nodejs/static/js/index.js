@@ -105,7 +105,7 @@ window.addEventListener('DOMContentLoaded', function(){
     /*파일 선택시 선택한 이미지를 preview에 보여주기*/
     var fileInput = document.getElementById('upload-hidden');
     fileInput.addEventListener('click', function(){
-        fileInput.value = null;
+        fileInput.value = null; //input reset
     })
     fileInput.addEventListener('change', function(){
         
@@ -258,9 +258,6 @@ window.addEventListener('DOMContentLoaded', function(){
         // backGroundCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         //outputCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        /*itemFactoryNav display상태 초기상태로*/
-//        itemFactoryOpen.style.display = 'block';
-        
         /*preview-image 의 자식 노드를 지우기*/
         var tempImage = document.getElementById('preview-image');
 //        tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
@@ -269,15 +266,28 @@ window.addEventListener('DOMContentLoaded', function(){
         cloneNode(tempImage);
         contents.insertBefore(contents.firstChild, contents.);
     },false);
-
     
     /*gridItem 클릭 시 확대 - output페이지로*/
     /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
-    var gridItem = document.getElementsByClassName('grid-item');
-    gridItem[0].addEventListener('click', function(e){
-        e.target.style.width = window.innerWidth;
-        e.target.style.height = window.innerHeight;
-    } ,false);    
-
+    var gridItems = document.querySelectorAll('.grid-item');
+    
+    for(var id=0;id<gridItems.length;id++){
+        gridItems[id].addEventListener('click',function(e){
+//            e.preventDefault();
+//            var front = this.firstChild;
+//            var back = this.lastChild;
+//            this.removeChild(this.firstChild);
+//            this.removeChild(this.lastChild);
+            this.style.zIndex = '500';
+            this.style.width = '100%';
+            this.style.height = '100%';
+            this.style.position = 'absolute';
+            this.style.backgroundColor = '#FFFFFF';
+            this.style.top = '0';
+            this.style.left = '0';
+            
+        }, false);
+    }
+    //확대되면서 this(클릭한 그리드) 말고 다 날려버림???? 일단은 흰색으로 fadeout형식
 
 },false)
