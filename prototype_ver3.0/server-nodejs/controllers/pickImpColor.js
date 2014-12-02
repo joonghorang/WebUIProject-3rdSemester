@@ -23,8 +23,9 @@ var createCanvasByImage = function(img){
 //    var rCanvas = document.createElement("canvas");
 //    rCanvas.width = image.naturalWidth;
 //    rCanvas.height = image.naturalHeight;
+    console.log(img);
+
     var rCanvas = new Canvas(img.width, img.height);
-    
     var rCanvasCtx = rCanvas.getContext("2d");
     rCanvasCtx.drawImage(img, 0, 0);
     return rCanvas;
@@ -132,7 +133,7 @@ var pickPeaks = function(histData){
 exports.pickPeaks = pickPeaks;
 exports.smoothing = smoothing;
 
-exports.createCanvasByImage = createCanvasByImage
+exports.createCanvasByImage = createCanvasByImage;
 exports.pickColors = pickColors;
 exports.histogram = histogram;
 exports.test_picColors = test_pickColors;

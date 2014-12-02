@@ -14,8 +14,7 @@ Array.prototype.circleIndex = function(idx){
         return this.circleIndex(idx - this.length);
     }    
 }
-
-var histo = document.getElementById("histo");
+document.getElementById("histo");
 window.addEventListener('DOMContentLoaded', function(){
     
 //    var xhr = new XMLHttpRequest();
@@ -41,8 +40,6 @@ window.addEventListener('DOMContentLoaded', function(){
     pickPeaks(smoothing(histData, 7, [1, 4, 6, 4, 1]));
     
 },false);
-
-var 
 
 var smoothing = function(histData, repeat, cvCoeff){
 

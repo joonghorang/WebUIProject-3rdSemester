@@ -22,14 +22,13 @@ app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
 app.get('/colorLab', function(req, res){
-    var imageFile = fs.readFileSync(static + '/image/7.jpg');
+    var imageFile = fs.readFileSync(static + '/image/9.jpg');
     
     var img = new Image();
     img.src = imageFile;
     var imageCanvas = imgP.createCanvasByImage(img);
     var colors = imgP.pickColors(imageCanvas);
     var hsvHistData = imgP.histogram("hsv", imageCanvas);
-    
     var pickedHues = imgP.pickPeaks(imgP.smoothing(hsvHistData, 7));
     var pickedColors = [];
     for(var i = 0; i< pickedHues.length; ++i){
@@ -42,7 +41,7 @@ app.get('/colorLab', function(req, res){
     console.log(JSON.stringify(pickedColors));
     res.render("colorLab.html", 
                {"colors" : colors,
-                "imageSrc" : '/image/7.jpg', 
+                "imageSrc" : '/image/9.jpg', 
                 "histData" : hsvHistData,
                 "pickedColors" : pickedColors });
     
