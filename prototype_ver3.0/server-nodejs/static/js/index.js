@@ -40,6 +40,8 @@ window.addEventListener('DOMContentLoaded', function(){
         wrapper.style.display = 'block';
         var tempImg = document.getElementById('preview-image');
         tempImg.style.display = 'block';
+        var uploadSection = document.getElementById('upload-wrapper');
+        uploadSection.style.display = 'block';
         minimizeItemFactory();
         setUploadButtonAtFirst();
         setSubmitButtonAtFirst();
@@ -134,10 +136,10 @@ window.addEventListener('DOMContentLoaded', function(){
        var formData = new FormData();
        formData.append("image", this.files[0]);
 
-       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
+//       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
 
        // 서버용 
-       //  XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
+        XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
        XHR.send(formData);
        
        XHR.onreadystatechange = function() 
@@ -196,6 +198,10 @@ window.addEventListener('DOMContentLoaded', function(){
         preview.style.height = '100%';
         background.style.display = 'block';
         
+        var uploadSection = document.getElementById('upload-wrapper');
+        uploadSection.style.display = 'none';
+        itemFactoryClose.style.display = 'none';
+        
         //textInput창 초기화 코드 
         backGroundCanvas.width = MAX_WIDTH;
         backGroundCanvas.height = MAX_HEIGHT;
@@ -212,8 +218,6 @@ window.addEventListener('DOMContentLoaded', function(){
         textValue = textInput.textContent;
 		textInput.style.display = 'none';
 		submitButton.style.display = 'none';
-
-
 
         outputCanvas.style.opacity = '1';
         outputCanvas.style.display = 'block';
@@ -242,7 +246,8 @@ window.addEventListener('DOMContentLoaded', function(){
         outputCanvas.style.opacity = '0';
         setTimeout(function(){
             wrapper.style.display = 'none';
-        }, 2000);
+            itemFactoryOpen.style.display = 'block';
+        }, 2100);
 
         //textInput에 있던 값을 원래 초기값으로 
         textInput.value = "30자 이내로 입력하세요.";
@@ -253,9 +258,8 @@ window.addEventListener('DOMContentLoaded', function(){
         //outputCanvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         /*itemFactoryNav display상태 초기상태로*/
-        itemFactoryOpen.style.display = 'block';
-        itemFactoryClose.style.display = 'none';
-
+//        itemFactoryOpen.style.display = 'block';
+        
         /*preview-image 의 자식 노드를 지우기*/
         var tempImage = document.getElementById('preview-image');
         tempImage.removeChild(tempImage.childNodes[0]); // 노드가 하나 밖에 없으므로 삭제됨. 
@@ -267,12 +271,11 @@ window.addEventListener('DOMContentLoaded', function(){
     
     /*gridItem 클릭 시 확대 - output페이지로*/
     /*TODO 동일한 클래스명인 grid-item들 중에서 클릭된 것을 확대시키기. this? e?*/
-//    var gridItem = document.getElementsByClassName('grid-item');
-//    gridItem.addEventListener('click', function(e){
-//        
-//        e.target.style.width = '50%';
-//        e.target.style.height = '50%';
-//    } ,false);    
+    var gridItem = document.getElementsByClassName('grid-item');
+    gridItem[0].addEventListener('click', function(e){
+        e.target.style.width = window.innerWidth;
+        e.target.style.height = window.innerHeight;
+    } ,false);    
 
 
 },false)
