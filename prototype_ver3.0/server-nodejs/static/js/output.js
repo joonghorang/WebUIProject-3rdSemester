@@ -10,31 +10,42 @@ var CANVAS_HEIGHT = MAX_HEIGHT;
 var textInput = document.getElementById('text-input');
 var fontSize = 36;
 var fontName;
-var fontColor = "#000000";
-
-//캔버스를 생성한다.  
-var outputCanvas = document.getElementById("output-canvas");
-outputCanvas.width = CANVAS_WIDTH;
-outputCanvas.height = CANVAS_HEIGHT;
-var context = outputCanvas.getContext("2d");
-var outputBackCanvas = document.getElementById("output-backCanvas");
-outputBackCanvas.width = CANVAS_WIDTH;
-outputBackCanvas.height = CANVAS_HEIGHT;
-var outputBackContext = outputBackCanvas.getContext("2d");
+var fontColor = "#FFFFFF";
+var fullViewFlag = false;
 
 
-function textWriter(){
+function textWriter(outputCanvas, outputBackCanvas, textArrayNumber, fullViewFlag){
+    //console.log(outputCanvasId);
+    //캔버스를 생성한다.  
+   // var id = outputCanvasId.toString();
+    //var outputCanvas = document.getElementById(id);
+    outputCanvas.width = CANVAS_WIDTH;
+    outputCanvas.height = CANVAS_HEIGHT;
+    var context = outputCanvas.getContext("2d");
+    //var outputBackCanvas = document.getElementById(outputBackCanvasId);
+    outputBackCanvas.width = CANVAS_WIDTH;
+    outputBackCanvas.height = CANVAS_HEIGHT;
+    var outputBackContext = outputBackCanvas.getContext("2d");
+
 
     // 비동기 통신으로 받아온 칼라값을 넣어준다. 
+    fontColor = colorSetHex[1];
     outputBackCanvas.style.display = 'block';
     outputBackContext.fillStyle = colorSetHex[0]; // or "rgb(0, 0, 0)";
     outputBackContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
-    colorSetBackup = colorSetHex.slice();       // 초기화 전에 아웃풋 페이지를 위해 배열을 복제해서 가지고 있는다. 
-    colorSetHex = new Array; // 다음 값을 받기 위해 일단 배열을 초기화 좋은 방법이 아님 나중에 리팩토링 
-    colorSet = new Array();
-    fontColor = "#000000";// colorSetHex[1];//
 
-    var originTextData = textInput.value;
+    colorSetBackup = colorSetHex.slice();       // 초기화 전에 아웃풋 페이지를 위해 배열을 복제해서 가지고 있는다. 
+    colorSetHex = new Array(); // 다음 값을 받기 위해 일단 배열을 초기화 좋은 방법이 아님 나중에 리팩토링 
+    colorSet = new Array();
+
+
+//change
+    if(fullViewFlag){
+        var originTextData = textInput.value;  
+    } else {
+        var originTextData = textArray[textArrayNumber];
+    }
+
     var textX = CANVAS_WIDTH/2;
     var textY = CANVAS_HEIGHT/2;
     // 왼쪽 정렬을 위한 코드. (윈쪽 정렬한 후 문단 전체를 제일 긴 단어를 기준으로 가운데 정렬하기)

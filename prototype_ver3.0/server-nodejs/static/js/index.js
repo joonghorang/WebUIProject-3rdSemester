@@ -25,6 +25,8 @@
 var colorSetBackup = new Array();
 var colorSet = new Array();
 var colorSetHex = new Array();
+var fontNameArray = new Array();
+var textArray = new Array();
 var contents = document.getElementById('contents');
 var canvasParent = document.getElementById("preview");
 
@@ -39,6 +41,7 @@ window.addEventListener('DOMContentLoaded', function(){
     
     /*itemFactory 열기*/
     itemFactoryOpen.addEventListener('click',function(){
+        outputBackCanvas = document.getElementById("output-backCanvas");
         outputBackCanvas.style.display = 'none';
         wrapper.style.display = 'block';
         var tempImg = document.getElementById('preview-image');
@@ -132,6 +135,8 @@ window.addEventListener('DOMContentLoaded', function(){
         tempImg.style.display = 'block';
         
         /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
+        var outputCanvas = document.getElementById("output-canvas");
+        var outputBackCanvas = document.getElementById("output-backCanvas");
         outputCanvas.style.display = 'none';
         outputBackCanvas.style.display = 'none';
 
@@ -155,20 +160,28 @@ window.addEventListener('DOMContentLoaded', function(){
                     colorSet.push(inColor[i]);
                     colorSetHex.push(changeDecToHexColor(inColor[i]["r"], inColor[i]["g"], inColor[i]["b"]));
                }
+               
                //그라데이션 칼라 셋팅 
-                fR = colorSet[1]["r"];
-                fG = colorSet[1]["g"];
-                fB = colorSet[1]["b"];
-                firstColor = colorSetHex[1];
+                if(colorSet.length < 2){    //색상이 하나밖에 없을 때를 대비한 코드. 
+                    fR = colorSet[0]["r"];
+                    fG = colorSet[0]["g"];
+                    fB = colorSet[0]["b"];
+                    firstColor = colorSetHex[0];       
+                } else {
+                    fR = colorSet[1]["r"];
+                    fG = colorSet[1]["g"];
+                    fB = colorSet[1]["b"];
+                    firstColor = colorSetHex[1]; 
+                }
                 secondColor = colorSetHex[0];
                 textInputEventManager();
                 drawGradation(firstColor, secondColor);
-                console.log("XHR onready");
-                console.log(colorSetHex);
            } 
         }
 
         //캔버스 초기화 
+        var outputCanvas = document.getElementById("output-canvas");
+        var context = outputCanvas.getContext("2d")
         context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);        // 픽셀 정리
         context.beginPath();                                         // 컨텍스트 리셋
     },false);
@@ -215,6 +228,8 @@ window.addEventListener('DOMContentLoaded', function(){
     },false);
     
     /*submit버튼으로 전송하면 output 보여주기*/    
+    var indexId; // for link between e.target and full view div.
+
     var submit = document.getElementById('submit-button');
     submit.addEventListener('click',function(){
 
@@ -222,6 +237,8 @@ window.addEventListener('DOMContentLoaded', function(){
         textValue = textInput.textContent;
 		textInput.style.display = 'none';
 		submitButton.style.display = 'none';
+
+        var outputCanvas = document.getElementById("output-canvas");
 
         outputCanvas.style.opacity = '1';
         outputCanvas.style.display = 'block';
@@ -240,12 +257,20 @@ window.addEventListener('DOMContentLoaded', function(){
         var presentTime = parseInt(getHour());
         if(presentTime < 10 || presentTime > 6 ){
             fontName = 'NanumMyeongjo';
+            fontNameArray.push('NanumMyeongjo');
         } else {
             fontName = 'NanumBarunGothic';
+            fontNameArray.push('NanumBarunGothic');
         }
+
+        // 받은 내용을 textArray에 저장ㅎ나다. 
+        textArray.push(textInput.value);
+        tempText = textInput.value;
         
         /*입력받은 텍스트를 캔버스에 fillText 후 2초후 삭제 */
-        textWriter();
+        var outputCanvas = document.getElementById("output-canvas");
+        var outputBackCanvas = document.getElementById("output-backCanvas");
+        textWriter(outputCanvas, outputBackCanvas, 0, false);
         
         outputCanvas.style.opacity = '0';
         setTimeout(function(){
@@ -260,10 +285,9 @@ window.addEventListener('DOMContentLoaded', function(){
 
         /*preview-image 의 자식 노드를 지우기*/
 
-        var tempImage = document.getElementById('preview-image');
-
         var addGridItem = document.createElement('div');
         addGridItem.setAttribute('class', 'grid-item');
+        addGridItem.setAttribute('id', ("GridItem" + contents.childNodes.length -1).toString());
         contents.appendChild(addGridItem);
         addGridItem.style.display = "block";
 
@@ -277,24 +301,7 @@ window.addEventListener('DOMContentLoaded', function(){
         addGridItem.appendChild(addBack);
         addBack.style.display = "block";
 
-        var addFrontCanvas = document.createElement('canvas');
-        addFrontCanvas.setAttribute('class', 'outputFront');
-        addFront.appendChild(addFrontCanvas);
-        addFrontCanvas.style.display = "none";
-
-        var addBackCanvas = document.createElement('canvas');
-        addBackCanvas.setAttribute('class', 'outputBack');
-        addBack.appendChild(addBackCanvas);
-        addBackCanvas.style.display = "none";   
-
-        var addExitButton = document.createElement('img');
-        addExitButton.setAttribute('class', 'exit-button');
-        addGridItem.appendChild(addExitButton);
-        addExitButton.style.display = "none";
-
-
-
-
+        var tempImage = document.getElementById('preview-image');
         var addImgElement = tempImage.cloneNode(true); // 해당 노드를 복사한다. 
         tempImage.removeChild(tempImage.firstChild);  // 기존 이미지를 지워준다. 
 
@@ -309,8 +316,34 @@ window.addEventListener('DOMContentLoaded', function(){
         addGridItem.firstChild.appendChild(addColorElement);
         addColorElement.style.display = "block";
         addColorElement.value = textInput.value;
-        addColorElement.style.backgroundColor = colorSetBackup[0];//"#" + colorSet[0].r + colorSet[0].g + colorSet[0].b;
+        addColorElement.style.backgroundColor = colorSetBackup[0];
         addColorElement.style.opacity = "1";
+
+        // add 1 page Elements for fullView
+        var fullContents = document.getElementById("fullView");
+
+        var addFullDiv = document.createElement('div');
+        addFullDiv.setAttribute('class', 'grid-item-full');
+        addFullDiv.setAttribute('id', "full-div-" + (contents.childNodes.length - 1).toString())
+        fullContents.appendChild(addFullDiv);
+        addFullDiv.style.display = "block";
+
+        var addFrontCanvas = document.createElement('canvas');
+        addFrontCanvas.setAttribute('class', 'outputFront');
+        addFullDiv.appendChild(addFrontCanvas);
+        addFrontCanvas.style.display = "none";
+
+        var addBackCanvas = document.createElement('canvas');
+        addBackCanvas.setAttribute('class', 'outputBack');
+        addFullDiv.appendChild(addBackCanvas);
+        addBackCanvas.style.display = "none";   
+
+        var addExitButton = document.createElement('img');
+        addExitButton.setAttribute('class', 'exit-button');
+        addFullDiv.appendChild(addExitButton);
+        addExitButton.style.display = "none";
+        addExitButton.src = "image/exit_button.png";
+
 
         //textInput에 있던 값을 원래 초기값으로 
         textInput.value = "30자 이내로 입력하세요.";
@@ -322,23 +355,55 @@ window.addEventListener('DOMContentLoaded', function(){
 
         for(var id = 0; id < gridItems.length; id++){
             gridItems[id].addEventListener('click',function(e){
-            console.log("in");
-//            e.preventDefault();
-//            var front = this.firstChild;
-//            var back = this.lastChild;
-//            this.removeChild(this.firstChild);
-//            this.removeChild(this.lastChild);
-            //e.target.style.zIndex = '500';
-            e.target.style.width = '100%';
-            e.target.style.height = '100%';
-            e.target.style.position = 'absolute';
-            //e.target.style.backgroundColor = '#50F090';
-            e.target.style.top = '0';
-            e.target.style.left = '0';
-            e.target.parentNode.parentNode.style.width = '100%';
-            e.target.parentNode.parentNode.style.height = '100%';
-            e.target.parentNode.parentNode.style.position = 'absolute';
-            e.target.style.zIndex= '600';
+            // nav hide
+            document.getElementById("item-factory-nav-open").style.display = "none";
+            document.getElementById("contents").style.position = "absolute";
+
+            // save e.target.id To indexId
+            indexId = e.target.id;
+            console.log(indexId);
+
+            //change e.target.style
+            // e.target.style.width = '100%';
+            // e.target.style.height = '100%';
+            // e.target.style.position = 'absolute';
+            // e.target.style.top = '0';
+            // e.target.style.left = '0';
+            // e.target.margin = '0';
+            // e.target.parentNode.parentNode.style.width = '100%';
+            // e.target.parentNode.parentNode.style.height = '100%';
+            // e.target.parentNode.parentNode.style.position = 'absolute';
+            // e.target.style.zIndex= '500';
+            e.target.parentNode.parentNode.style.display = "none";
+
+            // full outputPage comes out.
+            console.log(indexId.substring(15, 16));
+            var targetFullView = document.getElementById("full-div-" + indexId.substring(15, 16));
+
+            // text Page
+            targetFullView.childNodes[0].style.display = "block";
+            targetFullView.childNodes[0].style.width = CANVAS_WIDTH;
+            targetFullView.childNodes[0].style.height = CANVAS_HEIGHT;
+            targetFullView.childNodes[0].style.background = colorSetBackup[0];
+            targetFullView.childNodes[0].style.zIndex = "501";
+            var TextCanvasContext = targetFullView.childNodes[0].getContext("2d");
+
+
+            // picture Page
+            targetFullView.childNodes[1].style.display = "block";
+            targetFullView.childNodes[1].width = CANVAS_WIDTH;
+            targetFullView.childNodes[1].height = CANVAS_HEIGHT;
+            var PictureCanvasContext = targetFullView.childNodes[1].getContext("2d");
+
+            // exit button comes out.
+            targetFullView.childNodes[2].style.display = "block";
+            targetFullView.childNodes[2].style.width = MAX_HEIGHT * 4 / 100 + "px";
+            targetFullView.childNodes[2].style.height = MAX_HEIGHT * 4 / 100 + "px";
+            targetFullView.childNodes[2].style.marginLeft = MAX_WIDTH - 40 - 40 + "px";
+            targetFullView.childNodes[2].style.marginTop = 20 + "px";
+            targetFullView.childNodes[2].style.display = "block";
+            targetFullView.childNodes[2].style.zIndex = "503";
+
             e.stopPropagation();
         }, false);
     }
