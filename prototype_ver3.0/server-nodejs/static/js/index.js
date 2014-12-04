@@ -29,6 +29,8 @@ var fontNameArray = new Array();
 var textArray = new Array();
 var contents = document.getElementById('contents');
 var canvasParent = document.getElementById("preview");
+var indexId; // for link between e.target and full view div.
+var imageSrcArray = new Array(); // for link between contents image and full view image
 
 window.addEventListener('DOMContentLoaded', function(){    
     var wrapper = document.getElementById('item-factory-wrapper');
@@ -228,7 +230,6 @@ window.addEventListener('DOMContentLoaded', function(){
     },false);
     
     /*submit버튼으로 전송하면 output 보여주기*/    
-    var indexId; // for link between e.target and full view div.
 
     var submit = document.getElementById('submit-button');
     submit.addEventListener('click',function(){
@@ -287,7 +288,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
         var addGridItem = document.createElement('div');
         addGridItem.setAttribute('class', 'grid-item');
-        addGridItem.setAttribute('id', ("GridItem" + contents.childNodes.length -1).toString());
+        addGridItem.setAttribute('id', ("GridItem" + contents.childNodes.length).toString());
         contents.appendChild(addGridItem);
         addGridItem.style.display = "block";
 
@@ -302,7 +303,8 @@ window.addEventListener('DOMContentLoaded', function(){
         addBack.style.display = "block";
 
         var tempImage = document.getElementById('preview-image');
-        var addImgElement = tempImage.cloneNode(true); // 해당 노드를 복사한다. 
+        var addImgElement = tempImage.cloneNode(true); // 해당 노드를 복사한다.
+        imageSrcArray.push(addImgElement.src); 
         tempImage.removeChild(tempImage.firstChild);  // 기존 이미지를 지워준다. 
 
         addImgElement.setAttribute('class', 'in-grid-image');
@@ -336,11 +338,24 @@ window.addEventListener('DOMContentLoaded', function(){
         var addBackCanvas = document.createElement('canvas');
         addBackCanvas.setAttribute('class', 'outputBack');
         addFullDiv.appendChild(addBackCanvas);
-        addBackCanvas.style.display = "none";   
+        addBackCanvas.style.display = "none";  
 
+        var addPictureDiv = document.createElement('div');
+        addPictureDiv.setAttribute('class', 'outputPictureDiv');
+        addFullDiv.appendChild(addPictureDiv);
+        addPictureDiv.style.display = "none";  
+        var addPicture = document.createElement('img');
+        addPicture.setAttribute('class', 'outputPicture');
+        addPictureDiv.appendChild(addPicture);
+        addPicture.style.display = "none";
+
+        var addExitButtonWrap = document.createElement('div');
+        addExitButtonWrap.setAttribute('class', 'exit-button-wrap');
+        addFullDiv.appendChild(addExitButtonWrap);
+        addExitButtonWrap.style.display = "none";
         var addExitButton = document.createElement('img');
         addExitButton.setAttribute('class', 'exit-button');
-        addFullDiv.appendChild(addExitButton);
+        addExitButtonWrap.appendChild(addExitButton);
         addExitButton.style.display = "none";
         addExitButton.src = "image/exit_button.png";
 
@@ -358,54 +373,92 @@ window.addEventListener('DOMContentLoaded', function(){
             // nav hide
             document.getElementById("item-factory-nav-open").style.display = "none";
             document.getElementById("contents").style.position = "absolute";
-
+            document.getElementById("contents").style.display = "none";
+            document.getElementById("fullView").style.display = "block";
+            
             // save e.target.id To indexId
             indexId = e.target.id;
-            console.log(indexId);
 
-            //change e.target.style
-            // e.target.style.width = '100%';
-            // e.target.style.height = '100%';
-            // e.target.style.position = 'absolute';
-            // e.target.style.top = '0';
-            // e.target.style.left = '0';
-            // e.target.margin = '0';
-            // e.target.parentNode.parentNode.style.width = '100%';
-            // e.target.parentNode.parentNode.style.height = '100%';
-            // e.target.parentNode.parentNode.style.position = 'absolute';
-            // e.target.style.zIndex= '500';
-            e.target.parentNode.parentNode.style.display = "none";
+            var contentsWrap = e.target.parentNode.parentNode;
+            //contentsWrap.style.display = "none";
 
             // full outputPage comes out.
-            console.log(indexId.substring(15, 16));
             var targetFullView = document.getElementById("full-div-" + indexId.substring(15, 16));
 
             // text Page
-            targetFullView.childNodes[0].style.display = "block";
-            targetFullView.childNodes[0].style.width = CANVAS_WIDTH;
-            targetFullView.childNodes[0].style.height = CANVAS_HEIGHT;
-            targetFullView.childNodes[0].style.background = colorSetBackup[0];
-            targetFullView.childNodes[0].style.zIndex = "501";
-            var TextCanvasContext = targetFullView.childNodes[0].getContext("2d");
+            var fullOutputCanvas = targetFullView.childNodes[0];
+            fullOutputCanvas.style.position = "absolute";
+            fullOutputCanvas.style.display = "block";
+            fullOutputCanvas.style.width = CANVAS_WIDTH;
+            fullOutputCanvas.style.height = CANVAS_HEIGHT;
+            fullOutputCanvas.style.background = colorSetBackup[0];
+            fullOutputCanvas.style.zIndex = "502";
+            
 
+            var fullOutputBackCanvas = targetFullView.childNodes[1];
+            fullOutputBackCanvas.style.position = "absolute";
+            fullOutputBackCanvas.style.display = "block";
+            fullOutputBackCanvas.width = CANVAS_WIDTH;
+            fullOutputBackCanvas.height = CANVAS_HEIGHT;
+            fullOutputBackCanvas.style.zIndex = "501";
 
-            // picture Page
-            targetFullView.childNodes[1].style.display = "block";
-            targetFullView.childNodes[1].width = CANVAS_WIDTH;
-            targetFullView.childNodes[1].height = CANVAS_HEIGHT;
-            var PictureCanvasContext = targetFullView.childNodes[1].getContext("2d");
+            // text Write.
+            textWriter(fullOutputCanvas, fullOutputBackCanvas, indexId.substring(15, 16), true);
+
+            // text Page function definition
+            fullOutputCanvas.addEventListener('click', function(e){
+                fullOutputCanvas.style.display = "none";
+                fullOutputBackCanvas.style.display = "none";
+            })
+
+            // picture canvas
+            var pictureDiv = targetFullView.childNodes[2];
+            pictureDiv.style.position = "absolute";
+            pictureDiv.style.display = "block";
+            pictureDiv.width = CANVAS_WIDTH;
+            pictureDiv.height = CANVAS_HEIGHT;
+            pictureDiv.style.zIndex = "500";
+            pictureDiv.style.margin = "auto";
+
+            var picture = pictureDiv.firstChild;
+            console.log(CANVAS_WIDTH - picture.style.width);
+            picture.src =document.getElementById("contents-back-" + indexId.substring(15, 16)).firstChild.src;
+            picture.style.display = "block";
+            picture.style.paddingLeft = (CANVAS_WIDTH - picture.style.width).toString();
+            //picture.width = CANVAS_WIDTH;
+            //picture.height = CANVAS_HEIGHT;
+            picture.style.zIndex = "500";            
+            
 
             // exit button comes out.
-            targetFullView.childNodes[2].style.display = "block";
-            targetFullView.childNodes[2].style.width = MAX_HEIGHT * 4 / 100 + "px";
-            targetFullView.childNodes[2].style.height = MAX_HEIGHT * 4 / 100 + "px";
-            targetFullView.childNodes[2].style.marginLeft = MAX_WIDTH - 40 - 40 + "px";
-            targetFullView.childNodes[2].style.marginTop = 20 + "px";
-            targetFullView.childNodes[2].style.display = "block";
-            targetFullView.childNodes[2].style.zIndex = "503";
+            var buttonWrap = targetFullView.lastChild;
+            buttonWrap.style.display = "block";
+            buttonWrap.style.width = MAX_HEIGHT * 4 / 100 + "px";
+            buttonWrap.style.height = MAX_HEIGHT * 4 / 100 + "px";
+            buttonWrap.style.marginLeft = MAX_WIDTH - 40 + "px";
+            buttonWrap.style.marginTop = 20 + "px";
+            buttonWrap.style.display = "block";
+            buttonWrap.style.zIndex = "503";
+            var exitButton = targetFullView.childNodes[3].childNodes[0];
+            exitButton.style.display = "block";
+            exitButton.style.width = MAX_HEIGHT * 4 / 100 + "px";
+            exitButton.style.height = MAX_HEIGHT * 4 / 100 + "px";
+            exitButton.style.zIndex = "504";
 
-            e.stopPropagation();
+            // exit button function definition
+            var targetFullView = document.getElementById("full-div-" + indexId.substring(15, 16));
+            var exitButton = targetFullView.lastChild.firstChild;
+            exitButton.addEventListener('click',function(e){
+                document.getElementById("item-factory-nav-open").style.display = "block";
+                document.getElementById("contents").style.position = "relative";
+                document.getElementById("fullView").style.display = "none";
+                document.getElementById("contents").style.display = "block";
+            });
+
+
         }, false);
+
+    
     }
     //확대되면서 this(클릭한 그리드) 말고 다 날려버림???? 일단은 흰색으로 fadeout형식
 
