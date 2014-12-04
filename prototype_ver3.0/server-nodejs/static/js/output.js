@@ -35,10 +35,7 @@ function textWriter(outputCanvas, textArrayNumber, fullViewFlag){
     outputCanvas.width = CANVAS_WIDTH;
     outputCanvas.height = CANVAS_HEIGHT;
     var context = outputCanvas.getContext("2d");
-    //var outputBackCanvas = document.getElementById(outputBackCanvasId);
-
-
-//change
+ 
     if(fullViewFlag){
         var originTextData = textInput.value;  
     } else {

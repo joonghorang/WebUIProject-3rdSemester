@@ -19,7 +19,7 @@ function changeDecToHexColor(r, g, b){
     return result;
 }
 function zeroCheck(num){
-    if(num < 10){
+    if(num.toString().length < 2){
         return "0" + num;
     } else {
         return num;

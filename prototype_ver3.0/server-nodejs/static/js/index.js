@@ -272,7 +272,7 @@ window.addEventListener('DOMContentLoaded', function(){
         var outputCanvas = document.getElementById("output-canvas");
         var outputBackCanvas = document.getElementById("output-backCanvas");
         textWriterForFirstInput(outputBackCanvas);
-        textWriter(outputCanvas, 0, false);
+        textWriter(outputCanvas, 0, true);
         
         outputCanvas.style.opacity = '0';
         setTimeout(function(){
@@ -315,7 +315,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
         var addColorElement = document.createElement('p');
         addColorElement.setAttribute('class', 'front');
-        addColorElement.setAttribute('id', "contents-front-" + (contents.childNodes.length - 1).toString());
+        addColorElement.setAttribute('id', (contents.childNodes.length - 1).toString());
         addGridItem.firstChild.appendChild(addColorElement);
         addColorElement.style.display = "block";
         addColorElement.value = textInput.value;
@@ -378,14 +378,14 @@ window.addEventListener('DOMContentLoaded', function(){
             document.getElementById("item-factory-nav-open").style.display = "none";
             document.getElementById("contents").style.position = "absolute";
             document.getElementById("contents").style.display = "none";
-            document.getElementById("full-div-" + indexId.substring(15, 16)).style.display = "block";
+            document.getElementById("full-div-" + indexId).style.display = "block";
 
             var contentsWrap = e.target.parentNode.parentNode;
             //contentsWrap.style.display = "none";
 
             // full outputPage comes out.
-            var targetFullView = document.getElementById("full-div-" + indexId.substring(15, 16));
-
+            var targetFullView = document.getElementById("full-div-" + indexId); //특정문자 제거 //substring(15, 16));
+        
             // text Page
             var fullOutputCanvas = targetFullView.childNodes[0];
             fullOutputCanvas.style.position = "absolute";
@@ -404,7 +404,7 @@ window.addEventListener('DOMContentLoaded', function(){
             fullOutputBackCanvas.style.zIndex = "501";
 
             // text Write.
-            textWriter(fullOutputCanvas, indexId.substring(15, 16), true);
+            textWriter(fullOutputCanvas, (indexId - 1), false);
 
             // text Page function definition
             fullOutputCanvas.addEventListener('click', function(e){
@@ -423,7 +423,7 @@ window.addEventListener('DOMContentLoaded', function(){
             pictureDiv.style.zIndex = "500";
 
             var picture = pictureDiv.firstChild;
-            picture.src =document.getElementById("contents-back-" + indexId.substring(15, 16)).firstChild.src;
+            picture.src =document.getElementById("contents-back-" + indexId).firstChild.src;
             picture.style.display = "block";
             picture.style.zIndex = "500";
             if(picture.width > picture.height){
@@ -465,12 +465,11 @@ window.addEventListener('DOMContentLoaded', function(){
             exitButton.style.zIndex = "504";
 
             // exit button function definition
-            var targetFullView = document.getElementById("full-div-" + indexId.substring(15, 16));
+            var targetFullView = document.getElementById("full-div-" + indexId);
             var exitButton = targetFullView.lastChild.firstChild;
             exitButton.addEventListener('click',function(e){
                 document.getElementById("item-factory-nav-open").style.display = "block";
                 document.getElementById("contents").style.position = "relative";
-                //document.getElementById("fullView").style.display = "none";
                 targetFullView.style.display = "none";
                 document.getElementById("contents").style.display = "block";
             });
