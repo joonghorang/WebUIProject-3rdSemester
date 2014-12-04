@@ -142,7 +142,7 @@ window.addEventListener('DOMContentLoaded', function(){
 //       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
 
        // 서버용 
-       XHR.open("post", "/itemFactory/image", true);
+       XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
        XHR.send(formData);
        
        XHR.onreadystatechange = function() 
@@ -277,6 +277,24 @@ window.addEventListener('DOMContentLoaded', function(){
         addGridItem.appendChild(addBack);
         addBack.style.display = "block";
 
+        var addFrontCanvas = document.createElement('canvas');
+        addFrontCanvas.setAttribute('class', 'outputFront');
+        addFront.appendChild(addFrontCanvas);
+        addFrontCanvas.style.display = "none";
+
+        var addBackCanvas = document.createElement('canvas');
+        addBackCanvas.setAttribute('class', 'outputBack');
+        addBack.appendChild(addBackCanvas);
+        addBackCanvas.style.display = "none";   
+
+        var addExitButton = document.createElement('img');
+        addExitButton.setAttribute('class', 'exit-button');
+        addGridItem.appendChild(addExitButton);
+        addExitButton.style.display = "none";
+
+
+
+
         var addImgElement = tempImage.cloneNode(true); // 해당 노드를 복사한다. 
         tempImage.removeChild(tempImage.firstChild);  // 기존 이미지를 지워준다. 
 
@@ -293,9 +311,6 @@ window.addEventListener('DOMContentLoaded', function(){
         addColorElement.value = textInput.value;
         addColorElement.style.backgroundColor = colorSetBackup[0];//"#" + colorSet[0].r + colorSet[0].g + colorSet[0].b;
         addColorElement.style.opacity = "1";
-        console.log(colorSetBackup[0]);
-        console.log(colorSetHex[0]);
-        console.log(colorSetHex[1]);
 
         //textInput에 있던 값을 원래 초기값으로 
         textInput.value = "30자 이내로 입력하세요.";
