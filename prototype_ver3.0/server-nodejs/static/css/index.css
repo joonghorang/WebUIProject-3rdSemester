@@ -272,6 +272,8 @@ border-bottom-left-radius:5px;
 .exit-button{ 
     position : absolute;
     z-index : 504;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 #text-canvas {

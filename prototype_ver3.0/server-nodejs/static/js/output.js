@@ -13,16 +13,7 @@ var fontName;
 var fontColor = "#FFFFFF";
 var fullViewFlag = false;
 
-
-function textWriter(outputCanvas, outputBackCanvas, textArrayNumber, fullViewFlag){
-    //console.log(outputCanvasId);
-    //캔버스를 생성한다.  
-   // var id = outputCanvasId.toString();
-    //var outputCanvas = document.getElementById(id);
-    outputCanvas.width = CANVAS_WIDTH;
-    outputCanvas.height = CANVAS_HEIGHT;
-    var context = outputCanvas.getContext("2d");
-    //var outputBackCanvas = document.getElementById(outputBackCanvasId);
+function textWriterForFirstInput(outputBackCanvas){
     outputBackCanvas.width = CANVAS_WIDTH;
     outputBackCanvas.height = CANVAS_HEIGHT;
     var outputBackContext = outputBackCanvas.getContext("2d");
@@ -37,6 +28,14 @@ function textWriter(outputCanvas, outputBackCanvas, textArrayNumber, fullViewFla
     colorSetBackup = colorSetHex.slice();       // 초기화 전에 아웃풋 페이지를 위해 배열을 복제해서 가지고 있는다. 
     colorSetHex = new Array(); // 다음 값을 받기 위해 일단 배열을 초기화 좋은 방법이 아님 나중에 리팩토링 
     colorSet = new Array();
+
+};
+function textWriter(outputCanvas, textArrayNumber, fullViewFlag){
+
+    outputCanvas.width = CANVAS_WIDTH;
+    outputCanvas.height = CANVAS_HEIGHT;
+    var context = outputCanvas.getContext("2d");
+    //var outputBackCanvas = document.getElementById(outputBackCanvasId);
 
 
 //change

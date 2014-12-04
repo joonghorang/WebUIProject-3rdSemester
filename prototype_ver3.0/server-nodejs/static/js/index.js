@@ -271,7 +271,8 @@ window.addEventListener('DOMContentLoaded', function(){
         /*입력받은 텍스트를 캔버스에 fillText 후 2초후 삭제 */
         var outputCanvas = document.getElementById("output-canvas");
         var outputBackCanvas = document.getElementById("output-backCanvas");
-        textWriter(outputCanvas, outputBackCanvas, 0, false);
+        textWriterForFirstInput(outputBackCanvas);
+        textWriter(outputCanvas, 0, false);
         
         outputCanvas.style.opacity = '0';
         setTimeout(function(){
@@ -403,32 +404,41 @@ window.addEventListener('DOMContentLoaded', function(){
             fullOutputBackCanvas.style.zIndex = "501";
 
             // text Write.
-            textWriter(fullOutputCanvas, fullOutputBackCanvas, indexId.substring(15, 16), true);
+            textWriter(fullOutputCanvas, indexId.substring(15, 16), true);
 
             // text Page function definition
             fullOutputCanvas.addEventListener('click', function(e){
                 fullOutputCanvas.style.display = "none";
                 fullOutputBackCanvas.style.display = "none";
+                pictureDiv.style.display = "block";
             })
 
-            // picture canvas
+            // picture
             var pictureDiv = targetFullView.childNodes[2];
             pictureDiv.style.position = "absolute";
             pictureDiv.style.display = "block";
             pictureDiv.width = CANVAS_WIDTH;
             pictureDiv.height = CANVAS_HEIGHT;
             pictureDiv.style.zIndex = "500";
-            pictureDiv.style.margin = "auto";
+            pictureDiv.style.marginLeft = (CANVAS_WIDTH/2 - pictureDiv.width/2).toString() + "px";
+            pictureDiv.style.marginTop = (CANVAS_HEIGHT/2 - pictureDiv.height/2).toString() + "px";
 
             var picture = pictureDiv.firstChild;
-            console.log(CANVAS_WIDTH - picture.style.width);
             picture.src =document.getElementById("contents-back-" + indexId.substring(15, 16)).firstChild.src;
             picture.style.display = "block";
-            picture.style.paddingLeft = (CANVAS_WIDTH - picture.style.width).toString();
-            //picture.width = CANVAS_WIDTH;
-            //picture.height = CANVAS_HEIGHT;
-            picture.style.zIndex = "500";            
+            picture.style.zIndex = "500";
+            if(picture.width > picture.height){
+                picture.width = CANVAS_WIDTH;
+            } else {
+                picture.height = CANVAS_HEIGHT;
+            }
             
+            // picture function 
+            pictureDiv.addEventListener('click', function(e){
+                fullOutputCanvas.style.display = "block";
+                fullOutputBackCanvas.style.display = "block";
+                pictureDiv.style.display = "none";
+            })
 
             // exit button comes out.
             var buttonWrap = targetFullView.lastChild;
