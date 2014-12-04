@@ -371,14 +371,14 @@ window.addEventListener('DOMContentLoaded', function(){
 
         for(var id = 0; id < gridItems.length; id++){
             gridItems[id].addEventListener('click',function(e){
+            // save e.target.id To indexId
+            indexId = e.target.id;
+            
             // nav hide
             document.getElementById("item-factory-nav-open").style.display = "none";
             document.getElementById("contents").style.position = "absolute";
             document.getElementById("contents").style.display = "none";
-            document.getElementById("fullView").style.display = "block";
-            
-            // save e.target.id To indexId
-            indexId = e.target.id;
+            document.getElementById("full-div-" + indexId.substring(15, 16)).style.display = "block";
 
             var contentsWrap = e.target.parentNode.parentNode;
             //contentsWrap.style.display = "none";
@@ -411,33 +411,42 @@ window.addEventListener('DOMContentLoaded', function(){
                 fullOutputCanvas.style.display = "none";
                 fullOutputBackCanvas.style.display = "none";
                 pictureDiv.style.display = "block";
+                picture.style.display = "block";
             })
 
             // picture
             var pictureDiv = targetFullView.childNodes[2];
             pictureDiv.style.position = "absolute";
             pictureDiv.style.display = "block";
-            pictureDiv.width = CANVAS_WIDTH;
-            pictureDiv.height = CANVAS_HEIGHT;
+            pictureDiv.width = CANVAS_WIDTH + "px";
+            pictureDiv.height = CANVAS_HEIGHT + "px";
             pictureDiv.style.zIndex = "500";
-            pictureDiv.style.marginLeft = (CANVAS_WIDTH/2 - pictureDiv.width/2).toString() + "px";
-            pictureDiv.style.marginTop = (CANVAS_HEIGHT/2 - pictureDiv.height/2).toString() + "px";
 
             var picture = pictureDiv.firstChild;
             picture.src =document.getElementById("contents-back-" + indexId.substring(15, 16)).firstChild.src;
             picture.style.display = "block";
             picture.style.zIndex = "500";
             if(picture.width > picture.height){
+                if(picture.height > CANVAS_HEIGHT){
+                    picture.height = CANVAS_HEIGHT;
+                }
                 picture.width = CANVAS_WIDTH;
-            } else {
+            } else if(picture.width <= picture.height){
+                if(picture.width > CANVAS_WIDTH){
+                    picture.width = CANVAS_WIDTH;
+                }
                 picture.height = CANVAS_HEIGHT;
             }
-            
+
+            pictureDiv.style.marginLeft = ((CANVAS_WIDTH - picture.width)/2).toString() + "px";
+            pictureDiv.style.marginTop = (CANVAS_HEIGHT/2 - picture.height/2).toString() + "px";
+
             // picture function 
             pictureDiv.addEventListener('click', function(e){
                 fullOutputCanvas.style.display = "block";
                 fullOutputBackCanvas.style.display = "block";
                 pictureDiv.style.display = "none";
+                picture.style.display = "none";
             })
 
             // exit button comes out.
@@ -461,7 +470,8 @@ window.addEventListener('DOMContentLoaded', function(){
             exitButton.addEventListener('click',function(e){
                 document.getElementById("item-factory-nav-open").style.display = "block";
                 document.getElementById("contents").style.position = "relative";
-                document.getElementById("fullView").style.display = "none";
+                //document.getElementById("fullView").style.display = "none";
+                targetFullView.style.display = "none";
                 document.getElementById("contents").style.display = "block";
             });
 
