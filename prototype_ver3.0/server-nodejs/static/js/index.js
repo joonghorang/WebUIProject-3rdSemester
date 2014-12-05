@@ -418,29 +418,33 @@ window.addEventListener('DOMContentLoaded', function(){
             var pictureDiv = targetFullView.childNodes[2];
             pictureDiv.style.position = "absolute";
             pictureDiv.style.display = "block";
-            pictureDiv.width = CANVAS_WIDTH + "px";
-            pictureDiv.height = CANVAS_HEIGHT + "px";
+            
+            pictureDiv.style.width = "100%";
+            pictureDiv.style.height = "100%";
+            pictureDiv.style.maxWidth = CANVAS_WIDTH + "px";
+            pictureDiv.style.maxHeight = CANVAS_HEIGHT + "px";
+                
             pictureDiv.style.zIndex = "500";
+            
+            var fullViewDiv = document.getElementById("fullView");
+            fullViewDiv.style.textAlign = "center";
 
             var picture = pictureDiv.firstChild;
             picture.src =document.getElementById("contents-back-" + indexId).firstChild.src;
             picture.style.display = "block";
             picture.style.zIndex = "500";
-            if(picture.width > picture.height){
-                if(picture.height > CANVAS_HEIGHT){
-                    picture.height = CANVAS_HEIGHT;
-                }
-                picture.width = CANVAS_WIDTH;
-            } else if(picture.width <= picture.height){
-                if(picture.width > CANVAS_WIDTH){
-                    picture.width = CANVAS_WIDTH;
-                }
-                picture.height = CANVAS_HEIGHT;
-            }
+            
+            picture.style.maxWidth = CANVAS_WIDTH + "px";
+            picture.style.maxHeight = CANVAS_HEIGHT + "px";
+                
+            /*outputPicture Style*/    
+            
+            picture.style.margin = "0 auto";
+            picture.style.height = "100%";
 
-            pictureDiv.style.marginLeft = ((CANVAS_WIDTH - picture.width)/2).toString() + "px";
-            pictureDiv.style.marginTop = (CANVAS_HEIGHT/2 - picture.height/2).toString() + "px";
 
+            /*//outputPicture Style*/       
+                
             // picture function 
             pictureDiv.addEventListener('click', function(e){
                 fullOutputCanvas.style.display = "block";
@@ -458,12 +462,13 @@ window.addEventListener('DOMContentLoaded', function(){
             buttonWrap.style.marginTop = 20 + "px";
             buttonWrap.style.display = "block";
             buttonWrap.style.zIndex = "503";
+            buttonWrap.style.position = "absolute";
+                
             var exitButton = targetFullView.childNodes[3].childNodes[0];
             exitButton.style.display = "block";
             exitButton.style.width = MAX_HEIGHT * 4 / 100 + "px";
             exitButton.style.height = MAX_HEIGHT * 4 / 100 + "px";
-            exitButton.style.zIndex = "504";
-
+                
             // exit button function definition
             var targetFullView = document.getElementById("full-div-" + indexId);
             var exitButton = targetFullView.lastChild.firstChild;
