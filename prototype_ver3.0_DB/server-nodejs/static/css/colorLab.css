@@ -1,0 +1,20 @@
+#target-container {
+    position : relative;
+    height : 400px;
+    background-color: black;
+}
+
+#target-container > img{
+    height : 100%;
+};
+
+#colors{
+    position : relative;
+    height : 100px;
+}
+.color{
+    float : left;
+    width : 90px;
+    height : 90px;
+    margin: 5px;
+}
