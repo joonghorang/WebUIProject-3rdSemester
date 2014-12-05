@@ -1,0 +1,61 @@
+body{
+    margin: 0 auto;
+}
+
+.box1{
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    display: none;
+}
+.box2{
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+}
+
+
+.bg{
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    width: 500px;
+    height: 500px;
+    background-image: url(4.jpg);
+    cursor: pointer;
+}
+/*
+
+.bg:after{
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.8);
+}
+
+.bg:hover:after{
+    width: 8%;
+    background-color: rgba(255,255,255,0);
+    transition: all 1s ease-out;
+}
+*/
+
+
+.effect{
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    width: 500px;
+    height: 500px;
+    background-position: -400px -400px;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(120deg, transparent 20%, white 50%, transparent 80%);
+    opacity: 0.5;
+    transition: background-position 0.5s ease;
+}
+.effect:hover{
+    background-position: 400px 400px;
+}

@@ -1,0 +1,311 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+body {
+    width: 100%;
+    height: 100%;
+    font-family: "Nanum Gothic", sans-serif;
+}
+
+canvas {
+    width : 100%;
+    height : 100%;
+    position : absolute;
+}
+
+#wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+/*itemFactory open/close bar Style*/
+#item-factory-nav-open {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    width:40px;
+    height: 100%;
+    box-shadow: 2px 2px 2px #999999;
+    background-color: #ffffff;
+    opacity: 0.7;
+    cursor: pointer;
+}
+#item-factory-nav-open img {
+    position: relative;
+    top: 45%;
+    width: 100%;
+}
+
+#item-factory-nav-close {
+    position: absolute;
+    z-index: 5;
+    top: 0;
+    right: 0;
+    width:40px;
+    height: 100%;
+    box-shadow: -2px -2px 2px #999999;
+    background-color: #ffffff;
+    opacity: 0.7;
+    cursor: pointer;
+    display: none;
+}
+#item-factory-nav-close img {
+    position: relative;
+    top: 45%;
+    width: 100%;
+}
+
+/*itemFactory Style*/
+#item-factory-wrapper {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#item-factory-background {
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    opacity: 0.7;
+    transition: all 0.5s ease-in-out;
+}
+
+#item-factory {
+    z-index: 4;
+    width: 50%;
+    min-width: 450px;
+    height: 500px;
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    display: none;  
+    background-color: #ffffff;
+    opacity: 0;
+    border-radius: 8px;
+    transition: all 0.7s ease-in-out;
+}
+
+#upload-wrapper {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+#upload {
+    position: relative;
+    top: 0;
+    width: 200px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+    /*사진고르기 button Style*/
+#upload-button {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 50px;
+    color: #ffffff;
+    font-size: 18px;
+    border-bottom-right-radius:5px;
+border-bottom-left-radius:5px;
+    background-color: #999999;
+    text-align: center;
+    transition: display 0.4s ease-in-out;
+
+}
+    /*fileInput Style*/
+#upload-hidden {
+    position: relative;
+    width: 200px;
+    height: 50px;
+    margin-bottom: 10px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+    /*preview area Style*/
+#preview {
+    width: 100%;
+    height: 75%;
+    margin: 0 auto;
+}
+
+#output-canvas {
+    border: 0;
+    z-index: 35;
+    position: absolute;
+    display : none;
+	width : 100%;
+	height : 100%;
+    transition:  all 2s ease-in-out;
+	/*캔버스의 그리는 시작점*/
+	top : 0px;
+	left : 0px;
+}
+
+#output-backCanvas {
+    border: 0;
+    z-index: 30;
+    position: absolute;
+}
+
+#preview-image{
+    width: 100%;
+    height: 75%;
+    border: 5;
+    z-index: 5;
+    position: absolute;
+    transition: display 0.8s ease-in-out;
+}
+
+.inputImage {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 95%;
+    max-height: 100%;
+    display: block;
+}
+
+#text-input {
+    z-index: 21;
+    display: none;
+    text-align: center;
+	vertical-align: middle;
+	line-height: 100%;
+	width : 100%;
+	height : 100%;
+	float : left;
+	font-family: "NanumMyeongjo";
+	font-size : 60px;
+	color : #101010;
+	background-color: rgba(0, 0, 0, 0);
+	position : relative;
+}
+
+#back-ground-canvas {
+    display: none;
+    position: absolute;
+    z-index: 20;
+}
+
+
+
+#confirm-button {
+    z-index: 100;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 100px;
+    height: 40px;
+    color: #505050;
+    font-size: 17px;
+    background-color: #ffffff;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    margin-left: 515px;
+    transition: display 0.4s ease-in-out;
+}
+#submit-button {
+    z-index: 200;
+    position: absolute;
+    right: 25px;
+    bottom: 20px;
+    display: none;
+    width: 100px;
+    height: 40px;
+    color: #505050;
+    font-size: 17px;
+    background-color: #ffffff;
+    opacity: 0.7;
+    border: 0;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    transition: display 0.8s ease-in-out;
+}
+
+
+/*gridView Style*/
+#contents {
+    z-index: inherit;
+    width: 70%;
+    height: 100%;
+    margin: 0 auto;
+    overflow: auto;
+}
+
+.grid-item{
+    z-index: 2;
+    position: relative;
+    width: 202px;
+	height: 202px;
+    float : left;
+    /*display: inline-block;*/
+    font-size: 50px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    transition: all 0.5s ease-in-out;
+}
+
+.grid-item-full{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;    
+}
+
+.exit-button{ 
+    position : absolute;
+    z-index : 504;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#text-canvas {
+    z-index : 400;
+}
+
+#image-canvas{
+    z-index : 410;
+}
+
+.front {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    transition: all 0.5s ease-in-out;
+    opacity: 1;
+}
+
+.front:hover{
+    opacity: 0;
+}
+
+.back {
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}

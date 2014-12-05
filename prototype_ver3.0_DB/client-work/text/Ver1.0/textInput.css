@@ -1,0 +1,22 @@
+
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+
+body{   /*사용자 마우스 드래그시 파란색 생기는 것 제거*/
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#button{
+	float : left;
+	display :block;
+}
+
+#textInput{
+	float : left;
+	display : block;
+	font-family: "NanumMyeongjo";
+	font-size : 60px;
+	font-weight : "light";
+	color : #303030;
+}
