@@ -239,7 +239,6 @@ var pickPeaks = function(histData){
 if(typeof module !== "undefined" && module.exports){
     exports.pickPeaks = pickPeaks;
     exports.smoothing = smoothing;
-
     exports.createCanvasByImage = createCanvasByImage;
     exports.pickColors = pickColors;
     exports.histogram = histogram;

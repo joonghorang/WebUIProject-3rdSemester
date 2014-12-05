@@ -31,6 +31,11 @@ app.engine('.html', require('ejs').__express);
 app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
+app.get('/gradientLab', function(req, res){
+    var fileName = "uploaded/9.jpg";
+    
+    res.render("gradientLab.html", {"imageSrc" : '/image/' + fileName});
+});
 app.get('/colorLab', function(req, res){
     var fileName = "colorLab-current-image";
     var imageFile = fs.readFileSync(static + '/image/' +fileName);
@@ -40,8 +45,8 @@ app.get('/colorLab', function(req, res){
     var imageCanvas = imgP.createCanvasByImage(img);
     var colors = imgP.pickColors(imageCanvas);
     var rawHistData = imgP.histogram("hue", imageCanvas, { sL : 0.3, vL : 0.3});
-    var resultHistData = imgP.smoothing(rawHistData, 7);
-    var cmpHistData = imgP.smoothing(rawHistData, 7, [1,4,6,4,1]);
+    var resultHistData = imgP.smoothing(rawHistData, 2);
+    var cmpHistData = imgP.smoothing(rawHistData, 2, [1,4,6,4,1]);
     var pickedHues = imgP.pickPeaks(resultHistData);
     
     var pickedColors = [];
