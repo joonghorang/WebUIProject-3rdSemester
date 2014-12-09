@@ -7,10 +7,10 @@
         <title>Test</title>
 	</head>
 	<body>
-        <form id = "formWrapper"  method="post" action="http://127.0.0.1:3000/upload">
-            <input id = "textUpload" type = "text"> 
-            <input id = "submitButton" type = "submit" value = "SUBMIT">
-        </form> 
+        <form action="/handler" id="fileForm" method="POST">
+            <input type="file" name="imgUpload" id="imgUpload" multiple />
+            <button type="submit" id="upload-button">Button</button>
+        </form>
         <script src="./test.js"></script>
 	</body>
 </html>
