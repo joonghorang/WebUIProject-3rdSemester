@@ -280,11 +280,6 @@ window.addEventListener('DOMContentLoaded', function(){
             itemFactoryOpen.style.display = 'block';
         }, 2100);
 
-        /*itemFactoryNav display상태 초기상태로*/
-//        itemFactoryOpen.style.display = 'block';
-        
-        /*preview-image 의 자식 노드를 지우고 노드에 추가하기*/
-
         /*preview-image 의 자식 노드를 지우기*/
 
         var addGridItem = document.createElement('div');

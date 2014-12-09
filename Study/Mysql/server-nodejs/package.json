@@ -1,0 +1,21 @@
+{
+  "name": "server-nodejs",
+  "version": "3.0.0",
+  "description": "prototype",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GeulGeurimNetwork",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^1.1.6",
+    "ejs": "~1.0.0",
+    "express": "^4.10.4",
+    "formidable": "^1.0.15",
+    "fs": "0.0.2",
+    "mime": "^1.2.11",
+    "mysql": "~2.0",
+    "tinycolor2": "^1.0.0"
+  }
+}
