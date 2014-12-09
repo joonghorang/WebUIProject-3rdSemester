@@ -1,0 +1,51 @@
+html{
+	height : 100%;
+	width : 100%;
+	position : relative;
+	background-color : gray;
+	display : block;	
+}
+
+body{
+	position: absolute;
+	height : 100%;
+	width : 100%;
+	display : block;
+	line-height: 100%;
+}
+
+#wrapper{
+	width : 80%;
+	height : 30%;
+	position : absolute;
+	background-color : yellow;
+
+	margin : auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+#navBar{
+	margin-top : 0%;
+	height : 20%;
+	width : 100%;
+	position : absolute;
+	background-color: green;
+	display : block;
+}
+
+#colorBar{
+	top : 20%;
+	height : 80%;
+	width : 100%;
+	position : absolute;
+	background-color: red;
+	display : block;
+	text-align : center;
+}
+
+.colorCard{
+	height : 100%;
+}
