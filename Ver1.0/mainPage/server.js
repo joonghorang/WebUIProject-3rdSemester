@@ -7,7 +7,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
 	host :'localhost',
 	user : 'root',
-	password : 'rlacjsen08!',
+	password : 'db1004',
 	database : 'joongdb'
 });
 connection.connect(function(err){
@@ -34,28 +34,17 @@ app.post('/rgbDB', function (req, res){
         	// 	'b' : fields.b,
         	// 	'a' : fields.a
         	// };
-        	var query = connection.query('insert into RGBA values(' + fields.r + ','
+        	connection.query('insert into RGBA values(' + fields.r + ','
         															+ fields.g + ','
         															+ fields.b + ','
         															+ fields.a + ');', function(err, result){
-        		console.log(result);
+        		if(err) throw err);
         	});
-
-        	//RGBA, function(err, result){
-        	// 	if(err){
-        	// 		console.error(err);
-        	// 		throw err;
-        	// 	}
-        	// 	console.log("in");
-        	//var query = connection.query('select * form RGBA;');
-        	//console.log(JSON.parse(query));
+            connection.query('SELECT * FROM RGBA' , function(err, result){
+                if(err) throw err;
+                console.log(result);
+            });
         	res.send("DOne?");
-        	// 	connection.query('select * form RGBA', function(err, rows){
-        	// 		console.log(rows);
-        	// 		res.json(rows);
-        	// 	});
-        	// 	console.log(query);
-        	// });
         }
     });
 });
