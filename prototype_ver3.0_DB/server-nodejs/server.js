@@ -213,10 +213,3 @@ if (!module.parent) {
   console.log('Express started on port 3000');
 }
 
-// app.get('/rgbDB', function(req, res){
-//     connection.query('SELECT * FROM RGB', function(err, result){
-//         if(err) throw err;
-//         console.log(result);
-//         res.send(result);
-//     });
-// });

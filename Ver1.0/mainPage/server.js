@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var mysql = require('mysql');
 var connection = mysql.createConnection({
 	host :'localhost',
-	user : 'root',
+	user : 'joong',
 	password : 'db1004',
 	database : 'joongdb'
 });
@@ -38,13 +38,13 @@ app.post('/rgbDB', function (req, res){
         															+ fields.g + ','
         															+ fields.b + ','
         															+ fields.a + ');', function(err, result){
-        		if(err) throw err);
+        		if(err) throw err;
         	});
             connection.query('SELECT * FROM RGBA' , function(err, result){
                 if(err) throw err;
-                console.log(result);
+                var stringifyResult = JSON.stringify(result);
+                res.send(stringifyResult);
             });
-        	res.send("DOne?");
         }
     });
 });

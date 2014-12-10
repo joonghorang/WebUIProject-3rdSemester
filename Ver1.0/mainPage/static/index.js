@@ -3,11 +3,12 @@ var MAX_WIDTH = window.innerWidth;
 
 var colorBar = document.getElementById("colorBar");
 var navBar = document.getElementById("navBar");
+var uploadButton = document.getElementById("uploadButton");
 
-window.addEventListener('DOMContentLoaded', function(){  
-
-}, false);
-
+window.onload = function(){
+//	uploadButton.preventDefault();
+	console.log(uploadButton);
+}
 
 colorBar.addEventListener('click',function(){
 	// 하나씩 유닛 추가하는 로직.
@@ -28,7 +29,23 @@ colorBar.addEventListener('click',function(){
 	}
 }, false);
 
-var uploadButton = document.getElementById("uploadButton");
-uploadButton.addEventListener('click', function(){
 
+uploadButton.addEventListener('click', function(e){
+	e.preventDefault();
+	var request = new XMLHttpRequest();
+	var formData = new FormData();;
+	var red = document.getElementById('red');
+	var green = document.getElementById('green');
+	var blue = document.getElementById('blue');
+	var alpha = document.getElementById('alpha');
+
+	formData.append("r", red.value);
+	formData.append("g", green.value);
+	formData.append("b", blue.value);
+	formData.append("a", alpha.value);
+
+	request.open("POST" , "/rgbDB" , false);
+	request.send(formData);
+
+	console.log(request.responseText) // 받아온 결과물을 뿌려줌. 
 }, false);
