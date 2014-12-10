@@ -27,3 +27,8 @@ colorBar.addEventListener('click',function(){
 		colorCards[i].style.backgroundColor = "#" + i + i + i + i + i + i;
 	}
 }, false);
+
+var uploadButton = document.getElementById("uploadButton");
+uploadButton.addEventListener('click', function(){
+
+}, false);

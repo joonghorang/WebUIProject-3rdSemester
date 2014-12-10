@@ -73,7 +73,7 @@ app.all('/data.html', function (request, response) { // /a주로소 들어오면
 	output += '</html>';
 	response.send(output);
 });
-app.all('/data.json', function (request, response) { // 이렇게 하면 json형식으로 데이터제공. 뒤의 확장자가 그 역할을 한다.  
+app.all('/a.json', function (request, response) { // 이렇게 하면 json형식으로 데이터제공. 뒤의 확장자가 그 역할을 한다.  
 	response.send(items);
 });
 app.all('/data.xml', function (request, response) {
@@ -117,18 +117,17 @@ app.get('/products/:id', function (request, response){
 app.post('/products', function (request, response){
 	var name = request.param('name');
 	var price = request.param('price');
-	console.log(name);
-	console.log(price);
 	var item = {
-		NAME: name,
-		PRICE: price
+		name: name,
+		price: price
 	};
 
 	items.push(item);
 
-	response.send(
-		"잘 갔음"
-	);
+	response.send({
+		message : '데이터를 추가했습니다.',
+		data : item 
+	});
 });
 
 // 데이터 수정 
