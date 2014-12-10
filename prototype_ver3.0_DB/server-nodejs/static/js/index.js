@@ -113,7 +113,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var fileInput = document.getElementById('upload-hidden');
     fileInput.addEventListener('click', function(){
         fileInput.value = null; //input reset
-    })
+    });
     fileInput.addEventListener('change', function(){
         
         /*파일 없을때 에러처리*/
@@ -142,18 +142,16 @@ window.addEventListener('DOMContentLoaded', function(){
         outputCanvas.style.display = 'none';
         outputBackCanvas.style.display = 'none';
 
-//        /*AJAX로 데이터 받아오기*/
-       var formData = new FormData();
-       formData.append("image", this.files[0]);
-
-//       XHR.open("post", "http://10.73.38.160:3000/itemFactory/image", true);
+        /*AJAX로 데이터 받아오기*/
+        var formData = new FormData();
+        formData.append("image", this.files[0]);
 
        // 서버용 
-       XHR.open("post", "https://web-ui-project.herokuapp.com/itemFactory/image", true);
-       XHR.send(formData);
+        XHR.open("post", "http://127.0.0.1:3000/itemFactory/image", true);
+        XHR.send(formData);
        
-       XHR.onreadystatechange = function() 
-       {
+        XHR.onreadystatechange = function() 
+        {
            if (XHR.readyState == 4 && XHR.status == 200) 
            {            
                /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
@@ -226,6 +224,18 @@ window.addEventListener('DOMContentLoaded', function(){
 
             drawGradation(firstColor, secondColor);
             textInputEventManager();
+    
+            /*AJAX로 데이터 받아오기*/
+            var formData = new FormData();
+            formData.append("image", fileInput.files[0]);
+            XHR.open("post", "http://127.0.0.1:3000/itemFactory", true);
+            XHR.send(formData);
+            // XHR.onreadystatechange = function() {
+            //    if (XHR.readyState == 4 && XHR.status == 200) {            
+            //        /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
+            //        var inColor = JSON.parse(XHR.response);
+            //    }
+            // }
         }
     },false);
     
@@ -233,6 +243,13 @@ window.addEventListener('DOMContentLoaded', function(){
 
     var submit = document.getElementById('submit-button');
     submit.addEventListener('click',function(){
+
+        /*AJAX로 데이터 받아오기*/
+        var textInput = document.getElementById('text-input');
+        var textData = new FormData();
+        textData.append("text", textInput.value);
+        XHR.open("post", "http://127.0.0.1:3000/textDB", true);
+        XHR.send(textData);
 
         wrapper.style.display = 'block';
         textValue = textInput.textContent;
@@ -473,16 +490,8 @@ window.addEventListener('DOMContentLoaded', function(){
                 targetFullView.style.display = "none";
                 document.getElementById("contents").style.display = "block";
             });
-
-
         }, false);
-
-    
     }
     //확대되면서 this(클릭한 그리드) 말고 다 날려버림???? 일단은 흰색으로 fadeout형식
-
     },false);
-    
-
-
 },false)

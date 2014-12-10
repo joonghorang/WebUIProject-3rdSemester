@@ -1,4 +1,27 @@
+
 var express = require("express");
+//var routes = require("./routes");
+
+//var rgbDB = require("./rgbDB");
+var http = require("http");
+var path = require("path");
+
+var mysql = require("mysql");
+var connection = mysql.createConnection({
+    host : 'localhost',
+    user : 'joong',
+    password : 'db1004',
+    database : 'joongdb'
+});
+connection.connect(function(err){
+    if(err){
+        console.error('mysql connection error');
+        console.error(err);
+        throw err;
+    }
+});
+var PID = 0;
+
 var formidable = require("formidable");
 var imgP = require("./controllers/pickImpColor.js");
 //var imgP = require("./static/js/colorLab/pickImpColor.js");
@@ -12,6 +35,7 @@ var path = require("path");
 var app = express();
 
 var __basename = path.basename(__filename);
+
 //static 폴더 위치
 var static = __dirname + '/static';
 app.use(express.static(static));
@@ -31,6 +55,7 @@ app.engine('.html', require('ejs').__express);
 app.get(['/', '/index'], function(req, res){
     res.render("index_sy.html");
 });
+
 app.get('/colorLab', function(req, res){
     var fileName = "colorLab-current-image";
     var imageFile = fs.readFileSync(static + '/image/' +fileName);
@@ -76,9 +101,45 @@ app.get('/colorLab', function(req, res){
         "histData3" : cmpHistData,
         "pickedColors" : pickedColors });
 });
+
 app.post('/itemFactory', function(req, res){
 
+    console.log("itemFactory In");
+    var form = new formidable.IncomingForm();
+    
+    form.parse(req, function(err, fields, files){
+        if(err){
+            console.log(err);
+        } else {
+            fs.readFile(files.image.path, function(err, data){
+                if( err) throw err;
+                var img = new Image();
+                img.src = data;
+                
+                var pickedColors = imgP.pickColors(img);
+                var stringfyPickedColors = JSON.stringify(pickedColors);
+                res.send(stringfyPickedColors);
+
+                var jsonParsedColors = JSON.parse(stringfyPickedColors);
+                //console.log(JSON.parse(stringfyPickedColors)[0]["r"]);
+                for(var i = 0; i < jsonParsedColors.length; i++){
+                    connection.query('INSERT INTO RGB values(' + PID
+                    + ',' + jsonParsedColors[0]["r"]
+                    + ',' + jsonParsedColors[0]["g"]
+                    + ',' + jsonParsedColors[0]["b"]
+                    + ',' + jsonParsedColors[0]["a"]
+                    + ');');
+                    PID++;
+                }
+                connection.query('SELECT * FROM RGB', function(err, result){
+                    if(err) throw err;
+                    console.log(result);
+                });
+            });
+        }    
+    });
 });
+
 app.post('/itemFactory/image', function(req, res){
     
     var form = new formidable.IncomingForm();
@@ -86,15 +147,18 @@ app.post('/itemFactory/image', function(req, res){
     form.parse(req, function(err, fields, files){
         if(err){
             console.log(err);
-        }else{
-            //get Image from client
-            var imageFile = fs.readFileSync(files.image.path);
-            var img = new Image();
-            img.src = imageFile;
-            
-            var pickedColors = imgP.pickColors(img);
-            res.send(JSON.stringify(pickedColors));
-        
+        } else {
+            fs.readFile(files.image.path, function(err, data){
+                if( err) throw err;
+                var img = new Image();
+                img.src = data;
+                
+                var pickedColors = imgP.pickColors(img);
+                var stringfyPickedColors = JSON.stringify(pickedColors);
+                res.send(stringfyPickedColors);
+            });
+
+
             //for colorLab
             var fileImageData = fs.readFileSync(files.image.path);
             fs.writeFile(static + "/image/colorLab-current-image", fileImageData, function(err){
@@ -113,31 +177,46 @@ app.post('/itemFactory/image', function(req, res){
             });          
         }
                          
-            
-                         
-        
-//        console.log("Parsing Done."); 
-//        var outputData = {"text" : fields.text};
-//        console.log(files.image.path);
-//        fs.writeFileSync('./uploads/output.jpg', fs.readFileSync(files.image.path));
-////        fs.readFile(files.image.path, function(err, data){
-////            console.log("Read File.");
-////            fs.writeFile('./uploads/output.jpg', data, function(err){
-////                console.log("Write File.");
-////            });
-////        });
-////        
-//        //var colorDatas = imageProcess.getColors();
-//        fs.writeFile('./uploads/output.json', JSON.stringify(outputData, null, 4), function(err) {
-//            if(err) {
-//                console.log(err);
-//            }else{
-//                console.log("JSON saved to " + "output.json");
-//            }    
-//        }); 
+    });
+});
+
+app.post('/textDB', function(req, res){
+
+    // for Converting UTF-8
+    // var Iconv  = require('iconv').Iconv;
+    // var euckr2utf8 = new Iconv('EUC-KR', 'UTF-8');
+    // var utf82euckr = new Iconv('UTF-8', 'EUC-KR');
+    var form = new formidable.IncomingForm();
+    
+    form.parse(req, function(err, fields, files){
+        if(err){
+            console.log(err);
+        } else {
+            // console.log(fields.text);
+            // var textData = euckr2utf8.convert(fields.text);
+            //console.log(textData);
+            connection.query('INSERT INTO textDB values(' + PID
+                            + ',' + "'" + fields.text + "'"
+                            + ');', function(err, result){
+                if(err) throw err;
+            });
+
+            connection.query('SELECT * FROM textDB', function(err, result){
+                if(err) throw err;
+                console.log(result);
+            });
+        }    
     });
 });
 if (!module.parent) {
   app.listen(3000);
   console.log('Express started on port 3000');
 }
+
+// app.get('/rgbDB', function(req, res){
+//     connection.query('SELECT * FROM RGB', function(err, result){
+//         if(err) throw err;
+//         console.log(result);
+//         res.send(result);
+//     });
+// });

@@ -478,9 +478,37 @@ window.addEventListener('DOMContentLoaded', function(){
         }, false);
 
     
+<<<<<<< Updated upstream
     }
     //확대되면서 this(클릭한 그리드) 말고 다 날려버림???? 일단은 흰색으로 fadeout형식
 
+=======
+        document.getElementById('preview-image').appendChild(imgElement);
+        
+        var tempImg = document.getElementById('preview-image');
+        tempImg.style.display = 'block';
+        
+        /*재업로드시 outputCanvas가 보이지 않았던 문제 해결용. 아마도 setTimeout과 시간상으로 꼬이는 듯???*/
+        outputCanvas.style.display = 'none';
+       
+       /*AJAX로 데이터 받아오기*/
+       var formData = new FormData();
+       formData.append("image", this.files[0]);
+
+       XHR.open("post", "/itemFactory/image", true);
+       XHR.send(formData);
+       
+       XHR.onreadystatechange = function() 
+       {
+           if (XHR.readyState == 4 && XHR.status == 200) 
+           {
+               /*서버에서 받아온 JSON을 parsing - rgba데이터 받아오기*/
+               var ddd = JSON.parse(XHR.response);
+               alert(ddd.r);
+               alert(XHR.response);
+           }
+       }
+>>>>>>> Stashed changes
     },false);
     
 
