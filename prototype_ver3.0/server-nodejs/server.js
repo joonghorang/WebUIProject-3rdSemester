@@ -96,6 +96,20 @@ app.post('/itemFactory/image', function(req, res){
             var imageFile = fs.readFileSync(files.image.path);
             var img = new Image();
             img.src = imageFile;
+<<<<<<< Updated upstream
+=======
+            var canvas = new Canvas(img.width, img.height);
+            var ctx = canvas.getContext('2d');
+            img.onload = function(){
+
+            }
+            console.log("ualalajifjalei");
+
+            ctx.drawImage(img, 0, 0);
+//            ctx.getImageData(0,
+            res.send(imgP.pickColors(canvas));
+
+>>>>>>> Stashed changes
             
             var pickedColors = imgP.pickColors(img);
             res.send(JSON.stringify(pickedColors));

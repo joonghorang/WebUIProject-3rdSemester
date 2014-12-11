@@ -1,41 +1,51 @@
-var Canvas = function(width, height){
-    var c = document.createElement("canvas");
-    c.width = width;
-    c.height = height;
-    return c;
+var hex2Dec = function(hex){    
+    var r = parseInt(hex.slice(1,3),16);
+    var g = parseInt(hex.slice(3,5),16);
+    var b = parseInt(hex.slice(5,7),16);
+    return {r: r, g: g, b: b};
 };
 
-var createCanvasByImage = function(img){
-//todo : module 호환해야됨.
-//    var rCanvas = document.createElement("canvas");
-//    rCanvas.width = image.naturalWidth;
-//    rCanvas.height = image.naturalHeight;
+var genGaussianNoise = function(variance){
+    if(typeof variance === "undefined") variance = 1.0;
     
-    var pixelNumResizingSaturation = 100000;
-    
-    var pixelNum = img.width * img.height;
-    var pixelNumRate = pixelNum / pixelNumResizingSaturation;
+    if (typeof genGaussianNoise.spare !== "undefined") {
+         var spare = genGaussianNoise.spare;
+         delete genGaussianNoise.spare;
+         return variance * spare;
+     } else {
+         var rand1 = Math.random();
+         rand1 = -2 * Math.log(rand1);
+         
+         var rand2 = Math.random();
+         rand2 = 2 * Math.PI * rand2;
+         genGaussianNoise.spare = Math.sqrt(rand1 * variance) * Math.sin(rand2);
+         return Math.sqrt(rand1 * variance) * Math.cos(rand2);
+     }
+}
 
-    var canvasWidth = img.width;
-    var canvasHeight = img.height;
-    
-    if(pixelNumRate > 1){
-        var lengthRate =  Math.sqrt(pixelNumRate);
-        canvasWidth = parseInt(canvasWidth/lengthRate);
-        canvasHeight = parseInt(canvasHeight / lengthRate);
+var testGaussian = function(variance){
+    if(typeof variance === "undefined") variance = 1.0;
+
+    var hist = [];
+//    var histLength = variance * 4 * 2 * 100;
+    histLength = 2000;
+    for( var i = 0; i< histLength; i++){
+        hist[i] = 0;   
     }
-
-    var rCanvas = new Canvas(canvasWidth, canvasHeight);
-    var rCanvasCtx = rCanvas.getContext("2d");
-    rCanvasCtx.drawImage(img, 0,0, img.width, img.height, 0,0, canvasWidth, canvasHeight);
-    return rCanvas;
-}    
+    for(var i =0; i< 100000; ++i){
+        var gauNoise = genGaussianNoise(variance);
+        gauNoise = Math.round(gauNoise * 100);
+        if(gauNoise < histLength/2 && gauNoise > -histLength/2) hist[parseInt(gauNoise + histLength/2)]++;
+    }
+    return hist;
+}
 
 var gradient = function(canvas, color1, color2){
     var rgb1 = hex2Dec(color1);
     var rgb2 = hex2Dec(color2); 
     var ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
+    
     var index;
     for(var y = 0; y < canvas.height; ++y){
         for(var x = 0; x< canvas.width; ++x){
@@ -43,18 +53,46 @@ var gradient = function(canvas, color1, color2){
             imageData.data[index + 0] = rgb1.r * x / canvas.width + rgb2.r * (canvas.width - x)/canvas.width;
             imageData.data[index + 1] = rgb1.g * x / canvas.width + rgb2.g * (canvas.width - x)/canvas.width;
             imageData.data[index + 2] = rgb1.b * x / canvas.width + rgb2.b * (canvas.width - x)/canvas.width;
-            //       imageData.data[index + 3] = 255;
+            imageData.data[index + 3] = 255;
         }         
     }
+    
     ctx.putImageData(imageData, 0,0);
 };
 
-var hex2Dec = function(hex){    
-    var r = parseInt(hex.slice(1,3),16);
-    var g = parseInt(hex.slice(3,5),16);
-    var b = parseInt(hex.slice(5,7),16);
-    return {r: r, g: g, b: b};
+var gradientWithNoise = function(canvas, color1, color2, noisePercent){
+    var rgb1 = hex2Dec(color1);
+    var rgb2 = hex2Dec(color2); 
+    var ctx = canvas.getContext("2d");
+    var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
+    
+    var index;
+    var noise;
+    for(var y = 0; y < canvas.height; ++y){
+        if(Math.random() > 1 - noisePercent )
+        { noise = genGaussianNoise( canvas.width/ 32);
+        }else{ noise = 0; }
+        for(var x = 0; x< canvas.width; ++x){
+
+            index = (y * canvas.width + x) * 4;
+        
+
+            var colorPersent = x + noise;
+            
+            imageData.data[index + 0] = 
+                parseInt((rgb1.r * (x + noise) / canvas.width) + rgb2.r * (canvas.width - (x + noise))/canvas.width);
+            imageData.data[index + 1] = 
+                parseInt((rgb1.g * (x + noise) / canvas.width) + rgb2.g * (canvas.width - (x + noise))/canvas.width);
+            imageData.data[index + 2] = 
+                parseInt((rgb1.b * (x + noise) / canvas.width) + rgb2.b * (canvas.width - (x + noise))/canvas.width);
+
+            imageData.data[index + 3] = 255;
+        }         
+    }
+    
+    ctx.putImageData(imageData, 0,0);
 };
+
 
 var cv = function(canvas, mat){
     var matSize = Math.sqrt(mat.length);
