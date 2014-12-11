@@ -8,7 +8,7 @@
     </head>
     <body>
         <div id = "uploadWrapper">
-            <img id = "uploadButton" src = "./image/upload.png"/>
+            <img id = "uploadButton" src = "../image/upload.png"/>
             <!-- <form action = "/upload" method = "post" enctype = "multipart/form-data"> -->
                 <input type = "file" id = "upload-hidden" name = "image">
                 <input type = "submit" id = "submitButton">
@@ -16,9 +16,14 @@
         </div>
         <div id = "wrapper">
             <div id = "dateBar"></div>
-            <div id = "momentsBar"></div> 
+            <div id = "momentsBar">
+                <ul id = "moments"></ul>
+            </div> 
             <div id = "navBar"></div> 
         </div> 
         <script src="./js/index.js"></script>
+        <script src="./js/testCode.js"></script>
+        <script src="./js/tools.js"></script>
+        
     </body>
 </html>

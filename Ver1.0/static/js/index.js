@@ -7,30 +7,7 @@ var fileInput = document.getElementById("upload-hidden");
 var submitButton = document.getElementById("submitButton");
 
 window.addEventListener('DOMContentLoaded', function(){  
-}, false);
-
-
-window.onload = function(){
-	console.log(uploadButton);
-}
-
-momentsBar.addEventListener('click',function(){
-	// 하나씩 유닛 추가하는 로직.
-	var addColorCard = document.createElement('div');
-	addColorCard.setAttribute('class', 'moment');
-	addColorCard.setAttribute('id', ("moment" + momentsBar.childNodes.length).toString());
-	addColorCard.style.height = MAX_HEIGHT * 0.24 + "px";
-	addColorCard.style.backgroundColor = "#000000";
-	addColorCard.style.display = "inline-block";
-	momentsBar.appendChild(addColorCard);
-
-	var colorCards = document.getElementById("momentsBar").childNodes;
-	console.log(MAX_WIDTH * 0.8 / colorCards.length);
-
-	for(var i = 0; i < colorCards.length; i++){
-		colorCards[i].style.width = MAX_WIDTH * 0.8 / colorCards.length + "px";
-		colorCards[i].style.backgroundColor = "#" + i + i + i + i + i + i;
-	}
+	test_genOutputs();
 }, false);
 
 submitButton.addEventListener('click', function(e){

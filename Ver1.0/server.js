@@ -32,7 +32,7 @@ app.post('/upload', function(req, res){
             console.log(files);
             console.log(files.image);
             fs.readFile(files.image.path, function(err, data){
-                var uploadFileName = __dirname + 'image/uploads/' + files.image.name;
+                var uploadFileName = __dirname + 'uploads/' + files.image.name;
                 fs.writeFile(uploadFileName, data, function(err){
                     if(err){
                         console.log(err);
