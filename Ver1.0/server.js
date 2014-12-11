@@ -4,19 +4,19 @@ var formidable = require("formidable");
 var router = express.Router();
 var mysql = require('mysql');
 var fs = require('fs');
-var connection = mysql.createConnection({
-	host :'localhost',
-	user : 'joong',
-	password : 'db1004',
-	database : 'joongdb'
-});
-connection.connect(function(err){
-	if(err){
-		console.error('mysql connection error');
-		console.error(err);
-		throw err;
-	}
-});
+// var connection = mysql.createConnection({
+// 	host :'localhost',
+// 	user : 'joong',
+// 	password : 'db1004',
+// 	database : 'joongdb'
+// });
+// connection.connect(function(err){
+// 	if(err){
+// 		console.error('mysql connection error');
+// 		console.error(err);
+// 		throw err;
+// 	}
+// });
 
 var __dirname = "";
 var app = express();
@@ -28,9 +28,7 @@ app.post('/upload', function(req, res){
         if(err){
             console.log(err);
         } else {
-            //console.log(files.image.path);
-            console.log(files);
-            console.log(files.image);
+
             fs.readFile(files.image.path, function(err, data){
                 var uploadFileName = __dirname + 'uploads/' + files.image.name;
                 fs.writeFile(uploadFileName, data, function(err){

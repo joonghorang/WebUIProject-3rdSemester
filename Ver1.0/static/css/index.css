@@ -2,7 +2,9 @@ html{
 	height : 100%;
 	width : 100%;
 	position : relative;
-	background-color : gray;
+/*	background-color : gray;*/
+    background-image: url('../image/mainbg.jpg');
+    background-size: cover;
 	display : block;	
 }
 
@@ -12,6 +14,21 @@ body{
 	width : 100%;
 	display : block;
 	line-height: 100%;
+}
+
+#uploadWrapper {
+    position: relative;
+    top: 75%;
+    margin: 0 auto;
+    width: 10%;
+    height: 10%;
+}
+
+#uploadButton {
+    position: absolute;
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
 }
 
 #wrapper{

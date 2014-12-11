@@ -1,6 +1,6 @@
 var test_genOutputs = function(){
     var colors = document.getElementById("moments");
-    for( var i = 0; i < 40; ++i){
+    for( var i = 0; i < 30; ++i){
         var moment = document.createElement("li");
         moment.setAttribute("class", "moment");
 

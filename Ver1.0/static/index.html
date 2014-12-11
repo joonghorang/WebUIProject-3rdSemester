@@ -9,11 +9,15 @@
     <body>
         <div id = "uploadWrapper">
             <img id = "uploadButton" src = "../image/upload.png"/>
-            <!-- <form action = "/upload" method = "post" enctype = "multipart/form-data"> -->
-                <input type = "file" id = "upload-hidden" name = "image">
-                <input type = "submit" id = "submitButton">
-            <!-- </form> -->
         </div>
+        
+<!--        업로드 버튼 클릭시 나타나는 아이템팩토리-->
+        <div id="itemFactory">
+            <input type = "file" id = "upload-hidden" name = "image" accept = "image/*">
+            <input type = "submit" id = "submitButton">
+        </div>
+<!--        //업로드 버튼 클릭시 나타나는 아이템팩토리-->
+
         <div id = "wrapper">
             <div id = "dateBar"></div>
             <div id = "momentsBar">
@@ -21,6 +25,7 @@
             </div> 
             <div id = "navBar"></div> 
         </div> 
+        
         <script src="./js/index.js"></script>
         <script src="./js/testCode.js"></script>
         <script src="./js/tools.js"></script>
