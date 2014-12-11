@@ -1,0 +1,46 @@
+#plus {
+    z-index: 10;
+    
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url(../../image/plus.png);
+    background-size: cover;
+    cursor: pointer;
+}
+
+/*item-factory Style*/
+#item-factory-wrapper {
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#item-factory-bg {
+    z-index: 110;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #666666;
+    opacity: 0.8;
+}
+
+#item-factory {
+    z-index: 120;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 50%;
+    height: 60%;
+    background-color: #ffffff;
+    opacity: 0.9;
+}

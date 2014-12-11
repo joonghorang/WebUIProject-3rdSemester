@@ -1,0 +1,71 @@
+html{
+	height : 100%;
+	width : 100%;
+	position : relative;
+	background-color : gray;
+	display : block;	
+}
+
+body{
+	position: absolute;
+	height : 100%;
+	width : 100%;
+	display : block;
+	line-height: 100%;
+}
+
+#wrapper{
+	width : 80%;
+	height : 30%;
+	position : absolute;
+	background-color : yellow;
+
+	margin : auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+#navBar{
+	margin-top : 0%;
+	height : 20%;
+	width : 100%;
+	position : absolute;
+	background-color: gray;
+	display : block;
+}
+
+#momentsBar{
+	top : 20%;
+	height : 80%;
+	width : 100%;
+	position : absolute;
+	display : block;
+}
+
+#moments{
+    width : 100%;
+    height : 100%;
+    position: absolute;
+    overflow: hidden;
+}
+
+.moment{
+    float: left;
+    display: block;
+	height : 100%;
+    width : 3%;
+	transition: all 0.4s ease .300ms;
+
+
+}
+#moments:hover li{
+    width : 2%;   
+}
+#moments li:hover{
+    width :29%;   
+}
+.moment > canvas{
+    position: absolute;
+}
