@@ -37,7 +37,7 @@ colorBar.addEventListener('click',function(){
 uploadButton.addEventListener('click', function(e){
 	e.preventDefault();
 	var request = new XMLHttpRequest();
-	var formData = new FormData();;
+	var formData = new FormData();
 	var red = document.getElementById('red');
 	var green = document.getElementById('green');
 	var blue = document.getElementById('blue');

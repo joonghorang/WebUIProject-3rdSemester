@@ -4,20 +4,20 @@ var formidable = require('formidable');
 var fs = require('fs');
 
 // localDB가 아니라 서버에 저장되어있는 DB로 하려면....?
-// var mysql = require('mysql');
-// var connection = mysql.createConnection({
-//  host :'localhost',
-//  user : 'joong',
-//  password : 'db1004',
-//  database : 'joongdb'
-// });
-// connection.connect(function(err){
-//  if(err){
-//      console.error('mysql connection error');
-//      console.error(err);
-//      throw err;
-//  }
-// });
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+ host :'localhost',
+ user : 'joong',
+ password : 'db1004',
+ database : 'joongdb'
+});
+connection.connect(function(err){
+ if(err){
+     console.error('mysql connection error');
+     console.error(err);
+     throw err;
+ }
+});
 
 //express 모듈을 사용해 웹서버를 생성한다.
 var app = express();
@@ -61,7 +61,19 @@ app.post('/upload', function(request, response){
                     }
                     else {
                         // colorLab로직 
-                        // 그리고 받은 데이터 전부를 DB에 삽입. 
+                        // 그리고 받은 데이터 전부를 DB에 삽입.
+
+                        connection.query('INSERT INTO test VALUES(' + '"' + files.image.path.toString() + '");', function(err, res){
+                            if(err) throw err;
+                            console.log(res);
+                        });
+                        connection.query('SELECT * FROM test', function(err, mysqlRes){
+                            if(err) throw err;
+                            var stringifyResult = JSON.stringify(mysqlRes);
+                            response.send(stringifyResult);
+                            console.log(mysqlRes);
+                            console.log(stringifyResult)
+                        });
                         console.log('redirecting');
 //                        response.redirect('/output');
                     }
@@ -79,12 +91,6 @@ app.post('/upload', function(request, response){
 //         if(err){
 //             console.log(err);
 //         }else{
-//          // var RGBA = {
-//          //  'r' : fields.r,
-//          //  'g' : fields.g,
-//          //  'b' : fields.b,
-//          //  'a' : fields.a
-//          // };
 //          connection.query('insert into RGBA values(' + fields.r + ','
 //                                                                  + fields.g + ','
 //                                                                  + fields.b + ','
