@@ -48,9 +48,10 @@ app.post('/upload', function(request, response){
             throw error;
         }
         else{
+            console.log(files);
             //readFile : 업로드된 파일을 tmp디렉토리에 저장한다.
             fs.readFile(files.image.path, function(error, data){
-                
+
                 //writeFile : tmp디렉토리에 저장된 파일을 다른 디렉토리로 복사(저장)해준다.
                 //파일을 저장할 경로 설정. image/uploads 폴더 안에 uploadImage의 이름대로 저장된다. 
                 var uploadFileName = __dirname + '/uploads/' + files.image.name;
@@ -62,17 +63,26 @@ app.post('/upload', function(request, response){
                     else {
                         // colorLab로직 
                         // 그리고 받은 데이터 전부를 DB에 삽입.
-
-                        connection.query('INSERT INTO test VALUES(' + '"' + files.image.path.toString() + '");', function(err, res){
+                        var PID = 0;
+                        var d = new Date();
+                        var dateTime = d.getFullYear() + '-'
+                                        + d.getMonth() + '-'
+                                        + d.getDate() + '  ' 
+                                        + d.getHours() + ':'
+                                        + d.getMinutes() + ':'
+                                        + d.getSeconds(); 
+                                                               
+                        connection.query('INSERT INTO filePath VALUES(' + PID + ',' 
+                                                                        + '"' + files.image.path.toString() + '"' 
+                                                                        + ',"' + dateTime + '");', function(err, res){
                             if(err) throw err;
-                            console.log(res);
+                           // console.log(res);
                         });
-                        connection.query('SELECT * FROM test', function(err, mysqlRes){
+                        connection.query('SELECT * FROM filePath', function(err, mysqlRes){
                             if(err) throw err;
                             var stringifyResult = JSON.stringify(mysqlRes);
                             response.send(stringifyResult);
-                            console.log(mysqlRes);
-                            console.log(stringifyResult)
+                            console.log(stringifyResult);
                         });
                         console.log('redirecting');
 //                        response.redirect('/output');

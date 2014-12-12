@@ -12,20 +12,26 @@ window.addEventListener('DOMContentLoaded', function(){
 
 submitButton.addEventListener('click', function(e){
 	e.preventDefault();
-	var request = new XMLHttpRequest();
+
 	var formData = new FormData();
+    var localUrl = "/upload";
 
     /*파일 없을때 에러처리*/
     if(fileInput.files.item(0)===null){
         alert('no image');
     }
-    /*AJAX로 데이터 받아오기*/
-    var formData = new FormData();
-    console.log(fileInput.files[0]);
+    /*AJAX로 데이터 보내기*/
     formData.append("image", fileInput.files[0]);
-
+    var request = new XMLHttpRequest();
 	request.open("POST" , "/upload" , true);
 	request.send(formData);
-
-	console.log(request.responseText) // 받아온 결과물을 뿌려줌. 
+    
+    /*AJAX로 데이터 받기*/
+    request.onreadystatechange = function() 
+    {
+       if (request.readyState == 4 && request.status == 200) 
+       {    
+           console.log(request.responseText);
+       }
+    }
 }, false);
