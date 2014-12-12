@@ -63,7 +63,6 @@ app.post('/upload', function(request, response){
                     else {
                         // colorLab로직 
                         // 그리고 받은 데이터 전부를 DB에 삽입.
-                        var PID = 0;
                         var d = new Date();
                         var dateTime = d.getFullYear() + '-'
                                         + d.getMonth() + '-'
@@ -72,9 +71,9 @@ app.post('/upload', function(request, response){
                                         + d.getMinutes() + ':'
                                         + d.getSeconds(); 
                                                                
-                        connection.query('INSERT INTO filePath VALUES(' + PID + ',' 
+                        connection.query('INSERT INTO filePath (path, date) VALUES(' //+ PID + ',' 
                                                                         + '"' + files.image.path.toString() + '"' 
-                                                                        + ',"' + dateTime + '");', function(err, res){
+                                                                        + ',"' + files.image.lastModifiedDate.toString() + '");', function(err, res){
                             if(err) throw err;
                            // console.log(res);
                         });
