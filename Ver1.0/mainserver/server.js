@@ -4,6 +4,9 @@ var formidable = require('formidable');
 var fs = require('fs');
 var ejs = require('ejs');
 var mysql = require('mysql');
+var Canvas = require('canvas');
+var Image = Canvas.Image;
+var imgP = require("./controllers/pickImpColor.js");
 
 //express 모듈을 사용해 웹서버를 생성한다.
 var app = express();
@@ -19,19 +22,19 @@ app.set('views', __dirname + '/view');
 app.engine('html', require('ejs').renderFile);
 
 //DB connect : .db로 추후 수정
-var connection = mysql.createConnection({
- host :'localhost',
- user : 'joong',
- password : 'db1004',
- database : 'joongdb'
-});
-connection.connect(function(err){
- if(err){
-     console.error('mysql connection error');
-     console.error(err);
-     throw err;
- }
-});
+//var connection = mysql.createConnection({
+// host :'localhost',
+// user : 'joong',
+// password : 'db1004',
+// database : 'joongdb'
+//});
+//connection.connect(function(err){
+// if(err){
+//     console.error('mysql connection error');
+//     console.error(err);
+//     throw err;
+// }
+//});
 
 app.get('/', function(request, response){
     
@@ -62,7 +65,18 @@ app.post('/upload-image', function(request, response){
         else{
             //readFile : 업로드된 파일을 tmp디렉토리에 저장한다.
             fs.readFile(files.image.path, function(error, data){
-                
+                /* 덕성 comment
+                Color 로직은 여기에 들어갑니다. readFile되었을 때 data를 읽고 적절한 칼라를 뽑아 pickedColors에 저장하고 send해줍니다.
+                뽑은 pickedColors를 클라이언트로 보내는 작업과는 비동기적으로 writeFile을 진행합니다.
+                client가 받은 pickedColors가 json으로 잘 작동하지 않으면 response.send(JSON.stringify(pickedColors));로 대체해서 시도해보세요.
+                */
+                var img = new Image();
+                img.src = data;
+                var canvas = new Canvas(img.width, img.height);
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                var pickedColors = imgP.pickColors(canvas);
+                response.send(pickedColors);
                 //writeFile : tmp디렉토리에 저장된 파일을 다른 디렉토리로 복사(저장)해준다.
                 //파일을 저장할 경로 설정. image/uploads 폴더 안에 uploadImage의 이름대로 저장된다. 
                 var uploadFileName = __dirname + '/uploads/' + files.image.name;
@@ -79,37 +93,38 @@ app.post('/upload-image', function(request, response){
 //                        };
                         /*//colorLab로직*/
                         
+                        
                         /*DB INSERT : imageFile path + date + RGB data*/    
-                        var d = new Date();
-                        var dateTime = d.getFullYear() + '-'
-                                        + d.getMonth() + '-'
-                                        + d.getDate() + '  ' 
-                                        + d.getHours() + ':'
-                                        + d.getMinutes() + ':'
-                                        + d.getSeconds(); 
-                                                               
-                        connection.query('INSERT INTO filePath (path, date) VALUES(' //+ PID + ',' 
-                                                                        + '"' + files.image.path.toString() + '"' 
-                                                                        + ',"' + files.image.lastModifiedDate.toString() + '");', function(err, res){
-                            if(err) {
-                                throw err;
-                            }
-                           // console.log(res);
-                        });
-                        
-                        connection.query('SELECT * FROM filePath', function(err, mysqlRes){
-                            if(err) {
-                                throw err;
-                            }
-                            var stringifyResult = JSON.stringify(mysqlRes);
-                            response.send(stringifyResult);
-                            console.log(stringifyResult);
-                        });
-                        /*//DB INSERT*/
-                        
-                        //클라이언트에 RGBdata 전달. 
-                        //textInput페이지 배경을 위한 colorData만 넘기면 되는 거죠? 나머지는 DB INSERT하면 끝.
-                        response.end(JSON.stringify({"rgb" : "#FFFFFF"}));
+//                        var d = new Date();
+//                        var dateTime = d.getFullYear() + '-'
+//                                        + d.getMonth() + '-'
+//                                        + d.getDate() + '  ' 
+//                                        + d.getHours() + ':'
+//                                        + d.getMinutes() + ':'
+//                                        + d.getSeconds(); 
+//                                                               
+//                        connection.query('INSERT INTO filePath (path, date) VALUES(' //+ PID + ',' 
+//                                                                        + '"' + files.image.path.toString() + '"' 
+//                                                                        + ',"' + files.image.lastModifiedDate.toString() + '");', function(err, res){
+//                            if(err) {
+//                                throw err;
+//                            }
+//                           // console.log(res);
+//                        });
+//                        
+//                        connection.query('SELECT * FROM filePath', function(err, mysqlRes){
+//                            if(err) {
+//                                throw err;
+//                            }
+//                            var stringifyResult = JSON.stringify(mysqlRes);
+//                            response.send(stringifyResult);
+//                            console.log(stringifyResult);
+//                        });
+//                        /*//DB INSERT*/
+//                        
+//                        //클라이언트에 RGBdata 전달. 
+//                        //textInput페이지 배경을 위한 colorData만 넘기면 되는 거죠? 나머지는 DB INSERT하면 끝.
+//                        response.end(JSON.stringify({"rgb" : "#FFFFFF"}));
                     }
                 });
             });
