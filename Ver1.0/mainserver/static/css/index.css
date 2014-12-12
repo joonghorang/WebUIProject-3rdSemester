@@ -26,9 +26,9 @@ body{
 
 #uploadButton {
     position: absolute;
-    width: 100%;
+    width: 50%;/*
     min-width: 100%;
-    min-height: 100%;
+    min-height: 100%;*/
 }
 
 #wrapper{

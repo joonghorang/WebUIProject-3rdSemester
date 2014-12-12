@@ -4,7 +4,7 @@ var MAX_WIDTH = window.innerWidth;
 var navBar = document.getElementById("navBar");
 var momentsBar = document.getElementById("momentsBar");
 var fileInput = document.getElementById("upload-hidden");
-var submitButton = document.getElementById("submitButton");
+var submitButton = document.getElementById("submit-button");
 
 window.addEventListener('DOMContentLoaded', function(){  
 	test_genOutputs();
