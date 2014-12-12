@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">   
+        <link rel="stylesheet" type="text/css" href="./css/reset.css">
+        <link rel="stylesheet" type="text/css" href="./css/index.css">
+        <title>a moment</title>
+    </head>
+    <body>
+        <div id = "uploadWrapper">
+            <img id = "uploadButton" src = "../image/upload.png"/>
+        </div>
+        
+<!--        업로드 버튼 클릭시 나타나는 아이템팩토리-->
+        <div id="itemFactory">
+            <input type = "file" id = "upload-hidden" name = "image" accept = "image/*">
+            <input type = "submit" id = "submitButton">
+        </div>
+<!--        //업로드 버튼 클릭시 나타나는 아이템팩토리-->
+
+        <div id = "wrapper">
+            <div id = "dateBar"></div>
+            <div id = "momentsBar">
+                <ul id = "moments"></ul>
+            </div> 
+            <div id = "navBar"></div> 
+        </div> 
+        
+        <script src="./js/index.js"></script>
+        <script src="./js/testCode.js"></script>
+        <script src="./js/tools.js"></script>
+        
+    </body>
+</html>

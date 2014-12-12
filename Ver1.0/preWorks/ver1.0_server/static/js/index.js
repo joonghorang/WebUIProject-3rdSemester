@@ -5,9 +5,17 @@ window.addEventListener('DOMContentLoaded',function(){
     var addIcon = document.getElementById('plus');
     var itemFactoryWrapper = document.getElementById('item-factory-wrapper');
 
+    
     addIcon.addEventListener('click',function(){
         itemFactoryWrapper.style.display = 'block';
     },false);
+    
+    var formData = new FormData();
+    formData.append('inputImage',this.files[0]);
+    
+    var XHR = new XMLHttpRequest();
+    XHR.open('POST', '/upload', true);
+    XHR.send();
 
 },false)
 
