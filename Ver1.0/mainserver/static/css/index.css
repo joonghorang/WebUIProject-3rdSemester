@@ -22,7 +22,7 @@ body{
     z-index: 10;
     position: absolute;
     width: 100%;
-    height: 70px;
+    height: 10%;
     bottom: 10%;
 }
 
@@ -45,23 +45,93 @@ body{
     height: 100%;
 }
 
-#upload-file {
-    z-index: 110;
+#upload-wrapper, upload-text {
+    z-index: 100;
     position: absolute;
+    width: 50%;
+    min-width: 600px;
+    height: 60%;
+    min-height: 400px;
     margin: auto;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 400px;
-    height: 300px;
 }
 
-#upload {
-    z-index: 120;
-    width: 100%;
+#upload-file {
+    z-index: 110;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    width: 80%;
+    min-width: 600px;
     height: 100%;
-    background-color: black;
+    min-height: 400px;
+}
+
+#upload-button {
+    z-index: 120;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #555555;
+    color: #ffffff;
+    font-size: 15px;
+}
+#upload-hidden {
+    z-index: 130;
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#upload-drag {
+    z-index: 120;
+    width: 90%;
+    height: 80%;
+    background-image: url(../image/camera.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 5%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    opacity: 0.85;
+    border: 2px solid #555555;
+    border-style: dashed;
+}
+
+#confirm-button {
+    z-index: 130;
+    opacity: 0.8;
+    width: 100px;
+    height: 40px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 5%;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+#text-input {
+    position: absolute;
+    width: 90%;
+    height: 100px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 #wrapper{

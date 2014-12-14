@@ -12,6 +12,7 @@ var test_genOutputs = function(){
         moments.appendChild(moment);
     }
 }
+
 var test_giveRandomColorTo = function(canvas){
     var ctx = canvas.getContext("2d");
     ctx.fillStyle = rgbToHexStr(parseInt(Math.random()*256), parseInt(Math.random()*256), parseInt(Math.random()*256));
