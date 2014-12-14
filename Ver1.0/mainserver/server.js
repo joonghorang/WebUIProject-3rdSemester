@@ -52,7 +52,7 @@ app.get('/output', function(request, response){
 //    response.render('output',data);
 });
 
-//fileInput에서 받아온 데이터 처리
+//fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
 app.post('/upload-image', function(request, response){
     //formidable. parse uploaded file.
     var form = new formidable.IncomingForm();
@@ -68,33 +68,18 @@ app.post('/upload-image', function(request, response){
                 /* 덕성 comment
                 Color 로직은 여기에 들어갑니다. readFile되었을 때 data를 읽고 적절한 칼라를 뽑아 pickedColors에 저장하고 send해줍니다.
                 뽑은 pickedColors를 클라이언트로 보내는 작업과는 비동기적으로 writeFile을 진행합니다.
-                client가 받은 pickedColors가 json으로 잘 작동하지 않으면 response.send(JSON.stringify(pickedColors));로 대체해서 시도해보세요.
+                client가 받은 pickedColors가 json으로 잘 작동하지 않으면 
+                response.send(JSON.stringify(pickedColors));로 대체해서 시도해보세요.
                 */
                 var img = new Image();
                 img.src = data;
                 var canvas = new Canvas(img.width, img.height);
                 var ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0);
+                
                 var pickedColors = imgP.pickColors(canvas);
-                response.send(pickedColors);
-                //writeFile : tmp디렉토리에 저장된 파일을 다른 디렉토리로 복사(저장)해준다.
-                //파일을 저장할 경로 설정. image/uploads 폴더 안에 uploadImage의 이름대로 저장된다. 
-                var uploadFileName = __dirname + '/uploads/' + files.image.name;
-                fs.writeFile(uploadFileName, data, function(error){
-                    if(error){
-                        console.log('file saving error');
-                        throw error;
-                    }
-                    else {
-                        /*colorLab로직 : 더크성크 tools로직 사용 - 2-3개 색 JSON으로 뱉어낸다*/
-//                        var RGB = {
-//                            "colorA" : "#FFFFFF",
-//                            "colorB" : "#FFFFFF"
-//                        };
-                        /*//colorLab로직*/
-                        
-                        
-                        /*DB INSERT : imageFile path + date + RGB data*/    
+                
+                /*DB INSERT : date + RGB data*/    
 //                        var d = new Date();
 //                        var dateTime = d.getFullYear() + '-'
 //                                        + d.getMonth() + '-'
@@ -121,18 +106,15 @@ app.post('/upload-image', function(request, response){
 //                            console.log(stringifyResult);
 //                        });
 //                        /*//DB INSERT*/
-//                        
-//                        //클라이언트에 RGBdata 전달. 
-//                        //textInput페이지 배경을 위한 colorData만 넘기면 되는 거죠? 나머지는 DB INSERT하면 끝.
-//                        response.end(JSON.stringify({"rgb" : "#FFFFFF"}));
-                    }
-                });
+                
+                response.send(pickedColors);
+                response.end();
             });
         }
     });
 });
 
-//textInput에서 받아온 데이터 처리
+//textInput에서 받아온 데이터 처리(submit상태) : 이미지 다시 읽어서 파일 최종 저장, 다른 데이터도 저장
 app.post('/upload-text', function(request, response){
     var form = new formidable.IncomingForm();
     form.parse(request, function(error, fields, files){
@@ -145,10 +127,22 @@ app.post('/upload-text', function(request, response){
             //클라이언트에서 입력한 text data
             var text = fields.textInput;
             
-            /*DB INSERT : text*/
-            /*//DB INSERT : text*/
-            
-            response.end();
+            fs.readFile(files.image.path, function(error, data){
+                var uploadFileName = __dirname + '/uploads/' + files.image.name;
+                fs.writeFile(uploadFileName, data, function(error){
+                    if(error){
+                        console.log('file saving error');
+                        throw error;
+                    }
+                    else {
+                        
+                        /*DB INSERT : text, filePath*/
+                        /*//DB INSERT : text*/
+
+                        response.end();
+                    }
+                });
+            });
         }
     });
 });
