@@ -10,16 +10,23 @@
 <!--        업로드 버튼 클릭시 나타나는 아이템팩토리-->
         <div id="itemFactory">
             <div id="upload-wrapper">
-                <input type = "file" id = "upload-hidden" name = "image" accept = "image/*">
-                <div id="upload"></div>
+                <div id="upload-file">
+                    <input type = "file" id = "upload-hidden" name = "image" accept = "image/*">
+                    <div id="upload"></div>
+                    <button id = "confirm-button">confirm</button>
+                </div>
+                <div id="upload-text">
+                    <input id = "text-input" type = "text" value = "30자 이내로 입력하세요." style="ime-mode: disabled;">
+                    <button id = "submit-button">submit</button>
+                </div>
             </div>
-            <button id = "confirm-button">confirm</button>
-            <input id = "text-input" type = "text" value = "30자 이내로 입력하세요." style="ime-mode: disabled;">
-            <button id = "submit-button">submit</button>
+        </div>        
+<!--        //업로드 버튼 클릭시 나타나는 아이템팩토리-->
+        
+        <div id="itemFactory-button-wrapper">
+            <img id = "itemFactory-button" src = "./image/upload.png"/>
         </div>
         
-<!--        //업로드 버튼 클릭시 나타나는 아이템팩토리-->
-        <img id = "itemFactoryButton" src = "../image/upload.png"/>
         <div id = "wrapper">
             <div id = "dateBar"></div>
             <div id = "momentsBar">
