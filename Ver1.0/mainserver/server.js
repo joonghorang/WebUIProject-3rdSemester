@@ -4,9 +4,10 @@ var formidable = require('formidable');
 var fs = require('fs');
 var ejs = require('ejs');
 var mysql = require('mysql');
-var Canvas = require('canvas');
-var Image = Canvas.Image;
-var imgP = require("./controllers/pickImpColor.js");
+//var Canvas = require('canvas');
+//var Image = Canvas.Image;
+//var imgP = require("./controllers/pickImpColor.js");
+var mytools = require("./controllers/mytools.js");
 
 //express 모듈을 사용해 웹서버를 생성한다.
 var app = express();
@@ -43,7 +44,7 @@ app.get('/output', function(request, response){
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
     var outputData = {
-        "image-src" : "./uploads/test.jpg"    
+        "image-src" : "uploads/test.jpg"    
     };
 
     response.render('output',outputData);
@@ -69,18 +70,19 @@ app.post('/upload-image', function(request, response){
                 client가 받은 pickedColors가 json으로 잘 작동하지 않으면 
                 response.send(JSON.stringify(pickedColors));로 대체해서 시도해보세요.
                 */
-                var img = new Image();
-                img.src = data;
-                var canvas = new Canvas(img.width, img.height);
-                var ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                
-                var pickedColors = imgP.pickColors(canvas);
-                
-                /*DB INSERT : date + RGB data*/    
-                /*//DB INSERT*/
-                
-                response.send(pickedColors);
+//                var img = new Image();
+//                img.src = data;
+//                var canvas = new Canvas(img.width, img.height);
+//                var ctx = canvas.getContext('2d');
+//                ctx.drawImage(img, 0, 0);
+//                
+//                var pickedColors = imgP.pickColors(canvas);
+//                
+//                /*DB INSERT : date + RGB data*/    
+//                /*//DB INSERT*/
+//                
+//                response.send(pickedColors);
+                response.send({r: 255, g: 100, b: 102});
                 response.end();
             });
         }
@@ -99,7 +101,7 @@ app.post('/upload-text', function(request, response){
         else{
             //클라이언트에서 입력한 text data
             var text = fields.textInput;
-            var fileName = ;
+            var fileName = mytools.genFileName();
             var uploadFileName = __dirname + '/uploads/' + fileName;
             
             fs.readFile(files.image.path, function(error, data){

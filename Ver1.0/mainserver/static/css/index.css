@@ -3,7 +3,7 @@ html{
 	width : 100%;
 	position : relative;
 /*	background-color : gray;*/
-    background-image: url('../image/mainbg.jpg');
+    background-image: url('../image/concrete.jpg');
     background-size: cover;
 	display : block;	
 }
@@ -24,11 +24,22 @@ body{
     height: 10%;
 }
 
-#uploadButton {
-    position: absolute;
+#itemFactoryButton {
+    position: relative;
     width: 50%;/*
     min-width: 100%;
     min-height: 100%;*/
+}
+
+#upload-wrapper {
+    width: 400px;
+    height: 300px;
+}
+
+#upload {
+    width: 100%;
+    height: 100%;
+    background-color: black;
 }
 
 #wrapper{

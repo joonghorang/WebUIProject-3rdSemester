@@ -7,6 +7,7 @@ var fileInput = document.getElementById("upload-hidden");
 var textInput = document.getElementById("text-input");
 var confirmButton = document.getElementById("confirm-button");
 var submitButton = document.getElementById("submit-button");
+var upload = document.getElementById("upload");
 
 window.addEventListener('DOMContentLoaded', function(){  
 	test_genOutputs();
@@ -47,12 +48,31 @@ confirmButton.addEventListener('click', function(e){
     
 }, false);
 
+upload.addEventListener("drop", function(e){
+    e.stopPropagation();
+    e.preventDefault();
+    var files = e.target.files || e.dataTransfer.files;
+    //image 인지 판별 코드 필요.
+    fileInput.files = files;
+}, true);
+    
+//왜인지 모르게 이부분이 있어야 드래그로 사진을 옮겼을때 크롬에서 이미지가 열려져버리는 일이 발생하지 않는다.
+upload.addEventListener("dragover", function(e){
+    e.stopPropagation();
+    e.preventDefault();
+}, true);
+
 //submit버튼 누르면 텍스트 데이터를 서버로 보내기.
 submitButton.addEventListener('click', function(e){
     e.preventDefault();
     var request = new XMLHttpRequest();
     var formData = new FormData();
     formData.append("textInput", textInput.value);
+    //파일 없을때 에러처리
+    if(fileInput.files.item(0)===null){
+        alert('no image');
+    }
+    formData.append("image", fileInput.files[0]);
     
     request.open("POST", "/upload-text", true);
     request.send(formData);
