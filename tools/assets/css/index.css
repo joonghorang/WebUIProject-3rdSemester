@@ -1,0 +1,27 @@
+
+#image-input-button {
+    position: absolute;
+    top :0;
+    left : 0;
+    width : 100%;
+    height : 100%;
+    background-color: green;
+}
+
+#image-input-wrapper {
+    float : left;
+    position : relative;
+    width : 300px;
+    height : 300px;
+    background-color: red;
+}
+
+#image-input-hidden {
+    position : absolute;
+}
+
+#target-image {
+    float : left;
+    position : relative;
+    width : 300px;
+}

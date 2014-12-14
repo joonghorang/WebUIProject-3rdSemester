@@ -1,0 +1,19 @@
+
+#target-image {
+    height : 400px;
+}
+
+footer {
+    position : relative;
+}
+
+header {
+    position : relative;
+}
+
+.color{
+    float : left;
+    width : 90px;
+    height : 90px;
+    margin: 5px;
+}

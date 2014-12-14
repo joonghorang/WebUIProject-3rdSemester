@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="./css/lib/reset.css">
+        <link rel="stylesheet" type="text/css" href="./css/colorLab.css">
+        <script data-main="js/colorLab.js" src="js/lib/require.js"></script>
+        <title>Deok's Color Lab</title>
+    </head>
+    <body>
+        <div id = "shell">
+            <header>Color Lab</header>
+            <nav></nav>
+            <main>
+                <img id = "target-image" src = "<%= imageSrc %>">
+                <div id = "colors">
+                    <% for(var i=0; i<pickedColors.length; i++) {%>
+   <div class = "color" style = "background-color :<%= pickedColors[i] %>;"></div>
+<% } %>
+                </div>
+            </main>
+            <footer>NHNNEXT DeokSeong</footer>
+        </div>
+    </body>
+</html>
