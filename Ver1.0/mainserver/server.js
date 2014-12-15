@@ -44,7 +44,8 @@ app.get('/output', function(request, response){
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
     var outputData = {
-        "image-src" : "uploads/test.jpg"    
+        imageSrc : "./uploads/201412142217_pv6ny.jpg",
+        frameInnershadowSrc : "./image/bottomShadow.png"
     };
 
     response.render('output',outputData);
@@ -102,7 +103,7 @@ app.post('/upload-text', function(request, response){
             //클라이언트에서 입력한 text data
             var text = fields.textInput;
             var fileName = mytools.genFileName();
-            var uploadFileName = __dirname + '/uploads/' + fileName;
+            var uploadFileName = __dirname + '/uploads/' + fileName + '.jpg';
             
             fs.readFile(files.image.path, function(error, data){
                 fs.writeFile(uploadFileName, data, function(error){

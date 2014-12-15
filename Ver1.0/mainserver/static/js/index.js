@@ -7,11 +7,33 @@ var fileInput = document.getElementById("upload-hidden");
 var textInput = document.getElementById("text-input");
 var confirmButton = document.getElementById("confirm-button");
 var submitButton = document.getElementById("submit-button");
-var upload = document.getElementById("upload");
+var uploadDrag = document.getElementById("upload-drag");
+var itemFactory = document.getElementById("itemFactory");
+var itemFactoryButton = document.getElementById("itemFactory-button");
+var mainContentWrapper = document.getElementById("wrapper");
+var uploadFile = document.getElementById("upload-file");
+var uploadText = document.getElementById("upload-text");
+var closeButton = document.getElementById("close-button");
 
 window.addEventListener('DOMContentLoaded', function(){  
 	test_genOutputs();
 }, false);
+
+itemFactoryButton.addEventListener('click', function(){
+    mainContentWrapper.style.display = 'none';
+    itemFactory.style.display = 'block';
+    itemFactoryButton.style.display = 'none';
+    uploadFile.style.display = 'block';
+    uploadText.style.display = 'none';
+    closeButton.style.display = 'block';
+},false);
+
+closeButton.addEventListener('click', function(){
+    mainContentWrapper.style.display = 'block';
+    itemFactory.style.display = 'none';
+    itemFactoryButton.style.display = 'block';
+    closeButton.style.display = 'none';
+},false);
 
 //confirm버튼 누르면 이미지를 서버로 보내기.
 confirmButton.addEventListener('click', function(e){
@@ -36,19 +58,18 @@ confirmButton.addEventListener('click', function(e){
         console.log(request.responseText);
         var result = JSON.parse(request.responseText)
         
+        //텍스트 입력창으로 전환
+        uploadText.style.display = 'block';
+        uploadFile.style.display = 'none';
+        closeButton.style.display = 'none';
+        
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기(bgColor=result.rgb)
         
     });
     
-//    request.onreadystatechange = function(){
-//       if (request.readyState == 4 && request.status == 200){    
-//           console.log(request.responseText);
-//       }
-//    }
-    
 }, false);
 
-upload.addEventListener("drop", function(e){
+uploadDrag.addEventListener("drop", function(e){
     e.stopPropagation();
     e.preventDefault();
     var files = e.target.files || e.dataTransfer.files;
@@ -57,7 +78,7 @@ upload.addEventListener("drop", function(e){
 }, true);
     
 //왜인지 모르게 이부분이 있어야 드래그로 사진을 옮겼을때 크롬에서 이미지가 열려져버리는 일이 발생하지 않는다.
-upload.addEventListener("dragover", function(e){
+uploadDrag.addEventListener("dragover", function(e){
     e.stopPropagation();
     e.preventDefault();
 }, true);
@@ -76,5 +97,10 @@ submitButton.addEventListener('click', function(e){
     
     request.open("POST", "/upload-text", true);
     request.send(formData);
+    
+    //데이터 전송이 다 끝난 뒤에 itemFactory close
+    itemFactory.style.display = 'none';
+    itemFactoryButton.style.display = 'block';
+    mainContentWrapper.style.display = 'block';
     
 },false);
