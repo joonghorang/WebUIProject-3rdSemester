@@ -4,6 +4,8 @@
         <meta charset="utf-8">   
         <link rel="stylesheet" type="text/css" href="./css/reset.css">
         <link rel="stylesheet" type="text/css" href="./css/index.css">
+        <link rel="stylesheet" type="text/css" href="./css/textInput.css">
+
         <title>a moment</title>
     </head>
     <body>
@@ -20,6 +22,7 @@
                 
                 <div id="upload-text">
                     <input id = "text-input" type = "text" value = "30자 이내로 입력하세요." style="ime-mode: disabled;">
+                    <canvas id="back-ground-canvas"></canvas>
                     <button id = "submit-button">submit</button>
                 </div>
             </div>
@@ -32,18 +35,26 @@
             <img id = "itemFactory-button" src = "./image/upload.png"/>
         </div>
         
-        <div id = "wrapper">
-            <div id = "dateBar"></div>
-            <div id = "momentsBar">
-                <ul id = "moments"></ul>
+        <div id="mainContent-wrapper">
+            <div id = "dateBar">
+                <div id="year-bg"></div>
+                <div id="month-bg"></div>
+                <div id="date-bg"></div>
+            </div>
+
+            <div id = "wrapper">
+                <div id = "momentsBar">
+                    <ul id = "moments"></ul>
+                </div> 
+                <div id = "navBar"></div> 
             </div> 
-            <div id = "navBar"></div> 
-        </div> 
-<!--        <img id = "bottom-shadow" src="../static/image/bottomShadow.png">-->
-        
+        </div>
+
         <script src="./js/index.js"></script>
         <script src="./js/testCode.js"></script>
         <script src="./js/tools.js"></script>
+        <script src="./js/testInput.js"></script>
+        <script src="./js/EventUtil.js"></script>
         
     </body>
 </html>

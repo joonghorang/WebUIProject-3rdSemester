@@ -25,7 +25,7 @@ body{
     z-index: 10;
     position: absolute;
     width: 100%;
-    height: 10%;
+    height: 8%;
     bottom: 10%;
 }
 
@@ -152,6 +152,17 @@ body{
     bottom: 0;
     left: 0;
     right: 0;
+    background-color: transparent;
+}
+#back-ground-canvas {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 #wrapper{
@@ -176,6 +187,57 @@ body{
 	position : absolute;
 	background-color: #444444;
 	display : block;
+}
+
+#dateBar {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 8%;
+    width: 120px;
+    height: 120px;
+    opacity: 0.8;
+    font-family: Arial, Helvetica, Geneva, sans-serif;
+}
+#year-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 35px;
+    color: #ffffff;
+    background-color: #555555;
+    border-radius: 10px;
+}
+#month-bg {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 35px;
+    color: #ffffff;
+    background-color: #555555;
+    border-radius: 10px;
+}
+#date-bg {
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 35px;
+    color: #ffffff;
+    background-color: #555555;
+    border-radius: 10px;
 }
 
 #momentsBar{

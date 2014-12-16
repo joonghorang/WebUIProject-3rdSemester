@@ -1,5 +1,5 @@
-var MAX_HEIGHT = window.innerHeight;
-var MAX_WIDTH = window.innerWidth;
+var MAX_HEIGHT = window.innerHeight*99.8;
+var MAX_WIDTH = window.innerWidth*99/100;
 
 var navBar = document.getElementById("navBar");
 var momentsBar = document.getElementById("momentsBar");
@@ -10,14 +10,30 @@ var submitButton = document.getElementById("submit-button");
 var uploadDrag = document.getElementById("upload-drag");
 var itemFactory = document.getElementById("itemFactory");
 var itemFactoryButton = document.getElementById("itemFactory-button");
-var mainContentWrapper = document.getElementById("wrapper");
+var mainContentWrapper = document.getElementById("mainContent-wrapper");
 var uploadFile = document.getElementById("upload-file");
 var uploadText = document.getElementById("upload-text");
 var closeButton = document.getElementById("close-button");
 
 window.addEventListener('DOMContentLoaded', function(){  
 	test_genOutputs();
+    setCalendar();
 }, false);
+
+function setCalendar(){
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth() + 1;
+    var date = d.getDate();
+    
+    var yearBg = document.getElementById('year-bg');
+    var monthBg = document.getElementById('month-bg');
+    var dateBg = document.getElementById('date-bg');
+
+    yearBg.textContent = year;
+    monthBg.textContent = month;
+    dateBg.textContent = date;
+}
 
 itemFactoryButton.addEventListener('click', function(){
     mainContentWrapper.style.display = 'none';
@@ -43,29 +59,30 @@ confirmButton.addEventListener('click', function(e){
     if(fileInput.files.item(0)===null){
         alert('no image');
     }
-    //AJAX로 데이터 받아오기
-    var request = new XMLHttpRequest();
-    var formData = new FormData();
-    formData.append("image", fileInput.files[0]);
+    else{
+        //AJAX로 데이터 받아오기
+        var request = new XMLHttpRequest();
+        var formData = new FormData();
+        formData.append("image", fileInput.files[0]);
 
-	//길을 열어라!
-    request.open("POST" , "/upload-image" , true);
-	//보내라!
-    request.send(formData);
-    //받아와라!(data가 load되면 실행)
-    request.addEventListener('load', function(){
-        //받아온 JSON
-        console.log(request.responseText);
-        var result = JSON.parse(request.responseText)
-        
-        //텍스트 입력창으로 전환
-        uploadText.style.display = 'block';
-        uploadFile.style.display = 'none';
-        closeButton.style.display = 'none';
-        
-        //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기(bgColor=result.rgb)
-        
-    });
+        //길을 열어라!
+        request.open("POST" , "/upload-image" , true);
+        //보내라!
+        request.send(formData);
+        //받아와라!(data가 load되면 실행)
+        request.addEventListener('load', function(){
+            //받아온 JSON
+            console.log(request.responseText);
+            var result = JSON.parse(request.responseText)
+
+            //텍스트 입력창으로 전환
+            uploadText.style.display = 'block';
+            uploadFile.style.display = 'none';
+            closeButton.style.display = 'none';
+
+            //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기(bgColor=result.rgb)    
+        });
+    }
     
 }, false);
 
@@ -104,3 +121,5 @@ submitButton.addEventListener('click', function(e){
     mainContentWrapper.style.display = 'block';
     
 },false);
+
+//moments bar 안의 moment 클릭시 output페이지로 이동
