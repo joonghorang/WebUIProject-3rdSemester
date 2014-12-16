@@ -10,6 +10,12 @@ html{
     background-image: url('../image/concrete.jpg');
     background-size: cover;
 	display : block;	
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body{
@@ -143,26 +149,47 @@ body{
     cursor: pointer;
 }
 
+input:focus{
+    outline : 0;
+}
 #text-input {
     position: absolute;
-    width: 90%;
+    width: 100%;
     height: 100px;
+    line-height: 100%;
     margin: auto;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     background-color: transparent;
+    font-family: "NanumMyeongjo";
+    font-size : 60px;
+
+    text-align: center;
+    vertical-align: middle;
+    z-index: 21;
+
 }
 #back-ground-canvas {
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
     position: absolute;
     margin: auto;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 20;
+}
+#submit-button {
+    position : absolute;
+    z-index : 22;
+    margin-top : 60%;
+    color : white;
+    background-color : #202020;
+    width : 100%;
+    height : 40px;
 }
 
 #wrapper{
@@ -264,8 +291,6 @@ body{
 	height : 100%;
     width : 3%;
 	transition: all 0.4s ease .300ms;
-
-
 }
 #moments:hover li{
     width : 2%;   

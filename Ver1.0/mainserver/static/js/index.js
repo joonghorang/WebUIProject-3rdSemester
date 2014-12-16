@@ -15,6 +15,7 @@ var uploadFile = document.getElementById("upload-file");
 var uploadText = document.getElementById("upload-text");
 var closeButton = document.getElementById("close-button");
 
+
 window.addEventListener('DOMContentLoaded', function(){  
 	test_genOutputs();
     setCalendar();
@@ -119,7 +120,6 @@ submitButton.addEventListener('click', function(e){
     itemFactory.style.display = 'none';
     itemFactoryButton.style.display = 'block';
     mainContentWrapper.style.display = 'block';
-    
 },false);
 
 //moments bar 안의 moment 클릭시 output페이지로 이동

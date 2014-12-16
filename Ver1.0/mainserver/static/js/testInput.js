@@ -32,18 +32,13 @@ function zeroCheck(num){
 function drawGradation(firstColor, secondColor) {
 	var grdContext = backGroundCanvas.getContext('2d');
 	// 그라데이션 영역 정의 및 객체 생성
-	//var grd = ctx.createLinearGradient(0, MAX_HEIGHT/40, MAX_WIDTH, MAX_HEIGHT*2/3);	// 일부 스크린만 그라데이션 
 	var grd = grdContext.createLinearGradient(0, MAX_HEIGHT, MAX_WIDTH, MAX_HEIGHT); 			// 풀스크린용
 	grd.addColorStop(0, firstColor);
 	grd.addColorStop(1, secondColor);
 
 	// 도형의채우는 색상 속성에 그라데이션 객체 설정
 	grdContext.fillStyle = grd;
-	//ctx.fillRect(0, MAX_HEIGHT/2 - MAX_HEIGHT/16, MAX_WIDTH, MAX_HEIGHT/8);			// 일부 스크린만
 	grdContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);											// 풀스크린용
-	// grd.addColorStop(0, colorSetHex[1]);
-	// grd.addColorStop(1, colorSetHex[0]);
-	// context.fillRect(0, MAX_HEIGHT/2, MAX_WIDTH, MAX_HEIGHT/2);
 }
 
 function changeGradationColor(num, offset){
