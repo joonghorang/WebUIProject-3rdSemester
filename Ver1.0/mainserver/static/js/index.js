@@ -15,27 +15,11 @@ var mainContentWrapper = document.getElementById("wrapper");
 var uploadFile = document.getElementById("upload-file");
 var uploadText = document.getElementById("upload-text");
 var closeButton = document.getElementById("close-button");
-
+var previewImg = document.getElementById('preview-image');
 
 window.addEventListener('DOMContentLoaded', function(){  
 	test_genOutputs();
-    setCalendar();
 }, false);
-
-function setCalendar(){
-    var d = new Date();
-    var year = d.getFullYear();
-    var month = d.getMonth() + 1;
-    var date = d.getDate();
-    
-    var yearBg = document.getElementById('year-bg');
-    var monthBg = document.getElementById('month-bg');
-    var dateBg = document.getElementById('date-bg');
-
-    yearBg.textContent = year;
-    monthBg.textContent = month;
-    dateBg.textContent = date;
-}
 
 itemFactoryButton.addEventListener('click', function(){
     mainContentWrapper.style.display = 'none';
@@ -44,6 +28,7 @@ itemFactoryButton.addEventListener('click', function(){
     uploadFile.style.display = 'block';
     uploadText.style.display = 'none';
     closeButton.style.display = 'block';
+    previewImg.style.display = 'block';
 },false);
 
 closeButton.addEventListener('click', function(){
@@ -51,8 +36,31 @@ closeButton.addEventListener('click', function(){
     itemFactory.style.display = 'none';
     itemFactoryButton.style.display = 'block';
     closeButton.style.display = 'none';
+    
+    if(previewImg.childNodes[0] !== undefined){
+        previewImg.removeChild(previewImg.childNodes[0]);
+    }   
+    previewImg.style.display = 'none';
 },false);
 
+fileInput.addEventListener('click', function(){
+    fileInput.value = null; //input reset
+});
+//fileInput change이벤트 : 여기로 colorLab요청 로직 옮기기.
+fileInput.addEventListener('change', function(){
+    var imgFile = this.files.item(0);
+    var imgURL = URL.createObjectURL(imgFile);
+    if(previewImg.childNodes[0] !== undefined){
+        previewImg.removeChild(previewImg.childNodes[0]);
+    }  
+    var imgElement = document.createElement('img');
+    imgElement.setAttribute('id', 'input-image');
+    imgElement.src=imgURL; 
+    previewImg.appendChild(imgElement);   
+    previewImg.style.display = 'block';
+});
+        
+        
 //confirm버튼 누르면 이미지를 서버로 보내기.
 confirmButton.addEventListener('click', function(e){
 	e.preventDefault();
@@ -62,16 +70,18 @@ confirmButton.addEventListener('click', function(e){
         alert('no image');
     }
     else{
+        if(previewImg.childNodes[0] !== undefined){
+            previewImg.removeChild(previewImg.childNodes[0]);
+        }  
+        previewImg.style.display = 'none';
+        
         //AJAX로 데이터 받아오기
         var request = new XMLHttpRequest();
         var formData = new FormData();
         formData.append("image", fileInput.files[0]);
-
-        //길을 열어라!
+        //길을 열어라! - 보내라! - 받아와라!(data가 load되면 실행)
         request.open("POST" , "/upload-image" , true);
-        //보내라!
         request.send(formData);
-        //받아와라!(data가 load되면 실행)
         request.addEventListener('load', function(){
             //받아온 JSON
             console.log(request.responseText);
