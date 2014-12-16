@@ -3,6 +3,7 @@ var MAX_WIDTH = window.innerWidth*99/100;
 
 var navBar = document.getElementById("navBar");
 var momentsBar = document.getElementById("momentsBar");
+var moments = document.getElementById("moments");
 var fileInput = document.getElementById("upload-hidden");
 var textInput = document.getElementById("text-input");
 var confirmButton = document.getElementById("confirm-button");
@@ -80,7 +81,7 @@ confirmButton.addEventListener('click', function(e){
             uploadText.style.display = 'block';
             uploadFile.style.display = 'none';
             closeButton.style.display = 'none';
-
+            textInput.value = "30자 이내로 입력하세요.";
             //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기(bgColor=result.rgb)    
         });
     }
@@ -120,6 +121,24 @@ submitButton.addEventListener('click', function(e){
     itemFactory.style.display = 'none';
     itemFactoryButton.style.display = 'block';
     mainContentWrapper.style.display = 'block';
+
+    //새로운 캔버스 객체를 메인페이지에 생성하는 코드
+    //덕성이가 만든 css코드를 이해못하겠으나 자고있으므로, 
+    //내일 신영이에게 물어봄... 
+    var addLi = document.createElement('li');
+    addLi.setAttribute('class', 'moment');
+    moments.appendChild(addLi);
+    var addCanvas = document.createElement('canvas');
+    addCanvas.style.backGroundColor = "black";
+    request.onreadystatechange = function(){
+        if(request.readyState === 4 && request.status === 200){
+            addCanvas.setAttribute('id', request.responseText);
+            addLi.appendChild(addCanvas);
+            test_genOutputs(addCanvas);
+            console.log(1);
+        }
+    };
+
 },false);
 
 //moments bar 안의 moment 클릭시 output페이지로 이동

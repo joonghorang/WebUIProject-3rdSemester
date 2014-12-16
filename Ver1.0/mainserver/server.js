@@ -117,8 +117,8 @@ app.post('/upload-text', function(request, response){
                     else {
                         /*DB INSERT : text, filePath*/
                         /*//DB INSERT : text*/
-
-                        response.end();
+                        // 새로운 캔버스에서 사용할 아이디를 fileName으로 맞춘다. 
+                        response.send(fileName);
                     }
                 });
             });
