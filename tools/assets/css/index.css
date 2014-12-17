@@ -9,11 +9,11 @@
 }
 
 #image-input-wrapper {
-    float : left;
     position : relative;
     width : 300px;
     height : 300px;
     background-color: red;
+    overflow: hidden;
 }
 
 #image-input-hidden {
@@ -24,4 +24,13 @@
     float : left;
     position : relative;
     width : 300px;
+}
+
+nav {
+    position : relative;
+}
+
+#shell {
+
+    position : relative;
 }

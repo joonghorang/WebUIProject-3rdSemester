@@ -8,14 +8,17 @@
         <title>Deok's tool</title>
     </head>
     <body>
+        
         <div id = "shell">
+            <nav>
+                <a href = "./colorLab">Color Lab</a>
+                <a href = "./imageAging">Image Aging</a>
+            </nav>
             <div id = "image-input-wrapper">
                 <button id = "image-input-button"></button>
                 <input id = "image-input-hidden" type = "file" accept="image/*">
             </div>
             <img id = "target-image" src = "<%= imageSrc %>">
-            <a href = "./colorLab">Color Lab</a>
-            <a href = "./imageAging">Image Aging</a>
         </div>
     </body>
 </html>

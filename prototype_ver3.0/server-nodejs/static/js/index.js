@@ -478,11 +478,10 @@ window.addEventListener('DOMContentLoaded', function(){
         }, false);
 
     
-<<<<<<< Updated upstream
+
     }
     //확대되면서 this(클릭한 그리드) 말고 다 날려버림???? 일단은 흰색으로 fadeout형식
 
-=======
         document.getElementById('preview-image').appendChild(imgElement);
         
         var tempImg = document.getElementById('preview-image');
@@ -508,7 +507,7 @@ window.addEventListener('DOMContentLoaded', function(){
                alert(XHR.response);
            }
        }
->>>>>>> Stashed changes
+
     },false);
     
 

@@ -68,12 +68,12 @@ var gradientWithNoise = function(canvas, color1, color2, noisePercent){
     
     var index;
     var noise;
-    for(var y = 0; y < canvas.height; ++y){
+    for(var x = 0; x< canvas.width; ++x){
         if(Math.random() > 1 - noisePercent )
-        { noise = genGaussianNoise( canvas.width/ 32);
+        { noise = genGaussianNoise( canvas.width/ 16);
         }else{ noise = 0; }
-        for(var x = 0; x< canvas.width; ++x){
-
+        
+for(var y = 0; y < canvas.height; ++y){
             index = (y * canvas.width + x) * 4;
         
 

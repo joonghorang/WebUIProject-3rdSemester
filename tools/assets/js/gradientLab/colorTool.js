@@ -5,41 +5,6 @@ var hex2Dec = function(hex){
     return {r: r, g: g, b: b};
 };
 
-var genGaussianNoise = function(variance){
-    if(typeof variance === "undefined") variance = 1.0;
-    
-    if (typeof genGaussianNoise.spare !== "undefined") {
-         var spare = genGaussianNoise.spare;
-         delete genGaussianNoise.spare;
-         return variance * spare;
-     } else {
-         var rand1 = Math.random();
-         rand1 = -2 * Math.log(rand1);
-         
-         var rand2 = Math.random();
-         rand2 = 2 * Math.PI * rand2;
-         genGaussianNoise.spare = Math.sqrt(rand1 * variance) * Math.sin(rand2);
-         return Math.sqrt(rand1 * variance) * Math.cos(rand2);
-     }
-}
-
-var testGaussian = function(variance){
-    if(typeof variance === "undefined") variance = 1.0;
-
-    var hist = [];
-//    var histLength = variance * 4 * 2 * 100;
-    histLength = 2000;
-    for( var i = 0; i< histLength; i++){
-        hist[i] = 0;   
-    }
-    for(var i =0; i< 100000; ++i){
-        var gauNoise = genGaussianNoise(variance);
-        gauNoise = Math.round(gauNoise * 100);
-        if(gauNoise < histLength/2 && gauNoise > -histLength/2) hist[parseInt(gauNoise + histLength/2)]++;
-    }
-    return hist;
-}
-
 var gradient = function(canvas, color1, color2){
     var rgb1 = hex2Dec(color1);
     var rgb2 = hex2Dec(color2); 

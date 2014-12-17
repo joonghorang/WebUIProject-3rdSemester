@@ -1,7 +1,7 @@
 define(function (require){
     var imageInput = document.getElementById("image-input-hidden");
     var imageInputButton = document.getElementById("image-input-button");
-    
+    var shell = document.getElementById("shell");
     imageInput.addEventListener('change', function(){
         var XHR = new XMLHttpRequest();
         var formData = new FormData();
@@ -9,6 +9,21 @@ define(function (require){
         
         XHR.open('post', '/', true);
         XHR.send(formData);
+        XHR.onreadystatechange = function() 
+        {
+            if (XHR.readyState == 4 && XHR.status == 200) 
+            {
+                var targetImage = document.getElementById("target-image");
+                shell.removeChild(targetImage);
+                targetImage = new Image();
+                targetImage.src = "./target_image_data?"+
+                    new Date().getTime();
+                targetImage.id = "target-image";
+                targetImage.onload = function(){
+                    shell.appendChild(targetImage);   
+                }
+            }
+        }
     });
     
     imageInputButton.addEventListener("drop", function(e){

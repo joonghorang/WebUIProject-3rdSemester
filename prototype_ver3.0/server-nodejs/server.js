@@ -96,8 +96,6 @@ app.post('/itemFactory/image', function(req, res){
             var imageFile = fs.readFileSync(files.image.path);
             var img = new Image();
             img.src = imageFile;
-<<<<<<< Updated upstream
-=======
             var canvas = new Canvas(img.width, img.height);
             var ctx = canvas.getContext('2d');
             img.onload = function(){
@@ -109,10 +107,10 @@ app.post('/itemFactory/image', function(req, res){
 //            ctx.getImageData(0,
             res.send(imgP.pickColors(canvas));
 
->>>>>>> Stashed changes
-            
-            var pickedColors = imgP.pickColors(img);
-            res.send(JSON.stringify(pickedColors));
+//>>>>>>> Stashed changes
+//            
+//            var pickedColors = imgP.pickColors(img);
+//            res.send(JSON.stringify(pickedColors));
         
             //for colorLab
             var fileImageData = fs.readFileSync(files.image.path);

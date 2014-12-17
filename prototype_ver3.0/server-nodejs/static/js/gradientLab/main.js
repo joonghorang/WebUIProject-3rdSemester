@@ -47,7 +47,7 @@ ctx.fillRect(20,20, CANVAS_WIDTH, CANVAS_HEIGHT);
 gradient(canvas, "#46DB23", "#E6E032");
 gradientWithNoise(canvas2, "#46DB23","#E6E032", 0.3);
 
-//wrapper.appendChild(drawHistogram(testGaussian(0.5), window.innerWidth, 200));
-//wrapper.appendChild(drawHistogram(testGaussian(1.0), window.innerWidth, 200));
-//wrapper.appendChild(drawHistogram(testGaussian(2.0), window.innerWidth, 200));
-//wrapper.appendChild(drawHistogram(testGaussian(3.0), window.innerWidth, 200));
+wrapper.appendChild(drawHistogram(testGaussian(0.5), window.innerWidth, 200));
+wrapper.appendChild(drawHistogram(testGaussian(1.0), window.innerWidth, 200));
+wrapper.appendChild(drawHistogram(testGaussian(2.0), window.innerWidth, 200));
+wrapper.appendChild(drawHistogram(testGaussian(3.0), window.innerWidth, 200));

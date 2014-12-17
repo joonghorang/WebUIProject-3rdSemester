@@ -1,5 +1,6 @@
 
 #target-image {
+    position : relative;
     height : 400px;
 }
 
@@ -12,8 +13,20 @@ header {
 }
 
 .color{
-    float : left;
+
+    display : inline-block;
     width : 90px;
     height : 90px;
     margin: 5px;
+}
+#shell {
+    position : relative;
+}
+
+#colors {
+    position : relative;
+}
+
+main {
+    position : relative;
 }

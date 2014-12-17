@@ -3,21 +3,27 @@
 */
 (function(){
 var isNodeModule = typeof module !== undefined && module.exports;
-
+var isRequirejs = typeof define === 'function' && define.amd;
 var Canvas;
 var Image;
 var tinycolor;
+var commonCanvas;
 /* Constructor Setting */
 if(isNodeModule){
-    var Canvas = require("canvas");   
-    var Image = Canvas.Image;
-    var tinycolor = require("tinycolor2");
+    Canvas = require("canvas");   
+    Image = Canvas.Image;
+    tinycolor = require("tinycolor2");
+    commonCanvas = require("common-canvas");
 }else {
-    var Canvas = function(width, height){
+    Canvas = function(width, height){
         var canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
         return canvas;
+    }
+    if(isRequirejs){
+        tinycolor = requirejs("tinycolor2");   
+        commonCanvas = requirejs("common-canvas");
     }
     //todo : requirejs 사용시 tinycolor문제 해결필요.
 }
@@ -36,29 +42,45 @@ Array.prototype.circleIndex = function(idx){
 /* Module */
 var PickColors = function ( imageObj ){
     imageObj = imageObj ? imageObj : {};
-
-    if (imageObj instanceof Image || isCanvas(imageObj)){
-        this.pickedColors = pickColorsByHue(imageObj);
+    if(!(this instanceof PickColors)){
+       return new PickColors(imageObj);
     }
-
+    if (imageObj instanceof Image || isCanvas(imageObj)){
+        var imageCanvas = this.imageCanvas = commonCanvas.createCanvasByImage(imageObj);
+        var pickedHues = this.pickedHues = pickHues(this.imageCanvas);
+        this.pickedColors = [];
+        for(var i = 0; i< this.pickedHues.length && i < 5; ++i){
+            this.pickedColors[i] = tinycolor({h : this.pickedHues[i]["x"], 
+                                         s : 
+                                         (function(){
+                                             var rawSatData = histogram("sat", imageCanvas, { 
+                                                 hL : pickedHues[i]["rangeL"], 
+                                                 hR : pickedHues[i]["rangeR"], 
+                                                 sL : 0.3, 
+                                                 vl : 0.3});
+                                             var pickedSats = pickPeaks(rawSatData);
+                                             console.log(pickedSats);
+                                             return pickedSats[0]["x"]; 
+                                         })(), 
+                                         v : 100}).toRgb();
+        }
+    }
 }
  
 /* prototype */
 PickColors.prototype = {
-    toRgb : function(){
+    toRgb : function(num){
         return this.pickedColors;
     },
     
-    toHexString : function(){
-        var pickedHexString
-        for(var i = 0; i < this.pickedColors.length; ++i){
+    toHexString : function(num){
+        num = typeof num !== "undefined" ? num : 10;
+        var pickedHexString =[];
+        for(var i = 0; i < this.pickedColors.length && i < num; ++i){
             pickedHexString[i] = tinycolor(this.pickedColors[i]).toHexString();
         }
         return pickedHexString;
     }
-            
-    
-            
 }
 
 /* function */
@@ -69,38 +91,19 @@ var isCanvas = isNodeModule ?
     return imageObj.toString() === "[object HTMLCanvasElement]";
 };
 
-var createCanvasByImage = function(img){
-//    console.log(__basename + " - function() createCanvasByImage start ...");
-//    console.log(img);
-
-    var pixelNumResizingSaturation = 100000;    
-    var pixelNum = img.width * img.height;
-    var pixelNumRate = pixelNum / pixelNumResizingSaturation;
-
-    var canvasWidth = img.width;
-    var canvasHeight = img.height;
+var pickHues = function(imageCanvas){
+    var rawHistData = histogram("hue", imageCanvas, { sL : 0.3, vL : 0.3});
+    var resultHistData = smoothingGraph(rawHistData, 7);
+    return pickPeaks(resultHistData);   
     
-    if(pixelNumRate > 1){
-        console.log("resizing... pixelNumRate : " + pixelNumRate);
-        var lengthRate =  Math.sqrt(pixelNumRate);
-        canvasWidth = parseInt(canvasWidth/lengthRate);
-        canvasHeight = parseInt(canvasHeight / lengthRate);
-        console.log("resizing result - canvasWidth : " + canvasWidth + ", canvasHeight : " + canvasHeight);
-    }
-
-    var rCanvas = new Canvas(canvasWidth, canvasHeight);
-    var rCanvasCtx = rCanvas.getContext("2d");
-    rCanvasCtx.drawImage(img, 0,0, img.width, img.height, 0,0, canvasWidth, canvasHeight);
-//    console.log(__basename + " - function() createCanvasByImage end");
-    return rCanvas;
-} 
+}
 
 var pickColorsByHue = function(img){
 //    console.log(__basename + " - function() pickColors start ...");
     
     var imageCanvas = createCanvasByImage(img);
     var rawHistData = histogram("hue", imageCanvas, { sL : 0.3, vL : 0.3});
-    var resultHistData = smoothing(rawHistData, 7);
+    var resultHistData = smoothingGraph(rawHistData, 7);
     var pickedHues = pickPeaks(resultHistData);
     
     var pickedColors = [];
@@ -118,7 +121,7 @@ var pickColorsByHue = function(img){
     
 //    var imageCanvas = createCanvasByImage(img);
 //    var hsvHistData = histogram("hue", imageCanvas, { sL : 0.3, vL : 0.3});
-//    var pickedHues = pickPeaks(smoothing(hsvHistData, 7));
+//    var pickedHues = pickPeaks(smoothingGraph(hsvHistData, 7));
 //    console.log(" pickedHue Finish. Hue.leng : " + pickedHues.length);
 //    var pickedColors = [];
 //    for(var i = 0; i< pickedHues.length; ++i){
@@ -129,7 +132,7 @@ var pickColorsByHue = function(img){
 }
 
 var histogram = function( type, canvas, rule){
-    console.log(__basename + " - function() histogram start ... ");
+//    console.log(__basename + " - function() histogram start ... ");
     var ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
     var histData = [];
@@ -198,12 +201,12 @@ var histogram = function( type, canvas, rule){
 //                console.log(hsv);
             }
         }
-        console.log(__basename + " - function() histogram end ");
+//        console.log(__basename + " - function() histogram end ");
         return histData;
     }
 }
 
-var smoothing = function(histData, repeat, cvCoeff){
+var smoothingGraph = function(histData, repeat, cvCoeff){
 
     //set default
     repeat = typeof repeat !== "number" ? 1 : repeat;
@@ -261,6 +264,8 @@ var pickPeaks = function(histData){
 
 if(isNodeModule){
     module.exports = PickColors;
+}else if(typeof define === 'function' && define.amd){
+    define(function(){ return pickColors; });
 }else {
     window.pickColors = PickColors;
 }

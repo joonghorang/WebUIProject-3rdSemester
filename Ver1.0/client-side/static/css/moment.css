@@ -9,7 +9,7 @@ html, body{
 
     position: absolute;
 
-    background-image:url( "../image/bg_test.jpg");
+    background-image:url( "../image/moment_bg2.jpg");
     background-size: cover;
     background-attachment: fixed;
     background-position: center top;
@@ -17,13 +17,13 @@ html, body{
 
 #frame {
     z-index: 100;
-    width : 31.5%;
-    padding-bottom: 31.5%;
+    width : 29%;
+    padding-bottom: 29%;
 
     position: absolute;
     left: 0;
     right:0;
-    margin: 18.7% auto 0 auto;
+    margin: 10.5% auto 0 auto;
     background-color: #82A3D2;
 }
 
@@ -45,7 +45,7 @@ html, body{
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ffffff;
+    background-color: rgba(0,0,0,0);
 }
 
 .output-image {

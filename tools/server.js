@@ -7,7 +7,7 @@ var formidable = require("formidable");
 var mysql = require("mysql");
 var tinycolor = require("tinycolor2");
 var mytools = require("./controllers/mytools.js");
-var pickColors = require("./controllers/colorLab/pickColors.js");
+var Impressive = require("impressive");
 
 var app = express();
 
@@ -58,6 +58,7 @@ app.post('/', function(req, res){
                             console.log("post / : upload image error!");
                         }else{
                             console.log("post / : upload image complete");
+                            res.send(200);
                         }
                     });
                     var filename = mytools.genFileName() + path.extname(files.image.name);
@@ -67,7 +68,7 @@ app.post('/', function(req, res){
                         }else{
                             console.log("post / : upload image complete");
                         }
-                    });
+                    });    
 //                    var query = connection.query('insert into moments (filename) VALUES ("'+filename+'");', function(err, results){
 //                        if(err){
 //                            console.error(err);
@@ -81,9 +82,17 @@ app.post('/', function(req, res){
     });
 });
 app.get('/colorLab', function(req, res){
-    
+    var imageData = fs.readFileSync(uploads + app.get("targetName")); 
+    var image = new Image();
+    image.src = imageData;
     res.render('colorLab.html',{
-        imageSrc : app.get("targetName")
+        imageSrc : app.get("targetName"),
+        pickedColors : Impressive(image).toHexString()
+    });
+});
+app.get('/gradientLab', function(req, res){
+    res.render('gradientLab.html',{
+
     });
 });
 app.get('/imageAging', function(req, res){
