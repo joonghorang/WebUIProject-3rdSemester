@@ -19,6 +19,25 @@ if(isNodeModule){
 }
 
 var commonCanvas = {
+    Canvas : Canvas,
+    
+    setPixel : function(target, x, y, r, g, b, a){
+        color = typeof r === 'object' ? r : {r: r, g: g, b: b, a: a};
+        if(target.constructor.name === "CanvasRenderingContext2D"){
+            target.fillStyle = 'rgba('+color.r+','+color.g+','+color.b+','+rolor.a+')';
+            target.fillRect(x,y,1,1);
+        } else if(target.constructor.name === "ImageData"){
+            if(a < 1) parseInt( a * 255 );
+            var index = (y * target.width + x) * 4;
+            target.data[index + 0] = color.r;
+            target.data[index + 1] = color.g;
+            target.data[index + 2] = color.b;
+            target.data[index + 3] = color.a;
+        } else {
+            throw target;
+        }
+    },
+    
     createCanvasByImage : function(img, saturate){
     //    console.log(__basename + " - function() createCanvasByImage start ...");
     //    console.log(img);
@@ -48,17 +67,19 @@ var commonCanvas = {
         var r = parseInt(hex.slice(1,3),16);
         var g = parseInt(hex.slice(3,5),16);
         var b = parseInt(hex.slice(5,7),16);
-        return {r: r, g: g, b: b};
+        return {r: r, g: g, b: b, a: 255};
     },
     rgb2Hex : function(r,g,b){
-        var rStr = r.toString(16);
-        if(rStr.length == 1) rStr = "0" + rStr;
-        var gStr = g.toString(16);
-        if(gStr.length == 1) gStr = "0" + gStr;
-        var bStr = b.toString(16);
-        if(bStr.length == 1) bStr = "0" + bStr;
-
-        return "#"+rStr+gStr+bStr;
+        if(typeof r === 'object'){
+            g = r.g;
+            b = r.b;
+            r = r.r;
+        }
+        function dec2HexStr(d){   
+            var hStr = d.toString(16);
+            return hStr.length === 1? "0" + hStr : hStr;
+        }
+        return "#"+dec2HexStr(r)+dec2HexStr(g)+dec2HexStr(b);
     }
 };
     

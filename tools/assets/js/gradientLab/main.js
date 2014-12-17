@@ -1,12 +1,23 @@
-define(["app/gradation"], function(gradation){
+define(["commonCanvas","app/gradation"], function(cmCvs, grad){
+    var INK_AND_PAPER_WIDTH = 400;
+    var INK_AND_PAPER_HEIGHT = 400;
+    Canvas = cmCvs.Canvas;
     
-    var shell = document.getElementById("shell");
-    var CANVAS_WIDTH = window.innerWidth - 10;
-    var CANVAS_HEIGHT = 200;
+    ink1 = Canvas(INK_AND_PAPER_WIDTH, INK_AND_PAPER_HEIGHT);
+    ink2 = Canvas(INK_AND_PAPER_WIDTH, INK_AND_PAPER_HEIGHT);
+    ink3 = Canvas(INK_AND_PAPER_WIDTH, INK_AND_PAPER_HEIGHT);
+    
+    inkWrapper = document.getElementById("gradation-wrapper");
+    
+    grad.inkAndPaper(ink1, "#FFFFFF", "#0365F8", 0.5, 0.5);
+    ink1.class = "ink";
+    inkWrapper.appendChild(ink1);
+//    var CANVAS_WIDTH = window.innerWidth - 10;
+//    var CANVAS_HEIGHT = 200;
 
-    var image = new Image();
-    image.src = "target_image_data";
-    image.addEventListener("load", function(){
+//    var image = new Image();
+//    image.src = "target_image_data";
+//    image.addEventListener("load", function(){
 //        var iCanvas = commonCanvas.createCanvasByImage(this);
 //        shell.appendChild(iCanvas);      
 //
@@ -28,26 +39,26 @@ define(["app/gradation"], function(gradation){
 //        shell.appendChild(gradation.cv(iCanvas, [ 0,-1, 0,
 //                                       -1, 5,-1,
 //                                        0,-1, 0]));    
-    });
+//    });
 
-    var canvas = document.createElement("canvas");
-    canvas.id = "gradient";
-    canvas.width = CANVAS_WIDTH;
-    canvas.height = CANVAS_HEIGHT;
-    shell.appendChild(canvas);
-
-    var canvas2 = document.createElement("canvas");
-    canvas2.id = "gradient2";
-    canvas2.width = CANVAS_WIDTH;
-    canvas2.height = CANVAS_HEIGHT;
-    shell.appendChild(canvas2);
-
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(20,20, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-    gradation.gradient(canvas, "#46DB23", "#E6E032");
-    gradation.gradientWithNoise(canvas2, "#46DB23","#E6E032", 0.3);
+//    var canvas = document.createElement("canvas");
+//    canvas.id = "gradient";
+//    canvas.width = CANVAS_WIDTH;
+//    canvas.height = CANVAS_HEIGHT;
+//    shell.appendChild(canvas);
+//
+//    var canvas2 = document.createElement("canvas");
+//    canvas2.id = "gradient2";
+//    canvas2.width = CANVAS_WIDTH;
+//    canvas2.height = CANVAS_HEIGHT;
+//    shell.appendChild(canvas2);
+//
+//    var ctx = canvas.getContext("2d");
+//    ctx.fillStyle = "#000000";
+//    ctx.fillRect(20,20, CANVAS_WIDTH, CANVAS_HEIGHT);
+//
+//    gradation.gradient(canvas, "#46DB23", "#E6E032");
+//    gradation.gradientWithNoise(canvas2, "#46DB23","#E6E032", 0.3);
 
     //shell.appendChild(drawHistogram(testGaussian(0.5), window.innerWidth, 200));
     //shell.appendChild(drawHistogram(testGaussian(1.0), window.innerWidth, 200));

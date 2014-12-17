@@ -4,16 +4,16 @@ var isRequirejs = typeof define === 'function' && define.amd;
     
 var Canvas;
 var Image;
-var gaussianNoise;
-var commonCanvas;
+var gNoise;
+var cmCvs;
     
 /* Dependency, Export Setting */
 if(isNodeModule){
     //Node module dependency
     Canvas = require("canvas");   
     Image = Canvas.Image;
-    gaussianNoise = require("gaussian-noise");
-    commonCanvas = require("commonCanvas");
+    gNoise = require("gaussian-noise");
+    cmCvs = require("commonCanvas");
     //export node module
     module.exports = gradation;
 }else{
@@ -26,9 +26,9 @@ if(isNodeModule){
     }
     if(isRequirejs){
         //export Requirejs module
-        define(["commonCanvas","gaussianNoise"],function(comCanLocal,gauNoiLocal){ 
-            commonCanvas = comCanLocal;
-            gaussianNoise = gauNoiLocal;
+        define(["commonCanvas","gaussianNoise"],function(commonCanvas,gaussianNoise){ 
+            cmCvs = commonCanvas;
+            gNoise = gaussianNoise;
             return gradation; 
         });
     }
@@ -40,11 +40,105 @@ if(isNodeModule){
     
 var gradation = {
     inkAndPaper : function(canvas, paperColor, inkColor, width, height){
+        paperColor = typeof paperColor === "object" ? paperColor : cmCvs.hex2Rgb(paperColor);
+        inkColor = typeof inkColor === "object" ? inkColor : cmCvs.hex2Rgb(inkColor);
         
-    }
+        semiInkRate = 0.3;
+        semiInkColor = {
+            r : inkColor.r * semiInkRate + paperColor.r * (1-semiInkRate),
+            g : inkColor.g * semiInkRate + paperColor.g * (1-semiInkRate),
+            b : inkColor.b * semiInkRate + paperColor.b * (1-semiInkRate),
+            a : 255
+        }
+        var ctx = canvas.getContext('2d');
+        var imageData = ctx.createImageData(canvas.width,canvas.height);
+   
+        var len = 200;
+        var r1 = 0.2 * len;
+        var r2 = 0.7 * len;
+        var rRate = 4/7;
+        
+        width = canvas.width * width;
+        height = canvas.height * height;
+        
+        function toDegree(x, y){
+            return Math.atan2(x,y) * 180 / Math.PI;
+        }
+        
+        var degreeRange2 = [r2];
+        for ( var i =1 ; i< 3600; ++i){
+            degreeRange2[i] = degreeRange2[i-1] + gNoise.genGaussianNoise(0.3);   
+        }
+        var degreeRange1 = [];
+        for ( var i =0; i<degreeRange2.length; ++i){
+            degreeRange1[i] = degreeRange2[i] * rRate;
+        }
+        for(var y = 0; y < canvas.height; ++y){
+            for(var x = 0; x < canvas.width; ++x){
+                var deltaX = width -x;
+                var deltaY = height -y;
+                var degree = toDegree(deltaX,deltaY);
+                var degreeIdx = Math.round(degree*10) + degreeRange1.length/2 -1;
+                var r = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY, 2));
+                var color;
+                if(r < degreeRange1[degreeIdx]){
+                    color = inkColor;       
+                }else if( r > degreeRange2[degreeIdx]){
+                    color = paperColor;
+                }else{
+                    var rate = (r - degreeRange1[degreeIdx])/(degreeRange2[degreeIdx] - degreeRange1[degreeIdx]);
+                    color = {
+                        r : inkColor.r * (1-rate) + semiInkColor.r * (rate),
+                        g : inkColor.g * (1-rate) + semiInkColor.g * (rate),
+                        b : inkColor.b * (1-rate) + semiInkColor.b * (rate),
+                        a : 255
+                    };
+                }
+                cmCvs.setPixel(imageData, x, y, color);
+            }
+        }
+        
+        
+//        var xpos1 = 0.2;
+//        var xpos2 = 0.7;
+//        var xpos1 = canvas.width * xpos1;
+//        var xpos2 = canvas.width * xpos2;
+//        
+//        var x1poses = [xpos1];
+//        var x2poses = [xpos2];
+//        for(var i =1; i< canvas.height; ++i){
+//            var noise = gNoise.genGaussianNoise(2);
+//            x1poses[i] = x1poses[i-1] + parseInt(gNoise.genGaussianNoise());
+//            noise = gNoise.genGaussianNoise(4);
+//            x2poses[i] = x2poses[i-1] + parseInt(gNoise.genGaussianNoise());
+//        }
+//        
+//        for(var y = 0; y < canvas.height; ++y){
+//            for(var x = 0; x < canvas.width; ++x){
+//                var color;
+//                if( x < x1poses[y]){
+//                    color = inkColor;       
+//                }else if( x > x2poses[y]){
+//                    color = paperColor;
+//                }else{
+//                    var rate = (x2poses[y] - x)/(x2poses[y] - x1poses[y]);
+//                    color = {
+//                        r : inkColor.r * (rate) + semiInkColor.r * (1-rate),
+//                        g : inkColor.g * (rate) + semiInkColor.g * (1-rate),
+//                        b : inkColor.b * (rate) + semiInkColor.b * (1-rate),
+//                        a : 255
+//                    };
+//                }
+//                cmCvs.setPixel(imageData, x, y, color);
+//            }
+//        }
+        
+        ctx.putImageData(imageData, 0,0);  
+    },
+    
     gradient : function(canvas, color1, color2){
-        var rgb1 = commonCanvas.hex2Rgb(color1);
-        var rgb2 = commonCanvas.hex2Rgb(color2); 
+        var rgb1 = cmCvs.hex2Rgb(color1);
+        var rgb2 = cmCvs.hex2Rgb(color2); 
         var ctx = canvas.getContext("2d");
         var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
 
@@ -63,8 +157,8 @@ var gradation = {
     },
 
     gradientWithNoise : function(canvas, color1, color2, noisePercent){
-        var rgb1 = commonCanvas.hex2Rgb(color1);
-        var rgb2 = commonCanvas.hex2Rgb(color2); 
+        var rgb1 = cmCvs.hex2Rgb(color1);
+        var rgb2 = cmCvs.hex2Rgb(color2); 
         var ctx = canvas.getContext("2d");
         var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
 
@@ -72,7 +166,7 @@ var gradation = {
         var noise;
         for(var y = 0; y < canvas.height; ++y){
             if(Math.random() > 1 - noisePercent )
-            { noise = gaussianNoise.genGaussianNoise( canvas.width/ 32);
+            { noise = gNoise.genGaussianNoise( canvas.width/ 32);
             }else{ noise = 0; }
             for(var x = 0; x< canvas.width; ++x){
 
