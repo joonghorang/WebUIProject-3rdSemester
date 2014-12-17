@@ -1,17 +1,12 @@
-var test_genOutputs = function(){
+var test_genOutputs = function(canvas){
     var colors = document.getElementById("moments");
-    for( var i = 0; i < 30; ++i){
-        var moment = document.createElement("li");
-        moment.setAttribute("class", "moment");
-
-        var canvas = document.createElement("canvas");
+    for( var i = 0; i < moments.childElementCount; ++i){
         canvas.width  = colors.offsetHeight; 
         canvas.height = colors.offsetHeight;
         test_giveRandomColorTo(canvas);
-        moment.appendChild(canvas);
-        moments.appendChild(moment);
     }
 }
+
 var test_giveRandomColorTo = function(canvas){
     var ctx = canvas.getContext("2d");
     ctx.fillStyle = rgbToHexStr(parseInt(Math.random()*256), parseInt(Math.random()*256), parseInt(Math.random()*256));
