@@ -78,19 +78,19 @@ function textInputEventManager(){
 			var num = textInput.value.length;
 			if(num < 5){
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "60px";
+				textInput.style.fontSize = "50px";
 			} else if(num < 10) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "55px";
+				textInput.style.fontSize = "45px";
 			} else if(num < 15) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "50px";
+				textInput.style.fontSize = "40px";
 			} else if(num < 20) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "45px";
+				textInput.style.fontSize = "35px";
 			} else {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "40px";
+				textInput.style.fontSize = "30px";
 			}
 		} else {
 		}	
@@ -106,7 +106,7 @@ function textInputEventManager(){
 
 	EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 		textInput.value = "";
-		textInput.style.fontSize = "60px";
+		textInput.style.fontSize = "50px";
 	});
 
 	EventUtil.addHandler(textInput, "paste", function(event){ // 붙이기 방지 
