@@ -9,13 +9,15 @@ var textValue;	// 입력받은 문자열 저장 변수
 var fR = 255;
 var fG = 255;
 var fB = 255;
-var firstColor = '#ffffff';	// 그라데이션 칼라 초기값
-var secondColor = '#000000';
+// var firstColor = '#ffffff';	// 그라데이션 칼라 초기값
+// var secondColor = '#000000';
 var offset = 4;
+
 window.onload = function(){
 	textInputEventManager();
-	drawGradation(firstColor, secondColor);
+	// drawGradation(firstColor, secondColor);
 };
+
 function changeDecToHexColor(r, g, b){
     var result = "#" + zeroCheck((r).toString(16)) 
                      + zeroCheck((g).toString(16)) 
@@ -78,19 +80,19 @@ function textInputEventManager(){
 			var num = textInput.value.length;
 			if(num < 5){
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "60px";
+				textInput.style.fontSize = "50px";
 			} else if(num < 10) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "55px";
+				textInput.style.fontSize = "45px";
 			} else if(num < 15) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "50px";
+				textInput.style.fontSize = "40px";
 			} else if(num < 20) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "45px";
+				textInput.style.fontSize = "35px";
 			} else {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "40px";
+				textInput.style.fontSize = "30px";
 			}
 		} else {
 		}	
@@ -106,7 +108,7 @@ function textInputEventManager(){
 
 	EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 		textInput.value = "";
-		textInput.style.fontSize = "60px";
+		textInput.style.fontSize = "50px";
 	});
 
 	EventUtil.addHandler(textInput, "paste", function(event){ // 붙이기 방지 

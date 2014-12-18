@@ -21,26 +21,23 @@ window.addEventListener('DOMContentLoaded', function(){
 	test_genOutputs();
 }, false);
 
+function display(elements, state){
+    for(var i=0 ; i<elements.length ; i++){
+        elements[i].style.display = state === 'show'? 'block':'none';
+    }
+};
+
 itemFactoryButton.addEventListener('click', function(){
-    mainContentWrapper.style.display = 'none';
-    itemFactory.style.display = 'block';
-    itemFactoryButton.style.display = 'none';
-    uploadFile.style.display = 'block';
-    uploadText.style.display = 'none';
-    closeButton.style.display = 'block';
-    previewImg.style.display = 'block';
+    display([itemFactory,uploadFile,closeButton, previewImg],'show');
+    display([mainContentWrapper, itemFactoryButton, uploadText],'hide');
 },false);
 
 closeButton.addEventListener('click', function(){
-    mainContentWrapper.style.display = 'block';
-    itemFactory.style.display = 'none';
-    itemFactoryButton.style.display = 'block';
-    closeButton.style.display = 'none';
-    
     if(previewImg.childNodes[0] !== undefined){
         previewImg.removeChild(previewImg.childNodes[0]);
     }   
-    previewImg.style.display = 'none';
+    display([mainContentWrapper, itemFactoryButton],'show');
+    display([itemFactory, closeButton, previewImg],'hide');
 },false);
 
 fileInput.addEventListener('click', function(){
@@ -57,7 +54,7 @@ fileInput.addEventListener('change', function(){
     imgElement.setAttribute('id', 'input-image');
     imgElement.src=imgURL; 
     previewImg.appendChild(imgElement);   
-    previewImg.style.display = 'block';
+    display(previewImg, 'show');
 });
         
         
@@ -83,16 +80,19 @@ confirmButton.addEventListener('click', function(e){
         request.open("POST" , "/upload-image" , true);
         request.send(formData);
         request.addEventListener('load', function(){
-            //받아온 JSON
-            console.log(request.responseText);
-            var result = JSON.parse(request.responseText)
+            //받아온 데이터는 colorList 배열에 담는다.
+            var colorList = JSON.parse(request.responseText)
+            console.log(colorList);
+            //텍스트 입력창으로 전환 : timer 필요함
+            display([uploadText],'show');
+            display([uploadFile, closeButton],'hide');
 
-            //텍스트 입력창으로 전환
-            uploadText.style.display = 'block';
-            uploadFile.style.display = 'none';
-            closeButton.style.display = 'none';
+            //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
+            //changeGradation()은????
             textInput.value = "30자 이내로 입력하세요.";
-            //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기(bgColor=result.rgb)    
+            firstColor = colorList[0];
+            secondColor = colorList[1];
+            drawGradation(colorList[0], colorList[1]);   
         });
     }
     
@@ -106,7 +106,7 @@ uploadDrag.addEventListener("drop", function(e){
     fileInput.files = files;
 }, true);
     
-//왜인지 모르게 이부분이 있어야 드래그로 사진을 옮겼을때 크롬에서 이미지가 열려져버리는 일이 발생하지 않는다.
+//브라우저는 이미지를 받으면 바로 이미지를 여는 기본기능이 있기 때문에, 기본기능을 막아둔다.
 uploadDrag.addEventListener("dragover", function(e){
     e.stopPropagation();
     e.preventDefault();
@@ -117,38 +117,60 @@ submitButton.addEventListener('click', function(e){
     e.preventDefault();
     var request = new XMLHttpRequest();
     var formData = new FormData();
+
     formData.append("textInput", textInput.value);
-    //파일 없을때 에러처리
-    if(fileInput.files.item(0)===null){
-        alert('no image');
-    }
     formData.append("image", fileInput.files[0]);
     
     request.open("POST", "/upload-text", true);
     request.send(formData);
-    
-    //데이터 전송이 다 끝난 뒤에 itemFactory close
-    itemFactory.style.display = 'none';
-    itemFactoryButton.style.display = 'block';
-    mainContentWrapper.style.display = 'block';
-
-    //새로운 캔버스 객체를 메인페이지에 생성하는 코드
-    //덕성이가 만든 css코드를 이해못하겠으나 자고있으므로, 
-    //내일 신영이에게 물어봄... 
+  
+  //새로운 캔버스 객체를 메인페이지에 생성하는 코드  
     var addLi = document.createElement('li');
     addLi.setAttribute('class', 'moment');
     moments.appendChild(addLi);
-    var addCanvas = document.createElement('canvas');
-    addCanvas.style.backGroundColor = "black";
-    request.onreadystatechange = function(){
-        if(request.readyState === 4 && request.status === 200){
-            addCanvas.setAttribute('id', request.responseText);
-            addLi.appendChild(addCanvas);
-            test_genOutputs(addCanvas);
-            console.log(1);
-        }
-    };
+    
+    var addA = document.createElement('a');
 
+
+    var addCanvas = document.createElement('canvas');
+
+    request.addEventListener('load', function(){
+        //데이터 전송이 다 끝난 뒤에 itemFactory close
+        display([itemFactoryButton, mainContentWrapper],'show');
+        display([itemFactory],'hide');
+
+        var result = JSON.parse(request.responseText);
+        console.log(result);
+
+        var ctx = addCanvas.getContext("2d");
+        ctx.fillStyle = result.colorList[0];
+        ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
+
+        addA.setAttribute('id', "a" + result.fileName);
+        addA.href = "/output/" + result.fileName;
+        addLi.appendChild(addA);
+        
+        addCanvas.setAttribute('id', "pc" + result.fileName);
+        addA.appendChild(addCanvas);
+        
+        // addFullCanvas.setAttribute('id', "fc" + request.responseText);
+        // addFullCanvas.setAttribute('class', "full-canvas");
+        // addBackCanvas.setAttribute('id', "bc" + request.responseText);
+        // addFullCanvas.setAttribute('class', "back-canvas");
+
+        // addFullCanvas.style.display = "none";
+        // addBackCanvas.style.display = "none";
+
+        // addFullLi.appendChild(addFullCanvas);    
+        // addFullLi.appendChild(addBackCanvas);            
+
+        test_genOutputs(addCanvas);
+        // EventUtil.addHandler(addA, "click", function(event){
+        //     itemFactory.style.display = "none";
+        //     wrapper.style.display = "none";
+        //     itemFactoryButtonWrapper.style.display = "none";
+        // });
+    });
 },false);
 
 //moments bar 안의 moment 클릭시 output페이지로 이동

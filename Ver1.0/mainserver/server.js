@@ -4,12 +4,11 @@ var formidable = require('formidable');
 var fs = require('fs');
 var ejs = require('ejs');
 var mysql = require('mysql');
-//var impressive = require('impressive');
+var Impressive = require('impressive');
 
 //impressive(image).toRgb();
-//var Canvas = require('canvas');
-//var Image = Canvas.Image;
-//var imgP = require("./controllers/pickImpColor.js");
+var Canvas = require('canvas');
+var Image = Canvas.Image;
 var mytools = require("./controllers/mytools.js");
 
 //express 모듈을 사용해 웹서버를 생성한다.
@@ -43,6 +42,7 @@ app.get('/', function(request, response){
     response.render('main',mainData);
 });
 
+/*/output/picId 형태 라우터로 이동*/
 app.get('/output', function(request, response){
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
@@ -67,26 +67,15 @@ app.post('/upload-image', function(request, response){
         else{
             //readFile : 업로드된 파일을 tmp디렉토리에 저장한다.
             fs.readFile(files.image.path, function(error, data){
-                /* 덕성 comment
-                Color 로직 
-                readFile되었을 때 data를 읽고 적절한 칼라를 뽑아 pickedColors에 저장하고 send해줍니다.
-                뽑은 pickedColors를 클라이언트로 보내는 작업과는 비동기적으로 writeFile을 진행합니다.
-                client가 받은 pickedColors가 json으로 잘 작동하지 않으면 
-                response.send(JSON.stringify(pickedColors));로 대체해서 시도해보세요.
-                */
-//                var img = new Image();
-//                img.src = data;
-//                var canvas = new Canvas(img.width, img.height);
-//                var ctx = canvas.getContext('2d');
-//                ctx.drawImage(img, 0, 0);
-//                
-//                var pickedColors = imgP.pickColors(canvas);
-//                
+                /*colorLab logic*/
+                var img = new Image();
+                img.src = data;
+                var colorList = Impressive(img).toHexString();
+
 //                /*DB INSERT : date + RGB data*/    
 //                /*//DB INSERT*/
 //                
-//                response.send(pickedColors);
-                response.send({r: 255, g: 100, b: 102});
+                response.send(colorList);
                 response.end();
             });
         }
@@ -115,10 +104,21 @@ app.post('/upload-text', function(request, response){
                         throw error;
                     }
                     else {
+                        var img = new Image();
+                        img.src = data;
+                        var colorList = Impressive(img).toHexString();
+
                         /*DB INSERT : text, filePath*/
                         /*//DB INSERT : text*/
+                        
+                        var result = {
+                            "fileName" : fileName,
+                            "colorList" : colorList
+                        };
+
                         // 새로운 캔버스에서 사용할 아이디를 fileName으로 맞춘다. 
-                        response.send(fileName);
+                        response.send(result);
+                        response.end();
                     }
                 });
             });
@@ -131,44 +131,4 @@ app.listen(3000, function(){
     console.log('server running at port 3000...');
 });
 
-//DB connect : .db로 추후 수정
-//var connection = mysql.createConnection({
-// host :'localhost',
-// user : 'joong',
-// password : 'db1004',
-// database : 'joongdb'
-//});
-//connection.connect(function(err){
-// if(err){
-//     console.error('mysql connection error');
-//     console.error(err);
-//     throw err;
-// }
-//});
-                /*DB INSERT : date + RGB data*/    
-//                        var d = new Date();
-//                        var dateTime = d.getFullYear() + '-'
-//                                        + d.getMonth() + '-'
-//                                        + d.getDate() + '  ' 
-//                                        + d.getHours() + ':'
-//                                        + d.getMinutes() + ':'
-//                                        + d.getSeconds(); 
-//                                                               
-//                        connection.query('INSERT INTO filePath (path, date) VALUES(' //+ PID + ',' 
-//                                                                        + '"' + files.image.path.toString() + '"' 
-//                                                                        + ',"' + files.image.lastModifiedDate.toString() + '");', function(err, res){
-//                            if(err) {
-//                                throw err;
-//                            }
-//                           // console.log(res);
-//                        });
-//                        
-//                        connection.query('SELECT * FROM filePath', function(err, mysqlRes){
-//                            if(err) {
-//                                throw err;
-//                            }
-//                            var stringifyResult = JSON.stringify(mysqlRes);
-//                            response.send(stringifyResult);
-//                            console.log(stringifyResult);
-//                        });
-//              /*//DB INSERT*/
+

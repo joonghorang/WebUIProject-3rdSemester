@@ -1,9 +1,24 @@
+// utility function
+function show(ele){
+    ele.style.display = "display";
+}
+function hide(ele){
+    ele.style.display = "none";
+}
+
+function display(elements, state){
+    for(var i=0 ; i<elements.length ; i++){
+        elements[i].style.display = state === 'show'? 'block':'none';
+    }
+};
+
+// test MainPage Generator
 var test_genOutputs = function(canvas){
     var colors = document.getElementById("moments");
     for( var i = 0; i < moments.childElementCount; ++i){
         canvas.width  = colors.offsetHeight; 
         canvas.height = colors.offsetHeight;
-        // test_giveRandomColorTo(canvas);
+        test_giveRandomColorTo(canvas);
     }
 }
 

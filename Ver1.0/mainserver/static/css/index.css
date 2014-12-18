@@ -181,7 +181,7 @@ input:focus{
     right: 0;
     background-color: transparent;
     font-family: "NanumMyeongjo";
-    font-size : 60px;
+    font-size : 50px;
 
     text-align: center;
     vertical-align: middle;
@@ -249,6 +249,15 @@ input:focus{
     height : 100%;
     position: absolute;
     overflow: hidden;
+}
+
+#moment-close-button{
+    z-index : 210;
+    width : 30px;
+    height : 30px;
+    padding : 30px;
+    margin-left : 93%;
+    display : none;
 }
 
 .moment{
