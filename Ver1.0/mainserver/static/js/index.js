@@ -128,15 +128,11 @@ submitButton.addEventListener('click', function(e){
     var addLi = document.createElement('li');
     addLi.setAttribute('class', 'moment');
     moments.appendChild(addLi);
-    var addCanvas = document.createElement('canvas');
+    
+    var addA = document.createElement('a');
 
-    var addFullLi = document.createElement('li');
-    addFullLi.setAttribute('class', 'fullMoment');
-    fullViewMoments.appendChild(addFullLi);
 
     var addCanvas = document.createElement('canvas');
-    var addFullCanvas = document.createElement('canvas');
-    var addBackCanvas = document.createElement('canvas');
 
     request.addEventListener('load', function(){
         //데이터 전송이 다 끝난 뒤에 itemFactory close
@@ -144,39 +140,36 @@ submitButton.addEventListener('click', function(e){
         display([itemFactory],'hide');
 
         var result = JSON.parse(request.responseText);
+        console.log(result);
+
         var ctx = addCanvas.getContext("2d");
         ctx.fillStyle = result.colorList[0];
         ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
 
-
-
-        addCanvas.setAttribute('id', request.responseText);
-        addLi.appendChild(addCanvas);
+        addA.setAttribute('id', "a" + result.fileName);
+        addA.href = "/output/" + result.fileName;
+        addLi.appendChild(addA);
         
-        addFullCanvas.setAttribute('id', "fc" + request.responseText);
-        addFullCanvas.setAttribute('class', "full-canvas");
-        addBackCanvas.setAttribute('id', "bc" + request.responseText);
-        addFullCanvas.setAttribute('class', "back-canvas");
+        addCanvas.setAttribute('id', "pc" + result.fileName);
+        addA.appendChild(addCanvas);
+        
+        // addFullCanvas.setAttribute('id', "fc" + request.responseText);
+        // addFullCanvas.setAttribute('class', "full-canvas");
+        // addBackCanvas.setAttribute('id', "bc" + request.responseText);
+        // addFullCanvas.setAttribute('class', "back-canvas");
 
-        addFullCanvas.style.display = "none";
-        addBackCanvas.style.display = "none";
+        // addFullCanvas.style.display = "none";
+        // addBackCanvas.style.display = "none";
 
-        addFullLi.appendChild(addFullCanvas);    
-        addFullLi.appendChild(addBackCanvas);            
+        // addFullLi.appendChild(addFullCanvas);    
+        // addFullLi.appendChild(addBackCanvas);            
 
         test_genOutputs(addCanvas);
-        EventUtil.addHandler(addCanvas, "click", function(event){
-            itemFactory.style.display = "none";
-            wrapper.style.display = "none";
-            itemFactoryButtonWrapper.style.display = "none";
-
-            var targetFullCanvas = document.getElementById("fc" + event.target.id);
-            var targetBackCanvas = document.getElementById("bc" + event.target.id);
-            targetFullCanvas.style.display = "block";
-
-            targetBackCavnas.style.backgroundColor = "yellow";
-            targetBackCanvas.style.display = "block";
-        });
+        // EventUtil.addHandler(addA, "click", function(event){
+        //     itemFactory.style.display = "none";
+        //     wrapper.style.display = "none";
+        //     itemFactoryButtonWrapper.style.display = "none";
+        // });
     });
 },false);
 
