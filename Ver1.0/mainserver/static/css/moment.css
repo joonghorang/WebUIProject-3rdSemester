@@ -9,13 +9,13 @@ html, body{
 
     position: absolute;
 
-    background-image:url( "../image/moment_bg2.jpg");
+    background-image:url( "../image/concrete_texture.jpg");
     background-size: cover;
     background-attachment: fixed;
     background-position: center top;
 }
 
-#frame {
+#moment {
     z-index: 100;
     width : 29%;
     padding-bottom: 29%;
@@ -23,16 +23,45 @@ html, body{
     position: absolute;
     left: 0;
     right:0;
-    margin: 10.5% auto 0 auto;
-    background-color: #82A3D2;
+    margin: 5.5% auto 0 auto;
+    box-shadow: 10px 10px 15px #555555;
 }
 
+#text-canvas{
+    z-index : 106;
+    width: 70%;
+    height: 70%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+#back-canvas{
+    z-index : 105;
+        width: 70%;
+    height: 70%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
 
-
-.output-text {
+#output-text {
     z-index: 110;
     width: 100%;
     height: 100%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: yellow;
 }
 
 #output-image-wrapper {
@@ -45,7 +74,9 @@ html, body{
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0);
+
+    background-color: blue;
+    display : none;
 }
 
 .output-image {
@@ -72,13 +103,13 @@ and (max-device-height : 680px)
         
         position: absolute;
         
-        background-image: url(../image/moment_mobile_bg.jpg);
+        background-image: url(../image/concrete_texture.jpg);
         background-size: auto;
         background-attachment: fixed;
         background-position: center center;
     }
-    #frame{
-        background-color: #3ad274;
+    #moment{
+        background-color: yellow;
         
     }
 }
@@ -107,7 +138,7 @@ and (max-device-width : 680px)
 and (min-device-height : 320px)
 and (max-device-height : 680px)
 and (orientation : landscape){
-    #frame{
+    #moment{
         width : 85vh;
         height: 85vh;
         padding: 0;
