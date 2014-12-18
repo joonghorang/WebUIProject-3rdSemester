@@ -251,6 +251,28 @@ input:focus{
     overflow: hidden;
 }
 
+#full-view-wrapper{
+    z-index : 200;
+    width : 100%;
+    height : 100%;
+}
+#full-view-moments{
+    z-index : 205;
+    width : 100%;
+    height : 100%;
+}
+#moment-close-button{
+    z-index : 210;
+    width : 30px;
+    height : 30px;
+    padding : 30px;
+    margin-left : 93%;
+    display : none;
+}
+
+.full-canvas{
+    background-color : yellow;
+}
 .moment{
     z-index: 30;
     float: left;

@@ -11,14 +11,29 @@ var submitButton = document.getElementById("submit-button");
 var uploadDrag = document.getElementById("upload-drag");
 var itemFactory = document.getElementById("itemFactory");
 var itemFactoryButton = document.getElementById("itemFactory-button");
+var itemFactoryButtonWrapper = document.getElementById("itemFactory-button-wrapper");
+
 var mainContentWrapper = document.getElementById("wrapper");
 var uploadFile = document.getElementById("upload-file");
 var uploadText = document.getElementById("upload-text");
 var closeButton = document.getElementById("close-button");
 var previewImg = document.getElementById('preview-image');
+// utility function
+function show(ele){
+    ele.style.display = "none";
+}
+function show(ele){
+    ele.style.display = "hide";
+}
 
 window.addEventListener('DOMContentLoaded', function(){  
 	test_genOutputs();
+    // 각각의 유닛에게 클릭시 아웃풋으로 변환하는 초기화코드
+    for(var i = 0; i < moments.children.length; i++){
+        EventUtil.addHandler(moments.children[i].firstElementChild, "click", function(){
+            console.log(1);
+        });
+    }
 }, false);
 
 function display(elements, state){
@@ -33,6 +48,22 @@ itemFactoryButton.addEventListener('click', function(){
 },false);
 
 closeButton.addEventListener('click', function(){
+EventUtil.addHandler(itemFactoryButton, 'click', function(){
+    hide(mainContentWrapper);
+    show(itemFactory);
+    hide(itemFactoryButton);
+    show(uploadFile);
+    hide(uploadText);
+    show(closeButton);
+    show(previewImg);
+},false);
+
+EventUtil.addHandler(closeButton, 'click', function(){
+    mainContentWrapper.style.display = 'block';
+    itemFactory.style.display = 'none';
+    itemFactoryButton.style.display = 'block';
+    closeButton.style.display = 'none';
+    
     if(previewImg.childNodes[0] !== undefined){
         previewImg.removeChild(previewImg.childNodes[0]);
     }   
@@ -40,11 +71,11 @@ closeButton.addEventListener('click', function(){
     display([itemFactory, closeButton, previewImg],'hide');
 },false);
 
-fileInput.addEventListener('click', function(){
+EventUtil.addHandler(fileInput, 'click', function(){
     fileInput.value = null; //input reset
 });
 //fileInput change이벤트 : 여기로 colorLab요청 로직 옮기기.
-fileInput.addEventListener('change', function(){
+EventUtil.addHandler(fileInput, 'change', function(){
     var imgFile = this.files.item(0);
     var imgURL = URL.createObjectURL(imgFile);
     if(previewImg.childNodes[0] !== undefined){
@@ -59,7 +90,7 @@ fileInput.addEventListener('change', function(){
         
         
 //confirm버튼 누르면 이미지를 서버로 보내기.
-confirmButton.addEventListener('click', function(e){
+EventUtil.addHandler(confirmButton, 'click', function(e){
 	e.preventDefault();
 
     //파일 없을때 에러처리
@@ -80,6 +111,7 @@ confirmButton.addEventListener('click', function(e){
         request.open("POST" , "/upload-image" , true);
         request.send(formData);
         request.addEventListener('load', function(){
+
             //받아온 데이터는 colorList 배열에 담는다.
             var colorList = JSON.parse(request.responseText)
             console.log(colorList);
@@ -89,6 +121,13 @@ confirmButton.addEventListener('click', function(e){
 
             //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
             //changeGradation()은????
+            //받아온 JSON
+            var result = JSON.parse(request.responseText)
+
+            //텍스트 입력창으로 전환
+            uploadText.style.display = 'block';
+            uploadFile.style.display = 'none';
+            closeButton.style.display = 'none';
             textInput.value = "30자 이내로 입력하세요.";
             drawGradation(colorList[0], colorList[1]);   
         });
@@ -96,7 +135,7 @@ confirmButton.addEventListener('click', function(e){
     
 }, false);
 
-uploadDrag.addEventListener("drop", function(e){
+EventUtil.addHandler(uploadDrag, "drop", function(e){
     e.stopPropagation();
     e.preventDefault();
     var files = e.target.files || e.dataTransfer.files;
@@ -106,12 +145,14 @@ uploadDrag.addEventListener("drop", function(e){
     
 //브라우저는 이미지를 받으면 바로 이미지를 여는 기본기능이 있기 때문에, 기본기능을 막아둔다.
 uploadDrag.addEventListener("dragover", function(e){
+//왜인지 모르게 이부분이 있어야 드래그로 사진을 옮겼을때 크롬에서 이미지가 열려져버리는 일이 발생하지 않는다.
+EventUtil.addHandler(uploadDrag, "dragover", function(e){
     e.stopPropagation();
     e.preventDefault();
 }, true);
 
 //submit버튼 누르면 텍스트 데이터를 서버로 보내기.
-submitButton.addEventListener('click', function(e){
+EventUtil.addHandler(submitButton, 'click', function(e){
     e.preventDefault();
     var request = new XMLHttpRequest();
     var formData = new FormData();
@@ -126,6 +167,11 @@ submitButton.addEventListener('click', function(e){
     var addLi = document.createElement('li');
     addLi.setAttribute('class', 'moment');
     moments.appendChild(addLi);
+
+    var addFullLi = document.createElement('li');
+    addFullLi.setAttribute('class', 'fullMoment');
+    fullViewMoments.appendChild(addFullLi);
+
     var addCanvas = document.createElement('canvas');
 
     request.addEventListener('load', function(){
@@ -140,8 +186,39 @@ submitButton.addEventListener('click', function(e){
         addCanvas.setAttribute('id', result.fileName);
         addLi.appendChild(addCanvas);
     });
+    var addFullCanvas = document.createElement('canvas');
+    var addBackCanvas = document.createElement('canvas');
+    request.onreadystatechange = function(){
+        if(request.readyState === 4 && request.status === 200){
+            addCanvas.setAttribute('id', request.responseText);
+            addLi.appendChild(addCanvas);
+            
+            addFullCanvas.setAttribute('id', "fc" + request.responseText);
+            addFullCanvas.setAttribute('class', "full-canvas");
+            addBackCanvas.setAttribute('id', "bc" + request.responseText);
+            addFullCanvas.setAttribute('class', "back-canvas");
 
+            addFullCanvas.style.display = "none";
+            addBackCanvas.style.display = "none";
 
+            addFullLi.appendChild(addFullCanvas);    
+            addFullLi.appendChild(addBackCanvas);            
+
+            test_genOutputs(addCanvas);
+            EventUtil.addHandler(addCanvas, "click", function(event){
+                itemFactory.style.display = "none";
+                wrapper.style.display = "none";
+                itemFactoryButtonWrapper.style.display = "none";
+
+                var targetFullCanvas = document.getElementById("fc" + event.target.id);
+                var targetBackCanvas = document.getElementById("bc" + event.target.id);
+                targetFullCanvas.style.display = "block";
+
+                targetBackCavnas.style.backgroundColor = "yellow";
+                targetBackCanvas.style.display = "block";
+            })
+        }
+    };
 },false);
 
 //moments bar 안의 moment 클릭시 output페이지로 이동
