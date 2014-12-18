@@ -4,11 +4,14 @@ var MAX_WIDTH = window.innerWidth*99/100;
 var navBar = document.getElementById("navBar");
 var momentsBar = document.getElementById("momentsBar");
 var moments = document.getElementById("moments");
+
 var fileInput = document.getElementById("upload-hidden");
 var textInput = document.getElementById("text-input");
 var confirmButton = document.getElementById("confirm-button");
+
 var submitButton = document.getElementById("submit-button");
 var uploadDrag = document.getElementById("upload-drag");
+
 var itemFactory = document.getElementById("itemFactory");
 var itemFactoryButton = document.getElementById("itemFactory-button");
 var mainContentWrapper = document.getElementById("wrapper");
@@ -151,25 +154,9 @@ submitButton.addEventListener('click', function(e){
         addLi.appendChild(addA);
         
         addCanvas.setAttribute('id', "pc" + result.fileName);
-        addA.appendChild(addCanvas);
-        
-        // addFullCanvas.setAttribute('id', "fc" + request.responseText);
-        // addFullCanvas.setAttribute('class', "full-canvas");
-        // addBackCanvas.setAttribute('id', "bc" + request.responseText);
-        // addFullCanvas.setAttribute('class', "back-canvas");
-
-        // addFullCanvas.style.display = "none";
-        // addBackCanvas.style.display = "none";
-
-        // addFullLi.appendChild(addFullCanvas);    
-        // addFullLi.appendChild(addBackCanvas);            
+        addA.appendChild(addCanvas);          
 
         test_genOutputs(addCanvas);
-        // EventUtil.addHandler(addA, "click", function(event){
-        //     itemFactory.style.display = "none";
-        //     wrapper.style.display = "none";
-        //     itemFactoryButtonWrapper.style.display = "none";
-        // });
     });
 },false);
 
