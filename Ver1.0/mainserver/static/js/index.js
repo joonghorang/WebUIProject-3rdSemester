@@ -21,26 +21,23 @@ window.addEventListener('DOMContentLoaded', function(){
 	test_genOutputs();
 }, false);
 
+function display(elements, state){
+    for(var i=0 ; i<elements.length ; i++){
+        elements[i].style.display = state === 'show'? 'block':'none';
+    }
+};
+
 itemFactoryButton.addEventListener('click', function(){
-    mainContentWrapper.style.display = 'none';
-    itemFactory.style.display = 'block';
-    itemFactoryButton.style.display = 'none';
-    uploadFile.style.display = 'block';
-    uploadText.style.display = 'none';
-    closeButton.style.display = 'block';
-    previewImg.style.display = 'block';
+    display([itemFactory,uploadFile,closeButton, previewImg],'show');
+    display([mainContentWrapper, itemFactoryButton, uploadText],'hide');
 },false);
 
 closeButton.addEventListener('click', function(){
-    mainContentWrapper.style.display = 'block';
-    itemFactory.style.display = 'none';
-    itemFactoryButton.style.display = 'block';
-    closeButton.style.display = 'none';
-    
     if(previewImg.childNodes[0] !== undefined){
         previewImg.removeChild(previewImg.childNodes[0]);
     }   
-    previewImg.style.display = 'none';
+    display([mainContentWrapper, itemFactoryButton],'show');
+    display([itemFactory, closeButton, previewImg],'hide');
 },false);
 
 fileInput.addEventListener('click', function(){
