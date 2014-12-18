@@ -3,7 +3,7 @@ var test_genOutputs = function(canvas){
     for( var i = 0; i < moments.childElementCount; ++i){
         canvas.width  = colors.offsetHeight; 
         canvas.height = colors.offsetHeight;
-        test_giveRandomColorTo(canvas);
+        // test_giveRandomColorTo(canvas);
     }
 }
 

@@ -9,13 +9,15 @@ var textValue;	// 입력받은 문자열 저장 변수
 var fR = 255;
 var fG = 255;
 var fB = 255;
-var firstColor = '#ffffff';	// 그라데이션 칼라 초기값
-var secondColor = '#000000';
+// var firstColor = '#ffffff';	// 그라데이션 칼라 초기값
+// var secondColor = '#000000';
 var offset = 4;
+
 window.onload = function(){
 	textInputEventManager();
-	drawGradation(firstColor, secondColor);
+	// drawGradation(firstColor, secondColor);
 };
+
 function changeDecToHexColor(r, g, b){
     var result = "#" + zeroCheck((r).toString(16)) 
                      + zeroCheck((g).toString(16)) 
