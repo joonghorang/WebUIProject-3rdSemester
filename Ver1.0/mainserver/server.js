@@ -39,17 +39,19 @@ var connection = mysql.createConnection({
     password : '16d5ce5e',
     database : 'heroku_7081e1ce7ec12df'
 });
-connection.connect(function(err){
-    if(err){
-        console.error('sql connection err');
-        console.error(err);
-        throw err;
-    }
-});
 
 app.get('/', function(request, response){
     /*DB SELECT : data for momentsBar(color only)*/
     /*//DB SELECT : data for momentsBar*/
+//    connection.connect(function(err){
+//        if(err){
+//            console.error('sql connection err');
+//            console.error(err);
+//            throw err;
+//        }
+//    });
+//    var query = connection.query('select * from moment');
+    
     var mainData;
     response.render('main',mainData);
 });
@@ -58,10 +60,23 @@ app.get('/', function(request, response){
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
     
+    /* connection 타임아웃이 있어서 
+    필요할때마다 커넥트를하고, end를 해주어야 할거같습니다 신영님.*/
+    
+//    connection.connect(function(err){
+//        if(err){
+//            console.error('sql connection err');
+//            console.error(err);
+//            throw err;
+//        }
+//    });
+    
     // SELECT m.momentId, m.imgPath, m.text, c.color
     // FROM momentList m 
     // INNER JOIN color c
     // ON m.momentId=c.momentId AND m.momentId=targetId;
+    
+    //connection.end();
     
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
@@ -89,9 +104,8 @@ app.post('/upload-image', function(request, response){
                 var colorList = Impressive(img).toHexString();
                 var bgColor = colorClassifier(colorList).bgColorHex();
                 var textColor = colorClassifier(colorList).textColorHex();
-//                /*DB INSERT : timeStamp + color data*/    
-//                /*//DB INSERT*/
-               
+                /*DB INSERT : timeStamp + color data*/    
+           
                 response.send(
                     {
                         "bgColor" : bgColor,
@@ -139,10 +153,19 @@ app.post('/upload-text', function(request, response){
                             textColor : colorClassifier(colorList).textColorHex(),
                             date : date
                         }
-                        
+                        //    connection.connect(function(err){
+                        //        if(err){
+                        //            console.error('sql connection err');
+                        //            console.error(err);
+                        //            throw err;
+                        //        }
+                        //    });
+
                         /*DB INSERT : text, filePath*/
                         /*//DB INSERT : text*/                         
-                            
+                        
+                        //connection.end();
+
                         var result = {
                             "id" : id,
                             "bgColor" : moment.bgColor,
