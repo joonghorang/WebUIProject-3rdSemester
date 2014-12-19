@@ -1,5 +1,5 @@
-var MAX_HEIGHT = window.innerHeight*99.8;
-var MAX_WIDTH = window.innerWidth*99/100;
+var MAX_WIDTH = window.innerWidth;
+var MAX_HEIGHT = window.innerHeight;
 
 function display(elements, state){
     for(var i=0 ; i<elements.length ; i++){
@@ -95,14 +95,17 @@ var confirm = {
     },
     "getData" : function(){
         //받아온 데이터는 colorList 배열에 담는다.
-        var colorList = JSON.parse(this.request.responseText)
-        console.log(colorList);
+        var result = JSON.parse(this.request.responseText);
+        var bgColor = result.bgColor;
+        var textColor = result.textColor;
+        console.log(result);
         //텍스트 입력창으로 전환 : timer 필요함
         display([this.uploadText],'show');
         display([this.uploadFile, this.closeButton],'hide');
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
         this.textInput.value = "30자 이내로 입력하세요.";
+<<<<<<< HEAD
 
         // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
         fR = parseInt(colorList[0].slice(1,3), 16);
@@ -112,6 +115,11 @@ var confirm = {
         secondColor = colorList[1];
 
         drawGradation(colorList[0], colorList[1]);
+=======
+        firstColor = bgColor;
+        secondColor = textColor;
+        drawGradation(bgColor, textColor);
+>>>>>>> FETCH_HEAD
     },
     "init" : function(){
         this.getElements();
@@ -174,11 +182,11 @@ var submit = {
             ctx.fillStyle = result.colorList[0];
             ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
 
-            addA.setAttribute('id', "a" + result.fileName);
-            addA.href = "/moment/" + result.fileName;
+            addA.setAttribute('id', "a" + result.id);
+            addA.href = "/moment/" + result.id;
             addLi.appendChild(addA);
             
-            addCanvas.setAttribute('id', "pc" + result.fileName);
+            addCanvas.setAttribute('id', "pc" + result.id);
             addA.appendChild(addCanvas);          
 
             test_genOutputs(addCanvas);
