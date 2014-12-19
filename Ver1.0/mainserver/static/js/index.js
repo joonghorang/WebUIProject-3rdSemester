@@ -105,21 +105,15 @@ var confirm = {
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
         this.textInput.value = "30자 이내로 입력하세요.";
-<<<<<<< HEAD
 
         // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
-        fR = parseInt(colorList[0].slice(1,3), 16);
-        fG = parseInt(colorList[0].slice(3,5), 16);
-        fB = parseInt(colorList[0].slice(5,7), 16);
-        firstColor = colorList[0];
-        secondColor = colorList[1];
-
-        drawGradation(colorList[0], colorList[1]);
-=======
+        fR = parseInt(bgColor.slice(1,3), 16);
+        fG = parseInt(bgColor.slice(3,5), 16);
+        fB = parseInt(bgColor.slice(5,7), 16);
+        
         firstColor = bgColor;
         secondColor = textColor;
         drawGradation(bgColor, textColor);
->>>>>>> FETCH_HEAD
     },
     "init" : function(){
         this.getElements();
@@ -164,6 +158,7 @@ var submit = {
         this.request.send(formData);
     },
     "addMoment" : function(){
+        //이부분은 필요하지 않습니다. 추후 refresh로 변경.
         var addLi = document.createElement('li');
         addLi.setAttribute('class', 'moment');
         this.moments.appendChild(addLi);
@@ -179,7 +174,7 @@ var submit = {
             console.log(result);
 
             var ctx = addCanvas.getContext("2d");
-            ctx.fillStyle = result.colorList[0];
+            ctx.fillStyle = result.bgColor;
             ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
 
             addA.setAttribute('id', "a" + result.id);

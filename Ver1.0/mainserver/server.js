@@ -51,7 +51,6 @@ app.get('/', function(request, response){
 //        }
 //    });
 //    var query = connection.query('select * from moment');
-    
     var mainData;
     response.render('main',mainData);
 });
