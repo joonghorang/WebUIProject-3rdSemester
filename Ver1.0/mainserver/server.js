@@ -3,7 +3,7 @@ var express = require('express');
 var formidable = require('formidable'); 
 var fs = require('fs');
 var ejs = require('ejs');
-// var mysql = require('mysql');
+var mysql = require('mysql');
 var Impressive = require('impressive');
 
 //impressive(image).toRgb();
@@ -28,7 +28,23 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/view');
 app.engine('html', require('ejs').renderFile);
 
-//DB connect
+//port 설정.
+app.set('port', (process.env.PORT || 3000));
+
+/* DB Connection Setting */
+var connection = mysql.createConnection({
+    host :'us-cdbr-iron-east-01.cleardb.net',
+    user : 'bf67c12c853ddc',
+    password : '16d5ce5e',
+    database : 'heroku_7081e1ce7ec12df'
+});
+connection.connect(function(err){
+    if(err){
+        console.error('sql connection err');
+        console.error(err);
+        throw err;
+    }
+});
 
 app.get('/', function(request, response){
     /*DB SELECT : data for momentsBar(color only)*/
@@ -48,9 +64,9 @@ app.get('/moment/:id', function(request, response){
     
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
-    var outputData; //SELECT 결과 
+    var momentData; //SELECT 결과 
 
-    response.render('moment',outputData);
+    response.render('moment',momentData);
 });
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
@@ -70,7 +86,7 @@ app.post('/upload-image', function(request, response){
                 var img = new Image();
                 img.src = data;
                 var colorList = Impressive(img).toHexString();
-
+                
 //                /*DB INSERT : timeStamp + color data*/    
 //                /*//DB INSERT*/
                
@@ -108,8 +124,8 @@ app.post('/upload-text', function(request, response){
                         var colorList = Impressive(img).toHexString();
 
                         /*DB INSERT : text, filePath*/
-                        /*//DB INSERT : text*/
-                        
+                        /*//DB INSERT : text*/                         
+                            
                         var result = {
                             "fileName" : fileName,
                             "colorList" : colorList
@@ -124,8 +140,8 @@ app.post('/upload-text', function(request, response){
 });
 
 //웹서버를 실행한다.
-app.listen(3000, function(){
-    console.log('server running at port 3000...');
+app.listen(app.get("port"), function(){
+    console.log('server running at port '+app.get("port")+'...');
 });
 
 
