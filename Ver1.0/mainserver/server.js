@@ -10,6 +10,7 @@ var Impressive = require('impressive');
 var Canvas = require('canvas');
 var Image = Canvas.Image;
 var mytools = require("./controllers/mytools.js");
+var colorClassifier = require("./controllers/colorClassifier.js");
 
 //express 모듈을 사용해 웹서버를 생성한다.
 var app = express();
@@ -86,11 +87,16 @@ app.post('/upload-image', function(request, response){
                 var img = new Image();
                 img.src = data;
                 var colorList = Impressive(img).toHexString();
-                
+                var bgColor = colorClassifier(colorList).bgColorHex();
+                var textColor = colorClassifier(colorList).textColorHex();
 //                /*DB INSERT : timeStamp + color data*/    
 //                /*//DB INSERT*/
                
-                response.send(colorList);
+                response.send(
+                    {
+                        "bgColor" : bgColor,
+                        "textColor" : textColor
+                    });
                 response.end();
             });
         }
@@ -109,8 +115,10 @@ app.post('/upload-text', function(request, response){
         else{
             //클라이언트에서 입력한 text data
             var text = fields.textInput;
-            var fileName = mytools.genFileName();
-            var uploadFileName = __dirname + '/uploads/' + fileName + '.jpg';
+            var date = new Date();
+            var id = mytools.genId(date);
+            var fileName = id + ".jpg";
+            var uploadFileName = __dirname + '/uploads/' + fileName;
             
             fs.readFile(files.image.path, function(error, data){
                 fs.writeFile(uploadFileName, data, function(error){
@@ -122,13 +130,27 @@ app.post('/upload-text', function(request, response){
                         var img = new Image();
                         img.src = data;
                         var colorList = Impressive(img).toHexString();
-
+                        
+                        var moment = {
+                            id : id,
+                            file : fileName,
+                            text : fields.textInput,
+                            bgColor : colorClassifier(colorList).bgColorHex(),
+                            textColor : colorClassifier(colorList).textColorHex(),
+                            date : date
+                        }
+                        console.log(moment);
+                        //DB like json. 
+                        //Deok's test Code.
+                        //데이터를 db.json에 저장중-
+                        
                         /*DB INSERT : text, filePath*/
                         /*//DB INSERT : text*/                         
                             
                         var result = {
-                            "fileName" : fileName,
-                            "colorList" : colorList
+                            "id" : id,
+                            "bgColor" : moment.bgColor,
+                            "textColor" : moment.textColor
                         };
                         response.send(result);
                         response.end();

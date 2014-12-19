@@ -6,7 +6,7 @@
            
     }
     var mytools = {
-        genFileName: function(){
+        genId: function(date){
             var toYYYYMMDDHHmm = function(date) {
                     var YYYY = date.getFullYear().toString();
                     var MM = (date.getMonth()+1).toString();
@@ -15,7 +15,7 @@
                     var mm = date.getMinutes().toString();
                     return YYYY + (MM[1]?MM:"0"+MM[0]) + (DD[1]?DD:"0"+DD[0]) + (HH[1]?HH:"0"+HH[0]) + (mm[1]?mm:"0"+mm[0]);
             };
-            return toYYYYMMDDHHmm(new Date()) 
+            return toYYYYMMDDHHmm(date) 
             + '_' 
             + Math.random().toString(36).substr(2, 5);    
         }

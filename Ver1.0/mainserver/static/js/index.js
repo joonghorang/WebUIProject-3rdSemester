@@ -95,18 +95,20 @@ var confirm = {
     },
     "getData" : function(){
         //받아온 데이터는 colorList 배열에 담는다.
-        var colorList = JSON.parse(this.request.responseText)
-        console.log(colorList);
+        var result = JSON.parse(this.request.responseText);
+        var bgColor = result.bgColor;
+        var textColor = result.textColor;
+        console.log(result);
         //텍스트 입력창으로 전환 : timer 필요함
         display([this.uploadText],'show');
         display([this.uploadFile, this.closeButton],'hide');
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
         this.textInput.value = "30자 이내로 입력하세요.";
-        firstColor = colorList[0];
-        secondColor = colorList[1];
+        firstColor = bgColor;
+        secondColor = textColor;
 
-        drawGradation(colorList[0], colorList[1]);
+        drawGradation(bgColor, textColor);
     },
     "init" : function(){
         this.getElements();
@@ -169,11 +171,11 @@ var submit = {
             ctx.fillStyle = result.colorList[0];
             ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
 
-            addA.setAttribute('id', "a" + result.fileName);
-            addA.href = "/moment/" + result.fileName;
+            addA.setAttribute('id', "a" + result.id);
+            addA.href = "/moment/" + result.id;
             addLi.appendChild(addA);
             
-            addCanvas.setAttribute('id', "pc" + result.fileName);
+            addCanvas.setAttribute('id', "pc" + result.id);
             addA.appendChild(addCanvas);          
 
             test_genOutputs(addCanvas);
