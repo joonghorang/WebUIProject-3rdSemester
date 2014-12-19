@@ -1,5 +1,5 @@
-var MAX_HEIGHT = window.innerHeight*99.8;
-var MAX_WIDTH = window.innerWidth*99/100;
+var MAX_WIDTH = window.innerWidth;
+var MAX_HEIGHT = window.innerHeight;
 
 function display(elements, state){
     for(var i=0 ; i<elements.length ; i++){
