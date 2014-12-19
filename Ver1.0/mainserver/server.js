@@ -3,7 +3,7 @@ var express = require('express');
 var formidable = require('formidable'); 
 var fs = require('fs');
 var ejs = require('ejs');
-var mysql = require('mysql');
+// var mysql = require('mysql');
 var Impressive = require('impressive');
 
 //impressive(image).toRgb();
@@ -31,27 +31,26 @@ app.engine('html', require('ejs').renderFile);
 //DB connect
 
 app.get('/', function(request, response){
-    /*DB SELECT : data for momentsBar(color)*/
+    /*DB SELECT : data for momentsBar(color only)*/
     /*//DB SELECT : data for momentsBar*/
-    var mainData = {
-        "color1" : "#ffffff",
-        "color2" : "#ffffff",
-        "color3" : "#ffffff"
-    };
-    
+    var mainData;
     response.render('main',mainData);
 });
 
-/*/output/picId 형태 라우터로 이동*/
-app.get('/output', function(request, response){
+/*/moment/picId 형태 라우터로 이동*/
+app.get('/moment/:id', function(request, response){
+    var targetId = request.param('id');
+    
+    // SELECT m.momentId, m.imgPath, m.text, c.color
+    // FROM momentList m 
+    // INNER JOIN color c
+    // ON m.momentId=c.momentId AND m.momentId=targetId;
+    
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
-    var outputData = {
-        imageSrc : "./uploads/201412142217_pv6ny.jpg",
-        frameInnershadowSrc : "./image/bottomShadow.png"
-    };
+    var outputData; //SELECT 결과 
 
-    response.render('output',outputData);
+    response.render('moment',outputData);
 });
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
@@ -72,9 +71,9 @@ app.post('/upload-image', function(request, response){
                 img.src = data;
                 var colorList = Impressive(img).toHexString();
 
-//                /*DB INSERT : date + RGB data*/    
+//                /*DB INSERT : timeStamp + color data*/    
 //                /*//DB INSERT*/
-//                
+               
                 response.send(colorList);
                 response.end();
             });
@@ -115,8 +114,6 @@ app.post('/upload-text', function(request, response){
                             "fileName" : fileName,
                             "colorList" : colorList
                         };
-
-                        // 새로운 캔버스에서 사용할 아이디를 fileName으로 맞춘다. 
                         response.send(result);
                         response.end();
                     }
