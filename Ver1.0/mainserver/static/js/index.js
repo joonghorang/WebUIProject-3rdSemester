@@ -91,10 +91,8 @@ confirmButton.addEventListener('click', function(e){
             display([uploadFile, closeButton],'hide');
 
             //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
-            //changeGradation()은????
+            //changeGradation()은????changeGradationColor 안에서 drawGradation()사용할때 파라미터 문제.
             textInput.value = "30자 이내로 입력하세요.";
-            firstColor = colorList[0];
-            secondColor = colorList[1];
             drawGradation(colorList[0], colorList[1]);   
         });
     }
@@ -159,5 +157,3 @@ submitButton.addEventListener('click', function(e){
         test_genOutputs(addCanvas);
     });
 },false);
-
-//moments bar 안의 moment 클릭시 output페이지로 이동

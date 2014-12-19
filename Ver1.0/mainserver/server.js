@@ -3,7 +3,7 @@ var express = require('express');
 var formidable = require('formidable'); 
 var fs = require('fs');
 var ejs = require('ejs');
-var mysql = require('mysql');
+// var mysql = require('mysql');
 var Impressive = require('impressive');
 
 //impressive(image).toRgb();
@@ -38,9 +38,14 @@ app.get('/', function(request, response){
 });
 
 /*/moment/picId 형태 라우터로 이동*/
-app.get('/output/:id', function(request, response){
-    var momentId = request.param('id');
+app.get('/moment/:id', function(request, response){
+    var targetId = request.param('id');
 
+    // SELECT m.momentId, m.imgPath, m.text, c.color
+    // FROM momentList m 
+    // INNER JOIN color c
+    // ON m.momentId=c.momentId AND m.momentId=targetId;
+    
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
     var outputData; //SELECT 결과 
