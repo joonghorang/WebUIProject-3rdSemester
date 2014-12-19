@@ -40,7 +40,7 @@ app.get('/', function(request, response){
 /*/moment/picId 형태 라우터로 이동*/
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
-
+    
     // SELECT m.momentId, m.imgPath, m.text, c.color
     // FROM momentList m 
     // INNER JOIN color c
