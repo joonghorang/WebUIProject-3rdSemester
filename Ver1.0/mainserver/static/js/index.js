@@ -103,6 +103,11 @@ var confirm = {
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
         this.textInput.value = "30자 이내로 입력하세요.";
+
+        // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
+        fR = parseInt(colorList[0].slice(1,3), 16);
+        fG = parseInt(colorList[0].slice(3,5), 16);
+        fB = parseInt(colorList[0].slice(5,7), 16);
         firstColor = colorList[0];
         secondColor = colorList[1];
 

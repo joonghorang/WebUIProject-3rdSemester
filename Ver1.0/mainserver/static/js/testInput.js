@@ -6,9 +6,9 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR = 255;
-var fG = 255;
-var fB = 255;
+var fR;
+var fG;
+var fB;
 var firstColor;	// 그라데이션 칼라 초기값
 var secondColor;
 var offset = 4;
@@ -75,7 +75,7 @@ function changeGradationColor(num, offset){
 }
 
 function textInputEventManager(){
-	textInput.oninput = function(){
+	textInput.oninput = function(event){
 		if(textInput.value.length < 30){
 			var num = textInput.value.length;
 			if(num < 5){
@@ -95,6 +95,7 @@ function textInputEventManager(){
 				textInput.style.fontSize = "30px";
 			}
 		} else {
+			EventUtil.preventDefault(event);
 		}	
 	};
 

@@ -1,5 +1,3 @@
-var MAX_WIDTH = window.innerWidth * 99/100;
-var MAX_HEIGHT = window.innerHeight * 99.8/100;
 
 var wrapper = document.getElementById("wrapper");
 var textInput = document.getElementById("text-input");
@@ -8,15 +6,18 @@ var backGroundCanvas = document.getElementById("back-ground-canvas");
 
 var textValue;	// 입력받은 문자열 저장 변수 
 
-var fR = 255;
-var fG = 255;
-var fB = 255;
-var firstColor = '#404040';	// 그라데이션 칼라 초기값
-var secondColor = '#000000';
+var fR;
+var fG;
+var fB;
+var firstColor;	// 그라데이션 칼라 초기값
+var secondColor;
 var offset = 4;
+
 window.onload = function(){
 	textInputEventManager();
+	// drawGradation(firstColor, secondColor);
 };
+
 function changeDecToHexColor(r, g, b){
     var result = "#" + zeroCheck((r).toString(16)) 
                      + zeroCheck((g).toString(16)) 
@@ -34,18 +35,13 @@ function zeroCheck(num){
 function drawGradation(firstColor, secondColor) {
 	var grdContext = backGroundCanvas.getContext('2d');
 	// 그라데이션 영역 정의 및 객체 생성
-	//var grd = ctx.createLinearGradient(0, MAX_HEIGHT/40, MAX_WIDTH, MAX_HEIGHT*2/3);	// 일부 스크린만 그라데이션 
 	var grd = grdContext.createLinearGradient(0, MAX_HEIGHT, MAX_WIDTH, MAX_HEIGHT); 			// 풀스크린용
 	grd.addColorStop(0, firstColor);
 	grd.addColorStop(1, secondColor);
 
 	// 도형의채우는 색상 속성에 그라데이션 객체 설정
 	grdContext.fillStyle = grd;
-	//ctx.fillRect(0, MAX_HEIGHT/2 - MAX_HEIGHT/16, MAX_WIDTH, MAX_HEIGHT/8);			// 일부 스크린만
 	grdContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);											// 풀스크린용
-	// grd.addColorStop(0, colorSetHex[1]);
-	// grd.addColorStop(1, colorSetHex[0]);
-	// context.fillRect(0, MAX_HEIGHT/2, MAX_WIDTH, MAX_HEIGHT/2);
 }
 
 function changeGradationColor(num, offset){
@@ -79,26 +75,27 @@ function changeGradationColor(num, offset){
 }
 
 function textInputEventManager(){
-	textInput.oninput = function(){
+	textInput.oninput = function(event){
 		if(textInput.value.length < 30){
 			var num = textInput.value.length;
 			if(num < 5){
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "60px";
+				textInput.style.fontSize = "50px";
 			} else if(num < 10) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "55px";
+				textInput.style.fontSize = "45px";
 			} else if(num < 15) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "50px";
+				textInput.style.fontSize = "40px";
 			} else if(num < 20) {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "45px";
+				textInput.style.fontSize = "35px";
 			} else {
 				changeGradationColor(num, offset);
-				textInput.style.fontSize = "40px";
+				textInput.style.fontSize = "30px";
 			}
 		} else {
+			textInput.value = textInput.value.slice(0,29);
 		}	
 	};
 
@@ -109,9 +106,16 @@ function textInputEventManager(){
 		}
 	});
 
+	// EventUtil.addHandler(textInput, "onkeypress", function(event){
+	// 	event = EventUtil.getEvent(event);
+	// 	if(textInput.value.length > 29){
+	// 		EventUtil.preventDefault(event);
+	// 	}
+	// });
+
 	EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 		textInput.value = "";
-		textInput.style.fontSize = "60px";
+		textInput.style.fontSize = "50px";
 	});
 
 	EventUtil.addHandler(textInput, "paste", function(event){ // 붙이기 방지 
@@ -128,4 +132,3 @@ function textInputEventManager(){
 	});
 
 };
-
