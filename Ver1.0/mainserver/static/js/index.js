@@ -107,7 +107,6 @@ var confirm = {
         this.textInput.value = "30자 이내로 입력하세요.";
         firstColor = bgColor;
         secondColor = textColor;
-
         drawGradation(bgColor, textColor);
     },
     "init" : function(){

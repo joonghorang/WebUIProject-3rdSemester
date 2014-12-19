@@ -139,10 +139,6 @@ app.post('/upload-text', function(request, response){
                             textColor : colorClassifier(colorList).textColorHex(),
                             date : date
                         }
-                        console.log(moment);
-                        //DB like json. 
-                        //Deok's test Code.
-                        //데이터를 db.json에 저장중-
                         
                         /*DB INSERT : text, filePath*/
                         /*//DB INSERT : text*/                         
