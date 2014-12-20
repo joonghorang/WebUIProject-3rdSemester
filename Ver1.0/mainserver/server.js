@@ -33,13 +33,6 @@ app.engine('html', require('ejs').renderFile);
 app.set('port', (process.env.PORT || 3000));
 
 /* DB Connection Setting */
-//var connection = mysql.createConnection({
-//    host :'us-cdbr-iron-east-01.cleardb.net',
-//    user : 'bf67c12c853ddc',
-//    password : '16d5ce5e',
-//    database : 'heroku_7081e1ce7ec12df'
-//});
-
 var pool = mysql.createPool({
     host :'us-cdbr-iron-east-01.cleardb.net',
     user : 'bf67c12c853ddc',
@@ -112,7 +105,6 @@ app.post('/upload-image', function(request, response){
                 var bgColor = colorClassifier(colorList).bgColorHex();
                 var textColor = colorClassifier(colorList).textColorHex();
                 /*DB INSERT : timeStamp + color data*/    
-           
                 response.send(
                     {
                         "bgColor" : bgColor[0],
@@ -188,11 +180,15 @@ app.post('/upload-text', function(request, response){
                         });
 
                         console.log('bgColor Num : '+moment.bgColor.length);
-                                                
-                        for(var i=0; i<moment.bgColor.length ; i++){
-                            debugger;
-                            console.log('>>>>>>>>'+moment.bgColor[i]);
-                            pool.getConnection(function(err, connection){
+                             
+                        pool.getConnection(function(err, connection){
+                            for(var i=0; i<moment.bgColor.length ; i++){
+                                console.log('>>>>>>>>'+moment.bgColor[i]);
+
+                                console.log('INSERT INTO bgColor VALUES("'+ 
+                                                 moment.id + '",' + i + ',"' + 
+                                                 moment.bgColor[i] +'");');
+
                                 connection.query('INSERT INTO bgColor VALUES("'+ 
                                                  moment.id + '",' + i + ',"' + 
                                                  moment.bgColor[i] +'");',function(err, res){
@@ -200,10 +196,10 @@ app.post('/upload-text', function(request, response){
                                                         console.log('bgColor insert error');
                                                        throw err;
                                                     }
-                                    connection.release();
-                                });    
-                            });                        
-                        };
+                                });  
+                            }
+                            connection.release();
+                        });
                        
                         
                         var result = {
