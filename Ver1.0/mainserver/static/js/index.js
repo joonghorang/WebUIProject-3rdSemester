@@ -29,7 +29,6 @@ var setItemFactoryDisplay = {
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
     "init" : function(){ // mainPage Initial code
-        console.log(1);
         //1.DB에 색상을 요청해서 저장된 칼라값을 받아온 후 배경 컬러를 설정하는 코드 
         //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드. 
         
@@ -102,7 +101,6 @@ var confirm = {
         var result = JSON.parse(this.request.responseText);
         var bgColor = result.bgColor;
         var textColor = result.textColor;
-        console.log(result);
         //텍스트 입력창으로 전환 : timer 필요함
         display([this.uploadText],'show');
         display([this.uploadFile, this.closeButton],'hide');
