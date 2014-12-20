@@ -5,6 +5,8 @@ window.addEventListener('DOMContentLoaded', function(){
 	var outputText = document.getElementById("output-text");
 	var outputCanvas = document.getElementById("text-canvas");
 	var backCanvas = document.getElementById("back-canvas");
+	var backwardButton = document.getElementById("backward-button");
+	var forwardButton = document.getElementById("forward-button");
 	//init
 	function init(){
 		//사진이미지 배경을 설정한다. 
@@ -233,18 +235,28 @@ window.addEventListener('DOMContentLoaded', function(){
 		            }
 		            return mostLongWord;
 		        }
-		    }
+		    }	    
+
 		}
 	};
 	init();
 
+	//화면전환 이벤트 등록
 	EventUtil.addHandler(outputText, "click", function(event){
-		display([outputImageWrapper], "show");
-		display([outputText], "hide");
+	display([outputImageWrapper], "show");
+	display([outputText], "hide");
 	});
 	EventUtil.addHandler(outputImageWrapper, "click", function(event){
-		display([outputText], "show");
-		display([outputImageWrapper], "hide");
+	display([outputText], "show");
+	display([outputImageWrapper], "hide");
+	});
+
+	//모멘츠 이동버튼 이벤트 등록
+	EventUtil.addHandler(backwardButton, "click", function(event){
+	console.log(1);
+	});
+	EventUtil.addHandler(forwardButton, "click", function(event){
+	console.log(2);
 	});
 
 
