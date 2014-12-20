@@ -5,7 +5,7 @@ var setItemFactoryDisplay = {
     "getElements" : function(){
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
-        this.mainContentWrapper = document.getElementById("wrapper");
+        this.moments = document.getElementById("moments");
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
@@ -13,13 +13,13 @@ var setItemFactoryDisplay = {
     },
     "openFactory" : function(){
         display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
-        display([this.mainContentWrapper, this.itemFactoryButton, this.uploadText],'hide');
+        display([this.moments, this.itemFactoryButton, this.uploadText],'hide');
     },
     "closeFactory" : function(){
         if(this.previewImg.childNodes[0] !== undefined){
             this.previewImg.removeChild(this.previewImg.childNodes[0]);
         }   
-        display([this.mainContentWrapper, this.itemFactoryButton],'show');
+        display([this.moments, this.itemFactoryButton],'show');
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
     "init" : function(){ // mainPage Initial code
@@ -31,7 +31,6 @@ var setItemFactoryDisplay = {
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
     }
 };
-
 var manageFileInput = {
     "getElements" : function(){
         this.fileInput = document.getElementById("upload-hidden");
@@ -59,7 +58,6 @@ var manageFileInput = {
         this.fileInput.addEventListener('change',this.change.bind(this),false);
     }
 };
-
 var confirm = {
     "getElements" : function(){
         this.closeButton = document.getElementById("close-button");
@@ -119,22 +117,6 @@ var confirm = {
         this.request.addEventListener('load', this.getData.bind(this));
     }
 };
-
-var uploadDrag = document.getElementById("upload-drag");
-uploadDrag.addEventListener("drop", function(e){
-    e.stopPropagation();
-    e.preventDefault();
-    var files = e.target.files || e.dataTransfer.files;
-    //image 인지 판별 코드 필요.
-    fileInput.files = files;
-}, true);
-    
-//브라우저는 이미지를 받으면 바로 이미지를 여는 기본기능이 있기 때문에, 기본기능을 막아둔다.
-uploadDrag.addEventListener("dragover", function(e){
-    e.stopPropagation();
-    e.preventDefault();
-}, true);
-
 var submit = {
     "getElements" : function(){
         this.request = new XMLHttpRequest();
@@ -155,42 +137,23 @@ var submit = {
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
     },
-    // "addMoment" : function(){
-    //     //이부분은 필요하지 않습니다. 추후 refresh로 변경.
-    //     var addLi = document.createElement('li');
-    //     addLi.setAttribute('class', 'moment');
-    //     this.moments.appendChild(addLi);
-    //     var addA = document.createElement('a');
-    //     var addCanvas = document.createElement('canvas');
-
-    //     this.request.addEventListener('load', function(){
-    //         //데이터 전송이 다 끝난 뒤에 itemFactory close
-    //         display([this.itemFactoryButton, this.mainContentWrapper],'show');
-    //         display([this.itemFactory],'hide');
-
-    //         var result = JSON.parse(this.request.responseText);
-    //         console.log(result);
-
-    //         var ctx = addCanvas.getContext("2d");
-    //         ctx.fillStyle = result.bgColor;
-    //         ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
-
-    //         addA.setAttribute('id', "a" + result.id);
-    //         addA.href = "/moment/" + result.id;
-    //         addLi.appendChild(addA);
-            
-    //         addCanvas.setAttribute('id', "pc" + result.id);
-    //         addA.appendChild(addCanvas);          
-
-    //         test_genOutputs(addCanvas);
-    //     }.bind(this));
-    // },
     "init" : function(){
         this.getElements();
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
     //    this.addMoment();
     }
 };
+
+var uploadDrag = document.getElementById("upload-drag");
+uploadDrag.addEventListener("drop", function(e){
+    e.stopPropagation();
+    e.preventDefault();
+    var files = e.target.files || e.dataTransfer.files;
+    //image 인지 판별 코드 필요.
+    fileInput.files = files;
+}, true);
+//브라우저는 이미지를 받으면 바로 이미지를 여는 기본기능이 있기 때문에, 기본기능을 막아둔다.
+uploadDrag.addEventListener("dragover", function(e){ e.preventDefault(); }, true);
 
 setItemFactoryDisplay.init();
 manageFileInput.init();

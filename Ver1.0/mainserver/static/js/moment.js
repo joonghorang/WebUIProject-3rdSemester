@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', function(){
 		var CANVAS_HEIGHT = outputCanvas.height;
 
 		//setting value
-		var fontName = "MyHelvetica";
+		var fontName = "nanumGothic";
 		var fontColor = "#ffffff";
 		var fontSizeArray = new Array();
 		fontSizeArray.push(140);
@@ -39,7 +39,7 @@ window.addEventListener('DOMContentLoaded', function(){
 		textWriter();
 
 		function textWriter(){
-		     var originTextData = "HELVETICA LOVE";
+		    var originTextData = "Typing Yong Why Ho Undifined";
 		    var textX = CANVAS_WIDTH/2;
 		    var textY = CANVAS_HEIGHT/2;
 		    // 왼쪽 정렬을 위한 코드. (윈쪽 정렬한 후 문단 전체를 제일 긴 단어를 기준으로 가운데 정렬하기)
@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
 		    var addTextArray = new Array();	// for Y
 		    //addTextArray.push(10);	//0
-		    //addTextArray.push(16);	//1
+		    addTextArray.push(16);	//1
 		    addTextArray.push(24);	//2
 		    addTextArray.push(36);	//3
 		    addTextArray.push(48);	//4
@@ -184,7 +184,7 @@ window.addEventListener('DOMContentLoaded', function(){
 			                context.font = fontSize + "px " + fontName; //fontWeight + " " + 
 			                context.textAlign = "left";
 			                context.textBaseline = "middle";
-			                context.fillText(text, x, y);
+			                context.fillText(text, x+20, y);
 			            };
 
 			            function checkOneWordBug(){
