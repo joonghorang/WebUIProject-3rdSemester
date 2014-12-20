@@ -44,7 +44,9 @@ var pool = mysql.createPool({
     host :'us-cdbr-iron-east-01.cleardb.net',
     user : 'bf67c12c853ddc',
     password : '16d5ce5e',
-    database : 'heroku_7081e1ce7ec12df'
+    database : 'heroku_7081e1ce7ec12df',
+    connectionLimit:20,
+    waitForConnections:true
 });
 
 /* Router */
@@ -80,15 +82,6 @@ app.get('/moment/:id', function(request, response){
         }
         connection.release();
     });
-    
-//    connection.connect(function(err){
-//        if(err){
-//            console.error('sql connection err');
-//            console.error(err);
-//            throw err;
-//        }
-//    });
-//    connection.end();
     
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
@@ -179,64 +172,8 @@ app.post('/upload-text', function(request, response){
 //                        
 //                        console.log(sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", moment));
                         
-                        var connection = mysql.createConnection({
-                            host :'us-cdbr-iron-east-01.cleardb.net',
-                            user : 'bf67c12c853ddc',
-                            password : '16d5ce5e',
-                            database : 'heroku_7081e1ce7ec12df'
-                        });
-                        connection.connect(function(err){
-                            if(err){
-                                console.error('sql connection err');
-                                console.error(err);
-                                throw err;
-                            }
-                            
-                            connection.query('INSERT INTO moment (id, textColor, text, file, date) VALUES("'
-                                             + moment.id +'","'
-                                             + moment.textColor +'","'
-                                             + moment.text +'","'
-                                             + moment.file +'","'
-                                             + moment.date + '");', 
-                                             function(err, res){
-                                if(err) {
-                                    console.log('moment insert error');
-                                    throw err;
-                                }
-                                connection.end();
-                            });
-                            
-                        });
 
-                        /*DB INSERT*/
-                        
-                        for(var i=0; i<moment.bgColor.length ; i++){
-                            var connection = mysql.createConnection({
-                                host :'us-cdbr-iron-east-01.cleardb.net',   
-                                user : 'bf67c12c853ddc',
-                                password : '16d5ce5e',
-                                database : 'heroku_7081e1ce7ec12df'
-                            });
-                            connection.connect(function(err){
-                                if(err){
-                                    console.error('sql connection err');
-                                    console.error(err);
-                                    throw err;
-                                }
-                                connection.query('INSERT INTO bgColor VALUES("'
-                                                 + moment.id + '","' 
-                                                 + (i+1) + '","' 
-                                                 + moment.bgColor[i] +'");',
-                                                 function(err, res){
-                                    if(err) {
-                                        console.log('bgColor insert error');
-                                        throw err;
-                                    }
-                                });
-                                connection.end();
-                            });
-                        }
-                        
+                        /*DB INSERT*/                      
                         pool.getConnection(function(err, connection){
                             connection.query('INSERT INTO moment VALUES("'+ 
                                              moment.id + '","'+ moment.textColor +'","'+ 
@@ -249,26 +186,11 @@ app.post('/upload-text', function(request, response){
                                 connection.release();
                             });
                         });
-                        
-                        
-//                        connection.connect(function(err){
-//                            if(err){
-//                                console.error('sql connection err');
-//                                console.error(err);
-//                                throw err;
-//                            }
-//                        });
-//                        
-//                        /*DB INSERT*/
-//                        connection.query('INSERT INTO moment VALUES("'+ moment.id + '","'+ moment.textColor +'","'+ moment.text +'","'+ moment.file +'","'+ moment.date+ '")', function(err, res){
-//                           if(err) {
-//                               console.log('moment insert error');
-//                               throw err;
-//                           }
-//                        });
+
                         console.log('bgColor Num : '+moment.bgColor.length);
                                                 
                         for(var i=0; i<moment.bgColor.length ; i++){
+                            debugger;
                             console.log('>>>>>>>>'+moment.bgColor[i]);
                             pool.getConnection(function(err, connection){
                                 connection.query('INSERT INTO bgColor VALUES("'+ 
@@ -282,20 +204,7 @@ app.post('/upload-text', function(request, response){
                                 });    
                             });                        
                         };
-                        
-
-                        
-                        
-//                        for(var i=0; i<moment.bgColor.length ; i++){
-//                            connection.query('INSERT INTO bgColor VALUES("'+ moment.id + '",' + (i+1) + ',"' + moment.bgColor[i] +'");',function(err, res){
-//                                if(err) {
-//                                    console.log('bgColor insert error');
-//                                   throw err;
-//                                }
-//                            });
-//                        }            
-//                        connection.end();
-                        /*//DB INSERT*/                         
+                       
                         
                         var result = {
                             "id" : id,
