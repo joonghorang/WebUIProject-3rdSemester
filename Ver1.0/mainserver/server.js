@@ -11,7 +11,7 @@ var Canvas = require('canvas');
 var Image = Canvas.Image;
 var mytools = require("./controllers/mytools.js");
 var colorClassifier = require("./controllers/colorClassifier.js");
-
+var sq = require("./controllers/simpleQuery.js");
 //express 모듈을 사용해 웹서버를 생성한다.
 var app = express();
 
@@ -151,62 +151,75 @@ app.post('/upload-text', function(request, response){
                             textColor : colorClassifier(colorList).textColorHex(),
                             date : date
                         }
-//                        var connection = mysql.createConnection({
-//                            host :'us-cdbr-iron-east-01.cleardb.net',
-//                            user : 'bf67c12c853ddc',
-//                            password : '16d5ce5e',
-//                            database : 'heroku_7081e1ce7ec12df'
-//                        });
-//                        connection.connect(function(err){
-//                            if(err){
-//                                console.error('sql connection err');
-//                                console.error(err);
-//                                throw err;
-//                            }
-//                            connection.query('INSERT INTO moment (id, textColor, text, file, date) VALUES("'
+                        //INSERT_INTO USAGE
+//                        console.log('INSERT INTO moment (id, textColor, text, file, date) VALUES("'
 //                                             + moment.id +'","'
 //                                             + moment.textColor +'","'
 //                                             + moment.text +'","'
 //                                             + moment.file +'","'
-//                                             + moment.date + '");', 
-//                                             function(err, res){
-//                                if(err) {
-//                                    console.log('moment insert error');
-//                                    throw err;
-//                                }
-//                                connection.end();
-//                            });
-//                            
-//                        });
+//                                             + moment.date + '");');
+//                        console.log(sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", 
+//                                                   [moment.id, moment.textColor, moment.text, moment.file, moment.date]));
+//                        
+//                        console.log(sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", moment));
+                        
+                        var connection = mysql.createConnection({
+                            host :'us-cdbr-iron-east-01.cleardb.net',
+                            user : 'bf67c12c853ddc',
+                            password : '16d5ce5e',
+                            database : 'heroku_7081e1ce7ec12df'
+                        });
+                        connection.connect(function(err){
+                            if(err){
+                                console.error('sql connection err');
+                                console.error(err);
+                                throw err;
+                            }
+                            
+                            connection.query('INSERT INTO moment (id, textColor, text, file, date) VALUES("'
+                                             + moment.id +'","'
+                                             + moment.textColor +'","'
+                                             + moment.text +'","'
+                                             + moment.file +'","'
+                                             + moment.date + '");', 
+                                             function(err, res){
+                                if(err) {
+                                    console.log('moment insert error');
+                                    throw err;
+                                }
+                                connection.end();
+                            });
+                            
+                        });
                         
                         /*DB INSERT*/
                         
-//                        for(var i=0; i<moment.bgColor.length ; i++){
-//                            var connection = mysql.createConnection({
-//                                host :'us-cdbr-iron-east-01.cleardb.net',   
-//                                user : 'bf67c12c853ddc',
-//                                password : '16d5ce5e',
-//                                database : 'heroku_7081e1ce7ec12df'
-//                            });
-//                            connection.connect(function(err){
-//                                if(err){
-//                                    console.error('sql connection err');
-//                                    console.error(err);
-//                                    throw err;
-//                                }
-//                                connection.query('INSERT INTO bgColor VALUES("'
-//                                                 + moment.id + '","' 
-//                                                 + (i+1) + '","' 
-//                                                 + moment.bgColor[i] +'");',
-//                                                 function(err, res){
-//                                    if(err) {
-//                                        console.log('bgColor insert error');
-//                                        throw err;
-//                                    }
-//                                });
-//                                connection.end();
-//                            });
-//                        }
+                        for(var i=0; i<moment.bgColor.length ; i++){
+                            var connection = mysql.createConnection({
+                                host :'us-cdbr-iron-east-01.cleardb.net',   
+                                user : 'bf67c12c853ddc',
+                                password : '16d5ce5e',
+                                database : 'heroku_7081e1ce7ec12df'
+                            });
+                            connection.connect(function(err){
+                                if(err){
+                                    console.error('sql connection err');
+                                    console.error(err);
+                                    throw err;
+                                }
+                                connection.query('INSERT INTO bgColor VALUES("'
+                                                 + moment.id + '","' 
+                                                 + (i+1) + '","' 
+                                                 + moment.bgColor[i] +'");',
+                                                 function(err, res){
+                                    if(err) {
+                                        console.log('bgColor insert error');
+                                        throw err;
+                                    }
+                                });
+                                connection.end();
+                            });
+                        }
                         
                         /*//DB INSERT*/                         
                         
