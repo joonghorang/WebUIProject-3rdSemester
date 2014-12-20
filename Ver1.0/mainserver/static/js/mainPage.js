@@ -14,7 +14,7 @@ var setItemFactoryDisplay = {
         this.mainContentWrapper = document.getElementById("wrapper");
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
-        this.closeButton = document.getElementById("close-button-wrapper");
+        this.closeButton = document.getElementById("close-button");
         this.previewImg = document.getElementById('preview-image');
     },
     "openFactory" : function(){

@@ -1,0 +1,186 @@
+
+#wrapper{
+    z-index: 10;
+    width: 50%;
+    min-width: 600px;
+    height: 60%;
+    min-height: 400px;
+	position : absolute;
+
+    opacity: 0.9;    
+    background-image:url( "../image/backGround.jpg");
+    background-size: auto;
+    background-attachment: fixed;
+
+	margin : auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+#wrapper > div:nth-child(1){
+    position : relative;
+    float : left;
+    width : 50%;
+    height : 62%;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #ffffff;
+    background-color : #300080;
+}
+#wrapper > div:nth-child(2){
+    float : left;
+    width : 44.6%;
+    height : 25%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(3){
+    float : left;
+    width : 44.6%;
+    height : 13%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(4){
+    float : left;
+    width : 44.6%;
+    height : 8%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(5){
+    float : left;
+    width : 25%;
+    height : 18.3%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(6){
+    float : left;
+    width : 48.6%;
+    height : 15%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(7){
+    float : left;
+    width : 97.3%;
+    height : 6%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+
+.wp{
+    float : left;
+    color : white;
+    font-family : nanumgothic;
+    font-size : 16px;
+    line-height : 20px;
+    padding : 5px;
+}
+
+
+
+
+#wrapper > div:nth-child(8){
+    position : relative;
+    float : left;
+    width : 50%;
+    height : 62%;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #ffffff;
+    background-color : #300080;
+}
+#wrapper > div:nth-child(9){
+    float : left;
+    width : 44.6%;
+    height : 25%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(10){
+    float : left;
+    width : 44.6%;
+    height : 13%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(11){
+    float : left;
+    width : 44.6%;
+    height : 8%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(12){
+    float : left;
+    width : 25%;
+    height : 18.3%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(13){
+    float : left;
+    width : 48.6%;
+    height : 15%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
+#wrapper > div:nth-child(14){
+    float : left;
+    width : 97.3%;
+    height : 6%;
+    position : relative;
+    border-style: solid;
+    border-width : 2px;
+    border-color : #300080;
+    padding : 5px;
+    margin : 1px;
+}
