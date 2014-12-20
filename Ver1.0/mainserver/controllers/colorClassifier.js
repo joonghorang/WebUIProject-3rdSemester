@@ -19,8 +19,9 @@ var colorClassifier = function colorClassifier(colorList){
     if(!(this instanceof colorClassifier)){
         return new colorClassifier(colorList);   
     }
+    this.bgColor = [];
     if(colorList.length === 0){
-        this.bgColor = {
+        this.bgColor[0] = {
             r: 200, 
             g: 200,
             b: 200,
@@ -33,7 +34,7 @@ var colorClassifier = function colorClassifier(colorList){
             a: 255
         };
     }else if(colorList.length === 1){
-        this.bgColor = colorList[0];
+        this.bgColor[0] = colorList[0];
         this.textColor = {
             r: 220,
             g: 220,
@@ -41,9 +42,13 @@ var colorClassifier = function colorClassifier(colorList){
             a: 255
         };
     }else{
-        this.bgColor = colorList[0];
         this.textColor = colorList[1];
+        this.bgColor = colorList.slice(0);
+        this.bgColor.splice(this.bgColor.indexOf(this.textColor),1);
+        
     }
+    console.log(colorList);
+    console.log(this.bgColor);
 }
 colorClassifier.prototype ={
     textColorRgb : function(){
@@ -56,7 +61,12 @@ colorClassifier.prototype ={
         return tc(this.textColor).toHexString();
     },
     bgColorHex : function(){
-        return tc(this.bgColor).toHexString();
+        var hex = [];
+        console.log(this.bgColor.length);
+        for(var i = 0; i<this.bgColor.length; ++i){
+             hex[i] = tc(this.bgColor[i]).toHexString();
+        }
+        return hex;
     }
 }
 

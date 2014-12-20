@@ -33,13 +33,9 @@ app.engine('html', require('ejs').renderFile);
 app.set('port', (process.env.PORT || 3000));
 
 /* DB Connection Setting */
-var connection = mysql.createConnection({
-    host :'us-cdbr-iron-east-01.cleardb.net',
-    user : 'bf67c12c853ddc',
-    password : '16d5ce5e',
-    database : 'heroku_7081e1ce7ec12df'
-});
 
+
+/* Router */
 app.get('/', function(request, response){
     /*DB SELECT : data for momentsBar(color only)*/
     /*//DB SELECT : data for momentsBar*/
@@ -80,10 +76,10 @@ app.get('/moment/:id', function(request, response){
     
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
-//    var momentData = {
-//        "imageSrc" : fileName
-//    };
+    var momentData = {
 
+    };
+    
     response.render('moment',momentData);
 });
 
@@ -110,7 +106,7 @@ app.post('/upload-image', function(request, response){
            
                 response.send(
                     {
-                        "bgColor" : bgColor,
+                        "bgColor" : bgColor[0],
                         "textColor" : textColor
                     });
                 response.end();
@@ -155,39 +151,71 @@ app.post('/upload-text', function(request, response){
                             textColor : colorClassifier(colorList).textColorHex(),
                             date : date
                         }
+//                        var connection = mysql.createConnection({
+//                            host :'us-cdbr-iron-east-01.cleardb.net',
+//                            user : 'bf67c12c853ddc',
+//                            password : '16d5ce5e',
+//                            database : 'heroku_7081e1ce7ec12df'
+//                        });
+//                        connection.connect(function(err){
+//                            if(err){
+//                                console.error('sql connection err');
+//                                console.error(err);
+//                                throw err;
+//                            }
+//                            connection.query('INSERT INTO moment (id, textColor, text, file, date) VALUES("'
+//                                             + moment.id +'","'
+//                                             + moment.textColor +'","'
+//                                             + moment.text +'","'
+//                                             + moment.file +'","'
+//                                             + moment.date + '");', 
+//                                             function(err, res){
+//                                if(err) {
+//                                    console.log('moment insert error');
+//                                    throw err;
+//                                }
+//                                connection.end();
+//                            });
+//                            
+//                        });
                         
-                        connection.connect(function(err){
-                            if(err){
-                                console.error('sql connection err');
-                                console.error(err);
-                                throw err;
-                            }
-                        });
-
                         /*DB INSERT*/
-                        connection.query('INSERT INTO moment (id, textColor, text, file, date) VALUES('+ moment.id.toString() +','+ moment.textColor.toString() +','+ moment.text.toString() +','+ moment.file.toString() +','+ moment.date.toString()+ ')', function(err, res){
-                           if(err) {
-                               console.log('moment insert error');
-                               throw err;
-                           }
-                        });
                         
-                        for(var i=0; i<moment.bgColor.length ; i++){
-                            connection.query('INSERT INTO bgColor VALUES('+ moment.id + ',' + (i+1) + ',' + moment.bgColor[i] +');',function(err, res){
-                                if(err) {
-                                    console.log('bgColor insert error');
-                                   throw err;
-                                }
-                            });
-                        }            
-                        connection.end();
+//                        for(var i=0; i<moment.bgColor.length ; i++){
+//                            var connection = mysql.createConnection({
+//                                host :'us-cdbr-iron-east-01.cleardb.net',   
+//                                user : 'bf67c12c853ddc',
+//                                password : '16d5ce5e',
+//                                database : 'heroku_7081e1ce7ec12df'
+//                            });
+//                            connection.connect(function(err){
+//                                if(err){
+//                                    console.error('sql connection err');
+//                                    console.error(err);
+//                                    throw err;
+//                                }
+//                                connection.query('INSERT INTO bgColor VALUES("'
+//                                                 + moment.id + '","' 
+//                                                 + (i+1) + '","' 
+//                                                 + moment.bgColor[i] +'");',
+//                                                 function(err, res){
+//                                    if(err) {
+//                                        console.log('bgColor insert error');
+//                                        throw err;
+//                                    }
+//                                });
+//                                connection.end();
+//                            });
+//                        }
+                        
                         /*//DB INSERT*/                         
-
+                        
                         var result = {
                             "id" : id,
-                            "bgColor" : moment.bgColor,
+                            "bgColor" : moment.bgColor[0],
                             "textColor" : moment.textColor
                         };
+                        console.log(moment, result);
                         response.send(result);
                         response.end();
                     }
