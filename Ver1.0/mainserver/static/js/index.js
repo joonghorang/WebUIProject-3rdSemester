@@ -28,7 +28,11 @@ var setItemFactoryDisplay = {
         display([this.mainContentWrapper, this.itemFactoryButton],'show');
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
-    "init" : function(){
+    "init" : function(){ // mainPage Initial code
+        console.log(1);
+        //1.DB에 색상을 요청해서 저장된 칼라값을 받아온 후 배경 컬러를 설정하는 코드 
+        //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드. 
+        
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
@@ -113,6 +117,8 @@ var confirm = {
         
         firstColor = bgColor;
         secondColor = textColor;
+        var html = document.getElementById("html");
+        html.style.backgroundColor = bgColor;
         drawGradation(bgColor, textColor);
     },
     "init" : function(){
@@ -157,40 +163,40 @@ var submit = {
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
     },
-    "addMoment" : function(){
-        //이부분은 필요하지 않습니다. 추후 refresh로 변경.
-        var addLi = document.createElement('li');
-        addLi.setAttribute('class', 'moment');
-        this.moments.appendChild(addLi);
-        var addA = document.createElement('a');
-        var addCanvas = document.createElement('canvas');
+    // "addMoment" : function(){
+    //     //이부분은 필요하지 않습니다. 추후 refresh로 변경.
+    //     var addLi = document.createElement('li');
+    //     addLi.setAttribute('class', 'moment');
+    //     this.moments.appendChild(addLi);
+    //     var addA = document.createElement('a');
+    //     var addCanvas = document.createElement('canvas');
 
-        this.request.addEventListener('load', function(){
-            //데이터 전송이 다 끝난 뒤에 itemFactory close
-            display([this.itemFactoryButton, this.mainContentWrapper],'show');
-            display([this.itemFactory],'hide');
+    //     this.request.addEventListener('load', function(){
+    //         //데이터 전송이 다 끝난 뒤에 itemFactory close
+    //         display([this.itemFactoryButton, this.mainContentWrapper],'show');
+    //         display([this.itemFactory],'hide');
 
-            var result = JSON.parse(this.request.responseText);
-            console.log(result);
+    //         var result = JSON.parse(this.request.responseText);
+    //         console.log(result);
 
-            var ctx = addCanvas.getContext("2d");
-            ctx.fillStyle = result.bgColor;
-            ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
+    //         var ctx = addCanvas.getContext("2d");
+    //         ctx.fillStyle = result.bgColor;
+    //         ctx.fillRect(0,0,addCanvas.width,addCanvas.height);
 
-            addA.setAttribute('id', "a" + result.id);
-            addA.href = "/moment/" + result.id;
-            addLi.appendChild(addA);
+    //         addA.setAttribute('id', "a" + result.id);
+    //         addA.href = "/moment/" + result.id;
+    //         addLi.appendChild(addA);
             
-            addCanvas.setAttribute('id', "pc" + result.id);
-            addA.appendChild(addCanvas);          
+    //         addCanvas.setAttribute('id', "pc" + result.id);
+    //         addA.appendChild(addCanvas);          
 
-            test_genOutputs(addCanvas);
-        }.bind(this));
-    },
+    //         test_genOutputs(addCanvas);
+    //     }.bind(this));
+    // },
     "init" : function(){
         this.getElements();
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
-        this.addMoment();
+    //    this.addMoment();
     }
 };
 
