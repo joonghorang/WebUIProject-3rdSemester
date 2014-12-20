@@ -152,10 +152,9 @@ var submit = {
         var formData = new FormData(); 
         formData.append("textInput", this.textInput.value);
         formData.append("image", this.fileInput.files[0]);
-<<<<<<< Updated upstream
-=======
+
         console.log(this.moments.childElementCount);
->>>>>>> Stashed changes
+
         formData.append("hopeNumber", this.moments.childElementCount);
         
         this.request.open("POST", "/upload-text", true);
