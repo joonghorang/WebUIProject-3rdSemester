@@ -1,12 +1,6 @@
 var MAX_WIDTH = window.innerWidth;
 var MAX_HEIGHT = window.innerHeight;
 
-function display(elements, state){
-    for(var i=0 ; i<elements.length ; i++){
-        elements[i].style.display = state === 'show'? 'block':'none';
-    }
-};
-
 var setItemFactoryDisplay = {
     "getElements" : function(){
         this.itemFactory = document.getElementById("itemFactory");

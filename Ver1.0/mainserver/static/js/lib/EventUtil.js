@@ -1,4 +1,3 @@
-
 var EventUtil = {
         addHandler: function( element, type, handler ) {
             if ( element.addEventListener ) {
@@ -91,6 +90,6 @@ var EventUtil = {
         		return event.clipboardData.setData("text/plain", value);
         	} else if (window.clipboardData){
         		return window.clipboardData.setData("text", value);
-        	}
+            }
         } 
-    };
+};
