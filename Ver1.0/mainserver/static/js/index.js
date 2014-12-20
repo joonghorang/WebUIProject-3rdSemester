@@ -130,11 +130,10 @@ var submit = {
         this.previewImgWrapper = document.getElementById("preview-image");
         this.previewImg = document.getElementById("input-image");
     },
-    "sendData" : function(e){
-        e.preventDefault();
+    "reset" : function(){
         // 텍스트 인풋창을 닫고 메인화면으로 돌아간다. 
         display([this.itemFactory], "hide");
-        display([this.mainContentWrapper, this.itemFactoryButton], "show");
+        display([this.mainContentWrapper, this.itemFactoryButton, this.moments], "show");
 
         // 기존 preview Image에 들어있는 사진을 지우고 원래의 사진기 아이콘으로 되돌려준다. 
         this.previewImgWrapper.removeChild(this.previewImgWrapper.firstElementChild);
@@ -145,18 +144,37 @@ var submit = {
 
         // 기본 문자열 재입력.
         this.textInput.value = "30자 이내로 입력해주세요.";
+    },
+    "sendData" : function(e){
+        e.preventDefault();
 
-        // var formData = new FormData();
-        // formData.append("textInput", this.textInput.value);
-        // formData.append("image", this.fileInput.files[0]);
+        // 데이터를 전송 
+        var formData = new FormData(); 
+        formData.append("textInput", this.textInput.value);
+        formData.append("image", this.fileInput.files[0]);
         
-        // this.request.open("POST", "/upload-text", true);
-        // this.request.send(formData);
+        this.request.open("POST", "/upload-text", true);
+        this.request.send(formData);
+        console.log("data send");
+    },
+    "addMoment" : function(){
+        var result = JSON.parse(this.request.responseText);
+
+        // 새로운 모멘트 생성. 
+
+        var addMoment = document.createElement("div");
+        addMoment.setAttribute('class', result.id);
+        this.moments.insertBefore(this.moments.firstElementChild, addMoment);
+        console.log(this.moments.firstElementChild)
+        for(var i = 0; i < this.moments.childElementCount; i++){
+            console.log(2);
+        }
     },
     "init" : function(){
         this.getElements();
+        this.submitButton.addEventListener('click', this.reset.bind(this),false);
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
-    //    this.addMoment();
+        this.submitButton.addEventListener('load', this.addMoment.bind(this),false);
     }
 };
 
