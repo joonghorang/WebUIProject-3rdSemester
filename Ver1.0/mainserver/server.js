@@ -191,6 +191,7 @@ app.post('/upload-text', function(request, response){
                             "id" : id,
                             "bgColor" : moment.bgColor[0],
                             "textColor" : moment.textColor
+                            "hopeNumber" : moment.
                         };
                         response.send(result);
                         response.end();
