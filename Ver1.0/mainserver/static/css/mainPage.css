@@ -18,7 +18,50 @@
 	right: 0;
 	bottom: 0;
 }
+/*
 
+.moment-first {
+    width: 300px;
+    height: 100px;
+    background-color: #111111;
+}
+
+.moment second {
+    width: 150px;
+    height: 200px;
+    background-color: #222222;
+}
+
+.moment third {
+    width: 150px;
+    height: 300px;
+    background-color: #333333;
+}
+
+.moment fourth {
+    width: 150px;
+    height: 100px;
+    background-color: #444444;
+}
+
+.moment fifth {
+    width: 300px;
+    height: 100px;
+    background-color: #555555;
+}
+
+.moment sixth {
+    width: 300px;
+    height: 100px;
+    background-color: #666666;
+}
+
+.moment seventh {
+    width: 300px;
+    height: 100px;
+    background-color: #777777;
+}
+*/
 #moments > div:nth-child(1){
     box-sizing : border-box;
     position : relative;

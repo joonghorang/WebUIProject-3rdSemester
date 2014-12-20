@@ -187,11 +187,24 @@ app.post('/upload-text', function(request, response){
                         //DB transaction.....?
                         console.log('>>>inserted');
                         
+                        var hopeNum;
+                        pool.getConnection(function(err, connection){
+                            connection.query('SELECT hopeNum FROM moment;', function(err, res){
+                            if(err){
+                                console.log(err);
+                                throw err;
+                            }
+                                console.log(res);
+                                hopeNum=res;
+                                connection.release();
+                            });
+                        });
+                        
                         var result = {
                             "id" : id,
                             "bgColor" : moment.bgColor[0],
-                            "textColor" : moment.textColor
-                           // "hopeNumber" : moment.
+                            "textColor" : moment.textColor,
+                            "hopeNumber" : hopeNum
                         };
                         response.send(result);
                         response.end();
