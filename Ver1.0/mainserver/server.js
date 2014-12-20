@@ -43,30 +43,20 @@ var pool = mysql.createPool({
 });
 
 /* Router */
-app.get('/testMain', function(request, response){
-    var mainData;
-    
-    response.render('testMain', mainData);
-});
 app.get('/', function(request, response){
-<<<<<<< HEAD
-    /*DB SELECT : data for momentsBar(color only)*/
-=======
     /*DB SELECT : momentId, text, bgColor[0]*/
+    var mainData;
     pool.getConnection(function(err, connection){
-        connection.query('SELECT m.id, m.text, c.bgColor FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0;', function(err, result){
-                           if(err) {
-                               console.log('mainPage select error');
-                               throw err;
-                           }
+        connection.query('SELECT m.id, m.text, c.bgColor '+
+                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0;', function(err, result){
+            if(err) {
+                console.log('mainPage select error');
+                throw err;
+            }
             console.log(result);
             connection.release();
         });
     });
-    
->>>>>>> ecd5dd46adc0e44c2712899acb5e5bc03ff31224
-    var mainData;
-
     response.render('main',mainData);
 });
 
@@ -170,12 +160,6 @@ app.post('/upload-text', function(request, response){
                             textColor : colorClassifier(colorList).textColorHex(),
                             date : date
                         }
-                        
-                        //INSERT_INTO USAGE
-//                        console.log(sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", 
-//                                                   [moment.id, moment.textColor, moment.text, moment.file, moment.date]));
-//                        
-//                        console.log(sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", moment));
                         
                         var momentQuery = sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", moment);
                         pool.getConnection(function(err, connection){
