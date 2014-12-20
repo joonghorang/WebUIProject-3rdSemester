@@ -65,9 +65,10 @@ body{
     cursor: pointer;
 }
 #close-button{
-    width : 40%;
+    width : 60px;
+    height : 60px;
     margin: auto;
-    padding-top: 80%;
+    padding-top: 60%;
     left: 0;
     right: 0;
 
@@ -97,21 +98,31 @@ body{
     z-index: 120;
     width: 80%;
     height: 80%;
-    background-image: url(../image/camera.png);
+/*    background-image: url(../image/camera.png);
     background-size: contain;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
     position: relative;
     top: 5%;
     margin: auto;
     left: 0;
     right: 0;
-    border: 10px solid #202020;
-    border-radius : 15px;
+    border: 2px solid #202020;
+    border-radius : 2px;
     border-style: solid;
     box-sizing: border-box;
     text-align: center;
     line-height: 60px;
+}
+#camera {
+    position : relative;
+    top : 30%;
+    width: 40%;
+    height: 40%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 #input-image {
     z-index: 120;
@@ -172,7 +183,7 @@ body{
     left: 0;
     right: 0;
     top: 15%;
-    background-image: url(../image/confirm.png);
+    background-image: url(../image/png/confirm.png);
     background-size: cover;
     cursor: pointer;
 }
