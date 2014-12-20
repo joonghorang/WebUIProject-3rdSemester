@@ -47,8 +47,6 @@ var colorClassifier = function colorClassifier(colorList){
         this.bgColor.splice(this.bgColor.indexOf(this.textColor),1);
         
     }
-    console.log(colorList);
-    console.log(this.bgColor);
 }
 colorClassifier.prototype ={
     textColorRgb : function(){
@@ -62,7 +60,6 @@ colorClassifier.prototype ={
     },
     bgColorHex : function(){
         var hex = [];
-        console.log(this.bgColor.length);
         for(var i = 0; i<this.bgColor.length; ++i){
              hex[i] = tc(this.bgColor[i]).toHexString();
         }
