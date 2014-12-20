@@ -60,7 +60,7 @@ var manageFileInput = {
 };
 var confirm = {
     "getElements" : function(){
-        this.closeButton = document.getElementById("close-button");
+        this.closeButton = document.getElementById("close-button-wrapper");
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.confirmButton = document.getElementById("confirm-button");
@@ -127,15 +127,31 @@ var submit = {
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.mainContentWrapper = document.getElementById("wrapper");
+        this.previewImgWrapper = document.getElementById("preview-image");
+        this.previewImg = document.getElementById("input-image");
     },
     "sendData" : function(e){
         e.preventDefault();
-        var formData = new FormData();
-        formData.append("textInput", this.textInput.value);
-        formData.append("image", this.fileInput.files[0]);
+        // 텍스트 인풋창을 닫고 메인화면으로 돌아간다. 
+        display([this.itemFactory], "hide");
+        display([this.mainContentWrapper, this.itemFactoryButton], "show");
+
+        // 기존 preview Image에 들어있는 사진을 지우고 원래의 사진기 아이콘으로 되돌려준다. 
+        this.previewImgWrapper.removeChild(this.previewImgWrapper.firstElementChild);
+        var addCamera = document.createElement("img");
+        addCamera.setAttribute('id', "camera");
+        addCamera.setAttribute('src', "image/camera.png");
+        this.previewImgWrapper.appendChild(addCamera);
+
+        // 기본 문자열 재입력.
+        this.textInput.value = "30자 이내로 입력해주세요.";
+
+        // var formData = new FormData();
+        // formData.append("textInput", this.textInput.value);
+        // formData.append("image", this.fileInput.files[0]);
         
-        this.request.open("POST", "/upload-text", true);
-        this.request.send(formData);
+        // this.request.open("POST", "/upload-text", true);
+        // this.request.send(formData);
     },
     "init" : function(){
         this.getElements();
