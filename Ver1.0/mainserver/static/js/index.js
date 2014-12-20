@@ -161,10 +161,10 @@ var submit = {
         var result = JSON.parse(this.request.responseText);
 
         // 새로운 모멘트 생성. 
-
         var addMoment = document.createElement("div");
-        addMoment.setAttribute('class', result.id);
-        this.moments.insertBefore(this.moments.firstElementChild, addMoment);
+        addMoment.setAttribute('class', result.hopeNumber);
+        var firstNode = this.moments.firstElementChild;
+        this.moments.insertBefore(addMoment, firstNode);
         console.log(this.moments.firstElementChild)
         for(var i = 0; i < this.moments.childElementCount; i++){
             console.log(2);
@@ -174,7 +174,7 @@ var submit = {
         this.getElements();
         this.submitButton.addEventListener('click', this.reset.bind(this),false);
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
-        this.submitButton.addEventListener('load', this.addMoment.bind(this),false);
+        this.request.addEventListener('load', this.addMoment.bind(this),false);
     }
 };
 
