@@ -61,25 +61,28 @@ app.get('/moment/:id', function(request, response){
     
     /* connection 타임아웃이 있어서 
     필요할때마다 커넥트를하고, end를 해주어야 할거같습니다 신영님.*/
+    /* re : 그렇군요. */
     
-//    connection.connect(function(err){
-//        if(err){
-//            console.error('sql connection err');
-//            console.error(err);
-//            throw err;
-//        }
-//    });
+    connection.connect(function(err){
+        if(err){
+            console.error('sql connection err');
+            console.error(err);
+            throw err;
+        }
+    });
     
     // SELECT m.momentId, m.imgPath, m.text, c.color
     // FROM momentList m 
     // INNER JOIN color c
     // ON m.momentId=c.momentId AND m.momentId=targetId;
     
-    //connection.end();
+    connection.end();
     
     /*DB SELECT : all data(bgImg, img, color, text, date)*/
     /*//DB SELECT : all data(bgImg, img, color, text, date)*/
-    var momentData; //SELECT 결과 
+//    var momentData = {
+//        "imageSrc" : fileName
+//    };
 
     response.render('moment',momentData);
 });
@@ -152,18 +155,33 @@ app.post('/upload-text', function(request, response){
                             textColor : colorClassifier(colorList).textColorHex(),
                             date : date
                         }
-                        //    connection.connect(function(err){
-                        //        if(err){
-                        //            console.error('sql connection err');
-                        //            console.error(err);
-                        //            throw err;
-                        //        }
-                        //    });
-
-                        /*DB INSERT : text, filePath*/
-                        /*//DB INSERT : text*/                         
                         
-                        //connection.end();
+                        connection.connect(function(err){
+                            if(err){
+                                console.error('sql connection err');
+                                console.error(err);
+                                throw err;
+                            }
+                        });
+
+                        /*DB INSERT*/
+                        connection.query('INSERT INTO moment (id, textColor, text, file, date) VALUES('+ moment.id.toString() +','+ moment.textColor.toString() +','+ moment.text.toString() +','+ moment.file.toString() +','+ moment.date.toString()+ ')', function(err, res){
+                           if(err) {
+                               console.log('moment insert error');
+                               throw err;
+                           }
+                        });
+                        
+                        for(var i=0; i<moment.bgColor.length ; i++){
+                            connection.query('INSERT INTO bgColor VALUES('+ moment.id + ',' + (i+1) + ',' + moment.bgColor[i] +');',function(err, res){
+                                if(err) {
+                                    console.log('bgColor insert error');
+                                   throw err;
+                                }
+                            });
+                        }            
+                        connection.end();
+                        /*//DB INSERT*/                         
 
                         var result = {
                             "id" : id,
