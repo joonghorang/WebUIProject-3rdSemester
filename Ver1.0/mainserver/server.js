@@ -43,12 +43,11 @@ var pool = mysql.createPool({
 });
 
 /* Router */
-app.get('/', function(request, response){
-    /*DB SELECT : momentId, text, bgColor[0]*/
-    var mainData = {
-    };
+app.get('', function(request, response){
+    /*DB SELECT*/
+    var mainData = {};
     pool.getConnection(function(err, connection){
-        connection.query('SELECT m.id, m.text, c.bgColor '+
+        connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
                          'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0;', function(err, result){
             if(err) {
                 console.log('mainPage select error');
@@ -106,6 +105,23 @@ app.get('/moment/:id', function(request, response){
 
 
 });
+
+//app.post('/:pageNum', function(request, response){
+//    var pageNum = request.param('pageNum');
+//    var data = {};
+//    
+//    pool.getConnection(function(err, connection){
+//        connection.query('SELECT * FROM ;', 
+//                         function(err, result){
+//            if(err){
+//                console.log('pageNum data select error');
+//                throw err;
+//            }
+//            
+//            connection.release();
+//        });
+//    });
+//});
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
 app.post('/upload-image', function(request, response){
@@ -166,15 +182,15 @@ app.post('/upload-text', function(request, response){
                         var colorList = Impressive(img).toHexString();
                         
                         var moment = {
+                            date : date,
                             id : id,
                             file : fileName,
                             text : fields.textInput,
                             bgColor : colorClassifier(colorList).bgColorHex(),
                             textColor : colorClassifier(colorList).textColorHex(),
-                            date : date
                         }
                         
-                        var momentQuery = sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", moment);
+                        var momentQuery = sq.INSERT_INTO("moment", "(date, id, file, text, textColor)", moment);
                         pool.getConnection(function(err, connection){
                             connection.query(momentQuery, function(err, res){
                                                if(err) {
@@ -200,24 +216,11 @@ app.post('/upload-text', function(request, response){
                         //DB transaction.....?
                         
                         console.log('>>>inserted');
-                        var hopeNum;
-                        pool.getConnection(function(err, connection){
-                            connection.query('SELECT hopeNum FROM moment;', function(err, res){
-                            if(err){
-                                console.log(err);
-                                throw err;
-                            }
-                                console.log(res);
-                                hopeNum = res;
-                                connection.release();
-                            });
-                        });
                         
                         var result = {
                             "id" : id,
                             "bgColor" : moment.bgColor[0],
                             "textColor" : moment.textColor,
-                            "hopeNumber" : hopeNum
                         };
                         
                         response.send(result);

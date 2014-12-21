@@ -66,8 +66,8 @@ body{
     cursor: pointer;
 }
 #close-button{
-    width : 60px;
-    height : 60px;
+    width : 40px;
+    height : 40px;
     margin: auto;
     padding-top: 60%;
     left: 0;
@@ -178,8 +178,8 @@ body{
 
 #confirm-button {
     z-index: 130;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     position: relative;
     margin: auto;
     left: 0;

@@ -57,58 +57,69 @@ a:visited, a:link{
     line-height: 300px;
     border: 2px solid #ffffff;
     margin: 5px;
-    background-image: url("../image/main1.jpg");
-    background-color: rgb(83,127,145);
+/*    background-image: url("../image/main1.jpg");*/
+/*    background-color: rgb(83,127,145);*/
 }
 
 .moment-2 {
     width: 290px;
     height: 100px;
+    line-height: 100px;
     border: 2px solid #ffffff;
     margin: 5px;
     line-height: 100px;
-    text-align: right;
+    text-align: center;
 }
 
 .moment-3 {
     width: 190px;
     height: 190px;
+    line-height: 190px;
     border: 2px solid #ffffff;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 105px;
     margin-right: 5px;
+    text-align: center;
 }
 
 .moment-4 {
     width: 590px;
     height: 180px;
+    line-height: 180px;
     border: 2px solid #ffffff;
     margin-left: 5px;
     margin-top: 5px;
     margin-bottom: 400px;
+    text-align: center;
 }
 
 .moment-5 {
     width: 190px;
     height: 186px;
+    line-height: 186px;
     border: 2px solid #ffffff;
     margin-bottom: 400px;
     margin-left: 200px;
+    text-align: center;
 }
 
 .moment-6 {
     width: 240px;
     height: 150px;
+    line-height: 150px;
     border: 2px solid #ffffff;
     margin: 5px;
+    text-align: center;
 }
 
 .moment-7 {
     width: 290px;
     height: 200px;
+    line-height: 200px;
     border: 2px solid #ffffff;
     margin: 5px;
+    text-align: center;
 }
 
 .moment-8 {
@@ -119,9 +130,9 @@ a:visited, a:link{
     margin-top: 15px;
     margin-left: 60px;
     margin-bottom: 600px;
-    background-image: url("../image/main2.png");
+/*    background-image: url("../image/main2.png");*/
     background-size: cover;
-    background-color: rgb(115,90,74);
+/*    background-color: rgb(115,90,74);*/
 }
 
 .moment-9 {
@@ -131,25 +142,29 @@ a:visited, a:link{
     border: 2px solid #ffffff;
     margin-right: 5px;
     margin-left: -50px;
-    background-image: url("../image/mainTest2.jpg");
+/*    background-image: url("../image/mainTest2.jpg");*/
     background-size: cover;
 }
 
 .moment-10 {
     width: 240px;
     height: 100px;
+    line-height: 100px;
     border: 2px solid #ffffff;
     margin-left: 300px;
     margin-bottom: 5px;
+    text-align: center;
 }
 
 .moment-11 {
     width: 490px;
     height: 290px;
+    line-height: 290px;
     border: 2px solid #ffffff;
     margin-bottom: 400px;
     margin-left: 5px;
     margin-top: 5px;
+    text-align: center;
 }
 
 .moment-12 {
@@ -158,13 +173,14 @@ a:visited, a:link{
     line-height: 300px;
     border: 2px solid #ffffff;
     margin-bottom: 300px;
-    background-image: url("../image/main4.jpg");
+/*    background-image: url("../image/main4.jpg");*/
     background-size: cover;
 }
 
 .moment-13 {
     width: 150px;
     height: 300px;
+    line-height: 300px;
     border: 2px solid #ffffff;
     margin: 5px;
 }
@@ -172,6 +188,7 @@ a:visited, a:link{
 .moment-14 {
     width: 430px;
     height: 300px;
+    line-height: 300px;
     border: 2px solid #ffffff;
     margin-top: 85px;
     margin-left: 5px;

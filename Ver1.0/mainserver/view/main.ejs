@@ -42,85 +42,17 @@
             </div>
             <div id = "moments-wrapper" style="height:7000px;">
                 <div id = "moments">
-<!--
+                    
+<!--                    background-image url을 찾아올 수가 없습니다.....ㅠㅜ-->
+                    
                     <% for(var i=0; i<moments.length; i++) {%>
                     <a href = "./moment/<%= moments[i].id %>">
-                        <div class="moment-<%= i+1 %>">
+                        <div class="moment-<%= i+1 %>" style="background-image:url(uploads/<%= moments[i].file %>); background-color:<%= moments[i].bgColor %>;">
                             <span><%= moments[i].text%></span>
                         </div>
                     </a>
-                    <% } %>                    
--->
-                    <a href="#">
-                        <div class="moment-1">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-2">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-3">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-4">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-5">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-6">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-7">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-8">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-9">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-10">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-11">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-12">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-13">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-14">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
+                    <% } %>
+                    
                 </div> 
             </div>    
         </div>
@@ -128,6 +60,8 @@
         <script src="./js/lib/EventUtil.js"></script>
         <script src="./js/lib/cssUtil.js"></script>
         <script src="./js/lib/masonry.pkgd.min.js"></script>
+        <script src="./js/index.js"></script>
+        <script src="./js/testInput.js"></script>
         <script>
             var container = document.getElementById('moments');
             var masnry = new Masonry(container, {
@@ -135,8 +69,6 @@
                 itemSelector : '.moment'
             });   
         </script>
-        <script src="./js/index.js"></script>
-        <script src="./js/testInput.js"></script>
 
         
     </body>

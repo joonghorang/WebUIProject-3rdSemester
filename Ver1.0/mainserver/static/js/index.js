@@ -190,7 +190,7 @@ var confirm = {
         display([this.uploadFile, this.closeButton],'hide');
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
-        this.textInput.value = "30자 이내로 입력하세요.";
+//        this.textInput.value = "30자 이내로 입력하세요.";
 
         // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
         fR = parseInt(bgColor.slice(1,3), 16);
@@ -235,7 +235,7 @@ var submit = {
         this.previewImgWrapper.appendChild(addCamera);
 
         // 기본 문자열 재입력.
-        this.textInput.value = "30자 이내로 입력해주세요.";
+//        this.textInput.value = "30자 이내로 입력해주세요.";
     },
     "sendData" : function(e){
         e.preventDefault();
