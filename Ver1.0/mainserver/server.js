@@ -83,8 +83,9 @@ app.get('/moment/:id', function(request, response){
             momentData.text = result[0].text;
             momentData.file = result[0].file;
             momentData.date = result[0].date;
+            
             connection.release();
-            /*DB SELECT : all data(bgImg, img, color, text, date)*/
+            
             //color table select
             pool.getConnection(function(err, connection){
                 connection.query('SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";', function(err, result){
