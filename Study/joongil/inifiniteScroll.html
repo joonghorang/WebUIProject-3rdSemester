@@ -1,0 +1,27 @@
+<html>
+<body>
+<div id="test">scroll to understand</div>
+<div id="wrapper" style="height: 800px; overflow: auto;">
+  <div id="content"></div>
+</div>
+<script language="JavaScript">
+  var more = '<div style="height: 1000px; background: #EEE;"></div>';
+  var wrapper = document.getElementById("wrapper");
+  var content = document.getElementById("content");
+  var test = document.getElementById("test");
+  content.innerHTML = more;
+
+  function addEvent(obj,ev,fn) {
+    if(obj.addEventListener) obj.addEventListener(ev,fn,false);
+    else if(obj.attachEvent) obj.attachEvent("on"+ev,fn);    
+  }
+
+  function scroller() {
+    test.innerHTML = wrapper.scrollTop+"+"+wrapper.offsetHeight+"+100>"+content.offsetHeight;
+    if(wrapper.scrollTop+wrapper.offsetHeight+100>content.offsetHeight) content.innerHTML+= more;
+  }
+
+  wrapper.addEventListener("scroll",scroller, false);
+</script>
+</body>
+</html>

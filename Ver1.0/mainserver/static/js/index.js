@@ -3,13 +3,16 @@ var MAX_HEIGHT = window.innerHeight;
 
 var setItemFactoryDisplay = {
     "getElements" : function(){
+        this.wrapper = document.getElementById("wrapper");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
+        this.momentsWrapper = document.getElementById("moments-wrapper");
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
         this.previewImg = document.getElementById('preview-image');
+        this.end = document.getElementsByClassName("moment-14");
         this.request = new XMLHttpRequest();
     },
     "openFactory" : function(){
@@ -22,6 +25,16 @@ var setItemFactoryDisplay = {
         }   
         display([this.moments, this.itemFactoryButton],'show');
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
+    },
+    //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
+    "displayMore" : function(){
+        this.wrapper.innerHTML = this.wrapper.scrollTop+"+"+this.wrapper.offsetHeight+"+100>"+this.momentsWrapper.offsetHeight;
+        console.log(this.momentsWrapper.scrollTop);
+        console.log(this.momentsWrapper.offsetHeihgt);
+        //console.log(this.moments.offsetHeight);
+        if(this.wrapper.scrollTop + this.wrapper.offsetHeihgt +100 > this.momentsWrapper.offsetHeight){
+            console.log(1);
+        }
     },
     //서버에 라우터 완성되면 부활 
     // "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
@@ -98,12 +111,10 @@ var setItemFactoryDisplay = {
     //     html.style.backgroundColor = bgColor;
     // },
     "init" : function(){ // mainPage Initial code
-        
-        
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
-        
+        this.wrapper.addEventListener('scroll', this.displayMore.bind(this), false);
         //서버에 라우터 완성되면 부활 
         //this.request.addEventListener('load', this.createMoments.bind(this), false);
         //this.request.addEventListener('load', this.createBgColor.bind(this), false);
