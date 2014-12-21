@@ -42,24 +42,16 @@
             </div>
             <div id = "moments-wrapper" style="height:7000px;">
                 <div id = "moments">
-<<<<<<< Updated upstream
-                    
+
 <!--                    background-image url을 찾아올 수가 없습니다.....ㅠㅜ-->
                     
-=======
->>>>>>> Stashed changes
                     <% for(var i=0; i<moments.length; i++) {%>
                     <a href = "./moment/<%= moments[i].id %>">
                         <div class="moment-<%= i+1 %>" style="background-image:url(uploads/<%= moments[i].file %>); background-color:<%= moments[i].bgColor %>;">
                             <span><%= moments[i].text%></span>
                         </div>
                     </a>
-<<<<<<< Updated upstream
-                    <% } %>
-                    
-=======
-                    <% } %> 
-                                      
+        
 <!--                     <a href="#">
                         <div class="moment-1">
                             <span>별이 빛나는</span>
@@ -130,7 +122,6 @@
                             <span>별이 빛나는</span>
                         </div>
                     </a>
->>>>>>> Stashed changes
                 </div> 
             </div>    
         </div>
