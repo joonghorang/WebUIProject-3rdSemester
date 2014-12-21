@@ -5,7 +5,6 @@
         <link rel="stylesheet" type="text/css" href="./css/reset.css">
         <link rel="stylesheet" type="text/css" href="./css/mainPage.css">
         <link rel="stylesheet" type="text/css" href="./css/index.css">
-
         <title>a moment</title>
     </head>
     <body>
@@ -47,7 +46,7 @@
                     
                     <% for(var i=0; i<moments.length; i++) {%>
                     <a href = "./moment/<%= moments[i].id %>">
-                        <div class="moment-<%= i+1 %>" style="background-image:url(uploads/<%= moments[i].file %>); background-color:<%= moments[i].bgColor %>;">
+                        <div class="moment-<%= i+1 %>">
                             <span><%= moments[i].text%></span>
                         </div>
                     </a>
@@ -138,7 +137,14 @@
                 itemSelector : '.moment'
             });   
         </script>
-
+        <script>
+//            var style=document.getElementByTagName('style');
+//            var momentDivs = document.querySelectorAll('#moments div');
+//            for(var i=0; i<moments.length ; i++){
+//                var hoverText = '#moments div:nth-of-type(14n+'+(i+1)+'):hover { background-color : '+ moments[i].bgColor +' }'
+//                style.innerHTML += hoverText;
+//            }
+        </script>
         
     </body>
 </html>
