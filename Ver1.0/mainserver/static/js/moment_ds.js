@@ -1,16 +1,24 @@
 (function(){  
-    function drawBgCanvas(bgColor){
+    function initCanvases(){
+        //set canvases w, h
         var bgCanvas = document.getElementById("bg-canvas");
-        var BG_CANVAS_W = 500;
-        var BG_CANVAS_H = 500;
-        bgCanvas.width = BG_CANVAS_W;
-        bgCanvas.height = BG_CANVAS_H;
+        var textCanvas = document.getElementById("text-canvas");
+        var CANVAS_W = 500;
+        var CANVAS_H = 500;
+        bgCanvas.width = CANVAS_W;
+        bgCanvas.height = CANVAS_H;
+        textCanvas.width = CANVAS_W;
+        textCanvas.height = CANVAS_H;
+    }
+    function drawBgCanvas(bgColor){
+        var bgCanvas    = document.getElementById("bg-canvas");
         var bgCtx = bgCanvas.getContext("2d");
         bgCtx.fillStyle = bgColor;
         bgCtx.fillRect(0,0,bgCanvas.width,bgCanvas.height);
     }
-    function drawTextCanvas(textColor){
-        
+    function drawTextCanvas(textColor, text){
+        var textCanvas  = document.getElementById("text-canvas");
+        drawTextOn(textCanvas, text, textColor);
     }
     var letsShow = {
         //image를 보여주기위한 함수
@@ -30,9 +38,10 @@
             display([imageWrapper], "hide");
         }
     }
-
+    
+    initCanvases();
     drawBgCanvas(bgColor);
-    drawTextCanvas(textColor);
+    drawTextCanvas(textColor, text);
     var textCanvas = document.getElementById("text-canvas");
     var imageWrapper = document.getElementById("moment-image-wrapper"); 
     EventUtil.addHandler(imageWrapper, "click", letsShow.momentText);

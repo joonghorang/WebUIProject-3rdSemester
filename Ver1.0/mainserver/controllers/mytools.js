@@ -1,5 +1,4 @@
 (function() {
-    var moment;
     if (typeof module !== "undefined" && module.exports) {
 
     }else{

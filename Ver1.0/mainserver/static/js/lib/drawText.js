@@ -1,73 +1,11 @@
-function stringToWordList(String){
-    var result = [];
-    result = String.split(" ");
-    return result;
-};
-// Comment : 왜 enter를 더해주어야 하는가.
-function addEnterToWordList(WordArray){
-    for(var i = 0; i < WordArray.length; i++){
-        WordArray[i] += "\n";
-    }
-    return WordArray;
-};
-
-window.addEventListener('DOMContentLoaded', function(){
-	var MAX_WIDTH = window.innerWidth;
-	var MAX_HEIGHT = window.innerHeight;
-	var outputImageWrapper = document.getElementById("output-image-wrapper");
-	var outputText = document.getElementById("output-text");
-	var textCanvas = document.getElementById("text-canvas");
-	var bgCanvas = document.getElementById("back-canvas");
-	var backwardButton = document.getElementById("backward-button");
-	var forwardButton = document.getElementById("forward-button");
-
-    var textContext = textCanvas.getContext("2d");
-    var bgContext = bgCanvas.getContext("2d");
-    var MAX_STR_LEN;
-    var CANVAS_WIDTH;
-    var CANVAS_HEIGHT;
-    init();
-    textWriter("Typing 타이핑 12345");
-	//init
-	function init(){
-		//사진이미지 배경을 설정한다. 
-        // Comment : good.
-        MAX_STR_LEN = 30;
-		outputImageWrapper.style.backgroundColor = "#202020";
-        CANVAS_WIDTH = CANVAS_HEIGHT = MAX_WIDTH * 0.6;
-        // Comment : context가 뭔지 알 도리가 없다.
-        //           outputCanavs는 뭐고 bgCanvas는 뭐죠. 이름으로 단박에 명시하기 힘들다면 구체적인 코멘트를 작성하자.
-
-		bgContext.fillStyle = color;
-		bgContext.fillRect(0,0, bgCanvas.width, bgCanvas.height);
-
-		// 전체 폰트 사이즈 크기를 상대적으로 여기서 조절 가능. 
-        // Comment : width height 같다는걸 명시하자.
-		textCanvas.width = CANVAS_WIDTH;
-		textCanvas.height = CANVAS_HEIGHT;
-        // Comment : 어떤게 좋은걸까?
-		
-		//setting value
-
-//웹폰트 사용시 이구문이 필요할 수 있음. 나중에 해결-
-// 		<script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
-// <script>
-//  WebFont.load({
-//   custom: {
-//    families: ['NanumBarunGothic'],
-//    urls: ['/css/font.css']
-//   }
-//  });
-// </script>
-        // Comment : 이런 식으로 폰트 setting부분을 따로 빼두는 것은 array.
-		var fontName = "NanumBarunGothicUltraLight";
-		var fontColor = "#ffffff";
-        // Comment : 이 array 방식에는 문제가 있다.
-		var fontSizeArray = [140, 100, 72, 60, 48, 36, 24, 16, 8];
-        
-        // Comment : 글자를 쓰는 모양이다. 결과물은 무엇으로 나오나? 알 수 없다면 return하는 결과물이 무엇인지 써주자. 
+function drawTextOn(textCanvas, text, textColor){
+    MAX_STR_LEN = 30;
     
-    };
+    var fontName = "NanumBarunGothicUltraLight";
+    var fontColor = "#ffffff";
+    var fontSizeArray = [140, 100, 72, 60, 48, 36, 24, 16, 8];
+    var textContext = textCanvas.getContext("2d");
+    textWriter(text);
     function textWriter(originTextData){
             // Comment : Setting을 빼두는 것까진 좋았다. 그런데 이 데이타들이 내부에서 설정되어야 하는 친구들이었을까?            
             // Comment : 30과 같은것을 하드코딩이라 한다. 가독성도, 수정도 좋지않다.
@@ -84,13 +22,13 @@ window.addEventListener('DOMContentLoaded', function(){
             // Comment : 무엇을 하는 친구일지 전혀 감이 오지않는 네이밍. context에 글자를 써주는 것이라고 명시해주자. 
             //          canvas에 그리는 경우 네이밍엔 draw등을 넣어주는게 좋다.
 		    function drawWordsOnCanvas(context, wordArray){
-                var textX = CANVAS_WIDTH/2;
-                var textY = CANVAS_HEIGHT/2;
+                var textX = textCanvas.width/2;
+                var textY = textCanvas.height/2;
                 // 왼쪽 정렬을 위한 코드. (윈쪽 정렬한 후 문단 전체를 제일 긴 단어를 기준으로 가운데 정렬하기)
                 // Comment : 이런 부정확한 이름들은 어떤 역할을 하는 변수인지 확실히 써주자.
                 var addTextX = 0;
                 // Comment : 마찬가지. 이 array방식에는 문제가 있다.
-                var addTextArray =[16,24,36,48,60,72,100];
+                var addTextArray =[24,36,48,60,72,100];
                 // Comment : addTextX와 떨어져 있어야 했나?
                 var addTextY = addTextArray[2]; // 24가 기본값
                 var uuuuuu = fontSizeAndAddTextY(wordArray);
@@ -264,25 +202,17 @@ window.addEventListener('DOMContentLoaded', function(){
             }
             return mostLongWord;
         }
-    }	
-	//화면전환 이벤트 등록
-	EventUtil.addHandler(outputText, "click", function(event){
-        display([outputImageWrapper], "show");
-        display([outputText], "hide");
-	});
-	EventUtil.addHandler(outputImageWrapper, "click", function(event){
-        display([outputText], "show");
-        display([outputImageWrapper], "hide");
-	});
+    }
+};
+function stringToWordList(String){
+    var result = [];
+    result = String.split(" ");
+    return result;
+};
 
-	//모멘츠 이동버튼 이벤트 등록
-	EventUtil.addHandler(backwardButton, "click", function(event){
-        console.log("you click backward button");
-	});
-	EventUtil.addHandler(forwardButton, "click", function(event){
-        console.log("you click forward button");
-	});
-
-
-},false)
-
+function addEnterToWordList(WordArray){
+    for(var i = 0; i < WordArray.length; i++){
+        WordArray[i] += "\n";
+    }
+    return WordArray;
+};
