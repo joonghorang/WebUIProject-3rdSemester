@@ -4,23 +4,16 @@
 }
 
 #moments{
-    z-index: 10;
+    z-index: 0;
     width: 600px;
     min-width: 600px;
-    height: 60%;
     min-height: 400px;
-	position : absolute;
-
-    opacity: 0.9;    
-    background-image:url( "../image/backGround.jpg");
-    background-size: auto;
-    background-attachment: fixed;
-
 	margin : auto;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+    padding-top: 150px;
 }
 
 #moments div {
