@@ -45,7 +45,8 @@ var pool = mysql.createPool({
 /* Router */
 app.get('/', function(request, response){
     /*DB SELECT : momentId, text, bgColor[0]*/
-    var mainData;
+    var mainData = {
+    };
     pool.getConnection(function(err, connection){
         connection.query('SELECT m.id, m.text, c.bgColor '+
                          'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0;', function(err, result){
@@ -54,10 +55,13 @@ app.get('/', function(request, response){
                 throw err;
             }
             console.log(result);
+            mainData.moments = result;
+            console.log(mainData);
+            response.render('main',mainData);
             connection.release();
         });
     });
-    response.render('main',mainData);
+    
 });
 
 /*/moment/picId 라우터로 이동*/
