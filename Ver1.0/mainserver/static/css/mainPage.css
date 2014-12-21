@@ -3,6 +3,11 @@
     margin: 0 auto;
 }
 
+a:visited, a:link{
+    color: #222222;
+    text-decoration: none;
+}
+
 #moments{
     z-index: 0;
     width: 600px;
@@ -19,13 +24,40 @@
 #moments div {
     float: left;
     box-sizing: border-box;
+    position: relative;
+    font-size: 13px;
+    background-size: cover;
+    background-position: center;
+}
+/*
+
+#moments span {
+    position: absolute;
+    top: 50%;
+    text-align:center;
+    transform: translate(0,-50%);
+}
+*/
+
+#moments div:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    background-blend-mode:saturation;
+}
+
+.moment-1, .moment-8, .moment-9, .moment-12 {
+    color: transparent;
+    text-align: center;
 }
 
 .moment-1 {
     width: 290px;
     height: 300px;
+    line-height: 300px;
     border: 2px solid #ffffff;
     margin: 5px;
+    background-image: url("../image/main1.jpg");
+    background-color: rgb(83,127,145);
 }
 
 .moment-2 {
@@ -33,6 +65,8 @@
     height: 100px;
     border: 2px solid #ffffff;
     margin: 5px;
+    line-height: 100px;
+    text-align: right;
 }
 
 .moment-3 {
@@ -79,18 +113,26 @@
 .moment-8 {
     width: 590px;
     height: 320px;
+    line-height: 320px;
     border: 2px solid #ffffff;
     margin-top: 15px;
     margin-left: 60px;
     margin-bottom: 600px;
+    background-image: url("../image/main2.png");
+    background-size: cover;
+    background-color: rgb(115,90,74);
+    transition: all 0.4s ease-in;
 }
 
 .moment-9 {
     width: 100px;
     height: 400px;
+    line-height: 400px;
     border: 2px solid #ffffff;
     margin-right: 5px;
     margin-left: -50px;
+    background-image: url("../image/mainTest2.jpg");
+    background-size: cover;
 }
 
 .moment-10 {
@@ -113,8 +155,11 @@
 .moment-12 {
     width: 550px;
     height: 300px;
+    line-height: 300px;
     border: 2px solid #ffffff;
     margin-bottom: 300px;
+    background-image: url("../image/main4.jpg");
+    background-size: cover;
 }
 
 .moment-13 {
