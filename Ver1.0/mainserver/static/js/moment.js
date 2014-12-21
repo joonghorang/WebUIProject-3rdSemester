@@ -15,7 +15,6 @@ window.addEventListener('DOMContentLoaded', function(){
 		var backContext = backCanvas.getContext("2d");
 		backContext.fillStyle = "#202020";
 		backContext.fillRect(0,0, backCanvas.width, backCanvas.height);
-		console.log(outputText.width);
 
 		// 전체 폰트 사이즈 크기를 상대적으로 여기서 조절 가능. 
 		outputCanvas.width = MAX_WIDTH * 0.6;
@@ -25,7 +24,18 @@ window.addEventListener('DOMContentLoaded', function(){
 		var CANVAS_HEIGHT = outputCanvas.height;
 
 		//setting value
-		var fontName = "nanumGothic";
+
+//웹폰트 사용시 이구문이 필요할 수 있음. 나중에 해결-
+// 		<script src="//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+// <script>
+//  WebFont.load({
+//   custom: {
+//    families: ['NanumBarunGothic'],
+//    urls: ['/css/font.css']
+//   }
+//  });
+// </script>
+		var fontName = "NanumBarunGothicUltraLight";
 		var fontColor = "#ffffff";
 		var fontSizeArray = new Array();
 		fontSizeArray.push(140);
@@ -41,7 +51,7 @@ window.addEventListener('DOMContentLoaded', function(){
 		textWriter();
 
 		function textWriter(){
-		    var originTextData = "Typing Yong Why Ho Undifined";
+		    var originTextData = "Typing 타이핑 12345";
 		    var textX = CANVAS_WIDTH/2;
 		    var textY = CANVAS_HEIGHT/2;
 		    // 왼쪽 정렬을 위한 코드. (윈쪽 정렬한 후 문단 전체를 제일 긴 단어를 기준으로 가운데 정렬하기)
@@ -243,20 +253,20 @@ window.addEventListener('DOMContentLoaded', function(){
 
 	//화면전환 이벤트 등록
 	EventUtil.addHandler(outputText, "click", function(event){
-	display([outputImageWrapper], "show");
-	display([outputText], "hide");
+        display([outputImageWrapper], "show");
+        display([outputText], "hide");
 	});
 	EventUtil.addHandler(outputImageWrapper, "click", function(event){
-	display([outputText], "show");
-	display([outputImageWrapper], "hide");
+        display([outputText], "show");
+        display([outputImageWrapper], "hide");
 	});
 
 	//모멘츠 이동버튼 이벤트 등록
 	EventUtil.addHandler(backwardButton, "click", function(event){
-	console.log(1);
+        console.log("you click backward button");
 	});
 	EventUtil.addHandler(forwardButton, "click", function(event){
-	console.log(2);
+        console.log("you click forward button");
 	});
 
 

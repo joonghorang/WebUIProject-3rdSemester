@@ -10,6 +10,7 @@ var setItemFactoryDisplay = {
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
         this.previewImg = document.getElementById('preview-image');
+        this.request = new XMLHttpRequest();
     },
     "openFactory" : function(){
         display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
@@ -22,13 +23,90 @@ var setItemFactoryDisplay = {
         display([this.moments, this.itemFactoryButton],'show');
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
+    //서버에 라우터 완성되면 부활 
+    // "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+    //     var displaySetNum = 2;          //레이아웃 디자인 갯수, 나중에 더 좋은 방법으로 개선해도 좋을듯. 
+    //     var momentUnitNum = 7;          // 한 세트에 적용되는 모멘츠 갯수
+
+    //     //this.request.open("GET" , "/?maybe Initial Color Router?" , true);
+    //     //this.request.send();
+    //     var result = JSON.parse(this.request.responseText);
+    //     for(var i = 0; i < this.result.length; i++){
+    //         var addMoment = createElement("div");
+    //         var addA = createElement("a");
+    //         var addImg = createElement("img");
+    //         var addP = createElemet("p");
+
+    //         if (i < momentUnitNum){
+    //             if(i % 7 === 0){
+    //                 addMoment.setAttribute("class", "moment-1");
+    //             } else if(i % 7 === 1){
+    //                 addMoment.setAttribute("class", "moment-2");
+    //             } else if(i % 7 === 2){
+    //                 addMoment.setAttribute("class", "moment-3");
+    //             } else if(i % 7 === 3){
+    //                 addMoment.setAttribute("class", "moment-4");
+    //             } else if(i % 7 === 4){
+    //                 addMoment.setAttribute("class", "moment-5");
+    //             } else if(i % 7 === 5){
+    //                 addMoment.setAttribute("class", "moment-6");
+    //             } else if(i % 7 === 6){
+    //                 addMoment.setAttribute("class", "moment-7");
+    //             } else {
+    //                 alert("error in createMoments set Class Name");
+    //             }
+    //         } else if(i < momentUnitNum * displaySetNum){
+    //                 addMoment.setAttribute("class", "moment-1");
+    //             } else if(i % 7 === 1){
+    //                 addMoment.setAttribute("class", "moment-2");
+    //             } else if(i % 7 === 2){
+    //                 addMoment.setAttribute("class", "moment-3");
+    //             } else if(i % 7 === 3){
+    //                 addMoment.setAttribute("class", "moment-4");
+    //             } else if(i % 7 === 4){
+    //                 addMoment.setAttribute("class", "moment-5");
+    //             } else if(i % 7 === 5){
+    //                 addMoment.setAttribute("class", "moment-6");
+    //             } else if(i % 7 === 6){
+    //                 addMoment.setAttribute("class", "moment-7");
+    //             } else {
+    //                 alert("error in createMoments set Class Name");
+    //             }
+    //         }
+    //         // 설정된 elements들을 html에 삽입
+    //         this.moments.appendChild(addMoment);
+    //         addMoment.appendChild(addA);
+    //         addA.appendChild(addImg);
+    //         addA.appendChild(addP);
+
+    //         // 삽입된 모든 elements에 클릭 이벤트를 걸기. 아. 앵커태그로 대체될듯.
+    //         // for(var i = 0; i < this.moments.childElementCount; i++){
+    //         //     this.moments.children[i].addEventListener("click", function(e){
+                    
+    //         //     }, false);
+    //         // }
+    //     }
+    // },
+    // "changeBgColor" : function(){       //1.DB에 색상을 요청해서 저장된 칼라값을 받아온 후 배경 컬러를 설정하는 코드 
+    //     // 전송을 요청하는 코드
+
+    //     // 요청결과를 받아서 배경화면에 뿌리는 코드.
+    //     var result = JSON.parse(this.request.responseText);
+    //     var bgColor = result.bgColor;
+
+    //     var html = document.getElementById("html");
+    //     html.style.backgroundColor = bgColor;
+    // },
     "init" : function(){ // mainPage Initial code
-        //1.DB에 색상을 요청해서 저장된 칼라값을 받아온 후 배경 컬러를 설정하는 코드 
-        //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드. 
+        
         
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
+        
+        //서버에 라우터 완성되면 부활 
+        //this.request.addEventListener('load', this.createMoments.bind(this), false);
+        //this.request.addEventListener('load', this.createBgColor.bind(this), false);
     }
 };
 var manageFileInput = {
@@ -152,13 +230,16 @@ var submit = {
         var formData = new FormData(); 
         formData.append("textInput", this.textInput.value);
         formData.append("image", this.fileInput.files[0]);
+
+        console.log(this.moments.childElementCount);
+
         formData.append("hopeNumber", this.moments.childElementCount);
         
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
         console.log("data send");
     },
-    "addMoment" : function(){
+    "refreshMoment" : function(){
         var result = JSON.parse(this.request.responseText);
 
         // 새로운 모멘트 생성. 
@@ -175,7 +256,7 @@ var submit = {
         this.getElements();
         this.submitButton.addEventListener('click', this.reset.bind(this),false);
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
-        this.request.addEventListener('load', this.addMoment.bind(this),false);
+        this.request.addEventListener('load', this.refreshMoment.bind(this),false);
     }
 };
 
