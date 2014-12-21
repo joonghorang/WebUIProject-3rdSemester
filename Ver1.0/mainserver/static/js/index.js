@@ -9,12 +9,8 @@ var setItemFactoryDisplay = {
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
         
-        this.moments.style.height = "7000px";
-        
+        this.moments.style.height = "7000px";  
         this.momentsWrapper = document.getElementById("moments-wrapper");
-        console.log(this.momentsWrapper);
-        console.log(this.moments.offsetHeight);
-        console.log(this.momentsWrapper.offsetHeight);
 
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
@@ -39,8 +35,8 @@ var setItemFactoryDisplay = {
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
-        console.log(this.moments.offsetHeight);
-        console.log(this.momentsWrapper.offsetHeight);
+       // console.log(this.moments.offsetHeight);
+       // console.log(this.momentsWrapper.offsetHeight);
 
         var OFFSET = 7000; // 임시로 지정. 나중에 정확한 디자인셋의 높이값을 반영. 
 
