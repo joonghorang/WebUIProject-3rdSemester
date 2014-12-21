@@ -239,7 +239,7 @@ var submit = {
         this.request.send(formData);
         console.log("data send");
     },
-    "addMoment" : function(){
+    "refreshMoment" : function(){
         var result = JSON.parse(this.request.responseText);
 
         // 새로운 모멘트 생성. 
@@ -256,7 +256,7 @@ var submit = {
         this.getElements();
         this.submitButton.addEventListener('click', this.reset.bind(this),false);
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
-        this.request.addEventListener('load', this.addMoment.bind(this),false);
+        this.request.addEventListener('load', this.refreshMoment.bind(this),false);
     }
 };
 
