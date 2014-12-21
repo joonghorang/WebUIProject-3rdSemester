@@ -143,7 +143,6 @@ app.post('/upload-text', function(request, response){
         }
         else{
             //클라이언트에서 입력한 text data
-            var hopeNum = fields.hopeNumber;
             var text = fields.textInput;
             var date = new Date();
             var id = mytools.genId(date);
@@ -162,7 +161,6 @@ app.post('/upload-text', function(request, response){
                         var colorList = Impressive(img).toHexString();
                         
                         var moment = {
-                            hopeNum : hopeNum,
                             id : id,
                             file : fileName,
                             text : fields.textInput,
@@ -171,7 +169,7 @@ app.post('/upload-text', function(request, response){
                             date : date
                         }
                         
-                        var momentQuery = sq.INSERT_INTO("moment", "(hopeNum, id, textColor, text, file, date)", moment);
+                        var momentQuery = sq.INSERT_INTO("moment", "(id, textColor, text, file, date)", moment);
                         pool.getConnection(function(err, connection){
                             connection.query(momentQuery, function(err, res){
                                                if(err) {
@@ -195,9 +193,9 @@ app.post('/upload-text', function(request, response){
                             connection.release();
                         });
                         //DB transaction.....?
-                        console.log('>>>inserted');
                         
-//                        var hopeNum;
+                        console.log('>>>inserted');
+                        var hopeNum;
                         pool.getConnection(function(err, connection){
                             connection.query('SELECT hopeNum FROM moment;', function(err, res){
                             if(err){
@@ -205,6 +203,7 @@ app.post('/upload-text', function(request, response){
                                 throw err;
                             }
                                 console.log(res);
+                                hopeNum = res;
                                 connection.release();
                             });
                         });
@@ -215,6 +214,7 @@ app.post('/upload-text', function(request, response){
                             "textColor" : moment.textColor,
                             "hopeNumber" : hopeNum
                         };
+                        
                         response.send(result);
                         response.end();
                     }
