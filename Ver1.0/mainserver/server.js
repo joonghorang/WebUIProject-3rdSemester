@@ -63,35 +63,43 @@ app.get('/', function(request, response){
 /*/moment/picId 라우터로 이동*/
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
-    
+    var momentData = {};
     //comment : 한꺼번에 해도 되는데, bgColor가 여러개일 경우 bgColor수만큼 중복된 열이 나와서, 그냥 따로 select해두었습니다 - 신영
+    //comment : 콜백 지옥에 오신것을 환영합니다.
+    
     //moment table select
     pool.getConnection(function(err, connection){
-        connection.query('SELECT * FROM moment WHERE id="'+targetId+'";', function(err, result){
+        connection.query('SELECT * FROM moment WHERE id="'+targetId+'";', 
+                         function(err, result){
             if(err){
                 console.log('moment inputData select error');
                 throw err;
             }
-            console.log(result);
+            momentData.textColor = result[0].textColor;
+            momentData.text = result[0].text;
+            momentData.file = result[0].file;
+            momentData.date = result[0].date;
             connection.release();
+            /*DB SELECT : all data(bgImg, img, color, text, date)*/
+            //color table select
+            pool.getConnection(function(err, connection){
+                connection.query('SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";', function(err, result){
+                    if(err){
+                        console.log('moment bgColor select error');
+                        throw err;
+                    }
+                    momentData.bgColor = [];
+                    for(var i =0; i<result.length; ++i){
+                        momentData.bgColor[i] = result[i].bgColor;
+                    }
+                    connection.release();
+                    response.render("moment", momentData);
+                });
+            });
         });
     });
-    /*DB SELECT : all data(bgImg, img, color, text, date)*/
-    var momentData = {
 
-    };
-    //color table select
-    pool.getConnection(function(err, connection){
-        connection.query('SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";', function(err, result){
-            if(err){
-                console.log('moment bgColor select error');
-                throw err;
-            }
-            console.log(result);
-            connection.release();
-        });
-    });
-    response.render('moment',momentData);
+
 });
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달

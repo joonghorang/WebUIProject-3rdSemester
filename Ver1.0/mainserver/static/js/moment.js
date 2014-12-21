@@ -243,20 +243,20 @@ window.addEventListener('DOMContentLoaded', function(){
 
 	//화면전환 이벤트 등록
 	EventUtil.addHandler(outputText, "click", function(event){
-	display([outputImageWrapper], "show");
-	display([outputText], "hide");
+        display([outputImageWrapper], "show");
+        display([outputText], "hide");
 	});
 	EventUtil.addHandler(outputImageWrapper, "click", function(event){
-	display([outputText], "show");
-	display([outputImageWrapper], "hide");
+        display([outputText], "show");
+        display([outputImageWrapper], "hide");
 	});
 
 	//모멘츠 이동버튼 이벤트 등록
 	EventUtil.addHandler(backwardButton, "click", function(event){
-	console.log(1);
+        console.log("you click backward button");
 	});
 	EventUtil.addHandler(forwardButton, "click", function(event){
-	console.log(2);
+        console.log("you click forward button");
 	});
 
 
