@@ -3,17 +3,28 @@ var MAX_HEIGHT = window.innerHeight;
 
 var setItemFactoryDisplay = {
     "getElements" : function(){
+
         this.wrapper = document.getElementById("wrapper");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
+        
+        this.moments.style.height = "7000px";
+        
         this.momentsWrapper = document.getElementById("moments-wrapper");
+        console.log(this.momentsWrapper);
+        console.log(this.moments.offsetHeight);
+        console.log(this.momentsWrapper.offsetHeight);
+
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
         this.previewImg = document.getElementById('preview-image');
+
         this.end = document.getElementsByClassName("moment-14");
         this.request = new XMLHttpRequest();
+
+
     },
     "openFactory" : function(){
         display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
@@ -28,13 +39,15 @@ var setItemFactoryDisplay = {
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
-        this.wrapper.innerHTML = this.wrapper.scrollTop+"+"+this.wrapper.offsetHeight+"+100>"+this.momentsWrapper.offsetHeight;
-        console.log(this.momentsWrapper.scrollTop);
-        console.log(this.momentsWrapper.offsetHeihgt);
-        //console.log(this.moments.offsetHeight);
-        if(this.wrapper.scrollTop + this.wrapper.offsetHeihgt +100 > this.momentsWrapper.offsetHeight){
-            console.log(1);
-        }
+        console.log(this.moments.offsetHeight);
+        console.log(this.momentsWrapper.offsetHeight);
+
+        var OFFSET = 7000; // 임시로 지정. 나중에 정확한 디자인셋의 높이값을 반영. 
+
+         if(this.momentsWrapper.scrollTop + this.momentsWrapper.offsetHeight + 100 > this.moments.offsetHeight){
+             this.moments.style.height = this.moments.offsetHeight + OFFSET + "px";
+             // 객체들을 불러들이는 코드 추가. 
+         }
     },
     //서버에 라우터 완성되면 부활 
     // "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
@@ -114,7 +127,7 @@ var setItemFactoryDisplay = {
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
-        this.wrapper.addEventListener('scroll', this.displayMore.bind(this), false);
+        EventUtil.addHandler(this.momentsWrapper, 'scroll', this.displayMore.bind(this));
         //서버에 라우터 완성되면 부활 
         //this.request.addEventListener('load', this.createMoments.bind(this), false);
         //this.request.addEventListener('load', this.createBgColor.bind(this), false);

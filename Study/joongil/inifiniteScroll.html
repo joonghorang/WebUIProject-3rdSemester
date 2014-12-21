@@ -1,8 +1,8 @@
 <html>
 <body>
 <div id="test">scroll to understand</div>
-<div id="wrapper" style="height: 800px; overflow: auto;">
-  <div id="content"></div>
+<div id="wrapper" style="height: 400px; overflow: auto;">
+  <div id="content"> </div>
 </div>
 <script language="JavaScript">
   var more = '<div style="height: 1000px; background: #EEE;"></div>';
@@ -17,11 +17,12 @@
   }
 
   function scroller() {
+    console.log(content.offsetHeight);
     test.innerHTML = wrapper.scrollTop+"+"+wrapper.offsetHeight+"+100>"+content.offsetHeight;
     if(wrapper.scrollTop+wrapper.offsetHeight+100>content.offsetHeight) content.innerHTML+= more;
   }
 
-  wrapper.addEventListener("scroll",scroller, false);
+  addEvent(wrapper,"scroll",scroller);
 </script>
 </body>
 </html>
