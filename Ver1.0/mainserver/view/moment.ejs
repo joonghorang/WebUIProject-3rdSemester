@@ -10,17 +10,20 @@
     <body>
         <div id="wrapper">
             <div id="moment">
-                <div id="output-text">
-                    <canvas id = "text-canvas"></canvas>
-                    <canvas id = "back-canvas"></canvas>
-                </div>
-                <div id="output-image-wrapper">
-                    <img class="output-image">
+                <canvas id = "bg-canvas"></canvas>
+                <canvas id = "text-canvas"></canvas>
+                <div id="moment-image-wrapper">
+                    <img class="moment-image" src = "../<%= file %>">
                 </div>
             </div>
         </div>
-        <script src="../js/EventUtil.js"></script>
+        <script>
+            var bgColor = "<%= bgColor[0] %>";
+            var textColor = "<%= textColor %>";
+        </script>
+        <script src="../js/lib/EventUtil.js"></script>
+        <srcipt src="../js/lib/commonCanvas.js"></srcipt>
         <script src="../js/utility.js"></script>
-        <script src="../js/moment.js"></script>
+        <script src="../js/moment_ds.js"></script>
     </body>
 </html>
