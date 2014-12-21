@@ -1,5 +1,19 @@
 @font-face {
-    font-family: momnetHelvetica;
+    font-family: "NanumBarunGothicLight";
+    font-style: normal;
+    src: url('../font/NanumGothicLight/NanumBarunGothicLight.eot');,
+    url('../font/NanumGothicLight/NanumBarunGothicLight.woff') format('woff'),
+    url('../font/NanumGothicLight/NanumBarunGothicLight.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'NanumBarunGothicUltraLight';
+    font-style: normal;
+    src: url('../font/NanumGothicLight/NanumBarunGothicUltraLight.eot');,
+    url('../font/NanumGothicLight/NanumBarunGothicUltraLight.woff') format('woff'),
+    url('../font/NanumGothicLight//NanumBarunGothicUltraLight.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'momentHelvetica';
     src: local("Helvetica Neue"),
          local("HelveticaNeue-Regular"),
          url(HelveticaNeue-Regular.ttf) format('truetype');
