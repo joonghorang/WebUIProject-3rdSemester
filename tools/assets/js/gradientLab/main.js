@@ -1,6 +1,6 @@
 define(["commonCanvas","app/gradation"], function(cmCvs, grad){
-    var INK_AND_PAPER_WIDTH = 400;
-    var INK_AND_PAPER_HEIGHT = 400;
+    var INK_AND_PAPER_WIDTH = 600;
+    var INK_AND_PAPER_HEIGHT = 600;
     Canvas = cmCvs.Canvas;
     
     ink1 = Canvas(INK_AND_PAPER_WIDTH, INK_AND_PAPER_HEIGHT);
@@ -9,36 +9,34 @@ define(["commonCanvas","app/gradation"], function(cmCvs, grad){
     
     inkWrapper = document.getElementById("gradation-wrapper");
     
-    grad.inkAndPaper(ink1, "#FFFFFF", "#0365F8", 0.5, 0.5);
+    grad.inkAndPaper(ink1, "#AEFBCF", "#0365F8", 0.5, 0.5, 0.05, 300);
     ink1.class = "ink";
     inkWrapper.appendChild(ink1);
-//    var CANVAS_WIDTH = window.innerWidth - 10;
-//    var CANVAS_HEIGHT = 200;
-
+        
 //    var image = new Image();
 //    image.src = "target_image_data";
 //    image.addEventListener("load", function(){
-//        var iCanvas = commonCanvas.createCanvasByImage(this);
+//        var iCanvas = cmCvs.createCanvasByImage(this);
 //        shell.appendChild(iCanvas);      
+////
+////        shell.appendChild(gradation.cv(iCanvas, [1,1,1,
+////                                         1,1,1,
+////                                         1,1,1]));  
+////        shell.appendChild(gradation.cv(iCanvas, [1,1,1,1,1,
+////                                         1,1,1,1,1,
+////                                         1,1,1,1,1,
+////                                         1,1,1,1,1,
+////                                         1,1,1,1,1])); 
+////        shell.appendChild(gradation.cv(iCanvas, [1,4,1,4,6,4,1,4,1]));    
+////        shell.appendChild(gradation.cv(iCanvas, [ 1, 4, 7, 4, 1,
+////                                          4,16,26,16, 4,
+////                                          7,26,41,26, 7,
+////                                          4,16,26,16, 4, 
+////                                          1, 4, 7, 4, 1]));    
 //
-//        shell.appendChild(gradation.cv(iCanvas, [1,1,1,
-//                                         1,1,1,
-//                                         1,1,1]));  
-//        shell.appendChild(gradation.cv(iCanvas, [1,1,1,1,1,
-//                                         1,1,1,1,1,
-//                                         1,1,1,1,1,
-//                                         1,1,1,1,1,
-//                                         1,1,1,1,1])); 
-//        shell.appendChild(gradation.cv(iCanvas, [1,4,1,4,6,4,1,4,1]));    
-//        shell.appendChild(gradation.cv(iCanvas, [ 1, 4, 7, 4, 1,
-//                                          4,16,26,16, 4,
-//                                          7,26,41,26, 7,
-//                                          4,16,26,16, 4, 
-//                                          1, 4, 7, 4, 1]));    
-//
-//        shell.appendChild(gradation.cv(iCanvas, [ 0,-1, 0,
-//                                       -1, 5,-1,
-//                                        0,-1, 0]));    
+//        shell.appendChild(cv(iCanvas, [ 0,1, 0,
+//                                       1, -4,1,
+//                                        0,1, 0]));    
 //    });
 
 //    var canvas = document.createElement("canvas");

@@ -90,13 +90,16 @@ var cv = function(canvas, mat){
                 }                   
             }
 
-            var rResult = parseInt(rSum/matSum);
+//            var rResult = parseInt(rSum/matSum);
+            var rResult = rSum;
             if(rResult < 0 ) rResult = 0;
             if(rResult > 255) rResult = 255;
             var gResult = parseInt(gSum/matSum);
+            gResult = gSum;
             if(gResult < 0 ) gResult = 0;
             if(gResult > 255) gResult = 255;
             var bResult = parseInt(bSum/matSum);
+            bResult = bSum;
             if(bResult < 0) bResult = 0;    
             if(bResult > 255) bResult = 255;
             rImageData.data[index + 0] = rResult;

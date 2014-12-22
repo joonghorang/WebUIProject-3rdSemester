@@ -76,7 +76,7 @@ html, body{
 
     position: absolute;
     opacity: 0.9;
-    background-image:url( "../image/backGroundYellow.jpg");
+    background-image:url( "../image/backGround.jpg");
     background-size: auto;
     background-attachment: fixed;
 /*    background-position: center top;*/
@@ -90,6 +90,7 @@ html, body{
     left: 0;
     right: 0;
     margin: 5.5% auto 0 auto;
+    box-shadow: 6px 6px 15px #555555;
 }
 
 #text-canvas{
@@ -113,7 +114,7 @@ html, body{
     left: 0;
     right: 0;
     bottom: 0;
-    box-shadow: 10px 10px 15px #555555;
+/*    box-shadow: 10px 10px 15px #555555;*/
 }
 
 /*
