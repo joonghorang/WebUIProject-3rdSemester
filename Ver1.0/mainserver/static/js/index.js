@@ -8,9 +8,8 @@ var setItemFactoryDisplay = {
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
-        
-        this.moments.style.height = "7000px";  
         this.momentsWrapper = document.getElementById("moments-wrapper");
+        //this.moments.style.height = "7000px";
 
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
@@ -31,18 +30,44 @@ var setItemFactoryDisplay = {
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
-        console.log("moments " + this.moments.offsetHeight);
-        console.log("momentsWrapper "  + this.momentsWrapper.offsetHeight);
+        var momentsArray = document.querySelectorAll("#moments a div");
+        var firstEle = momentsArray[0];
+        var lastEle = momentsArray[momentsArray.length-1];
 
-        var OFFSET = this.moments.offsetHeight; // 임시로 지정. 나중에 정확한 디자인셋의 높이값을 반영. 
+        // console.log("scrollY " + window.scrollY);
+        // console.log("lastEle " + (lastEle.offsetTop - window.innerHeight));
+        //console.log("moments " + this.moments.offsetHeight);
 
-        console.log("out");
-        console.log(this.momentsWrapper.scrollTop);
-        console.log(this.moments.scrollTop);
-        console.log(this.wrapper.scrollTop);
-         if(window.scrollTop + this.momentsWrapper.offsetHeight + 100 > this.moments.offsetHeight){
-             this.moments.style.height = this.moments.offsetHeight + OFFSET + "px";
-             console.log("in" + this.momentsWrapper.offsetHeight);
+        // 일단, 메이슨리를 쓰기 때문에 기존의 방법대로 무한스클로을 구현할 수 없다.
+        // 따라서 우리가 해야하는 일은 가장 마지막 아이를 찾고,
+        // 그 아이의 Y값위치를 계산한뒤, 
+        // 현재 스크롤의 위치와 비교하여 
+        // 현재 스크롤 위치가 그 아이의 Y값 위치보다 크다면 
+        // 추가 개체들을 생성하고,
+        // 아니라면 그냥 지나치도록 한다. 
+        // 스크롤의 현재 위치 > 맨위에서부터 마지막 디브까지의 길이 - 현재 창의 안쪽 길이. 
+
+        // 이렇게 전용우 교수님 말대로 진행하려고 했으나, 그렇게 하면 추가되는 아이들의 높이 값에 영향을 너무 받는다.
+        // 따라서 현재의 스크롤 위치가 
+        // 추가된 전체 moments div의 offsetHeight의 80%를 넘었을때,
+        // 새로 길이를 늘려주고 엘레멘트들을 추가하는 코드로 변경. 
+        // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
+         if(window.scrollY + 300 > this.moments.offsetHeight * 80 / 100){
+             this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
+             console.log("size Expanded");
+             var addA = document.createElement('a');
+             var addDiv = document.createElement('div');
+             addDiv.style.height = "200px" // 가라데이터, 나중에 서버에 요청값으로 받아서 제대로 생성해준다. 
+             addDiv.style.width = "800px"
+             addDiv.style.backgroundColor = "black";
+             addDiv.style.marginTop = "800px"
+             this.moments.appendChild(addA);
+             addA.appendChild(addDiv);
+
+             // 다시 마지막 엘리먼트를 갱신 
+             momentsArray = document.querySelectorAll("#moments a div");
+             var lastEle = momentsArray[momentsArray.length-1];
+             //console.log(lastEle);
              // 객체들을 불러들이는 코드 추가.
 
              // this.request.open("GET", "/", true);
