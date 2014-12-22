@@ -13,7 +13,11 @@ var app = express();
 
 /* DB Connection Setting */
 //var connection = mysql.createConnection({
-//    host : 'localhost',
+//    host :'us-cdbr-iron-east-01.cleardb.net',
+//    user : 'bf67c12c853ddc',
+//    password : '16d5ce5e',
+//    database : 'heroku_7081e1ce7ec12df'
+    //    host : 'localhost',
 //    port : 3306,
 //    user : 'tools',
 //    password : 'tools',
@@ -85,6 +89,7 @@ app.get('/colorLab', function(req, res){
     var imageData = fs.readFileSync(uploads + app.get("targetName")); 
     var image = new Image();
     image.src = imageData;
+    console.log(Impressive);
     res.render('colorLab.html',{
         imageSrc : app.get("targetName"),
         pickedColors : Impressive(image).toHexString()

@@ -20,6 +20,11 @@ if(isNodeModule){
 
 var commonCanvas = {
     Canvas : Canvas,
+    isCanvas : isNodeModule ? function(imageObj){
+    return imageObj instanceof Canvas;} 
+    : function(imageObj){
+        return imageObj.toString() === "[object HTMLCanvasElement]";
+    },
     
     setPixel : function(target, x, y, r, g, b, a){
         color = typeof r === 'object' ? r : {r: r, g: g, b: b, a: a};
@@ -38,13 +43,13 @@ var commonCanvas = {
         }
     },
     
-    createCanvasByImage : function(img, saturate){
+    createCanvasByImage : function(img, pixelSaturate){
     //    console.log(__basename + " - function() createCanvasByImage start ...");
     //    console.log(img);
 
         var pixelNum = img.width * img.height;
-        saturate = typeof saturate !== "undefined" ? saturate : pixelNum;    
-        var pixelNumRate = pixelNum / saturate;
+        pixelSaturate = typeof pixelSaturate !== "undefined" ? pixelSaturate : pixelNum;    
+        var pixelNumRate = pixelNum / pixelSaturate;
 
         var canvasWidth = img.width;
         var canvasHeight = img.height;

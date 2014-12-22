@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id = "html">
+<html id = "a">
     <head>
         <meta charset="utf-8">   
         <link rel="stylesheet" type="text/css" href="./css/reset.css">
@@ -39,15 +39,17 @@
                     <img id = "itemFactory-button" src = "./image/png/plus.png"/>
 <!--                </a>-->
             </div>
-            <div id = "moments-wrapper" style="height:7000px;">
+            <div id = "moments-wrapper">
                 <div id = "moments">
-
-<!--                    background-image url을 찾아올 수가 없습니다.....ㅠㅜ-->
                     
                     <% for(var i=0; i<moments.length; i++) {%>
                     <a href = "./moment/<%= moments[i].id %>">
+<<<<<<< HEAD
                         <div class="moment-<%= (i%14)+1 %>" <% if( i%14 == 0) {%>, style = "background-image : url('./<%= moments[i].file%>');"<%} %>>
                             
+=======
+                        <div class="moment-<%= i+1 %>" style="background-image:url(./<%= moments[i].file %>); background-color:<%= moments[i].bgColor %>">
+>>>>>>> 00336575a02412e9556449a18450c308caea22e3
                             <span><%= moments[i].text%></span>
                         </div>
                     </a>
@@ -58,7 +60,12 @@
                         <div class="moment-1">
                             <span>별이 빛나는</span>
                         </div>
+<<<<<<< HEAD
                     </a> 
+=======
+                    </a> -->
+<!--
+>>>>>>> 00336575a02412e9556449a18450c308caea22e3
                     <a href="#">
                         <div class="moment-2">
                             <span>별이 빛나는</span>

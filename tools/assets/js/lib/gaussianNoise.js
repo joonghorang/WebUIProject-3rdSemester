@@ -16,12 +16,12 @@ if(isNodeModule){
 }
 
 var gaussianNoise = {
-    genGaussianNoise : function(variance){
+    gen : function(variance){
         if(typeof variance === "undefined") variance = 1.0;
 
-        if (typeof this.genGaussianNoise.spare !== "undefined") {
-             var spare = this.genGaussianNoise.spare;
-             delete this.genGaussianNoise.spare;
+        if (typeof this.gen.spare !== "undefined") {
+             var spare = this.gen.spare;
+             delete this.gen.spare;
              return variance * spare;
          } else {
              var rand1 = Math.random();
@@ -29,7 +29,7 @@ var gaussianNoise = {
 
              var rand2 = Math.random();
              rand2 = 2 * Math.PI * rand2;
-             this.genGaussianNoise.spare = Math.sqrt(rand1 * variance) * Math.sin(rand2);
+             this.gen.spare = Math.sqrt(rand1 * variance) * Math.sin(rand2);
              return Math.sqrt(rand1 * variance) * Math.cos(rand2);
          }
     },
@@ -51,6 +51,4 @@ var gaussianNoise = {
         return hist;
     }
 }
-    
-
 })();

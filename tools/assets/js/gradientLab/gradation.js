@@ -39,7 +39,7 @@ if(isNodeModule){
 }    
     
 var gradation = {
-    inkAndPaper : function(canvas, paperColor, inkColor, width, height){
+    inkAndPaper : function(canvas, paperColor, inkColor, width, height, inkQuan, time){
         paperColor = typeof paperColor === "object" ? paperColor : cmCvs.hex2Rgb(paperColor);
         inkColor = typeof inkColor === "object" ? inkColor : cmCvs.hex2Rgb(inkColor);
         
@@ -53,10 +53,10 @@ var gradation = {
         var ctx = canvas.getContext('2d');
         var imageData = ctx.createImageData(canvas.width,canvas.height);
    
-        var len = 200;
-        var r1 = 0.2 * len;
-        var r2 = 0.7 * len;
-        var rRate = 4/7;
+        var len = 2;
+        var r1 = inkQuan * time*len;
+        var r2 = 3.5 * inkQuan * time*len;
+        var rRate = r1/r2;
         
         width = canvas.width * width;
         height = canvas.height * height;
@@ -67,7 +67,7 @@ var gradation = {
         
         var degreeRange2 = [r2];
         for ( var i =1 ; i< 3600; ++i){
-            degreeRange2[i] = degreeRange2[i-1] + gNoise.genGaussianNoise(0.3);   
+            degreeRange2[i] = degreeRange2[i-1] + gNoise.gen(0.3);   
         }
         var degreeRange1 = [];
         for ( var i =0; i<degreeRange2.length; ++i){
@@ -86,11 +86,12 @@ var gradation = {
                 }else if( r > degreeRange2[degreeIdx]){
                     color = paperColor;
                 }else{
-                    var rate = (r - degreeRange1[degreeIdx])/(degreeRange2[degreeIdx] - degreeRange1[degreeIdx]);
+                    var rate = Math.pow(degreeRange2[degreeIdx] - r,3)
+                    /Math.pow(degreeRange2[degreeIdx] - degreeRange1[degreeIdx],3);
                     color = {
-                        r : inkColor.r * (1-rate) + semiInkColor.r * (rate),
-                        g : inkColor.g * (1-rate) + semiInkColor.g * (rate),
-                        b : inkColor.b * (1-rate) + semiInkColor.b * (rate),
+                        r : inkColor.r * (rate) + semiInkColor.r * (1-rate),
+                        g : inkColor.g * (rate) + semiInkColor.g * (1-rate),
+                        b : inkColor.b * (rate) + semiInkColor.b * (1-rate),
                         a : 255
                     };
                 }
@@ -107,10 +108,10 @@ var gradation = {
 //        var x1poses = [xpos1];
 //        var x2poses = [xpos2];
 //        for(var i =1; i< canvas.height; ++i){
-//            var noise = gNoise.genGaussianNoise(2);
-//            x1poses[i] = x1poses[i-1] + parseInt(gNoise.genGaussianNoise());
-//            noise = gNoise.genGaussianNoise(4);
-//            x2poses[i] = x2poses[i-1] + parseInt(gNoise.genGaussianNoise());
+//            var noise = gNoise.gen(2);
+//            x1poses[i] = x1poses[i-1] + parseInt(gNoise.gen());
+//            noise = gNoise.gen(4);
+//            x2poses[i] = x2poses[i-1] + parseInt(gNoise.gen());
 //        }
 //        
 //        for(var y = 0; y < canvas.height; ++y){
@@ -166,7 +167,7 @@ var gradation = {
         var noise;
         for(var y = 0; y < canvas.height; ++y){
             if(Math.random() > 1 - noisePercent )
-            { noise = gNoise.genGaussianNoise( canvas.width/ 32);
+            { noise = gNoise.gen( canvas.width/ 32);
             }else{ noise = 0; }
             for(var x = 0; x< canvas.width; ++x){
 

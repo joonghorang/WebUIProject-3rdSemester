@@ -96,7 +96,7 @@ var gradientWithNoise = function(canvas, color1, color2, noisePercent){
 
 var cv = function(canvas, mat){
     var matSize = Math.sqrt(mat.length);
-    var matSum = mat.reduce(function(p, c){ return p+c; });
+//    var matSum = mat.reduce(function(p, c){ return p+c; });
     var ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
     var rCanvas = Canvas(canvas.width, canvas.height);
@@ -125,13 +125,16 @@ var cv = function(canvas, mat){
                 }                   
             }
 
-            var rResult = parseInt(rSum/matSum);
+//            var rResult = parseInt(rSum/matSum);
+            var rResult = rSum;
             if(rResult < 0 ) rResult = 0;
             if(rResult > 255) rResult = 255;
-            var gResult = parseInt(gSum/matSum);
+//            var gResult = parseInt(gSum/matSum);
+            var gResult = gSum;
             if(gResult < 0 ) gResult = 0;
             if(gResult > 255) gResult = 255;
-            var bResult = parseInt(bSum/matSum);
+//            var bResult = parseInt(bSum/matSum);
+            var bResult = bSum;
             if(bResult < 0) bResult = 0;    
             if(bResult > 255) bResult = 255;
             rImageData.data[index + 0] = rResult;
