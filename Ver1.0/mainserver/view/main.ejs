@@ -42,96 +42,18 @@
             <div id = "moments-wrapper">
                 <div id = "moments">
                     
-                    <% for(var i=0; i<moments.length; i++) {%>
-                    <a href = "./moment/<%= moments[i].id %>">
-<<<<<<< HEAD
-                        <div class="moment-<%= (i%14)+1 %>" <% if( i%14 == 0) {%>, style = "background-image : url('./<%= moments[i].file%>');"<%} %>>
+                    <% for(var i=0; i<moments.length ; i++){ %>
+                        <a href="./moment/<%= moments[i].id %>">
                             
-=======
-                        <div class="moment-<%= i+1 %>" style="background-image:url(./<%= moments[i].file %>); background-color:<%= moments[i].bgColor %>">
->>>>>>> 00336575a02412e9556449a18450c308caea22e3
-                            <span><%= moments[i].text%></span>
-                        </div>
-                    </a>
-                    <% } %>
+                            <div class="moment-<%= (i%14)+1 %>" style="<% if(i%14==0||i%14==7||i%14==8||i%14==11){ %> background-image : url('./<%= moments[i].file %>'); background-color : <%= moments[i].bgColor %><%}%>">
+                                <span><%= moments[i].text %></span>
+                            </div>
+                            
+                        </a>
                     
-<!--
-                     <a href="#">
-                        <div class="moment-1">
-                            <span>별이 빛나는</span>
-                        </div>
-<<<<<<< HEAD
-                    </a> 
-=======
-                    </a> -->
-<!--
->>>>>>> 00336575a02412e9556449a18450c308caea22e3
-                    <a href="#">
-                        <div class="moment-2">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-3">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-4">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-5">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-6">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-7">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-8">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-9">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-10">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-11">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-12">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-13">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-14">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
--->
+                    <%}%>
+
+ 
                 </div> 
             </div>    
         </div>

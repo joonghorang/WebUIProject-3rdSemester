@@ -45,12 +45,12 @@ var pool = mysql.createPool({
 });
 
 /* Router */
-app.get('', function(request, response){
+app.get('/', function(request, response){
     /*DB SELECT*/
     var mainData = {};
     pool.getConnection(function(err, connection){
         connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
-                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0;', function(err, result){
+                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC;', function(err, result){
             if(err) {
                 console.log('mainPage select error');
                 throw err;
