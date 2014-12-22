@@ -1,0 +1,32 @@
+
+#target-image {
+    position : relative;
+    height : 400px;
+}
+
+footer {
+    position : relative;
+}
+
+header {
+    position : relative;
+}
+
+.color{
+
+    display : inline-block;
+    width : 90px;
+    height : 90px;
+    margin: 5px;
+}
+#shell {
+    position : relative;
+}
+
+#colors {
+    position : relative;
+}
+
+main {
+    position : relative;
+}

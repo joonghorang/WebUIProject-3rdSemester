@@ -46,17 +46,19 @@
                     
                     <% for(var i=0; i<moments.length; i++) {%>
                     <a href = "./moment/<%= moments[i].id %>">
-                        <div class="moment-<%= i+1 %>">
+                        <div class="moment-<%= (i%14)+1 %>" <% if( i%14 == 0) {%>, style = "background-image : url('./<%= moments[i].file%>');"<%} %>>
+                            
                             <span><%= moments[i].text%></span>
                         </div>
                     </a>
                     <% } %>
                     
-<!--                     <a href="#">
+<!--
+                     <a href="#">
                         <div class="moment-1">
                             <span>별이 빛나는</span>
                         </div>
-                    </a> -->
+                    </a> 
                     <a href="#">
                         <div class="moment-2">
                             <span>별이 빛나는</span>
@@ -122,6 +124,7 @@
                             <span>별이 빛나는</span>
                         </div>
                     </a>
+-->
                 </div> 
             </div>    
         </div>

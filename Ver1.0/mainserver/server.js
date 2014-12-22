@@ -31,6 +31,8 @@ app.engine('html', require('ejs').renderFile);
 
 //port 설정.
 app.set('port', (process.env.PORT || 3000));
+//colorLabData
+app.set('colorLabData', "/colorLab_image_data");
 
 /* DB Connection Setting */
 var pool = mysql.createPool({
@@ -137,11 +139,15 @@ app.post('/upload-image', function(request, response){
             //readFile : 업로드된 파일을 tmp디렉토리에 저장한다.
             fs.readFile(files.image.path, function(error, data){
                 /*colorLab logic*/
+                fs.writeFile( uploads + app.get("colorLabData"), data, function(err){
+                   console.log('>>>> /upload-image : colorLabData saved.'); 
+                });
                 var img = new Image();
                 img.src = data;
                 var colorList = Impressive(img).toHexString();
                 var bgColor = colorClassifier(colorList).bgColorHex();
                 var textColor = colorClassifier(colorList).textColorHex();
+                
                 response.send(
                     {
                         "bgColor" : bgColor[0],
@@ -164,8 +170,10 @@ app.post('/upload-text', function(request, response){
         }
         else{
             //클라이언트에서 입력한 text data
+            
             var text = fields.textInput;
             var date = new Date();
+            var timeStamp = mytools.toYYYYMMDDHHmmSSsss(date);
             var id = mytools.genId(date);
             var fileName = id + ".jpg";
             var uploadFileName = __dirname + '/uploads/' + fileName;
@@ -182,7 +190,7 @@ app.post('/upload-text', function(request, response){
                         var colorList = Impressive(img).toHexString();
                         
                         var moment = {
-                            date : date,
+                            date : timeStamp,
                             id : id,
                             file : fileName,
                             text : fields.textInput,
@@ -231,7 +239,16 @@ app.post('/upload-text', function(request, response){
         }
     });
 });
-
+app.get('/colorLab', function(req, res){
+    var imageData = fs.readFileSync(uploads + app.get("colorLabData")); 
+    var image = new Image();
+    image.src = imageData;
+    console.log(Impressive);
+    res.render('colorLab.html',{
+        imageSrc : app.get("colorLabData"),
+        pickedColors : Impressive(image).toHexString()
+    });
+});
 //웹서버를 실행한다.
 app.listen(app.get("port"), function(){
     console.log('server running at port '+app.get("port")+'...');
