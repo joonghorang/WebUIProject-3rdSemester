@@ -31,28 +31,33 @@ var setItemFactoryDisplay = {
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
-       // console.log(this.moments.offsetHeight);
-       // console.log(this.momentsWrapper.offsetHeight);
+        console.log("moments " + this.moments.offsetHeight);
+        console.log("momentsWrapper "  + this.momentsWrapper.offsetHeight);
 
-        var OFFSET = 7000; // 임시로 지정. 나중에 정확한 디자인셋의 높이값을 반영. 
+        var OFFSET = this.moments.offsetHeight; // 임시로 지정. 나중에 정확한 디자인셋의 높이값을 반영. 
 
-         if(this.momentsWrapper.scrollTop + this.momentsWrapper.offsetHeight + 100 > this.moments.offsetHeight){
+        console.log("out");
+        console.log(this.momentsWrapper.scrollTop);
+        console.log(this.moments.scrollTop);
+        console.log(this.wrapper.scrollTop);
+         if(window.scrollTop + this.momentsWrapper.offsetHeight + 100 > this.moments.offsetHeight){
              this.moments.style.height = this.moments.offsetHeight + OFFSET + "px";
+             console.log("in" + this.momentsWrapper.offsetHeight);
              // 객체들을 불러들이는 코드 추가.
 
-             this.request.open("GET", "/", true);
-             this.request.send();
+             // this.request.open("GET", "/", true);
+             // this.request.send();
          }
     },
     //서버에 라우터 완성되면 부활 
-    "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
-        var displaySetNum = 2;          //레이아웃 디자인 갯수, 나중에 더 좋은 방법으로 개선해도 좋을듯. 
-        var momentUnitNum = 7;          // 한 세트에 적용되는 모멘츠 갯수
+    // "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+    //     var displaySetNum = 2;          //레이아웃 디자인 갯수, 나중에 더 좋은 방법으로 개선해도 좋을듯. 
+    //     var momentUnitNum = 7;          // 한 세트에 적용되는 모멘츠 갯수
 
-        // this.request.addEventListener('load', function(){
-        var result = JSON.parse(this.request.responseText);
-        console.log("in displayMore");
-        console.log(result);
+    //     // this.request.addEventListener('load', function(){
+    //     var result = JSON.parse(this.request.responseText);
+    //     console.log("in displayMore");
+    //     console.log(result);
  //       });
         // var result = JSON.parse(this.request.responseText);
         // for(var i = 0; i < this.result.length; i++){
@@ -103,7 +108,7 @@ var setItemFactoryDisplay = {
         //     addA.appendChild(addImg);
         //     addA.appendChild(addP);
         //}
-    },
+    // },
     // "changeBgColor" : function(){       //1.DB에 색상을 요청해서 저장된 칼라값을 받아온 후 배경 컬러를 설정하는 코드 
     //     // 전송을 요청하는 코드
 
@@ -118,8 +123,8 @@ var setItemFactoryDisplay = {
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
-        EventUtil.addHandler(this.momentsWrapper, 'scroll', this.displayMore.bind(this));
-        this.request.addEventListener('load', this.createMoments.bind(this), false);
+        EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
+        //this.request.addEventListener('load', this.createMoments.bind(this), false);
         //this.request.addEventListener('load', this.createBgColor.bind(this), false);
     }
 };

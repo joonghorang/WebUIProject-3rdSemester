@@ -7,7 +7,6 @@ html{
     max-width: 100%;
 	position : relative;
 	display : block;
-    overflow : hidden;
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -234,7 +233,15 @@ input:focus{
     top: 105%;
     cursor: pointer;
 }
-#moments-wrapper{
+/*#wrapper{
+    height : 7000px;
+}*/
+/*#moments-wrapper{
     height : 7000px; 
-    overflow : scroll;
-}
+}*/
+/*#moments{
+    height : 7000px;
+}*/
+/*html{
+    height : 7000px;
+}*/
