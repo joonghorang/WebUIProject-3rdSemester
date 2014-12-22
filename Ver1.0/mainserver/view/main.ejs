@@ -70,12 +70,24 @@
             });   
         </script>
         <script>
-//            var style=document.getElementByTagName('style');
-//            var momentDivs = document.querySelectorAll('#moments div');
-//            for(var i=0; i<moments.length ; i++){
-//                var hoverText = '#moments div:nth-of-type(14n+'+(i+1)+'):hover { background-color : '+ moments[i].bgColor +' }'
-//                style.innerHTML += hoverText;
-//            }
+            var moments = <%- JSON.stringify(moments) %>;
+            var hoverText = "";
+            for(var i=0; i<moments.length ; i++){
+                    hoverText += "#moments div:nth-of-type("+i+"):hover{background-color:"+moments[i].bgColor+";}";
+            }
+            
+            var head = document.head;
+            var styleTag = document.createElement('style');
+            styleTag.type = 'text/css';
+            
+            if (styleTag.styleSheet){
+                styleTag.styleSheet.cssText = hoverText;
+            } else {
+                styleTag.appendChild(document.createTextNode(hoverText));
+            }
+            
+            head.appendChild(styleTag);
+
         </script>
         
     </body>
