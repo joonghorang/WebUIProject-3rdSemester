@@ -38,15 +38,32 @@ a:visited, a:link{
     background-blend-mode:saturation;
 }
 
+#moments span {
+    display: inline-block;
+    width: 70%;
+    float: left;
+    height: 14px; 
+/*    fontsize와 height를 동일하게.(한줄만 들어오도록)*/
+    overflow: hidden;
+}
+
+/*사진이 들어가는 칸은 텍스트 가운데에 투명으로, hover시 텍스트 하얀색으로*/
 .moment-1, .moment-8, .moment-9, .moment-12 {
     color: transparent;
     text-align: center;
+}
+.moment-1 span, .moment-8 span, .moment-9 span, .moment-12 span {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .moment-1 {
     width: 290px;
     height: 300px;
-    line-height: 300px;
     border: 2px solid #ffffff;
     margin: 5px;
 }
@@ -54,68 +71,92 @@ a:visited, a:link{
 .moment-2 {
     width: 290px;
     height: 100px;
-    line-height: 100px;
     border: 2px solid #ffffff;
     margin: 5px;
-    line-height: 100px;
-    text-align: center;
+    direction: rtl;
+}
+.moment-2 span {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 15px;
 }
 
 .moment-3 {
     width: 190px;
     height: 190px;
-    line-height: 190px;
     border: 2px solid #ffffff;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 105px;
     margin-right: 5px;
-    text-align: center;
+    text-align: left;
+}
+.moment-3 span{
+    position: absolute;
+    top: 161px;
+    left: 15px;
 }
 
 .moment-4 {
     width: 590px;
     height: 180px;
-    line-height: 180px;
     border: 2px solid #ffffff;
     margin-left: 5px;
     margin-top: 5px;
     margin-bottom: 400px;
-    text-align: center;
+}
+.moment-4 span {
+    position: absolute;
+    top: 15px;
+    left: 15px;
 }
 
 .moment-5 {
     width: 190px;
     height: 186px;
-    line-height: 186px;
     border: 2px solid #ffffff;
     margin-bottom: 400px;
     margin-left: 200px;
     text-align: center;
 }
+.moment-5 span {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 157px;
+}
 
 .moment-6 {
     width: 240px;
     height: 150px;
-    line-height: 150px;
     border: 2px solid #ffffff;
     margin: 5px;
-    text-align: center;
+}
+.moment-6 span{
+    position:absolute;
+    top: 15px;
+    left: 15px;
 }
 
 .moment-7 {
     width: 290px;
     height: 200px;
-    line-height: 200px;
     border: 2px solid #ffffff;
     margin: 5px;
-    text-align: center;
+}
+.moment-7 span {
+    position: absolute;
+    right: 15px;
+    top: 126px;
+    direction: rtl;
 }
 
 .moment-8 {
     width: 590px;
     height: 320px;
-    line-height: 320px;
     border: 2px solid #ffffff;
     margin-top: 15px;
     margin-left: 60px;
@@ -125,38 +166,48 @@ a:visited, a:link{
 .moment-9 {
     width: 100px;
     height: 400px;
-    line-height: 400px;
     border: 2px solid #ffffff;
     margin-right: 5px;
     margin-left: -50px;
     background-size: cover;
 }
+.moment-9 span {
+    -webkit-transform: rotate(-90deg); 
+    -moz-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
 
 .moment-10 {
     width: 240px;
     height: 100px;
-    line-height: 100px;
     border: 2px solid #ffffff;
     margin-left: 300px;
     margin-bottom: 5px;
-    text-align: center;
+}
+.moment-10 span {
+    position: absolute;
+    top: 71px;
+    left: 15px;
 }
 
 .moment-11 {
     width: 490px;
     height: 290px;
-    line-height: 290px;
     border: 2px solid #ffffff;
     margin-bottom: 400px;
     margin-left: 5px;
     margin-top: 5px;
-    text-align: center;
+}
+.moment-11 span {
+    position: absolute;
+    top: 261px;
+    right: 15px;
+    direction: rtl;
 }
 
 .moment-12 {
     width: 550px;
     height: 300px;
-    line-height: 300px;
     border: 2px solid #ffffff;
     margin-bottom: 300px;
     background-size: cover;
@@ -166,19 +217,32 @@ a:visited, a:link{
 .moment-13 {
     width: 150px;
     height: 300px;
-    line-height: 300px;
     border: 2px solid #ffffff;
     margin: 5px;
     text-align: center;
+}
+.moment-13 span {
+    position: absolute;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .moment-14 {
     width: 430px;
     height: 300px;
-    line-height: 300px;
     border: 2px solid #ffffff;
     margin-top: 85px;
     margin-left: 5px;
     margin-bottom: 190px;
-    text-align: center;
+}
+.moment-14 span {
+    position: absolute;
+    top: 200px;
+    left: 15px;
 }
