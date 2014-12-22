@@ -41,12 +41,10 @@
             </div>
             <div id = "moments-wrapper" style="height:7000px;">
                 <div id = "moments">
-
-<!--                    background-image url을 찾아올 수가 없습니다.....ㅠㅜ-->
                     
                     <% for(var i=0; i<moments.length; i++) {%>
                     <a href = "./moment/<%= moments[i].id %>">
-                        <div class="moment-<%= i+1 %>">
+                        <div class="moment-<%= i+1 %>" style="background-image:url(./<%= moments[i].file %>); background-color:<%= moments[i].bgColor %>">
                             <span><%= moments[i].text%></span>
                         </div>
                     </a>
@@ -57,6 +55,7 @@
                             <span>별이 빛나는</span>
                         </div>
                     </a> -->
+<!--
                     <a href="#">
                         <div class="moment-2">
                             <span>별이 빛나는</span>
@@ -122,6 +121,7 @@
                             <span>별이 빛나는</span>
                         </div>
                     </a>
+-->
                 </div> 
             </div>    
         </div>
