@@ -108,22 +108,23 @@ app.get('/moment/:id', function(request, response){
 
 });
 
-//app.post('/:pageNum', function(request, response){
-//    var pageNum = request.param('pageNum');
-//    var data = {};
-//    
-//    pool.getConnection(function(err, connection){
-//        connection.query('SELECT * FROM ;', 
-//                         function(err, result){
-//            if(err){
-//                console.log('pageNum data select error');
-//                throw err;
-//            }
-//            
-//            connection.release();
-//        });
-//    });
-//});
+app.get('/:pageNum', function(request, response){
+    var pageNum = request.param('pageNum');
+    var data = {};
+    
+    pool.getConnection(function(err, connection){
+        connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
+                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT 14;', 
+                         function(err, result){
+            if(err){
+                console.log('pageNum data select error');
+                throw err;
+            }
+            response.json(result);
+            connection.release();
+        });
+    });
+});
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
 app.post('/upload-image', function(request, response){
@@ -201,38 +202,40 @@ app.post('/upload-text', function(request, response){
                         var momentQuery = sq.INSERT_INTO("moment", "(date, id, file, text, textColor)", moment);
                         pool.getConnection(function(err, connection){
                             connection.query(momentQuery, function(err, res){
-                                               if(err) {
-                                                   console.log('moment insert error');
-                                                   throw err;
-                                               }
+                                if(err) {
+                                    console.log('moment insert error');
+                                    throw err;
+                                }
                                 connection.release();
+                                pool.getConnection(function(err, connection){
+                                    for(var i=0; i<moment.bgColor.length ; i++){
+                                        connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
+                                                                        [moment.id, i, moment.bgColor[i]]),function(err, res){
+                                            if(err) {
+                                                console.log('bgColor insert error');
+                                                throw err;
+                                            }
+                                        });  
+                                    }
+                                    connection.release();
+                                    console.log('>>>inserted');
+                        
+                                    var result = {
+                                        "id" : id,
+                                        "bgColor" : moment.bgColor[0],
+                                        "textColor" : moment.textColor,
+                                    };
+                        
+                                    response.send(result);
+                                    response.end();
+                                });
                             });
+                            
                         });
                         
-                        pool.getConnection(function(err, connection){
-                            for(var i=0; i<moment.bgColor.length ; i++){
-                                connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
-                                                                [moment.id, i, moment.bgColor[i]]),function(err, res){
-                                                                if(err) {
-                                                                    console.log('bgColor insert error');
-                                                                   throw err;
-                                                                }
-                                });  
-                            }
-                            connection.release();
-                        });
                         //DB transaction.....?
                         
-                        console.log('>>>inserted');
-                        
-                        var result = {
-                            "id" : id,
-                            "bgColor" : moment.bgColor[0],
-                            "textColor" : moment.textColor,
-                        };
-                        
-                        response.send(result);
-                        response.end();
+
                     }
                 });
             });

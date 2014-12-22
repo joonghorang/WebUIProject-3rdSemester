@@ -42,7 +42,7 @@ a:visited, a:link{
 
 #moments div:hover {
     color: #ffffff;
-    opacity: 0.65;
+    opacity: 0.9;
     background-blend-mode:saturation;
 }
 
@@ -179,6 +179,7 @@ a:visited, a:link{
     margin-bottom: 300px;
 /*    background-image: url("../image/main4.jpg");*/
     background-size: cover;
+    text-align: center;
 }
 
 .moment-13 {
@@ -187,6 +188,7 @@ a:visited, a:link{
     line-height: 300px;
     border: 2px solid #ffffff;
     margin: 5px;
+    text-align: center;
 }
 
 .moment-14 {
@@ -197,4 +199,5 @@ a:visited, a:link{
     margin-top: 85px;
     margin-left: 5px;
     margin-bottom: 190px;
+    text-align: center;
 }
