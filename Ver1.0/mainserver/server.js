@@ -218,8 +218,7 @@ app.post('/upload-text', function(request, response){
                                     console.log('select latest moment error');
                                     throw err;
                                 }
-                                
-                                if(result[0]!=undefined){
+                                if(typeof result[0]!=="undefined"){
                                     latestId = result[0].id;
                                     moment.prevId = latestId; //왜 prevId가 들어가지 않는거죠....?
                                     moment.nextId = null;
@@ -238,7 +237,6 @@ app.post('/upload-text', function(request, response){
                                 else{
                                     connection.release();
                                 }
-
                             });
                         });
                         /*//set prevId, nextId of moment*/
