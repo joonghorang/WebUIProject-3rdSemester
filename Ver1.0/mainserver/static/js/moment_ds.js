@@ -43,32 +43,33 @@
         });
     }
     function drawShadow(){
-
+        var url = location.href;
+        var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
+        var hours = url.slice(slicePointer + 15, slicePointer + 17);    // 그당시의 시각에 해당하는 문자열 
+        var offset = 20; // 그림자의 길이. 
         var moment = document.getElementById("moment");
-        // 현재 서버가 고장나서 일단, 현재시각을 기준으로 작업한다.
-        var hourDegree = -(360 / 12 / 180 * Math.PI);//각과 시간은 반대방향이므로.
+        var hourDegree = -(360 / 12 / 180 * Math.PI);                   //각과 시간은 반대방향이므로.
         
         var request = new XMLHttpRequest();
-        request.open("GET", "/1", true); // 나중에 제대로 된 라우터로 바꿀 것. 
+
+
+        request.open("GET", "/1", true); // 나중에 제대로 된 라우터로 바꿀 것. ID를 넘기면, 해당 아이디의 date를 전송 
 
 
         request.send();
         request.addEventListener('load', function(){
             var result = JSON.parse(request.responseText);
-            var hours = result.moments[0].date.slice(4,6);
-
             if(hours > 11){
                 hours = hours - 12;
             }
-            var startDegree = -90 / 180 * Math.PI; // 0시는 3시(0도)와 90도 차이나므로 시작점은 +90도부터 시작한다. 
+            var startDegree = 90 / 180 * Math.PI;                       // 0시는 3시(0도)와 90도 차이나므로 시작점은 +90도부터 시작한다. 
             var degree = startDegree + hours * hourDegree;
-            // console.log("h : " + hours);
-            // console.log("degree : " + degree * 180 / Math.PI); 
-            var offset = 20;
+            console.log("h : " + hours);
+            console.log("degree : " + degree * 180 / Math.PI); 
             var posX =  Math.cos(degree) * offset;
-            var posY =  Math.sin(degree) * offset;      
-            // console.log(posX);
-            // console.log(posY);
+            var posY =  -(Math.sin(degree) * offset);                   // css설정은 Y값이 +일수록 밑으로 그림자가 진다.       
+            console.log("X " + posX);
+            console.log("Y " + posY);
             moment.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px #555555";
         });
     }
