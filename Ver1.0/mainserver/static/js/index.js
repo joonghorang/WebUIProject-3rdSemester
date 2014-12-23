@@ -38,8 +38,8 @@ var setItemFactoryDisplay = {
         request.send();
         request.addEventListener('load', function(){
             var result = JSON.parse(request.responseText);
-            var html = document.getElementById("b");
-//            html.style.backgroundColor = result.moments[0].bgColor;
+            var body = document.getElementById("body");
+            body.style.backgroundColor = result.moments[0].bgColor;
         }, false);
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드

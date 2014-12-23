@@ -172,12 +172,8 @@ function drawTextOn(textCanvas, text, textColor){
 
                         for(var l = 0; l <= wordArray.length; l++){ // 가장 뒤로 밀린 공백을 삭제한다. 
                             if(wordArray[l] === ""){
-                                // Comment : 커밋하기 전 단순 디버깅을 위한 console.log들은 지워주자. 
-                                //          좀더 구체적으로 위치와 실행한 함수를 logging해주었다면 
-                                //          지우지 않아도되는 의미가 담긴 log가 되었을 것.
-                                console.log(wordArray[l] + "here");
                                 wordArray.splice(l, 0);
-                                console.log(wordArray.length);
+            
                             }
                         }
                     }
