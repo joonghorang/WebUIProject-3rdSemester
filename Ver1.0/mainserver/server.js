@@ -92,8 +92,8 @@ app.get('/:pageNum', function(request, response){
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
     var momentData = {};
-    //comment : 한꺼번에 해도 되는데, bgColor가 여러개일 경우 bgColor수만큼 중복된 열이 나와서, 그냥 따로 select해두었습니다 - 신영
-    //comment : 콜백 지옥에 오신것을 환영합니다.
+
+    //comment : 콜백 지옥에 오신것을 환영합니다. -덕성
     
     //moment table select
     pool.getConnection(function(err, connection){
@@ -107,6 +107,11 @@ app.get('/moment/:id', function(request, response){
             momentData.text = result[0].text;
             momentData.file = result[0].file;
             momentData.date = result[0].date;
+            
+            /*get previous, next momentId*/
+//            momentData.previousMomentId;
+//            momentData.nextMomentId;
+            /*//get previous, next momentId*/
             
             connection.release();
             
