@@ -196,6 +196,8 @@ var confirm = {
         this.getElements();
         this.confirmButton.addEventListener('click',this.sendData.bind(this),false);
         this.request.addEventListener('load', this.getData.bind(this));
+        
+        this.confirmButton.style.display = 'none'; // 여러번 클릭되는 걸 방지.
     }
 };
 var submit = {
@@ -244,6 +246,8 @@ var submit = {
         this.request.addEventListener('load', function(){
             window.location.reload(true);
         }.bind(this) ,false);
+
+        this.submitButton.style.display = 'none'; // 여러번 클릭되는 걸 방지.
     }
 };
 
