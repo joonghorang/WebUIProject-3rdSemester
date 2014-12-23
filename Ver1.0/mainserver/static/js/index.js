@@ -32,6 +32,7 @@ var setItemFactoryDisplay = {
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
     "bootColorSet" : function(){
+        console.log(1);
         var request = new XMLHttpRequest();
         request.open("GET", "/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
         request.send();
@@ -75,11 +76,8 @@ var setItemFactoryDisplay = {
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
-        // var displaySetNum = 2;          //레이아웃 디자인 갯수, 나중에 더 좋은 방법으로 개선해도 좋을듯. 
-        // var momentUnitNum = 7;          // 한 세트에 적용되는 모멘츠 갯수
-        var result = JSON.parse(this.request.responseText);
-        //console.log(result);
-        for(var i = 0; i < result.moments.length; i++){
+        var result = JSON.parse
+            for(var i = 0; i < result.moments.length; i++){
             var addA = document.createElement('a');
             addA.setAttribute("href", "./moment/" + result.moments[i].id);
 
