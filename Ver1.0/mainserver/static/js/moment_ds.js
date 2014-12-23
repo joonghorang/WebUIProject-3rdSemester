@@ -1,6 +1,6 @@
 (function(){    
     function init(){
-        moveMoment();
+        //moveMoment();
         drawShadow();
         initCanvases();
         drawBgCanvas(bgColor);
@@ -31,17 +31,18 @@
         var textCanvas  = document.getElementById("text-canvas");
         drawTextOn(textCanvas, text, textColor);
     }
-    function moveMoment(){ // Full View에서 모멘츠간 이동을 위한 함수 
-        var backwardButton = document.getElementById("backward-button");
-        var forwardButton = document.getElementById("forward-button");
-        EventUtil.addHandler(backwardButton, "click", function(event){
-             window.location.href = "201412231751_ivnsm"; // 이런식으로 화면이동해야하는데, 서버에 요청을 다시해아할듯. 
-             console.log("you click backward button");
-        });
-        EventUtil.addHandler(forwardButton, "click", function(event){
-            console.log("you click forward button");
-        });
-    }
+    // 페이지 이동은 앵커태그로 할 예정. 
+    // function moveMoment(){ // Full View에서 모멘츠간 이동을 위한 함수 
+    //     var backwardButton = document.getElementById("backward-button");
+    //     var forwardButton = document.getElementById("forward-button");
+    //     EventUtil.addHandler(backwardButton, "click", function(event){
+    //          window.location.href = "201412231751_ivnsm"; // 이런식으로 화면이동해야하는데, 서버에 요청을 다시해아할듯. 
+    //          console.log("you click backward button");
+    //     });
+    //     EventUtil.addHandler(forwardButton, "click", function(event){
+    //         console.log("you click forward button");
+    //     });
+    // }
     function drawShadow(){
         var url = location.href;
         var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
