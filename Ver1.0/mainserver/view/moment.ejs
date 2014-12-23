@@ -9,6 +9,7 @@
     </head>
     <body>
         <div id="wrapper">
+            <img id="bg-image" src="../<%= file %>">
             <div id="moment">
                 <canvas id = "bg-canvas"></canvas>
                 <canvas id = "text-canvas"></canvas>
@@ -23,6 +24,12 @@
             var bgColor = "<%= bgColor[0] %>";
             var textColor = "<%= textColor %>";
             var text = "<%= text %>";
+//            var file = "<%= file %>"
+//            
+//            var bgImage = document.getElementById('bg-image');
+//            bgImage.style.backgroundImage = "url(../"+ file +");";
+//            //배경에 사진을 블러로 깔기:doing
+            
         </script>
         <script src="../js/lib/EventUtil.js"></script>
         <script src="../js/lib/commonCanvas.js"></script>

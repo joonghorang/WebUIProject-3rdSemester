@@ -12,6 +12,7 @@ var Image = Canvas.Image;
 var mytools = require("./controllers/mytools.js");
 var colorClassifier = require("./controllers/colorClassifier.js");
 var sq = require("./controllers/simpleQuery.js");
+
 //express 모듈을 사용해 웹서버를 생성한다.
 var app = express();
 
@@ -65,6 +66,27 @@ app.get('/', function(request, response){
     
 });
 
+//pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
+app.get('/:pageNum', function(request, response){
+    var pageNum = request.param('pageNum');
+    var pageData = {};
+    
+    pool.getConnection(function(err, connection){
+        connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
+                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;', function(err, result){
+            if(err){
+                console.log('pageNum data select error');
+                throw err;
+            }
+            console.log(result);
+            pageData.moments = result;
+            response.json(pageData);
+            connection.release();
+        });
+    });
+});
+
+
 /*/moment/picId 라우터로 이동*/
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
@@ -108,24 +130,6 @@ app.get('/moment/:id', function(request, response){
 
 });
 
-//pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
-app.get('/:pageNum', function(request, response){
-    var pageNum = request.param('pageNum');
-    var pageData = {};
-    
-    pool.getConnection(function(err, connection){
-        connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
-                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;', function(err, result){
-            if(err){
-                console.log('pageNum data select error');
-                throw err;
-            }
-            pageData.moments = result;
-            response.json(pageData);
-            connection.release();
-        });
-    });
-});
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
 app.post('/upload-image', function(request, response){
@@ -172,7 +176,6 @@ app.post('/upload-text', function(request, response){
         }
         else{
             //클라이언트에서 입력한 text data
-            
             var text = fields.textInput;
             var date = new Date();
             var timeStamp = mytools.toYYYYMMDDHHmmSSsss(date);
@@ -233,16 +236,13 @@ app.post('/upload-text', function(request, response){
                             });
                             
                         });
-                        
-                        //DB transaction.....?
-                        
-
                     }
                 });
             });
         }
     });
-});
+}); //이 콜백지옥....................
+
 app.get('/colorLab', function(req, res){
     var imageData = fs.readFileSync(uploads + app.get("colorLabData")); 
     var image = new Image();
@@ -253,6 +253,7 @@ app.get('/colorLab', function(req, res){
         pickedColors : Impressive(image).toHexString()
     });
 });
+
 //웹서버를 실행한다.
 app.listen(app.get("port"), function(){
     console.log('server running at port '+app.get("port")+'...');
