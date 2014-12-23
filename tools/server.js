@@ -4,7 +4,6 @@ var Image = Canvas.Image;
 var fs = require("fs");
 var path = require("path");
 var formidable = require("formidable");
-var mysql = require("mysql");
 var tinycolor = require("tinycolor2");
 var mytools = require("./controllers/mytools.js");
 var Impressive = require("impressive");
