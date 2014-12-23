@@ -186,8 +186,8 @@ function drawTextOn(textCanvas, text, textColor){
         };
     // Comment : 왜 무엇을 reposition해주어야 하는가.
     function repositionTextX(wordArray, textX, fontSize){
-        // x방향으로 좀 치우쳤네요 ㅎㅎ
-        var X_CORRECTION = 20 ;
+        // x방향으로 좀 치우쳤네요 ㅎㅎ, 코렉션 없는게 맞음. 
+        var X_CORRECTION = 0 ;
         context = textCanvas.getContext("2d");
         context.font = fontSize + "px " + fontName;
         addTextX = (context.measureText(findMostLongWord(wordArray)).width) / 2;

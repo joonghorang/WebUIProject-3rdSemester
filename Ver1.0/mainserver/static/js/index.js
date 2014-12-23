@@ -112,7 +112,6 @@ var setItemFactoryDisplay = {
         EventUtil.addHandler(window, 'DOMContentLoaded', this.bootColorSet.bind(this));
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         this.request.addEventListener('load', this.createMoments.bind(this), false);
-        //this.request.addEventListener('load', this.createBgColor.bind(this), false);
     }
 };
 var manageFileInput = {
