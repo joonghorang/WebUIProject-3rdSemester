@@ -239,6 +239,7 @@ app.post('/upload-text', function(request, response){
                                 }
                             });
                         });
+                        console.log(latestId);
                         /*//set prevId, nextId of moment*/
                         
                         var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
