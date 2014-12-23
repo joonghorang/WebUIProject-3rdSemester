@@ -11,7 +11,6 @@ var setItemFactoryDisplay = {
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
         this.momentsWrapper = document.getElementById("moments-wrapper");
-
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
