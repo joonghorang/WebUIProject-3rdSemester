@@ -44,12 +44,13 @@
                     
                     <% for(var i=0; i<moments.length; i++) {%>
                     <a href = "./moment/<%= moments[i].id %>">
-<<<<<<< HEAD
-                        <div class="moment-<%= (i%14)+1 %>" <% if( i%14 == 0) {%>, style = "background-image : url('./<%= moments[i].file%>');"<%} %>>
-                            
-=======
-                        <div class="moment-<%= i+1 %>" style="background-image:url(./<%= moments[i].file %>); background-color:<%= moments[i].bgColor %>">
->>>>>>> 00336575a02412e9556449a18450c308caea22e3
+
+                        <div class="moment-<%= (i%14)+1 %>" style = "
+                             <% if( i%14 == 0) 
+                            {%> 
+                            background-image:url('./<%= moments[i].file%>');
+                            <%}%>
+                            background-color:<%= moments[i].bgColor%>;">
                             <span><%= moments[i].text%></span>
                         </div>
                     </a>
@@ -60,12 +61,7 @@
                         <div class="moment-1">
                             <span>별이 빛나는</span>
                         </div>
-<<<<<<< HEAD
                     </a> 
-=======
-                    </a> -->
-<!--
->>>>>>> 00336575a02412e9556449a18450c308caea22e3
                     <a href="#">
                         <div class="moment-2">
                             <span>별이 빛나는</span>
