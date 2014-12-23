@@ -241,13 +241,10 @@ app.post('/upload-text', function(request, response){
 
                             });
                         });
-                        console.log(latestId);
                         /*//set prevId, nextId of moment*/
                         
                         var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
                         
-                        console.log('INSERT INTO moment(date, id, prevId, nextId, file, text, textColor) VALUES("'+ moment.date + '","' + moment.id+ '","' + moment.prevId + '","' + moment.nextId + '","' + moment.file + '","' + moment.text + '","' + moment.textColor +'")');
-                        console.log(momentQuery);
                         pool.getConnection(function(err, connection){
                             connection.query(momentQuery, function(err, res){
                                 if(err) {
