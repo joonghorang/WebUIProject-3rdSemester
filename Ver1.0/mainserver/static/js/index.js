@@ -46,11 +46,9 @@ var setItemFactoryDisplay = {
         // var momentsArray = document.querySelectorAll("#moments a div");
         // var firstEle = momentsArray[0];
         // var lastEle = momentsArray[momentsArray.length-1];
-
         // console.log("scrollY " + window.scrollY);
         // console.log("lastEle " + (lastEle.offsetTop - window.innerHeight));
         //console.log("moments " + this.moments.offsetHeight);
-
         // 일단, 메이슨리를 쓰기 때문에 기존의 방법대로 무한스클로을 구현할 수 없다.
         // 따라서 우리가 해야하는 일은 가장 마지막 아이를 찾고,
         // 그 아이의 Y값위치를 계산한뒤, 
@@ -65,6 +63,7 @@ var setItemFactoryDisplay = {
         // 추가된 전체 moments div의 offsetHeight의 80%를 넘었을때,
         // 새로 길이를 늘려주고 엘레멘트들을 추가하는 코드로 변경. 
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
+
          if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100){
             this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
             console.log("size Expanded");
@@ -91,9 +90,11 @@ var setItemFactoryDisplay = {
                 
                 addDiv.style.backgroundImage = "url(" + result.moments[i].file + ")";
             }
-
-            this.classIndexNum++;
-            //console.log(this.classIndexNum);
+            if(this.classIndexNum === 14){
+                this.classIndexNum = 1;
+            } else {
+               this.classIndexNum++;
+            }
             addDiv.style.backgroundColor = result.moments[i].bgColor;
             var addSpan = document.createElement('span');
             addSpan.innerHTML = result.moments[i].text;
@@ -238,15 +239,7 @@ var submit = {
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
     },
-//     "refresh" : function(){
-//         var refreshRequest = new XMLHttpRequest();
-//         refreshRequest.open("GET", "/1");
-//         refreshRequest.send();
-//         refreshRequest.addEventListener('load',function(){
-//            //submit 완료된 이후 페이지 리프레시
-//            location.reload();
-//         },false);
-//     },
+
     "init" : function(){
         this.getElements();
 //        this.submitButton.addEventListener('click', this.reset.bind(this),false);
