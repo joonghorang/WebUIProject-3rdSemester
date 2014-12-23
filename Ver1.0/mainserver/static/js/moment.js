@@ -3,7 +3,7 @@ function stringToWordList(String){
     result = String.split(" ");
     return result;
 };
-// Comment : 왜 enter를 더해주어야 하는가.
+// Comment : 왜 enter를 더해주어야 하는가. 기억이 나지 않습니다. 
 function addEnterToWordList(WordArray){
     for(var i = 0; i < WordArray.length; i++){
         WordArray[i] += "\n";
@@ -60,7 +60,7 @@ window.addEventListener('DOMContentLoaded', function(){
 //  });
 // </script>
         // Comment : 이런 식으로 폰트 setting부분을 따로 빼두는 것은 array.
-		var fontName = "NanumBarunGothicUltraLight";
+		var fontName = "NanumBarunGothic";
 		var fontColor = "#ffffff";
         // Comment : 이 array 방식에는 문제가 있다.
 		var fontSizeArray = [140, 100, 72, 60, 48, 36, 24, 16, 8];

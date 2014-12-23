@@ -1,7 +1,9 @@
 var MAX_WIDTH = window.innerWidth;
 var MAX_HEIGHT = window.innerHeight;
 
+
 var setItemFactoryDisplay = {
+
     "getElements" : function(){
 
         this.wrapper = document.getElementById("wrapper");
@@ -16,6 +18,8 @@ var setItemFactoryDisplay = {
         this.closeButton = document.getElementById("close-button-wrapper");
         this.previewImg = document.getElementById('preview-image');
         this.request = new XMLHttpRequest();
+        this.pageIndexNum = 1;
+        this.classIndexNum = 1;
     },
     "openFactory" : function(){
         display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
@@ -28,11 +32,14 @@ var setItemFactoryDisplay = {
         display([this.moments, this.itemFactoryButton],'show');
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
+    "bootColorSet" : function(){
+
+    }
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
-        var momentsArray = document.querySelectorAll("#moments a div");
-        var firstEle = momentsArray[0];
-        var lastEle = momentsArray[momentsArray.length-1];
+        // var momentsArray = document.querySelectorAll("#moments a div");
+        // var firstEle = momentsArray[0];
+        // var lastEle = momentsArray[momentsArray.length-1];
 
         // console.log("scrollY " + window.scrollY);
         // console.log("lastEle " + (lastEle.offsetTop - window.innerHeight));
@@ -52,88 +59,44 @@ var setItemFactoryDisplay = {
         // 추가된 전체 moments div의 offsetHeight의 80%를 넘었을때,
         // 새로 길이를 늘려주고 엘레멘트들을 추가하는 코드로 변경. 
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
-         if(window.scrollY + 300 > this.moments.offsetHeight * 80 / 100){
-             this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
-             console.log("size Expanded");
-             var addA = document.createElement('a');
-             var addDiv = document.createElement('div');
-             addDiv.style.height = "200px" // 가라데이터, 나중에 서버에 요청값으로 받아서 제대로 생성해준다. 
-             addDiv.style.width = "800px"
-             addDiv.style.backgroundColor = "black";
-             addDiv.style.marginTop = "800px"
-             this.moments.appendChild(addA);
-             addA.appendChild(addDiv);
-
-             // 다시 마지막 엘리먼트를 갱신 
-             momentsArray = document.querySelectorAll("#moments a div");
-             var lastEle = momentsArray[momentsArray.length-1];
-             //console.log(lastEle);
-             // 객체들을 불러들이는 코드 추가.
-
-             // this.request.open("GET", "/", true);
-             // this.request.send();
+         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100){
+            this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
+            console.log("size Expanded");
+            
+            //추가 객체들을 요청. 
+            this.pageIndexNum++;
+            this.request.open("GET", "/" + this.pageIndexNum.toString(), true);
+            this.request.send();
          }
+    }, 
+    "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+        // var displaySetNum = 2;          //레이아웃 디자인 갯수, 나중에 더 좋은 방법으로 개선해도 좋을듯. 
+        // var momentUnitNum = 7;          // 한 세트에 적용되는 모멘츠 갯수
+        var result = JSON.parse(this.request.responseText);
+        //console.log(result);
+        for(var i = 0; i < result.moments.length; i++){
+            var addA = document.createElement('a');
+            addA.setAttribute("href", "./moment/" + result.moments[i].id);
+
+            var addDiv = document.createElement('div');
+            addDiv.setAttribute("class", "moment-" + this.classIndexNum.toString());
+
+            if(this.classIndexNum == 1 || this.classIndexNum == 8 || this.classIndexNum == 9 || this.classIndexNum == 12){
+                
+                addDiv.style.backgroundImage = "url(" + result.moments[i].file + ")";
+            }
+
+            this.classIndexNum++;
+            //console.log(this.classIndexNum);
+            addDiv.style.backgroundColor = result.moments[i].bgColor;
+            var addSpan = document.createElement('span');
+            addSpan.innerHTML = result.moments[i].text;
+
+            this.moments.appendChild(addA);
+            addA.appendChild(addDiv);
+            addDiv.appendChild(addSpan);
+        }
     },
-    //서버에 라우터 완성되면 부활 
-    // "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
-    //     var displaySetNum = 2;          //레이아웃 디자인 갯수, 나중에 더 좋은 방법으로 개선해도 좋을듯. 
-    //     var momentUnitNum = 7;          // 한 세트에 적용되는 모멘츠 갯수
-
-    //     // this.request.addEventListener('load', function(){
-    //     var result = JSON.parse(this.request.responseText);
-    //     console.log("in displayMore");
-    //     console.log(result);
- //       });
-        // var result = JSON.parse(this.request.responseText);
-        // for(var i = 0; i < this.result.length; i++){
-        //     var addMoment = createElement("div");
-        //     var addA = createElement("a");
-        //     var addImg = createElement("img");
-        //     var addP = createElemet("p");
-
-        //     if (i < momentUnitNum){
-        //         if(i % 7 === 0){
-        //             addMoment.setAttribute("class", "moment-1");
-        //         } else if(i % 7 === 1){
-        //             addMoment.setAttribute("class", "moment-2");
-        //         } else if(i % 7 === 2){
-        //             addMoment.setAttribute("class", "moment-3");
-        //         } else if(i % 7 === 3){
-        //             addMoment.setAttribute("class", "moment-4");
-        //         } else if(i % 7 === 4){
-        //             addMoment.setAttribute("class", "moment-5");
-        //         } else if(i % 7 === 5){
-        //             addMoment.setAttribute("class", "moment-6");
-        //         } else if(i % 7 === 6){
-        //             addMoment.setAttribute("class", "moment-7");
-        //         } else {
-        //             alert("error in createMoments set Class Name");
-        //         }
-        //     } else if(i < momentUnitNum * displaySetNum){
-        //             addMoment.setAttribute("class", "moment-1");
-        //         } else if(i % 7 === 1){
-        //             addMoment.setAttribute("class", "moment-2");
-        //         } else if(i % 7 === 2){
-        //             addMoment.setAttribute("class", "moment-3");
-        //         } else if(i % 7 === 3){
-        //             addMoment.setAttribute("class", "moment-4");
-        //         } else if(i % 7 === 4){
-        //             addMoment.setAttribute("class", "moment-5");
-        //         } else if(i % 7 === 5){
-        //             addMoment.setAttribute("class", "moment-6");
-        //         } else if(i % 7 === 6){
-        //             addMoment.setAttribute("class", "moment-7");
-        //         } else {
-        //             alert("error in createMoments set Class Name");
-        //         }
-        //     }
-        //     // 설정된 elements들을 html에 삽입
-        //     this.moments.appendChild(addMoment);
-        //     addMoment.appendChild(addA);
-        //     addA.appendChild(addImg);
-        //     addA.appendChild(addP);
-        //}
-    // },
     // "changeBgColor" : function(){       //1.DB에 색상을 요청해서 저장된 칼라값을 받아온 후 배경 컬러를 설정하는 코드 
     //     // 전송을 요청하는 코드
 
@@ -148,8 +111,9 @@ var setItemFactoryDisplay = {
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
+        // EventUtil.addHandler(window, 'DOMContentLoaded', this.booting.bind(this));
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
-        //this.request.addEventListener('load', this.createMoments.bind(this), false);
+        this.request.addEventListener('load', this.createMoments.bind(this), false);
         //this.request.addEventListener('load', this.createBgColor.bind(this), false);
     }
 };
