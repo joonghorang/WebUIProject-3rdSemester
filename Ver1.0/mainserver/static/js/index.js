@@ -32,7 +32,6 @@ var setItemFactoryDisplay = {
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
     "bootColorSet" : function(){
-        console.log(1);
         var request = new XMLHttpRequest();
         request.open("GET", "/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
         request.send();
