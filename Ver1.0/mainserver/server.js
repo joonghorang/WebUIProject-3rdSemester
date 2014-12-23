@@ -108,19 +108,20 @@ app.get('/moment/:id', function(request, response){
 
 });
 
+//pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
 app.get('/:pageNum', function(request, response){
     var pageNum = request.param('pageNum');
-    var data = {};
+    var pageData = {};
     
     pool.getConnection(function(err, connection){
         connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
-                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT 14;', 
-                         function(err, result){
+                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;', function(err, result){
             if(err){
                 console.log('pageNum data select error');
                 throw err;
             }
-            response.json(result);
+            pageData.moments = result;
+            response.json(pageData);
             connection.release();
         });
     });
