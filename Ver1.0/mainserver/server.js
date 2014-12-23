@@ -209,11 +209,50 @@ app.post('/upload-text', function(request, response){
                             textColor : colorClassifier(colorList).textColorHex(),
                         }
                         
-                        var momentQuery = sq.INSERT_INTO("moment", "(date, id, file, text, textColor)", moment);
+                        /*set prevId, nextId of moment*/
+                        var latestId;
+                        pool.getConnection(function(err, connection){
+                            //가장 최근에 추가한 모멘트의 id, nextId select
+                            connection.query("SELECT id FROM moment ORDER BY date DESC LIMIT 1",function(err, result){
+                                if(err){
+                                    console.log('select latest moment error');
+                                    throw err;
+                                }
+                                
+                                if(result[0]!=undefined){
+                                    latestId = result[0].id;
+                                    moment.prevId = latestId; //왜 prevId가 들어가지 않는거죠....?
+                                    moment.nextId = null;
+                                    connection.release();
+                                    
+                                    pool.getConnection(function(err, connection){
+                                        connection.query("UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'",function(err,result){
+                                            if(err){
+                                                console.log('update nextId error');
+                                                throw err;
+                                            }
+                                            connection.release();
+                                        });
+                                    });
+                                }
+                                else{
+                                    connection.release();
+                                }
+
+                            });
+                        });
+                        console.log(latestId);
+                        /*//set prevId, nextId of moment*/
+                        
+                        var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
+                        
+                        console.log('INSERT INTO moment(date, id, prevId, nextId, file, text, textColor) VALUES("'+ moment.date + '","' + moment.id+ '","' + moment.prevId + '","' + moment.nextId + '","' + moment.file + '","' + moment.text + '","' + moment.textColor +'")');
+                        console.log(momentQuery);
                         pool.getConnection(function(err, connection){
                             connection.query(momentQuery, function(err, res){
                                 if(err) {
                                     console.log('moment insert error');
+                                    //문제 : 텍스트에 ' 가 들어갈 경우 에러가 납니다.
                                     throw err;
                                 }
                                 connection.release();
