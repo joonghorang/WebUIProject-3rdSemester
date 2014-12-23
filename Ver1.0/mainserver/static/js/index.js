@@ -112,6 +112,7 @@ var setItemFactoryDisplay = {
         this.request.addEventListener('load', this.createMoments.bind(this), false);
     }
 };
+
 var manageFileInput = {
     "getElements" : function(){
         this.fileInput = document.getElementById("upload-hidden");
@@ -139,6 +140,7 @@ var manageFileInput = {
         this.fileInput.addEventListener('change',this.change.bind(this),false);
     }
 };
+
 var confirm = {
     "getElements" : function(){
         this.closeButton = document.getElementById("close-button-wrapper");
@@ -151,6 +153,9 @@ var confirm = {
         this.request = new XMLHttpRequest();
     },
     "sendData" : function(e){
+        //하나만 쓰는거기는 하지만 스타일 통일하는 게 나은 것 같아서 요렇게 써둡니다 - 신영
+        display([this.confirmButton], 'hide'); 
+        
         e.preventDefault();
         //파일 없을때 에러처리
         if(this.fileInput.files.item(0)===null){
@@ -179,7 +184,6 @@ var confirm = {
         display([this.uploadFile, this.closeButton],'hide');
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
-//        this.textInput.value = "30자 이내로 입력하세요.";
 
         // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
         fR = parseInt(bgColor.slice(1,3), 16);
@@ -188,16 +192,12 @@ var confirm = {
         
         firstColor = bgColor;
         secondColor = textColor;
-//        var html = document.getElementById("html");
-//        html.style.backgroundColor = bgColor;
-        drawGradation(bgColor, textColor);
+        drawGradation(bgColor, textColor); //......????? 아, 전역변수였던가요....? - 신영
     },
     "init" : function(){
         this.getElements();
         this.confirmButton.addEventListener('click',this.sendData.bind(this),false);
         this.request.addEventListener('load', this.getData.bind(this));
-        
-        this.confirmButton.style.display = 'none'; // 여러번 클릭되는 걸 방지.
     }
 };
 var submit = {
@@ -224,11 +224,9 @@ var submit = {
         addCamera.setAttribute('id', "camera");
         addCamera.setAttribute('src', "image/camera.png");
         this.previewImgWrapper.appendChild(addCamera);
-        
-//        location.reload();
-
     },
     "sendData" : function(e){
+        display([this.submitButton], 'hide');
         e.preventDefault();
         // 데이터를 전송 
         var formData = new FormData(); 
@@ -246,8 +244,6 @@ var submit = {
         this.request.addEventListener('load', function(){
             window.location.reload(true);
         }.bind(this) ,false);
-
-        this.submitButton.style.display = 'none'; // 여러번 클릭되는 걸 방지.
     }
 };
 
