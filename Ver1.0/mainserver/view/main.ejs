@@ -41,12 +41,8 @@
             </div>
             <div id = "moments-wrapper">
                 <div id = "moments">
-<<<<<<< Updated upstream
-                    <% for(var i=0; i<moments.length ; i++){ %>
-=======
                     <!-- 맨처음 7개만 데이터베이스에서 불러온다.-->
                     <% for(var i=0; i< 14 ; i++){ %>
->>>>>>> Stashed changes
                         <a href="./moment/<%= moments[i].id %>">
                             
                             <div class="moment-<%= (i%14)+1 %>" style="<% if(i%14==0||i%14==7||i%14==8||i%14==11){ %> background-image : url('./<%= moments[i].file %>'); background-color : <%= moments[i].bgColor %><%}%>">
