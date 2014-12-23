@@ -1,6 +1,7 @@
 (function(){    
     function init(){
         //moveMoment();
+        setBgColor();
         drawShadow();
         initCanvases();
         drawBgCanvas(bgColor);
@@ -30,6 +31,10 @@
     function drawTextCanvas(textColor, text){
         var textCanvas  = document.getElementById("text-canvas");
         drawTextOn(textCanvas, text, textColor);
+    }
+    function setBgColor(){
+        var wrapper = document.getElementById("wrapper");
+        wrapper.style.backgroundColor = bgColor;
     }
     // 페이지 이동은 앵커태그로 할 예정. 
     // function moveMoment(){ // Full View에서 모멘츠간 이동을 위한 함수 
