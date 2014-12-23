@@ -65,12 +65,12 @@
             }
             var startDegree = 90 / 180 * Math.PI;                       // 0시는 3시(0도)와 90도 차이나므로 시작점은 +90도부터 시작한다. 
             var degree = startDegree + hours * hourDegree;
-            console.log("h : " + hours);
-            console.log("degree : " + degree * 180 / Math.PI); 
+            //console.log("h : " + hours);
+            //console.log("degree : " + degree * 180 / Math.PI); 
             var posX =  Math.cos(degree) * offset;
             var posY =  -(Math.sin(degree) * offset);                   // css설정은 Y값이 +일수록 밑으로 그림자가 진다.       
-            console.log("X " + posX);
-            console.log("Y " + posY);
+            //console.log("X " + posX);
+            //console.log("Y " + posY);
             moment.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px #555555";
         });
     }
