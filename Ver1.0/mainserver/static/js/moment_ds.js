@@ -1,4 +1,14 @@
-(function(){  
+(function(){    
+    function init(){
+        moveMoment();
+        initCanvases();
+        drawBgCanvas(bgColor);
+        drawTextCanvas(textColor, text);
+        var textCanvas = document.getElementById("text-canvas");
+        var imageWrapper = document.getElementById("moment-image-wrapper"); 
+        EventUtil.addHandler(imageWrapper, "click", letsShow.momentText);
+        EventUtil.addHandler(textCanvas, "click", letsShow.momentImage);
+    }
     function initCanvases(){
         //set canvases w, h
         var bgCanvas = document.getElementById("bg-canvas");
@@ -20,6 +30,17 @@
         var textCanvas  = document.getElementById("text-canvas");
         drawTextOn(textCanvas, text, textColor);
     }
+    function moveMoment(){ // Full View에서 모멘츠간 이동을 위한 함수 
+        var backwardButton = document.getElementById("backward-button");
+        var forwardButton = document.getElementById("forward-button");
+        EventUtil.addHandler(backwardButton, "click", function(event){
+             window.location.href = "201412231751_ivnsm"; 
+             console.log("you click backward button");
+        });
+        EventUtil.addHandler(forwardButton, "click", function(event){
+            console.log("you click forward button");
+        });
+    }
     var letsShow = {
         //image를 보여주기위한 함수
         //imageWrapper를 열고 textCanvas를 닫는다.
@@ -38,12 +59,6 @@
             display([imageWrapper], "hide");
         }
     }
-    
-    initCanvases();
-    drawBgCanvas(bgColor);
-    drawTextCanvas(textColor, text);
-    var textCanvas = document.getElementById("text-canvas");
-    var imageWrapper = document.getElementById("moment-image-wrapper"); 
-    EventUtil.addHandler(imageWrapper, "click", letsShow.momentText);
-    EventUtil.addHandler(textCanvas, "click", letsShow.momentImage);
+    init();
+
 })();
