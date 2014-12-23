@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id = "a">
+<html>
     <head>
         <meta charset="utf-8">   
         <link rel="stylesheet" type="text/css" href="./css/reset.css">
@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="./css/index.css">
         <title>a moment</title>
     </head>
-    <body id = "b">
+    <body id = "body">
         <div id = "wrapper">
 <!--        업로드 버튼 클릭시 나타나는 아이템팩토리-->
             <div id="itemFactory">
@@ -41,8 +41,8 @@
             </div>
             <div id = "moments-wrapper">
                 <div id = "moments">
-                    <!-- 맨처음 14개만 데이터베이스에서 불러온다.-->
-                    <% for(var i=0; i< 14 ; i++){ %>
+                    <!-- 맨처음 14개만 데이터베이스에서 불러온다 + 데이터가 14개보다 적을 경우는 있는 데이터 전체를 불러오도록 한다.-->
+                    <% for(var i=0; i< (moments.length>14?14:moments.length) ; i++){ %>
                         <a href="./moment/<%= moments[i].id %>">
                             
                             <div class="moment-<%= (i%14)+1 %>" style="<% if(i%14==0||i%14==7||i%14==8||i%14==11){ %> background-image : url('./<%= moments[i].file %>'); background-color : <%= moments[i].bgColor %><%}%>">

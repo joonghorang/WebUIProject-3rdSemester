@@ -3,7 +3,7 @@ function drawTextOn(textCanvas, text, textColor){
     
     var fontName = "NanumBarunGothicUltraLight";
     var fontColor = textColor;
-    var fontSizeArray = [140, 100, 72, 60, 48, 36, 24, 16, 8];
+    var fontSizeArray = [100, 72, 60, 48, 36, 24, 16, 8];
     var textContext = textCanvas.getContext("2d");
     textWriter(text);
     function textWriter(originTextData){
@@ -12,8 +12,8 @@ function drawTextOn(textCanvas, text, textColor){
 		    if(originTextData > MAX_STR_LEN){
 		        alert("Error");
 		    } else {
-		        var originTextArray = stringToWordList(originTextData);
-		        var words = addEnterToWordList(originTextArray);
+		        var words = stringToWordList(originTextData);
+		        //var words = originTextArray;//addEnterToWordList(originTextArray);
 		        drawWordsOnCanvas(textContext, words);
                 
                 // Comment : 자잘한 함수들을 어떻게 처리하면 좋을까.
@@ -28,7 +28,7 @@ function drawTextOn(textCanvas, text, textColor){
                 // Comment : 이런 부정확한 이름들은 어떤 역할을 하는 변수인지 확실히 써주자.
                 var addTextX = 0;
                 // Comment : 마찬가지. 이 array방식에는 문제가 있다.
-                var addTextArray =[24,36,48,60,72,100];
+                var addTextArray =[16, 24,36,48,60,72,100];
                 // Comment : addTextX와 떨어져 있어야 했나?
                 var addTextY = addTextArray[2]; // 24가 기본값
                 var uuuuuu = fontSizeAndAddTextY(wordArray);
@@ -47,21 +47,21 @@ function drawTextOn(textCanvas, text, textColor){
 		                fontSize = fontSizeArray[0];
                         // Comment : 이것을 우리는 괴랄하다고 한다.
                         // Comment : 결국 결정되는 fontSize와 AddTextY는 하나다.
-		                if(wordArray[0].length > 8 && wordArray[0].length <= 9){ // Comment : ....이게 뭐죠. 이러기 없기.
-		                    fontSize = fontSizeArray[0];
-		                } else if(wordArray[0].length > 9 && wordArray[0].length <= 15){
+		                if(wordArray[0].length <= 5){ // Comment : ....이게 뭐죠. 이러기 없기.
 		                    fontSize = fontSizeArray[1];
+		                } else if(wordArray[0].length > 5 && wordArray[0].length <= 15){
+		                    fontSize = fontSizeArray[4];
 		                } else if(wordArray[0].length > 15){
-		                    fontSize = fontSizeArray[3];
+		                    fontSize = fontSizeArray[6];
 		                }
 		                break;
 		            case 2 :
-		                fontSize = fontSizeArray[1];
+		                fontSize = fontSizeArray[2];
 		                addTextY = addTextArray[1];
 
 		                for(var i = 0; i < wordArray.length; i++){
 		                    if(wordArray[i].length > 6 && wordArray[i].length <= 12){
-		                        fontSize = fontSizeArray[2];
+		                        fontSize = fontSizeArray[3];
 		                        addTextY = addTextArray[2]
 		                    } else if(wordArray[0].length > 12){
 		                        fontSize = fontSizeArray[5];
@@ -172,12 +172,8 @@ function drawTextOn(textCanvas, text, textColor){
 
                         for(var l = 0; l <= wordArray.length; l++){ // 가장 뒤로 밀린 공백을 삭제한다. 
                             if(wordArray[l] === ""){
-                                // Comment : 커밋하기 전 단순 디버깅을 위한 console.log들은 지워주자. 
-                                //          좀더 구체적으로 위치와 실행한 함수를 logging해주었다면 
-                                //          지우지 않아도되는 의미가 담긴 log가 되었을 것.
-                                console.log(wordArray[l] + "here");
                                 wordArray.splice(l, 0);
-                                console.log(wordArray.length);
+            
                             }
                         }
                     }
@@ -210,9 +206,10 @@ function stringToWordList(String){
     return result;
 };
 
-function addEnterToWordList(WordArray){
-    for(var i = 0; i < WordArray.length; i++){
-        WordArray[i] += "\n";
-    }
-    return WordArray;
-};
+// 필요없어짐. 오히려 이녀석 때문에 코렉션 문제가 발생한듯?
+// function addEnterToWordList(WordArray){
+//     for(var i = 0; i < WordArray.length; i++){
+//         WordArray[i] += "\n";
+//     }
+//     return WordArray;
+// };

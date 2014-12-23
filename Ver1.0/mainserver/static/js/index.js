@@ -11,7 +11,6 @@ var setItemFactoryDisplay = {
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
         this.momentsWrapper = document.getElementById("moments-wrapper");
-
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
@@ -37,8 +36,8 @@ var setItemFactoryDisplay = {
         request.send();
         request.addEventListener('load', function(){
             var result = JSON.parse(request.responseText);
-            var html = document.getElementById("b");
-            html.style.backgroundColor = result.moments[0].bgColor;
+            var body = document.getElementById("body");
+         //   body.style.backgroundColor = result.moments[0].bgColor;
         }, false);
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
@@ -75,11 +74,8 @@ var setItemFactoryDisplay = {
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
-        // var displaySetNum = 2;          //레이아웃 디자인 갯수, 나중에 더 좋은 방법으로 개선해도 좋을듯. 
-        // var momentUnitNum = 7;          // 한 세트에 적용되는 모멘츠 갯수
-        var result = JSON.parse(this.request.responseText);
-        //console.log(result);
-        for(var i = 0; i < result.moments.length; i++){
+        var result = JSON.parse
+            for(var i = 0; i < result.moments.length; i++){
             var addA = document.createElement('a');
             addA.setAttribute("href", "./moment/" + result.moments[i].id);
 
@@ -114,6 +110,7 @@ var setItemFactoryDisplay = {
         this.request.addEventListener('load', this.createMoments.bind(this), false);
     }
 };
+
 var manageFileInput = {
     "getElements" : function(){
         this.fileInput = document.getElementById("upload-hidden");
@@ -141,6 +138,7 @@ var manageFileInput = {
         this.fileInput.addEventListener('change',this.change.bind(this),false);
     }
 };
+
 var confirm = {
     "getElements" : function(){
         this.closeButton = document.getElementById("close-button-wrapper");
@@ -153,6 +151,9 @@ var confirm = {
         this.request = new XMLHttpRequest();
     },
     "sendData" : function(e){
+        //하나만 쓰는거기는 하지만 스타일 통일하는 게 나은 것 같아서 요렇게 써둡니다 - 신영
+        display([this.confirmButton], 'hide'); 
+        
         e.preventDefault();
         //파일 없을때 에러처리
         if(this.fileInput.files.item(0)===null){
@@ -181,7 +182,6 @@ var confirm = {
         display([this.uploadFile, this.closeButton],'hide');
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
-//        this.textInput.value = "30자 이내로 입력하세요.";
 
         // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
         fR = parseInt(bgColor.slice(1,3), 16);
@@ -190,9 +190,7 @@ var confirm = {
         
         firstColor = bgColor;
         secondColor = textColor;
-//        var html = document.getElementById("html");
-//        html.style.backgroundColor = bgColor;
-        drawGradation(bgColor, textColor);
+        drawGradation(bgColor, textColor); //......????? 아, 전역변수였던가요....? - 신영
     },
     "init" : function(){
         this.getElements();
@@ -224,11 +222,9 @@ var submit = {
         addCamera.setAttribute('id', "camera");
         addCamera.setAttribute('src', "image/camera.png");
         this.previewImgWrapper.appendChild(addCamera);
-        
-//        location.reload();
-
     },
     "sendData" : function(e){
+        display([this.submitButton], 'hide');
         e.preventDefault();
         // 데이터를 전송 
         var formData = new FormData(); 

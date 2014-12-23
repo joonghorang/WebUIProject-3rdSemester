@@ -1,6 +1,7 @@
 (function(){    
     function init(){
         //moveMoment();
+        setBgColor();
         drawShadow();
         initCanvases();
         drawBgCanvas(bgColor);
@@ -31,6 +32,10 @@
         var textCanvas  = document.getElementById("text-canvas");
         drawTextOn(textCanvas, text, textColor);
     }
+    function setBgColor(){
+        var wrapper = document.getElementById("wrapper");
+        wrapper.style.backgroundColor = bgColor;
+    }
     // 페이지 이동은 앵커태그로 할 예정. 
     // function moveMoment(){ // Full View에서 모멘츠간 이동을 위한 함수 
     //     var backwardButton = document.getElementById("backward-button");
@@ -51,28 +56,18 @@
         var moment = document.getElementById("moment");
         var hourDegree = -(360 / 12 / 180 * Math.PI);                   //각과 시간은 반대방향이므로.
         
-        var request = new XMLHttpRequest();
-
-
-        request.open("GET", "/1", true); // 나중에 제대로 된 라우터로 바꿀 것. ID를 넘기면, 해당 아이디의 date를 전송 
-
-
-        request.send();
-        request.addEventListener('load', function(){
-            var result = JSON.parse(request.responseText);
-            if(hours > 11){
-                hours = hours - 12;
-            }
-            var startDegree = 90 / 180 * Math.PI;                       // 0시는 3시(0도)와 90도 차이나므로 시작점은 +90도부터 시작한다. 
-            var degree = startDegree + hours * hourDegree;
-            console.log("h : " + hours);
-            console.log("degree : " + degree * 180 / Math.PI); 
-            var posX =  Math.cos(degree) * offset;
-            var posY =  -(Math.sin(degree) * offset);                   // css설정은 Y값이 +일수록 밑으로 그림자가 진다.       
-            console.log("X " + posX);
-            console.log("Y " + posY);
-            moment.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px #555555";
-        });
+        if(hours > 11){
+            hours = hours - 12;
+        }
+        var startDegree = 90 / 180 * Math.PI;                       // 0시는 3시(0도)와 90도 차이나므로 시작점은 +90도부터 시작한다. 
+        var degree = startDegree + hours * hourDegree;
+        //console.log("h : " + hours);
+        //console.log("degree : " + degree * 180 / Math.PI); 
+        var posX =  Math.cos(degree) * offset;
+        var posY =  -(Math.sin(degree) * offset);                   // css설정은 Y값이 +일수록 밑으로 그림자가 진다.       
+        //console.log("X " + posX);
+        //console.log("Y " + posY);
+        moment.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px #555555";
     }
     var letsShow = {
         //image를 보여주기위한 함수

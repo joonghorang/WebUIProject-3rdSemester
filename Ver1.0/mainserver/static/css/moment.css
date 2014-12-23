@@ -35,7 +35,9 @@ html, body{
     background-image: url(../image/concrete_texture.jpg);
     background-size: cover;
 }*/
-
+#wrapper{
+    opacity : 0.5;
+}
 #backward-button-wrapper{
     z-index : 300;
     position : relative;
