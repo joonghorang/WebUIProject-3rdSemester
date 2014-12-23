@@ -40,7 +40,7 @@
     }
     
     initCanvases();
-//    drawBgCanvas(bgColor);
+    drawBgCanvas(bgColor);
     drawTextCanvas(textColor, text);
     var textCanvas = document.getElementById("text-canvas");
     var imageWrapper = document.getElementById("moment-image-wrapper"); 

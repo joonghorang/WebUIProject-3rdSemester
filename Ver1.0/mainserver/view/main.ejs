@@ -41,93 +41,17 @@
             </div>
             <div id = "moments-wrapper">
                 <div id = "moments">
+                    <% for(var i=0; i<moments.length ; i++){ %>
+                        <a href="./moment/<%= moments[i].id %>">
+                            
+                            <div class="moment-<%= (i%14)+1 %>" style="<% if(i%14==0||i%14==7||i%14==8||i%14==11){ %> background-image : url('./<%= moments[i].file %>'); background-color : <%= moments[i].bgColor %><%}%>">
+                                <span><%= moments[i].text %></span>
+                            </div>
+                            
+                        </a>
                     
-                    <% for(var i=0; i<moments.length; i++) {%>
-                    <a href = "./moment/<%= moments[i].id %>">
+                    <%}%>
 
-                        <div class="moment-<%= (i%14)+1 %>" style = "
-                             <% if( i%14 == 0) 
-                            {%> 
-                            background-image:url('./<%= moments[i].file%>');
-                            <%}%>
-                            background-color:<%= moments[i].bgColor%>;">
-                            <span><%= moments[i].text%></span>
-                        </div>
-                    </a>
-                    <% } %>
-                    
-<!--
-                     <a href="#">
-                        <div class="moment-1">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a> 
-                    <a href="#">
-                        <div class="moment-2">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-3">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-4">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-5">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-6">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-7">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-8">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-9">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-10">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-11">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-12">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-13">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
-                    <a href="#">
-                        <div class="moment-14">
-                            <span>별이 빛나는</span>
-                        </div>
-                    </a>
--->
                 </div> 
             </div>    
         </div>
@@ -145,12 +69,24 @@
             });   
         </script>
         <script>
-//            var style=document.getElementByTagName('style');
-//            var momentDivs = document.querySelectorAll('#moments div');
-//            for(var i=0; i<moments.length ; i++){
-//                var hoverText = '#moments div:nth-of-type(14n+'+(i+1)+'):hover { background-color : '+ moments[i].bgColor +' }'
-//                style.innerHTML += hoverText;
-//            }
+            var moments = <%- JSON.stringify(moments) %>;
+            var hoverText = "";
+            for(var i=0; i<moments.length ; i++){
+                hoverText += "#moments div:nth-of-type("+i+"):hover{background-color:"+moments[i].bgColor+";}";
+            }
+            
+            var head = document.head;
+            var styleTag = document.createElement('style');
+            styleTag.type = 'text/css';
+            
+            if (styleTag.styleSheet){
+                styleTag.styleSheet.cssText = hoverText;
+            } else {
+                styleTag.appendChild(document.createTextNode(hoverText));
+            }
+            
+            head.appendChild(styleTag);
+
         </script>
         
     </body>
