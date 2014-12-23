@@ -11,15 +11,14 @@ var setItemFactoryDisplay = {
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
         this.momentsWrapper = document.getElementById("moments-wrapper");
-        //this.moments.style.height = "7000px";
 
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
         this.previewImg = document.getElementById('preview-image');
         this.request = new XMLHttpRequest();
-        this.pageIndexNum = 1;
-        this.classIndexNum = 1;
+        this.pageIndexNum = 1;  // css Style 적용을 먹일 페이지 넘버 
+        this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
     },
     "openFactory" : function(){
         display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
@@ -33,8 +32,15 @@ var setItemFactoryDisplay = {
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
     "bootColorSet" : function(){
-
-    }
+        var request = new XMLHttpRequest();
+        request.open("GET", "/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
+        request.send();
+        request.addEventListener('load', function(){
+            var result = JSON.parse(request.responseText);
+            var html = document.getElementById("b");
+            html.style.backgroundColor = result.moments[0].bgColor;
+        }, false);
+    },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
         // var momentsArray = document.querySelectorAll("#moments a div");
@@ -97,21 +103,12 @@ var setItemFactoryDisplay = {
             addDiv.appendChild(addSpan);
         }
     },
-    // "changeBgColor" : function(){       //1.DB에 색상을 요청해서 저장된 칼라값을 받아온 후 배경 컬러를 설정하는 코드 
-    //     // 전송을 요청하는 코드
 
-    //     // 요청결과를 받아서 배경화면에 뿌리는 코드.
-    //     var result = JSON.parse(this.request.responseText);
-    //     var bgColor = result.bgColor;
-
-    //     var html = document.getElementById("html");
-    //     html.style.backgroundColor = bgColor;
-    // },
     "init" : function(){ // mainPage Initial code
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
-        // EventUtil.addHandler(window, 'DOMContentLoaded', this.booting.bind(this));
+        EventUtil.addHandler(window, 'DOMContentLoaded', this.bootColorSet.bind(this));
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         this.request.addEventListener('load', this.createMoments.bind(this), false);
         //this.request.addEventListener('load', this.createBgColor.bind(this), false);
