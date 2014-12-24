@@ -8,11 +8,14 @@
         <title>moment</title>
     </head>
     <body>
+        <% if(prevId !== "undefined")
+        {%>
         <div id = "backward-button-wrapper">
-            <a href>
+            <a href = "<%= prevId%>">
                 <div id = "backward-button"></div>
             </a>
         </div>
+        <%}%>
         <div id="wrapper">
             <canvas id="page-background"></canvas>
             <div id="moment">
@@ -23,11 +26,14 @@
                 </div>
             </div>
         </div>
-        <div id = "forward-button-wrapper">
-            <a href>
+        <% if(nextId !== "undefined")
+        {%>
+        <div id = "forward-button-wrapper">     
+            <a href="<%= nextId %>">
                 <div id = "forward-button"></div>
             </a>
         </div>
+        <%}%>
         <script src="../js/lib/EventUtil.js"></script>
         <script src="../js/lib/commonCanvas.js"></script>
         <script src="../js/lib/drawText.js"></script>
