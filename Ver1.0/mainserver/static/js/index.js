@@ -3,9 +3,7 @@ var MAX_HEIGHT = window.innerHeight;
 
 
 var setItemFactoryDisplay = {
-
     "getElements" : function(){
-
         this.wrapper = document.getElementById("wrapper");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
@@ -18,6 +16,7 @@ var setItemFactoryDisplay = {
         this.request = new XMLHttpRequest();
         this.pageIndexNum = 1;  // css Style 적용을 먹일 페이지 넘버 
         this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
+        this.scrollFlag = true;
     },
     "openFactory" : function(){
         display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
@@ -32,7 +31,7 @@ var setItemFactoryDisplay = {
     },
     "bootColorSet" : function(){
         var request = new XMLHttpRequest();
-        request.open("GET", "/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
+        request.open("GET", "/page/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
         request.send();
         request.addEventListener('load', function(){
             var result = JSON.parse(request.responseText);
@@ -48,7 +47,7 @@ var setItemFactoryDisplay = {
         // console.log("scrollY " + window.scrollY);
         // console.log("lastEle " + (lastEle.offsetTop - window.innerHeight));
         //console.log("moments " + this.moments.offsetHeight);
-        // 일단, 메이슨리를 쓰기 때문에 기존의 방법대로 무한스클로을 구현할 수 없다.
+        // 일단, 메이슨리를 쓰기 때문에 기존의 방법대로 무한스크롤을 구현할 수 없다.
         // 따라서 우리가 해야하는 일은 가장 마지막 아이를 찾고,
         // 그 아이의 Y값위치를 계산한뒤, 
         // 현재 스크롤의 위치와 비교하여 
@@ -63,19 +62,24 @@ var setItemFactoryDisplay = {
         // 새로 길이를 늘려주고 엘레멘트들을 추가하는 코드로 변경. 
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
 
-         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100){
+
+        if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
             this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
             console.log("size Expanded");
             
             //추가 객체들을 요청. 
             this.pageIndexNum++;
-            this.request.open("GET", "/" + this.pageIndexNum.toString(), true);
+            this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
             this.request.send();
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
-        var result = JSON.parse
-            for(var i = 0; i < result.moments.length; i++){
+        var result = JSON.parse(this.request.responseText);
+        var unitNumberInPage = 7;
+        if(result.moments.length < unitNumberInPage){
+            this.scrollFlag = false;
+        }
+        for(var i = 0; i < result.moments.length; i++){
             var addA = document.createElement('a');
             addA.setAttribute("href", "./moment/" + result.moments[i].id);
 
@@ -198,6 +202,18 @@ var confirm = {
         this.request.addEventListener('load', this.getData.bind(this));
     }
 };
+
+var Model = {
+    init : function(){
+        this.submitButton = document.getElementById("submit-button");
+        this.textInput = document.getElementById("text-input");
+        this.fileInput = document.getElementById("upload-hidden");
+        this.moments = document.getElementById("moments");
+        this.itemFactory = document.getElementById("itemFactory");
+        this.itemFactoryButton = document.getElementById("itemFactory-button");
+    }
+        
+}
 var submit = {
     "getElements" : function(){
         this.request = new XMLHttpRequest();

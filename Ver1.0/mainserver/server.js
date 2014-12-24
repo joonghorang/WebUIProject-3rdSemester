@@ -67,7 +67,8 @@ app.get('/', function(request, response){
 });
 
 //pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
-app.get('/:pageNum', function(request, response){
+app.get('/page/:pageNum', function(request, response){
+    console.log(request);
     var pageNum = request.param('pageNum');
     //console.log(pageNum); 페이지 넘버는 맞게 들어갔는데 왜 로딩부터 에러가 뜨는지 이해불가 ㅠ
     var pageData = {};
@@ -240,6 +241,7 @@ app.post('/upload-text', function(request, response){
                                 }
                             });
                         });
+                        console.log(latestId);
                         /*//set prevId, nextId of moment*/
                         
                         var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);

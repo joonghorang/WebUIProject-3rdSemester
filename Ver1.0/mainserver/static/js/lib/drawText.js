@@ -1,7 +1,7 @@
 function drawTextOn(textCanvas, text, textColor){
     MAX_STR_LEN = 30;
     
-    var fontName = "NanumBarunGothicUltraLight";
+    var fontName = "nanumMyeongjo"//"NanumBarunGothicUltraLight";
     var fontColor = textColor;
     var fontSizeArray = [100, 72, 60, 48, 36, 24, 16, 8];
     var textContext = textCanvas.getContext("2d");
@@ -28,7 +28,7 @@ function drawTextOn(textCanvas, text, textColor){
                 // Comment : 이런 부정확한 이름들은 어떤 역할을 하는 변수인지 확실히 써주자.
                 var addTextX = 0;
                 // Comment : 마찬가지. 이 array방식에는 문제가 있다.
-                var addTextArray =[16, 24,36,48,60,72,100];
+                var addTextArray =[24,36,48,60,72,100];
                 // Comment : addTextX와 떨어져 있어야 했나?
                 var addTextY = addTextArray[2]; // 24가 기본값
                 var uuuuuu = fontSizeAndAddTextY(wordArray);
@@ -154,10 +154,13 @@ function drawTextOn(textCanvas, text, textColor){
                     // Comment : 함수이름으로 역할을 명시하려고 한 노력이보인다.
                     //          함수에대한 코멘트를 써주었다면 네이밍에도 고민이 줄고 이해도 올라갔을 것이다.
                     function checkOneWord(wordArray){
+                        //console.log(wordArray);
                         for(var i = 0; i < wordArray.length - 1; i++){ // 연속적으로 1글자 짜리가 오면 뒷 단어를 복사하고 
-                            if(parseInt(wordArray[i].length) + parseInt(wordArray[i+1].length) === 4){
-                                wordArray[i] = wordArray[i] + wordArray[i+1];
+                            if(parseInt(wordArray[i].length) + parseInt(wordArray[i+1].length) === 2){
+                                //console.log("checkOneWord In");
+                                wordArray[i] = wordArray[i] + " " + wordArray[i+1];
                                 wordArray[i + 1] = "";  
+                                //console.log(wordArray);
                             }
                         }
                         for(var j = 0; j < wordArray.length - 1; j++){ // 복사하고 공백이 생기면 공백을 가장 뒷쪽으로 밀고.
