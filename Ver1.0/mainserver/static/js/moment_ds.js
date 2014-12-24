@@ -4,7 +4,8 @@
         //moveMoment();
         initPageCanvas();
         setBgColor();
-        drawShadow();
+        var moment = document.getElementById("moment");
+        drawShadow(moment);
         initCanvases();
         drawBgCanvas(bgColor);
         drawTextCanvas(textColor, text);
@@ -50,9 +51,6 @@
         var pageImg = new Image();
         pageImg.src = originImg.src;
         
-
-        console.log(pageImg.width);
-        console.log(pageImg.height);
         pageImg.onload = function() {
             if(pageImg.width < pageImg.height){     // 세로가 긴 경우, 비율상 작은쪽을 캔버스의 길이에 맞춰서 늘린다. 하지만 이렇게 하면 브라우저화면이 극단적으로 가로로 길거나 할 때 문제가 생긴다. 
                                                     // 가로로 긴 비율의 사진을 가로로 긴 브라우저에 맞춰도 브라우저의 가로세로 비율이 더 극단적이라면 오른쪽 끝은 남게 된다. 
@@ -88,12 +86,12 @@
     //         console.log("you click forward button");
     //     });
     // }
-    function drawShadow(){
+    function drawShadow(element){
         var url = location.href;
         var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
         var hours = url.slice(slicePointer + 15, slicePointer + 17);    // 그당시의 시각에 해당하는 문자열 
         var offset = 20; // 그림자의 길이. 
-        var moment = document.getElementById("moment");
+        //var moment = document.getElementById(elementId);
         var hourDegree = -(360 / 12 / 180 * Math.PI);                   //각과 시간은 반대방향이므로.
         
         if(hours > 11){
@@ -107,7 +105,7 @@
         var posY =  -(Math.sin(degree) * offset);                   // css설정은 Y값이 +일수록 밑으로 그림자가 진다.       
         //console.log("X " + posX);
         //console.log("Y " + posY);
-        moment.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px #555555";
+        element.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px #555555";
     }
     var letsShow = {
         //image를 보여주기위한 함수
@@ -115,16 +113,22 @@
         momentImage : function(){
             var textCanvas = document.getElementById("text-canvas");
             var imageWrapper = document.getElementById("moment-image-wrapper"); 
+            var image = imageWrapper.children[0];
+            var bgCanvas    = document.getElementById("bg-canvas");
             display([imageWrapper], "show");
-            display([textCanvas], "hide");
+            display([textCanvas, bgCanvas], "hide");
+            drawShadow(image);
+            moment.style.boxShadow = "none";
         },
         //textCanvas를 보여주기위한 함수
         //textCanvas를 열고 imageWrapper를 닫는다.
         momentText : function(){
             var textCanvas = document.getElementById("text-canvas");
-            var imageWrapper = document.getElementById("moment-image-wrapper"); 
-            display([textCanvas], "show");
+            var imageWrapper = document.getElementById("moment-image-wrapper");
+            var bgCanvas    = document.getElementById("bg-canvas");
+            display([textCanvas, bgCanvas], "show");
             display([imageWrapper], "hide");
+            drawShadow(moment);
         }
     }
     init();
