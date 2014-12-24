@@ -107,7 +107,7 @@
             timeContext.drawImage(Img, 0, 0, Img.width, Img.height);
             var timeImageData = timeContext.getImageData(0, 0, Img.width, Img.height);
 
-            var lightDegree = 30;
+            var lightDegree = 1;
 
             var url = location.href;
             var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
@@ -162,14 +162,43 @@
             var dayTime = (presentDay - pastDay) * 24;
             var hourTime = presentHour - pastHour;
             var totalTime = yearTime + monthTime + dayTime + hourTime;
-            console.log(totalTime);
-
-            for(var x = 0; x < timeImageData.width; ++x){           // 각 픽셀을 순회하며 전체적으로 하얀색으로 빼도록 한다. 
+            if(totalTime > 1000){
+                totalTime = 1000;
+            }
+            console.log(bgColor);
+            var DestinationR = parseInt(bgColor.slice(1, 3), 16);
+            var DestinationG = parseInt(bgColor.slice(3, 5), 16);
+            var DestinationB = parseInt(bgColor.slice(5, 7), 16);
+            totalTime = 1000;
+            for(var x = 0; x < timeImageData.width; ++x){                            // 각 픽셀을 순회하며 전체적으로 하얀색으로 빼도록 한다. 
                 for(var y = 0; y < timeImageData.height; ++y){
                     var index = (x + y * timeImageData.width) * 4;
-                    timeImageData.data[index + 0] += lightDegree * totalTime;
-                    timeImageData.data[index + 1] += lightDegree * totalTime;
-                    timeImageData.data[index + 2] += lightDegree * totalTime;
+
+                    for(var i = 0; i < totalTime; i++){
+                         if(timeImageData.data[index + 0] > DestinationR){
+                            timeImageData.data[index + 0] -= lightDegree;// * totalTime;
+                        } else if(timeImageData.data[index + 0] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
+                            //console.log("R is Same in this pixel " + timeImageData.data[index + 0]);
+                        }else {
+                            timeImageData.data[index + 0] += lightDegree;// * totalTime;
+                        }
+                        if(timeImageData.data[index + 1] > DestinationG){
+                            timeImageData.data[index + 1] -= lightDegree;// * totalTime;
+                        } else if(timeImageData.data[index + 1] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
+                            //console.log("G is Same in this pixel " + timeImageData.data[index + 0]);
+                        }else {
+                            timeImageData.data[index + 1] += lightDegree;//* totalTime;
+                        }
+                        if(timeImageData.data[index + 2] > DestinationB){
+                            timeImageData.data[index + 2] -= lightDegree;// * totalTime;
+                        } else if(timeImageData.data[index + 2] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
+                            //console.log("B is Same in this pixel " + timeImageData.data[index + 0]);
+                        }else {
+                            timeImageData.data[index + 2] += lightDegree;// * totalTime;
+                        }                       
+                    }
+                    //timeImageData.data[index + 1] += lightDegree * totalTime;
+                    //timeImageData.data[index + 2] += lightDegree * totalTime;
                 }
             }
             //console.log(timeImageData);
