@@ -1,5 +1,6 @@
 (function(){    
     function init(){
+        //console.log(prevId, nextId);
         //moveMoment();
         setBgColor();
         drawShadow();
