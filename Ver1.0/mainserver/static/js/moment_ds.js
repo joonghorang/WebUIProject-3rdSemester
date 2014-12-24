@@ -2,13 +2,14 @@
     function init(){
         //console.log(prevId, nextId);
         //moveMoment();
+        initPageCanvas();
         setBgColor();
         drawShadow();
         initCanvases();
         drawBgCanvas(bgColor);
         drawTextCanvas(textColor, text);
         var textCanvas = document.getElementById("text-canvas");
-        var imageWrapper = document.getElementById("moment-image-wrapper"); 
+        var imageWrapper = document.getElementById("moment-image-wrapper");
         EventUtil.addHandler(imageWrapper, "click", letsShow.momentText);
         EventUtil.addHandler(textCanvas, "click", letsShow.momentImage);
     }
@@ -36,6 +37,44 @@
     function setBgColor(){
         var wrapper = document.getElementById("wrapper");
         wrapper.style.backgroundColor = bgColor;
+    }
+    function initPageCanvas(){
+        var pageBackground = document.getElementById("page-background"); 
+        var pCanvas_W = window.innerWidth;
+        var pCanvas_H = window.innerHeight;
+        pageBackground.width = pCanvas_W;
+        pageBackground.height = pCanvas_H;
+        pageCtx = pageBackground.getContext("2d");
+        var originImg = document.getElementById("moment-image-wrapper").children[0];
+        console.log(originImg.src);
+        var pageImg = new Image();
+        pageImg.src = originImg.src;
+        
+
+        console.log(pageImg.width);
+        console.log(pageImg.height);
+        pageImg.onload = function() {
+            if(pageImg.width < pageImg.height){     // 세로가 긴 경우, 비율상 작은쪽을 캔버스의 길이에 맞춰서 늘린다. 하지만 이렇게 하면 브라우저화면이 극단적으로 가로로 길거나 할 때 문제가 생긴다. 
+                                                    // 가로로 긴 비율의 사진을 가로로 긴 브라우저에 맞춰도 브라우저의 가로세로 비율이 더 극단적이라면 오른쪽 끝은 남게 된다. 
+                                                    // 따라서 그런 경우 분기를 하나 더 두어서, 맞춘다. 
+                console.log("height");
+                if(pCanvas_W / pageImg.width * pageImg.height < pCanvas_H){
+                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_H / pageImg.width * pageImg.width, pCanvas_H / pageImg.width * pageImg.height);
+                } else {
+                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.width * pageImg.width, pCanvas_W / pageImg.width * pageImg.height);
+                }
+                
+            } else {                         
+                console.log("width");
+                if(pCanvas_H / pageImg.height * pageImg.width < pCanvas_W){
+                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.height * pageImg.width, pCanvas_W / pageImg.height * pageImg.height);
+                } else {
+                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_H / pageImg.height * pageImg.width, pCanvas_H / pageImg.height * pageImg.height);
+                }
+                
+            }
+        }
+        pageBackground.style.opacity = "0.3";
     }
     // 페이지 이동은 앵커태그로 할 예정. 
     // function moveMoment(){ // Full View에서 모멘츠간 이동을 위한 함수 
