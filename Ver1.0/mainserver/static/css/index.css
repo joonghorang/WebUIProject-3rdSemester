@@ -74,30 +74,6 @@ body{
     cursor: pointer;
 }
 
-/*#close-button-wrapper{
-    z-index: 120;
-    position: relative;
-    margin: auto;
-    top: 5%;
-    left: 0;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    min-height: 40px;
-    display: none;
-    cursor: pointer;
-}
-#close-button{
-    position: relative;
-    width : 40px;
-    height : 40px;
-    margin: auto;
-    padding-top: 60%;
-    top: 45%;
-    left: 0;
-    right: 0;
-
-}*/
 #itemFactory {
     z-index: 100;
     width: 100%;

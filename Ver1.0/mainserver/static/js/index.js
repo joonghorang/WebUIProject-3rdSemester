@@ -135,6 +135,11 @@ var manageFileInput = {
         imgElement.src=imgURL; 
         this.previewImg.appendChild(imgElement);   
         display([this.previewImg], 'show');
+        
+        /*인풋 이미지 크기에 테두리 맞추기*/
+        
+        
+        /*//인풋 이미지 크기에 테두리 맞추기*/
     },
     "init" : function(){
         this.getElements();
@@ -203,17 +208,6 @@ var confirm = {
     }
 };
 
-var Model = {
-    init : function(){
-        this.submitButton = document.getElementById("submit-button");
-        this.textInput = document.getElementById("text-input");
-        this.fileInput = document.getElementById("upload-hidden");
-        this.moments = document.getElementById("moments");
-        this.itemFactory = document.getElementById("itemFactory");
-        this.itemFactoryButton = document.getElementById("itemFactory-button");
-    }
-        
-}
 var submit = {
     "getElements" : function(){
         this.request = new XMLHttpRequest();
