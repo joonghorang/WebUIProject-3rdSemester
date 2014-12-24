@@ -48,6 +48,7 @@ var pool = mysql.createPool({
 /* Router */
 app.get('/', function(request, response){
     /*DB SELECT*/
+    console.log('>>>>>>>mainPage /');
     var mainData = {};
     pool.getConnection(function(err, connection){
         connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
@@ -56,9 +57,9 @@ app.get('/', function(request, response){
                 console.log('mainPage select error');
                 throw err;
             }
-            console.log(result);
+//            console.log(result);
             mainData.moments = result;
-            console.log(mainData);
+//            console.log(mainData);
             response.render('main',mainData);
             connection.release();
         });
@@ -68,7 +69,6 @@ app.get('/', function(request, response){
 
 //pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
 app.get('/page/:pageNum', function(request, response){
-    console.log(request);
     var pageNum = request.param('pageNum');
     //console.log(pageNum); 페이지 넘버는 맞게 들어갔는데 왜 로딩부터 에러가 뜨는지 이해불가 ㅠ
     var pageData = {};
@@ -80,7 +80,7 @@ app.get('/page/:pageNum', function(request, response){
                 console.log('pageNum data select error');
                 throw err;
             }
-            console.log(result);
+//            console.log(result);
             pageData.moments = result;
             response.json(pageData);
             connection.release();
@@ -91,6 +91,7 @@ app.get('/page/:pageNum', function(request, response){
 
 /*/moment/picId 라우터로 이동*/
 app.get('/moment/:id', function(request, response){
+    console.log('>>>>>>/moment/');
     var targetId = request.param('id');
     var momentData = {};
 
@@ -98,8 +99,7 @@ app.get('/moment/:id', function(request, response){
     
     //moment table select
     pool.getConnection(function(err, connection){
-        connection.query('SELECT * FROM moment WHERE id="'+targetId+'";', 
-                         function(err, result){
+        connection.query('SELECT * FROM moment WHERE id="'+targetId+'";', function(err, result){
             if(err){
                 console.log('moment inputData select error');
                 throw err;
@@ -110,10 +110,6 @@ app.get('/moment/:id', function(request, response){
             momentData.date = result[0].date;
             momentData.prevId = result[0].prevId;
             momentData.nextId = result[0].nextId;
-            /*get previous, next momentId*/
-//            momentData.previousMomentId;
-//            momentData.nextMomentId;
-            /*//get previous, next momentId*/
             
             connection.release();
             
@@ -155,7 +151,7 @@ app.post('/upload-image', function(request, response){
             fs.readFile(files.image.path, function(error, data){
                 /*colorLab logic*/
                 fs.writeFile( uploads + app.get("colorLabData"), data, function(err){
-                   console.log('>>>> /upload-image : colorLabData saved.'); 
+                   console.log('>>>>> /upload-image : colorLabData saved.'); 
                 });
                 var img = new Image();
                 img.src = data;
@@ -184,6 +180,7 @@ app.post('/upload-text', function(request, response){
             throw error;
         }
         else{
+            console.log('>>>>> /upload-text');
             //클라이언트에서 입력한 text data
             var text = fields.textInput;
             var date = new Date();
@@ -215,71 +212,112 @@ app.post('/upload-text', function(request, response){
                         /*set prevId, nextId of moment*/
                         var latestId;
                         pool.getConnection(function(err, connection){
+                            console.log('>>>>> db connection start');
                             //가장 최근에 추가한 모멘트의 id, nextId select
                             connection.query("SELECT id FROM moment ORDER BY date DESC LIMIT 1",function(err, result){
                                 if(err){
                                     console.log('select latest moment error');
                                     throw err;
                                 }
+                                
+                                console.log('>>>>> db select');
+                                console.log(result);
                                 if(typeof result[0]!=="undefined"){
                                     latestId = result[0].id;
                                     moment.prevId = latestId; //왜 prevId가 들어가지 않는거죠....?
-                                    moment.nextId = null;
-                                    connection.release();
-                                    
-                                    pool.getConnection(function(err, connection){
-                                        connection.query("UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'",function(err,result){
-                                            if(err){
-                                                console.log('update nextId error');
-                                                throw err;
-                                            }
-                                            connection.release();
-                                        });
-                                    });
                                 }
                                 else{
-                                    connection.release();
+                                    moment.prevId = null;
                                 }
-                            });
-                        });
-                        console.log(latestId);
-                        /*//set prevId, nextId of moment*/
-                        
-                        var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
-                        
-                        pool.getConnection(function(err, connection){
-                            connection.query(momentQuery, function(err, res){
-                                if(err) {
-                                    console.log('moment insert error');
-                                    //문제 : 텍스트에 ' 가 들어갈 경우 에러가 납니다.
-                                    throw err;
-                                }
+                                moment.nextId = null;
                                 connection.release();
                                 pool.getConnection(function(err, connection){
-                                    for(var i=0; i<moment.bgColor.length ; i++){
-                                        connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
-                                                                        [moment.id, i, moment.bgColor[i]]),function(err, res){
-                                            if(err) {
-                                                console.log('bgColor insert error');
-                                                throw err;
-                                            }
-                                        });  
-                                    }
-                                    connection.release();
-                                    console.log('>>>inserted');
-                        
-                                    var result = {
-                                        "id" : id,
-                                        "bgColor" : moment.bgColor[0],
-                                        "textColor" : moment.textColor,
-                                    };
-                        
-                                    response.send(result);
-                                    response.end();
+                                    connection.query("UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'",function(err,result){
+                                        if(err){
+                                            console.log('update nextId error');
+                                            throw err;
+                                        }
+                                        connection.release();
+                                                
+                                        console.log('>>>>> db update');
+                                            
+                                        /*testing callback hell*/
+                                        var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);       
+                                        pool.getConnection(function(err, connection){
+                                            connection.query(momentQuery, function(err, res){
+                                                if(err) {
+                                                    console.log('moment insert error');
+                                                    //문제 : 텍스트에 ' 가 들어갈 경우 에러가 납니다.
+                                                    throw err;
+                                                }
+                                                        
+                                                console.log('>>>>> db insert');
+                                                    
+                                                connection.release();
+                                                pool.getConnection(function(err, connection){
+                                                    for(var i=0; i<moment.bgColor.length ; i++){
+                                                        connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
+                                                                                            [moment.id, i, moment.bgColor[i]]),function(err, res){
+                                                            if(err) {
+                                                                console.log('bgColor insert error');
+                                                                throw err;
+                                                            }
+                                                        });  
+                                                    }
+                                                    connection.release();
+                                                    console.log('>>>>> inserted');
+                                                    
+                                                    var result = {
+                                                        "id" : id,
+                                                        "bgColor" : moment.bgColor[0],
+                                                        "textColor" : moment.textColor,
+                                                    };
+
+                                                    response.send(result);
+                                                    response.end();
+                                                });
+                                            });
+                                        });
+                                    });
                                 });
                             });
-                            
                         });
+                        /*//set prevId, nextId of moment*/
+                        
+//                        var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);       
+//                        pool.getConnection(function(err, connection){
+//                            connection.query(momentQuery, function(err, res){
+//                                if(err) {
+//                                    console.log('moment insert error');
+//                                    //문제 : 텍스트에 ' 가 들어갈 경우 에러가 납니다.
+//                                    throw err;
+//                                }
+//                                connection.release();
+//                                pool.getConnection(function(err, connection){
+//                                    for(var i=0; i<moment.bgColor.length ; i++){
+//                                        connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
+//                                                                        [moment.id, i, moment.bgColor[i]]),function(err, res){
+//                                            if(err) {
+//                                                console.log('bgColor insert error');
+//                                                throw err;
+//                                            }
+//                                        });  
+//                                    }
+//                                    connection.release();
+//                                    console.log('>>>inserted');
+//                        
+//                                    var result = {
+//                                        "id" : id,
+//                                        "bgColor" : moment.bgColor[0],
+//                                        "textColor" : moment.textColor,
+//                                    };
+//                        
+//                                    response.send(result);
+//                                    response.end();
+//                                });
+//                            });
+//                            
+//                        });
                     }
                 });
             });
