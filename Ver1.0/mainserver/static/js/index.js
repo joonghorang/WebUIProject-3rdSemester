@@ -65,9 +65,9 @@ var setItemFactoryDisplay = {
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
         var heightCheckOffset = 300;
         var scrollBenchMarkRatio = 90;
-        var heightAddLegnth = 1000;
+        var heightAddLength = 1000;
         if(window.scrollY + heightCheckOffset > this.moments.offsetHeight * scrollBenchMarkRatio / 100 && this.scrollFlag){
-            this.moments.style.height = this.moments.offsetHeight + heightAddLengthß + "px";
+            this.moments.style.height = this.moments.offsetHeight + heightAddLength + "px";
             console.log("size Expanded");
             
             //추가 객체들을 요청. 
