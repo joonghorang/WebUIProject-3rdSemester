@@ -69,7 +69,7 @@ var setItemFactoryDisplay = {
             
             //추가 객체들을 요청. 
             this.pageIndexNum++;
-            this.request.open("GET", "/" + this.pageIndexNum.toString(), true);
+            this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
             this.request.send();
          }
     }, 
