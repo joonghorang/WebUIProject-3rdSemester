@@ -169,7 +169,6 @@
             var DestinationR = parseInt(bgColor.slice(1, 3), 16);
             var DestinationG = parseInt(bgColor.slice(3, 5), 16);
             var DestinationB = parseInt(bgColor.slice(5, 7), 16);
-            totalTime = 1000;
             for(var x = 0; x < timeImageData.width; ++x){                            // 각 픽셀을 순회하며 전체적으로 하얀색으로 빼도록 한다. 
                 for(var y = 0; y < timeImageData.height; ++y){
                     var index = (x + y * timeImageData.width) * 4;
