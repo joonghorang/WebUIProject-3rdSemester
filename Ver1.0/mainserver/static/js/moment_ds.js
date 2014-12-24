@@ -1,7 +1,6 @@
 (function(){    
     function init(){
-        //console.log(prevId, nextId);
-        //moveMoment();
+        delColorByTime();
         initPageCanvas();
         setBgColor();
         var moment = document.getElementById("moment");
@@ -47,7 +46,6 @@
         pageBackground.height = pCanvas_H;
         pageCtx = pageBackground.getContext("2d");
         var originImg = document.getElementById("moment-image-wrapper").children[0];
-        console.log(originImg.src);
         var pageImg = new Image();
         pageImg.src = originImg.src;
         
@@ -55,15 +53,13 @@
             if(pageImg.width < pageImg.height){     // 세로가 긴 경우, 비율상 작은쪽을 캔버스의 길이에 맞춰서 늘린다. 하지만 이렇게 하면 브라우저화면이 극단적으로 가로로 길거나 할 때 문제가 생긴다. 
                                                     // 가로로 긴 비율의 사진을 가로로 긴 브라우저에 맞춰도 브라우저의 가로세로 비율이 더 극단적이라면 오른쪽 끝은 남게 된다. 
                                                     // 따라서 그런 경우 분기를 하나 더 두어서, 맞춘다. 
-                console.log("height");
                 if(pCanvas_W / pageImg.width * pageImg.height < pCanvas_H){
                     pageCtx.drawImage(pageImg, 0, 0, pCanvas_H / pageImg.width * pageImg.width, pCanvas_H / pageImg.width * pageImg.height);
                 } else {
                     pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.width * pageImg.width, pCanvas_W / pageImg.width * pageImg.height);
                 }
                 
-            } else {                         
-                console.log("width");
+            } else {                     
                 if(pCanvas_H / pageImg.height * pageImg.width < pCanvas_W){
                     pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.height * pageImg.width, pCanvas_W / pageImg.height * pageImg.height);
                 } else {
@@ -74,18 +70,7 @@
         }
         pageBackground.style.opacity = "0.3";
     }
-    // 페이지 이동은 앵커태그로 할 예정. 
-    // function moveMoment(){ // Full View에서 모멘츠간 이동을 위한 함수 
-    //     var backwardButton = document.getElementById("backward-button");
-    //     var forwardButton = document.getElementById("forward-button");
-    //     EventUtil.addHandler(backwardButton, "click", function(event){
-    //          window.location.href = "201412231751_ivnsm"; // 이런식으로 화면이동해야하는데, 서버에 요청을 다시해아할듯. 
-    //          console.log("you click backward button");
-    //     });
-    //     EventUtil.addHandler(forwardButton, "click", function(event){
-    //         console.log("you click forward button");
-    //     });
-    // }
+
     function drawShadow(element){
         var url = location.href;
         var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
@@ -106,6 +91,93 @@
         //console.log("X " + posX);
         //console.log("Y " + posY);
         element.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px " + shadowColor;//textColor; 텍스트칼라나 백그라운드 칼라로 적용해 봤으나 구림...
+    }
+
+    // 색변화할 예정인 테스트용 함수 
+    function delColorByTime(){
+        var originImg = document.getElementById("moment-image-wrapper").children[0];
+        var Img = new Image();
+        Img.src = originImg.src;
+        Img.onload = function(){
+            var timeCanvas = document.createElement('canvas');
+            timeCanvas.width = Img.width;
+            timeCanvas.height = Img.height;
+
+            var timeContext = timeCanvas.getContext("2d");
+            timeContext.drawImage(Img, 0, 0, Img.width, Img.height);
+            var timeImageData = timeContext.getImageData(0, 0, Img.width, Img.height);
+
+            var lightDegree = 30;
+
+            var url = location.href;
+            var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
+            var pastYear = parseInt(url.slice(slicePointer + 7, slicePointer + 11));    // 그당시의 시각에 해당하는 문자열 
+            var pastMonth = parseInt(url.slice(slicePointer + 11, slicePointer + 13));
+            var pastDay = parseInt(url.slice(slicePointer + 13, slicePointer + 15));
+            var pastHour = parseInt(url.slice(slicePointer + 15, slicePointer + 17));
+
+            var presentDate = new Date();
+            var presentYear = parseInt(presentDate.getFullYear());
+            var presentMonth = parseInt(presentDate.getMonth()) + 1; // 월은 js에서는 0월부터 시작이라 1 더해주어야한다.  
+            var presentDay = parseInt(presentDate.getDate());
+            var presentHour = parseInt(presentDate.getHours());
+
+            function monthToDay(year, month){
+                if(year % 4 === 2){ // 윤달의 경우 
+                    if(month === 2){
+                        return 31 + 29;
+                    }
+                } 
+                if(month === 1){
+                    return 31;
+                } else if(month === 2){
+                    return 31 + 28;
+                } else if(month === 3){
+                    return 31 + 28 + 31;
+                } else if(month === 4){
+                    return 31 + 28 + 31 + 30;
+                } else if(month === 5){
+                    return 31 + 28 + 31 + 30 + 31;
+                } else if(month === 6){
+                    return 31 + 28 + 31 + 30 + 31 + 30;
+                } else if(month === 7){
+                    return 31 + 28 + 31 + 30 + 31 + 30 + 31;
+                } else if(month === 8){
+                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31;
+                } else if(month === 9){
+                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30;
+                } else if(month === 10){
+                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31;
+                } else if(month === 11){
+                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30;
+                } else if(month === 12){
+                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31;
+                } else {
+                    console.log("wrong Input in monthToDay Function");
+                }
+
+            }
+            var yearTime = (presentYear - pastYear) * 365 * 24;
+            var monthTime = (monthToDay(presentYear, presentMonth) - monthToDay(pastYear, pastMonth)) * 24;
+            var dayTime = (presentDay - pastDay) * 24;
+            var hourTime = presentHour - pastHour;
+            var totalTime = yearTime + monthTime + dayTime + hourTime;
+            console.log(totalTime);
+
+            for(var x = 0; x < timeImageData.width; ++x){           // 각 픽셀을 순회하며 전체적으로 하얀색으로 빼도록 한다. 
+                for(var y = 0; y < timeImageData.height; ++y){
+                    var index = (x + y * timeImageData.width) * 4;
+                    timeImageData.data[index + 0] += lightDegree * totalTime;
+                    timeImageData.data[index + 1] += lightDegree * totalTime;
+                    timeImageData.data[index + 2] += lightDegree * totalTime;
+                }
+            }
+            //console.log(timeImageData);
+            var wrapper = document.getElementById("wrapper");
+            timeContext.putImageData(timeImageData, 0, 0);
+            timeCanvas.setAttribute("id", "timeCanvas");
+            wrapper.appendChild(timeCanvas);
+        }
     }
     var letsShow = {
         //image를 보여주기위한 함수
