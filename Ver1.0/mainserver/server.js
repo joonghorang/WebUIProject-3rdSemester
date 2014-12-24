@@ -107,7 +107,7 @@ app.get('/moment/:id', function(request, response){
             momentData.text = result[0].text;
             momentData.file = result[0].file;
             momentData.date = result[0].date;
-            
+            console.log(result);
             /*get previous, next momentId*/
 //            momentData.previousMomentId;
 //            momentData.nextMomentId;
@@ -127,6 +127,7 @@ app.get('/moment/:id', function(request, response){
                         momentData.bgColor[i] = result[i].bgColor;
                     }
                     connection.release();
+                    console.log(result);
                     response.render("moment", momentData);
                 });
             });
