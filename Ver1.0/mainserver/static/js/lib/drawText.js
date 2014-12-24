@@ -1,7 +1,7 @@
 function drawTextOn(textCanvas, text, textColor){
     MAX_STR_LEN = 30;
     
-    var fontName = "NanumBarunGothicUltraLight";
+    var fontName = "nanumMyeongjo"//"NanumBarunGothicUltraLight";
     var fontColor = textColor;
     var fontSizeArray = [100, 72, 60, 48, 36, 24, 16, 8];
     var textContext = textCanvas.getContext("2d");

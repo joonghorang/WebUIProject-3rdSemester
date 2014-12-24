@@ -31,13 +31,7 @@ html, body{
     -ms-user-select: none;
     user-select: none;
 }
-/*body {
-    background-image: url(../image/concrete_texture.jpg);
-    background-size: cover;
-}*/
-#wrapper{
-    opacity : 0.5;
-}
+
 #backward-button-wrapper{
     z-index : 300;
     position : relative;
@@ -89,8 +83,8 @@ html, body{
 #bg-image {
     z-index: 10;
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 0%;
+    height: 0%;
     -webkit-filter: blur(5px);
     filter: blur(5px);
 }
