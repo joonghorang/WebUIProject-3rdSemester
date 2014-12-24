@@ -91,7 +91,7 @@
         var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
         var hours = url.slice(slicePointer + 15, slicePointer + 17);    // 그당시의 시각에 해당하는 문자열 
         var offset = 20; // 그림자의 길이. 
-        //var moment = document.getElementById(elementId);
+        var shadowColor = "#444444";
         var hourDegree = -(360 / 12 / 180 * Math.PI);                   //각과 시간은 반대방향이므로.
         
         if(hours > 11){
@@ -105,7 +105,7 @@
         var posY =  -(Math.sin(degree) * offset);                   // css설정은 Y값이 +일수록 밑으로 그림자가 진다.       
         //console.log("X " + posX);
         //console.log("Y " + posY);
-        element.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px #555555";
+        element.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px " + shadowColor;//textColor; 텍스트칼라나 백그라운드 칼라로 적용해 봤으나 구림...
     }
     var letsShow = {
         //image를 보여주기위한 함수
@@ -118,7 +118,7 @@
             display([imageWrapper], "show");
             display([textCanvas, bgCanvas], "hide");
             drawShadow(image);
-            moment.style.boxShadow = "none";
+            moment.style.boxShadow = "none"; // 개인적으로는 그냥 프레임 자체가 사라지는게 이뻣는데, 다른 팀원들과 논의해봐야할듯. 
         },
         //textCanvas를 보여주기위한 함수
         //textCanvas를 열고 imageWrapper를 닫는다.

@@ -139,8 +139,8 @@ html, body{
 
 .moment-image {
     z-index: 130;
-    max-height: 70%;
-    max-width: 70%;
+    max-height: 100%;
+    max-width: 100%;
     position: absolute;
     margin: auto;
     top: 0;
