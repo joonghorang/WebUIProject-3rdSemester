@@ -13,11 +13,47 @@
             <nav></nav>
             <main>
                 <img id = "target-image" src = "<%= imageSrc %>">
-                <div id = "colors">
+                <section>
+                    <h3>All Colors</h3>
+                    <div id = "colors">
+                        <% for(var i=0; i<pickedColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= pickedColors[i] %>;"></div>
+    <% } %>
+                    </div>
+                </section>
+                <section>
+                    <h3>High Saturation Colors</h3>
+                    <div id = "high-Sat-colors">
+                        <% for(var i=0; i<pickedColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= highSatColors[i] %>;"></div>
+    <% } %>
+                    </div>
+                </section>
+                <section>
+                    <h3>Chromatic Colors</h3>
+                    <div id = "chroma-colors">
                     <% for(var i=0; i<pickedColors.length; i++) {%>
-   <div class = "color" style = "background-color :<%= pickedColors[i] %>;"></div>
+   <div class = "color" style = "background-color :<%= chromaColors[i] %>;"></div>
 <% } %>
-                </div>
+                    </div>
+                </section>
+                <section>
+                    <h3>Achromatic Colors</h3>
+                    <div id = "achroma-colors">
+                        <% for(var i=0; i<pickedColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= achromaColors[i] %>;"></div>
+    <% } %>
+                    </div>   
+                </section>    
+                <section>
+                    <h3>Dominant Colors</h3>
+                    <div id = "dominant-colors">
+                        <% for(var i=0; i<pickedColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= dominantColors[i] %>;"></div>
+    <% } %>
+                    </div>   
+                </section>    
+                <div id = "hue-hist"></div>
                 <div id = "two-dimension">
                     
                 </div>

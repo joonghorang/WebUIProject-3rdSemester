@@ -37,15 +37,7 @@ if(isNodeModule){
     }
 }    
 /* add utility method */
-Array.prototype.circleIndex = function(idx){
-    if( idx >= 0 && idx < this.length){
-        return this[idx];
-    }else if(idx < 0){
-        return this.circleIndex(idx + this.length);
-    }else{
-        return this.circleIndex(idx - this.length);
-    }    
-}
+
 Math.mod = function(a, n){
     if( a < 0 ){
         return this.mod(a + n, n);   
@@ -53,46 +45,129 @@ Math.mod = function(a, n){
         return a%n;
     }
 }
+/* Constant */
+var HUE_RANGE = 360;
+var VALUE_RANGE = 101;
+var CHROMA_RULE = {sL: 0.20, vL:0.20};
+var ACHROMA_RULE = {sR: 0.20, vR:0.20};
+var HIGH_SAT_RULE = {sL : 0.7, vL:0.9};
 /* Module */
-var Impressive = function Impressive(imageObj){
+var Impressive = function Impressive(imageObj, mode){
+    var DateStart = new Date();
     var RESIZING_PIXEL = 100000;
     var SV_FLATTEN_RATE = 0.3;
     var SV_SMOOTHING_CNT = 3;
+    var HIGH_SAT_COLOR_EXISTENCE_BOUNDARY_RATE = 0.001;
     imageObj = imageObj ? imageObj : {};
     if(!(this instanceof Impressive)){
        return new Impressive(imageObj);
     }
     if (cmCvs.isImage(imageObj) || cmCvs.isCanvas(imageObj)){
         var imageCanvas = this.imageCanvas = cmCvs.createCanvasByImage(imageObj, RESIZING_PIXEL);
-        var pickedHues = this.pickedHues = pickHues(imageCanvas);
+
+        this.pickedColors = new Colors();
+        this.highSatColors = new Colors();
+        this.chromaColors = new Colors();
+        this.achromaColors = new Colors();
+        this.dominantColors = new Colors();
         var svHists = this.svHists = [];
         
+        var highHueHistResult = hueHistogram(imageCanvas, HIGH_SAT_RULE);
+        var highHueHist = this.highHueHist = highHueHistResult.hist;
+        var pickedHighSHues = highHueHist.smoothing(2).flatten(0.01).pickPeaks();
+        console.log(">--- High Saturation Colors"); 
         
-        //pickedColor Old ver.
-//        this.pickedColorsOld = [];        
-//        for(var i = 0; i< this.pickedHues.length && i < 5; ++i){
-//            this.pickedColorsOld[i] = 
-//                tc({h : this.pickedHues[i]["x"], 
-//                    s : findSat(imageCanvas, pickedHues[i]),
-//                    v : 100
-//                   }).toRgb();
-//        }
-        this.pickedColors = [];
-        for(var hIdx = 0; hIdx < pickedHues.length; ++hIdx){
-            console.log(hIdx, "hue : ", pickedHues[hIdx]);    
-            svHists[hIdx] = svHistogram(imageCanvas, pickedHues[hIdx], {sL: 0.25, vL: 0.25});  
+        for(var hIdx = 0; hIdx < pickedHighSHues.length; ++hIdx){
+            console.log("Chroma hue " +hIdx+ " : ", pickedHighSHues[hIdx]);
+            var svHistsResult = svHistogram(imageCanvas, pickedHighSHues[hIdx], HIGH_SAT_RULE);  
+            svHists[svHists.length] = svHistsResult.hist;
+            console.log("Hue rate : ",svHistsResult.rate);
             //아아 깔끔하다.
-            var pickedSV = svHists[hIdx].smoothing(3).flatten(0.3).pickPeaks();
+            
+            if(Math.round(svHistsResult.rate*1000)/1000 >= HIGH_SAT_COLOR_EXISTENCE_BOUNDARY_RATE){
+                var pickedSV = svHists[svHists.length-1].smoothing(3).flatten(0.3).pickPeaks();
+                //채도가 가장 높은거만 뽑는다.
+                pickedSV.sort(function(f,b){ return b.x - f.x }); 
+                console.log("s, v : ", pickedSV[0]);
+                var color = tc({
+                    h : pickedHighSHues[hIdx]["x"],
+                    s : pickedSV[0]["x"],
+                    v : pickedSV[0]["y"]
+                }).toRgb();
+                //존재 비율을 추가해서 color배열에 넣는다.
+                color.rate = svHistsResult.rate * pickedSV[0].rate;
+                console.log("color : ", color);
+                this.highSatColors[this.highSatColors.length] = 
+                this.pickedColors[this.pickedColors.length] = color;
+            }
+        }
+        
+        var classifyResult = classifyChroma(imageCanvas, CHROMA_RULE);
+        var chroma = classifyResult.chroma;
+        var chromaRate = classifyResult.rate;
+        var achroma = classifyResult.achroma;
+        var avgRgb = classifyResult.avgRgb;
+        var avgHsv = tc(avgRgb).toHsv();
+        var achromaAvgRgb = classifyResult.avgRgb
+        var achromaAvgHsv = tc(achromaAvgRgb).toHsv();
+        
+        console.log(">  chroma rate : ", chromaRate);
+        console.log("> achroma rate :", 1-chromaRate);
+
+        var pickedHues = chroma.smoothing(4).flatten(0.01).pickPeaks();        
+        var pickedTones = achroma.smoothing(4).flatten(0.01).pickPeaks();
+        
+        console.log(">-");
+        console.log(">--");
+        console.log(">--- Chroma Colors");
+        console.log(">--");
+        console.log(">-");
+        for(var hIdx = 0; hIdx < pickedHues.length; ++hIdx){
+            console.log("Chroma hue " +hIdx+ " : ", pickedHues[hIdx]);    
+            var svHistsResult = svHistogram(imageCanvas, pickedHues[hIdx], CHROMA_RULE);  
+            svHists[svHists.length] = svHistsResult.hist;
+            console.log("Hue rate : ",svHistsResult.rate);
+
+            var pickedSV = svHists[svHists.length-1].smoothing(3).flatten(0.3).pickPeaks();
+            
             for(var svIdx = 0; svIdx < pickedSV.length; ++svIdx){
-                console.log("sv : ", pickedSV[svIdx]);
-                this.pickedColors[this.pickedColors.length] = tc({
+                console.log("s, v : ", pickedSV[svIdx]);
+                var color = tc({
                     h : pickedHues[hIdx]["x"],
                     s : pickedSV[svIdx]["x"],
                     v : pickedSV[svIdx]["y"]
                 }).toRgb();
+                color.rate = pickedHues[hIdx].rate * pickedSV[svIdx].rate;
+                console.log("color", color);
+                this.chromaColors[this.chromaColors.length] = 
+                this.dominantColors[this.dominantColors.length] = 
+                this.pickedColors[this.pickedColors.length] = color;
             }
         }
+        
+        console.log(">-");
+        console.log(">--");
+        console.log(">--- Achroma Colors");
+        console.log(">--");
+        console.log(">-");
+        for(var vIdx = 0; vIdx < pickedTones.length; ++vIdx){
+            
+            console.log("Achroma value " +vIdx+ " : ", pickedTones[vIdx]);
+            var color = tc({
+                h : achromaAvgHsv.h,
+                s : achromaAvgHsv.s,
+                v : (pickedTones[vIdx].x/VALUE_RANGE)
+            }).toRgb();
+            color.rate = (1-chromaRate) * pickedTones[vIdx].rate;
+            console.log("color", color);
+            this.achromaColors[this.achromaColors.length] = 
+            this.dominantColors[this.dominantColors.length] = 
+            this.pickedColors[this.pickedColors.length] = color;
+        }
+        this.dominantColors.sort(function(f,b){ return b.rate - f.rate; });
     }
+    var DateEnd = new Date();
+    console.log(">> RunTime ms : ", DateEnd - DateStart);
 }
  
 /* prototype */
@@ -104,22 +179,38 @@ Impressive.prototype = {
         return this.pickedColors;
     },
     oldToHexString : function(num){
-        num = typeof num !== "undefined" ? num : 30;
+        num = typeof num !== "undefined" ? num : 100;
         var pickedHexString =[];
         for(var i = 0; i < this.pickedColorsOld.length && i < num; ++i){
             pickedHexString[i] = tc(this.pickedColorsOld[i]).toHexString();
         }
         return pickedHexString;
     },
-
     toHexString : function(num){
-        num = typeof num !== "undefined" ? num : 30;
+        num = typeof num !== "undefined" ? num : 100;
         var pickedHexString =[];
         for(var i = 0; i < this.pickedColors.length && i < num; ++i){
             pickedHexString[i] = tc(this.pickedColors[i]).toHexString();
         }
         return pickedHexString;
     }
+}
+
+/* colors */
+function Colors(){
+    var colorsArr = new Array();
+    colorsArr.toRgb = function(num){
+        return this;
+    },
+    colorsArr.toHexString = function(num){
+        num = typeof num !== "undefined" ? num : 100;
+        var pickedHexString =[];
+        for(var i = 0; i < this.length && i < num; ++i){
+            pickedHexString[i] = tc(this[i]).toHexString();
+        }
+        return pickedHexString;
+    }
+    return colorsArr;
 }
 //Impressive.create2DHist = create2DHist;
 //Impressive.histCV = histCV;
@@ -129,8 +220,7 @@ Impressive.prototype = {
 //Impressive.pick2DPeaks = pick2DPeaks;
         
 function isInHueRange(hue, rangeL, rangeR){
-    //rangeL and rangeR have same sign.
-    if(rangeL * rangeR > 0){
+    if(rangeL * rangeR > 0 && rangeL <= rangeR){
         return Math.mod(rangeL, 360) <= hue && 
             hue <= Math.mod(rangeR, 360);
     }else{
@@ -157,16 +247,110 @@ function isInRule(hsv, rule){
     { return true; 
     }else{ return false; }
 }
-
+var classifyChroma = function(imageCanvas, rule){
+    var ctx = imageCanvas.getContext("2d");
+    var imageData = ctx.getImageData(0,0,imageCanvas.width, imageCanvas.height);
+    var chroma = new circularHistogram1D(HUE_RANGE);    
+    var achroma = new histogram1D(VALUE_RANGE);
+    rule = makeHsvRule(rule);
+    var allPxl=0;
+    var ruledPxl=0;
+    var avgRgb = {
+        r : 0,
+        g : 0,
+        b : 0,
+        a : 255
+    };
+    var achromaAvgRgb = {
+        r : 0,
+        g : 0,
+        b : 0,
+        a : 255
+    }
+    for(var x = 0; x < imageData.width; ++x){
+        for(var y = 0; y < imageData.height; ++y){
+            var index = (x + y * imageData.width) * 4;
+            var r = imageData.data[index + 0];
+            var g = imageData.data[index + 1];
+            var b = imageData.data[index + 2];
+            var a = imageData.data[index + 3];
+            var hsv = tc({ r: r, g: g, b: b}).toHsv();
+            avgRgb.r += r;
+            avgRgb.g += g;
+            avgRgb.b += b;
+            if(isInRule(hsv, rule)){
+                chroma[hIdx(hsv)]++;
+                ruledPxl++;
+            }else{
+                achromaAvgRgb.r += r;
+                achromaAvgRgb.g += g;
+                achromaAvgRgb.b += b;
+                achroma[vIdx(hsv)]++;   
+            }
+            allPxl++;
+        }
+    }
+    avgRgb.r = parseInt(avgRgb.r/allPxl);
+    avgRgb.g = parseInt(avgRgb.g/allPxl);
+    avgRgb.b = parseInt(avgRgb.b/allPxl);
+    achromaAvgRgb.r = parseInt(achromaAvgRgb.r/(allPxl-ruledPxl));
+    achromaAvgRgb.g = parseInt(achromaAvgRgb.g/(allPxl-ruledPxl));
+    achromaAvgRgb.b = parseInt(achromaAvgRgb.b/(allPxl-ruledPxl));
+    
+    return {chroma: chroma, rate: ruledPxl/allPxl, achroma: achroma, avgRgb: avgRgb, achromaAvgRgb: achromaAvgRgb};
+   
+    function hIdx(hsv){ return parseInt(hsv.h); }
+    function vIdx(hsv){ return Math.round(hsv.v*(VALUE_RANGE-1)); }
+}
+var pickHuesWithHighSat = function(imageCanvas){
+    var rawHistResult = hueHistogram(imageCanvas, HIGH_SAT_RULE);
+    var rawHist = rawHistResult.hist;
+}
+var pickHues = function(imageCanvas){
+    //hard coding.
+    var rawHistResult = hueHistogram(imageCanvas, CHROMA_RULE);
+    var rawHist = rawHistResult.hist;
+    console.log("hue rate : ", rawHistResult.rate);
+    var resultHist = rawHist.smoothing(4).flatten(0.01);
+    return resultHist.pickPeaks();   
+}
+var hueHistogram = function(imageCanvas, rule){
+    var ctx = imageCanvas.getContext("2d");
+    var imageData = ctx.getImageData(0,0,imageCanvas.width, imageCanvas.height);
+    var hist = new circularHistogram1D(HUE_RANGE);    
+    rule = makeHsvRule(rule);
+    var allPix=0;
+    var ruledPix=0;
+    for(var x = 0; x < imageData.width; ++x){
+        for(var y = 0; y < imageData.height; ++y){
+            var index = (x + y * imageData.width) * 4;
+            var r = imageData.data[index + 0];
+            var g = imageData.data[index + 1];
+            var b = imageData.data[index + 2];
+            var a = imageData.data[index + 3];
+            var hsv = tc({ r: r, g: g, b: b}).toHsv();
+            if(isInRule(hsv, rule)){
+                hist[hIdx(hsv)]++;
+                ruledPix++;
+            }
+            allPix++;
+        }
+    }
+    return {hist: hist, rate: ruledPix/allPix};
+   
+    function hIdx(hsv){ return parseInt(hsv["h"]); }
+}
+    
 var svHistogram = function(imageCanvas, hueData, rule){
     var imageData = imageCanvas.getContext('2d').getImageData(0,0,imageCanvas.width, imageCanvas.height);
     var sRange, vRange;
-    var hRange = 360;
     sRange = vRange = 101;
     rule = makeHsvRule(rule);
     rule.hL = hueData.rangeL;
     rule.hR = hueData.rangeR;
-    var hist = new histogram("2d", sRange, vRange);
+    var allPix=0;
+    var ruledPix=0;
+    var hist = new histogram2D("2d", sRange, vRange);
     for(var x = 0; x < imageCanvas.width; ++x){
         for(var y =0; y < imageCanvas.height; ++y){
             var idx = (y*imageCanvas.width + x) * 4;
@@ -177,10 +361,12 @@ var svHistogram = function(imageCanvas, hueData, rule){
             var hsv = tc({r: r, g: g, b: b, a: a}).toHsv();
             if(isInRule(hsv, rule)){
                 hist[sIdx(hsv.s)][vIdx(hsv.v)]++;
+                ruledPix++;
             }
+            allPix++;
         }
     }
-    return hist;
+    return {hist: hist, rate: ruledPix/allPix};
 
     function sIdx(s){
         return Math.round(s*(sRange-1));    
@@ -191,15 +377,9 @@ var svHistogram = function(imageCanvas, hueData, rule){
 }
 
 /* old function */
-var pickHues = function(imageCanvas){
-    //hard coding.
-    var rawHist = histogram1D(imageCanvas, "hue", { sL : 0.25, vL : 0.25});
-    var resultHist = flattenHist(smoothingGraph(rawHist, 4, [1,1,1,1,1,1,1]), 0.01);
-    return pickPeaks(resultHist);   
-}
 
 var findSat = function(imageCanvas, hueData){
-    var rawSatData = histogram1D(imageCanvas, "sat", { 
+    var rawSatData = histogram1DOld(imageCanvas, "sat", { 
         hL : hueData["rangeL"], 
         hR : hueData["rangeR"], 
         sL : 0.3, 
@@ -207,8 +387,6 @@ var findSat = function(imageCanvas, hueData){
     var peaks = pickPeaks(smoothingGraph(rawSatData, 3));
     return pickPeaks(rawSatData)[0]["x"];
 }
-
-
 
 var flattenHist = function(hist, saturate){
     var resultHist = [];
@@ -222,7 +400,7 @@ var flattenHist = function(hist, saturate){
     }
     return resultHist;  
 }
-var histogram1D = function(canvas, type, rule){
+var histogram1DOld = function(canvas, type, rule){
 //    console.log(__basename + " - function() histogram start ... ");
     var ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
@@ -271,7 +449,7 @@ var smoothingGraph = function(hist, repeat, cvCoeff){
         resultHist = [];
         for( var i = 0; i< beforeHist.length; ++i){
             var sum = 0;
-            for( var cvIdx = -2; cvIdx < 2; ++cvIdx){
+            for( var cvIdx = -2; cvIdx <= 2; ++cvIdx){
                 sum += beforeHist.circleIndex(i + cvIdx) * cvCoeff[cvIdx + 2];
             }
 //            Average Convolution
@@ -310,7 +488,7 @@ var pickPeaks = function(hist, count){
             for(l = i-1; hist.circleIndex(l) > hist.circleIndex(l-1) ; --l);
             //push to peaks array.
             peaks.push({ x : normalize(i), size : hist.circleIndex(i), 
-                 rangeL : l, rangeR :r });   
+                 rangeL : normalize(l), rangeR :normalize(r) });   
         }
     }
     peaks.sort(function(f,b){ return b.size - f.size });
@@ -327,9 +505,210 @@ function median(hist){
     }
     var sum = hist.reduce(function(pv, cv){return pv + cv});
     return sum%2 === 0 ? (nthData(hist, sum%2) + nthData(hist, sum%2+1))/2: nthData(hist, (sum+1)/2);
+}    
+    
+/* Histogram */    
+function histogram1D(width, init){
+    init = typeof init !== 'undefined' ? init : 0;
+    this.width = width;
+    for(var x = 0; x< width; ++x){
+        this[x] = init;   
+    }
+}
+histogram1D.prototype.max = function(cmp){
+    var arr = [];
+    for( var i =0; i< this.width; ++i){
+        arr[i] = this[i];   
+    }
+    return Math.max.apply(null, arr);   
+};
+histogram1D.prototype.min = function(cmp){
+    var arr = [];
+    for( var i =0; i< this.width; ++i){
+        arr[i] = this[i];   
+    }
+    return Math.min.apply(null, arr);   
+};
+histogram1D.prototype.cv = function(coeff){
+    var resultHist = new circularHistogram1D(this.width);  
+    var coeffRange = parseInt(coeff.length / 2);
+    for( var i = coeffRange; i< this.width - coeffRange; ++i){
+        for( var cvIdx = -coeffRange; cvIdx <= coeffRange; ++cvIdx){
+            resultHist[i] += this[i + cvIdx] * coeff[cvIdx + coeffRange];
+        }
+        resultHist[i] = Math.round(resultHist[i] * 100)/100;
+    }
+    return resultHist;
+};
+histogram1D.prototype.smoothing = function(repeat){
+    repeat = typeof repeat !== "undefined"? repeat : 1;
+    var resultHist = this;
+    var cvCoeff = [1,1,1,1,1];
+    var cvCoeffSum = cvCoeff.reduce(function(p, c){ return p+c; }); 
+    for(var i=0; i< cvCoeff.length; ++i){
+        cvCoeff[i] = cvCoeff[i]/cvCoeffSum;
+    }
+    for(var i=0; i< repeat; ++i){
+        resultHist = resultHist.cv(cvCoeff);    
+    }
+    return resultHist;
+};    
+histogram1D.prototype.flatten = function(saturate){
+    var resultHist = new histogram1D(this.width);
+    saturate = saturate * this.max();
+    for( var i = 0; i< this.width; ++i){
+        if( this[i] > saturate ) resultHist[i] = this[i];
+    }
+    return resultHist;  
+};
+histogram1D.prototype.pickPeaks = function(count){
+    var peaks = [];
+    var total = 0;
+    for(var x = 0; x< this.width; ++x){
+        //wow. this is peak.
+        total+= this[x];
+        if(isPeak.call(this,x)){
+            var r, l;
+            //let's find left and right end.
+            var size = this[x];
+            for(r = x+1; r < this.width && this[r] > this[r+1] ; ++r){
+                size += this[r];   
+            }
+            for(l = x-1; 0 <= l && this[l] > this[l-1] ; --l){
+                size += this[l];
+            }
+            //push to peaks array.
+            peaks.push({ x : x, size : size, rangeL : l, rangeR :r });   
+        }
+    }
+    peaks.sort(function(f,b){ return b.size - f.size });
+    for(var i = 0; i<peaks.length; ++i){
+        peaks[i].rate = peaks[i].size/total;   
+    }
+    return peaks;
+    function isPeak(x){
+        return (x-1 < 0 || this[x-1] < this[x]) && 
+            (x+1 > this.width || this[x] > this[x+1]);
+    }
+}  
+/* Circular1D Histogram */
+function circularHistogram1D(width, init){
+    init = typeof init !== 'undefined' ? init : 0;
+    this.width = width;
+    for(var x = 0; x< width; ++x){
+        this[x] = init;   
+    }
 }
 
-var histogram = function histogram(type, width, height, init){
+circularHistogram1D.prototype.circleIndex = function(idx){
+    if( idx >= 0 && idx < this.width){
+        return this[idx];
+    }else if(idx < 0){
+        return this.circleIndex(idx + this.width);
+    }else{
+        return this.circleIndex(idx - this.width);
+    }    
+};
+circularHistogram1D.prototype.max = function(cmp){
+    var arr = [];
+    for( var i =0; i< this.width; ++i){
+        arr[i] = this[i];   
+    }
+    return Math.max.apply(null, arr);   
+};
+circularHistogram1D.prototype.min = function(cmp){
+    var arr = [];
+    for( var i =0; i< this.width; ++i){
+        arr[i] = this[i];   
+    }
+    return Math.min.apply(null, arr);   
+};
+circularHistogram1D.prototype.cv = function(coeff){
+    var resultHist = new circularHistogram1D(this.width);  
+    var coeffRange = parseInt(coeff.length / 2);
+    for( var i = 0; i< this.width; ++i){
+        for( var cvIdx = -coeffRange; cvIdx <= coeffRange; ++cvIdx){
+            resultHist[i] += this.circleIndex(i + cvIdx) * coeff[cvIdx + coeffRange];
+        }
+        resultHist[i] = Math.round(resultHist[i] * 100)/100;
+    }
+    return resultHist;
+};
+circularHistogram1D.prototype.smoothing = function(repeat){
+    repeat = typeof repeat !== "undefined"? repeat : 1;
+    var resultHist = this;
+    var cvCoeff = [1,1,1,1,1];
+    var cvCoeffSum = cvCoeff.reduce(function(p, c){ return p+c; }); 
+    for(var i=0; i< cvCoeff.length; ++i){
+        cvCoeff[i] = cvCoeff[i]/cvCoeffSum;
+    }
+    for(var i=0; i< repeat; ++i){
+        resultHist = resultHist.cv(cvCoeff);    
+    }
+    return resultHist;
+};    
+circularHistogram1D.prototype.flatten = function(saturate){
+    var resultHist = new circularHistogram1D(this.width);
+    saturate = saturate * this.max();
+    for( var i = 0; i< this.width; ++i){
+        if( this[i] > saturate ) resultHist[i] = this[i];
+    }
+    return resultHist;  
+};
+circularHistogram1D.prototype.pickPeaks = function(count){
+    var peaks = [];
+//    var minDataIndex = this.indexOf(this.min()); // min is zero, ordinally.
+    var min = this.min();
+    var minDataIndex;
+    for(var i=0; i< this.width; ++i){
+        if(this[i] === min){
+            minDataIndex = i;
+            break;
+        }
+    }
+    
+    //idx can be <0, or >histLength because loop is started from minDataIndex.
+    //it must be normalized.
+    var total = 0;
+    for(var x = minDataIndex; x< this.width + minDataIndex; ++x){
+        //wow. this is peak.
+        total+= this.circleIndex(x);
+        if(isPeak.call(this,x)){
+            var r, l;
+            //let's find left and right end.
+            var size = this.circleIndex(x);
+            for(r = x+1; this.circleIndex(r) > this.circleIndex(r+1) ; ++r){
+                size += this.circleIndex(r);   
+            }
+            for(l = x-1; this.circleIndex(l) > this.circleIndex(l-1) ; --l){
+                size += this.circleIndex(l);
+            }
+            //push to peaks array.
+            peaks.push({ x : this.normalize(x), size : size, 
+                 rangeL : this.normalize(l), rangeR :this.normalize(r) });   
+        }
+    }
+    peaks.sort(function(f,b){ return b.size - f.size });
+    for(var i = 0; i<peaks.length; ++i){
+        peaks[i].rate = peaks[i].size/total;   
+    }
+    return peaks;
+    function isPeak(x){
+        return this.circleIndex(x-1) < this.circleIndex(x) && 
+            this.circleIndex(x) > this.circleIndex(x+1);
+    }
+}    
+circularHistogram1D.prototype.normalize = function(idx){
+    if( idx < 0 ){
+        return this.normalize(idx + this.width)
+    }else if( idx > this.width ){
+        return this.normalize(idx - this.width);   
+    }else{
+        return idx;
+    }
+}
+/* 2Dhistogram */
+var histogram2D = function histogram2D(type, width, height, init){
     init = typeof init !== 'undefined' ? init : 0;
     this.width = width;
     this.height = height;
@@ -340,8 +719,7 @@ var histogram = function histogram(type, width, height, init){
         }
     }
 };
-histogram.prototype = new Array();
-histogram.prototype.max = function(cmp){
+histogram2D.prototype.max = function(cmp){
     var max = 0;
     for(var i = 0; i < this.width; ++i){
         var iMax = Math.max.apply(null, this[i]);
@@ -349,24 +727,24 @@ histogram.prototype.max = function(cmp){
     }
     return max;
 };
-histogram.prototype.min = function(cmp){
+histogram2D.prototype.min = function(cmp){
     var min = 0;
     for(var i = 0; i < this.width; ++i){
-        var iMin = Math.mim.apply(null, this[i]);
+        var iMin = Math.min.apply(null, this[i]);
         if(min < iMin) min = iMin;
     }
     return min;
 };
-histogram.prototype.loop = function(doing){
+histogram2D.prototype.loop = function(doing){
     for(var x =0; x< this.width; ++x){
         for(var y =0; y< this.height; ++y){
             doing.call(this,x,y);   
         }
     }
 };
-histogram.prototype.cv = function(mat, saturate){
+histogram2D.prototype.cv = function(mat, saturate){
     saturate = typeof saturate !== "undefined" ? saturate : 1;
-    var resultHist = new histogram('2d', this.width, this.height);
+    var resultHist = new histogram2D('2d', this.width, this.height);
     var matSize = Math.sqrt(mat.length);
     var cvRange = parseInt(matSize/2);
     for(var x =0; x< this.width; ++x){
@@ -386,8 +764,8 @@ histogram.prototype.cv = function(mat, saturate){
     }
     return resultHist;
 };
-histogram.prototype.smoothing = function(recur){
-    recur = typeof recur !== "undefined"? recur : 1;
+histogram2D.prototype.smoothing = function(repeat){
+    repeat = typeof repeat !== "undefined"? repeat : 1;
     var resultHist = this;
     var mat = [1,1,1,1,1,
                1,1,1,1,1,
@@ -398,13 +776,13 @@ histogram.prototype.smoothing = function(recur){
     for(var i=0; i< mat.length; ++i){
         mat[i] = mat[i]/matSum;
     }
-    for(var i=0; i< recur; ++i){
+    for(var i=0; i< repeat; ++i){
         resultHist = resultHist.cv(mat);    
     }
     return resultHist;
 };
-histogram.prototype.flatten = function(saturate){
-    var resultHist = new histogram('2d', this.width, this.height);
+histogram2D.prototype.flatten = function(saturate){
+    var resultHist = new histogram2D('2d', this.width, this.height);
     saturate = saturate * this.max();
     for( var x = 0; x< this.width; ++x){
         for( var y =0; y< this.height; ++y){
@@ -413,8 +791,8 @@ histogram.prototype.flatten = function(saturate){
     }
     return resultHist;   
 };
-histogram.prototype.binary = function toBinary2DHist(saturate){
-    var resultHist = new histogram('2d', this.width, this.height);
+histogram2D.prototype.binary = function toBinary2DHist(saturate){
+    var resultHist = new histogram2D('2d', this.width, this.height);
     saturate = saturate * this.max();
     for( var x = 0; x< this.width; ++x){
         for( var y =0; y< this.height; ++y){
@@ -423,16 +801,41 @@ histogram.prototype.binary = function toBinary2DHist(saturate){
     }
     return resultHist;
 };
-histogram.prototype.pickPeaks = function(){
+histogram2D.prototype.pickPeaks = function(){
     var peaks = [];
+    var total = 0;
     for(var x = 0; x < this.width; ++x){
         for(var y =0; y< this.height; ++y){
+            total += this[x][y];
+            var r,l,u,d;
+            
             if(isPeak.call(this,x,y)){
-                peaks[peaks.length] = {x: x, y: y, size: this[x][y]};
+                var size = this[x][y];
+                for(r = x+1; r < this.width && this[r][y] > this[r+1][y] ; ++r){
+                    for(u = y+1; u < this.height && this[r][u] > this[r][u+1]; ++u){
+                        size += this[r][u];   
+                    }
+                    for(d = y-1; 0 <= d && this[r][d] > this[r][d-1]; --d){
+                        size += this[r][d];   
+                    }
+                }
+                for(l = x-1; 0 <= l && this[l] > this[l-1] ; --l){
+                    for(u = y+1; u < this.height && this[l][u] > this[l][u+1]; ++u){
+                        size += this[l][u];   
+                    }
+                    for(d = y-1; 0 <= d && this[l][d] > this[l][d-1]; --d){
+                        size += this[l][d];   
+                    }
+                }
+                peaks[peaks.length] = {x: x, y: y, height: this[x][y], size: size};
             }
         }
     }
+    
     peaks.sort(function(f,b){ return b.size - f.size });
+    for(var i = 0; i<peaks.length; ++i){
+        peaks[i].rate = peaks[i].size/total;   
+    }
     return peaks;
     function isPeak(x,y){        
         var ul = 

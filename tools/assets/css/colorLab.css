@@ -30,3 +30,19 @@ header {
 main {
     position : relative;
 }
+
+#high-Sat-colors {
+    position: relative;
+}
+
+#chroma-colors {
+    position: relative;
+}
+
+#achroma-colors {
+    position: relative;
+}
+
+#dominant-colors {
+    position: relative;
+}
