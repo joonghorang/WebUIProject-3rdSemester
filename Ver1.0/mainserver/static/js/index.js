@@ -63,9 +63,11 @@ var setItemFactoryDisplay = {
         // 추가된 전체 moments div의 offsetHeight의 80%를 넘었을때,
         // 새로 길이를 늘려주고 엘레멘트들을 추가하는 코드로 변경. 
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
-
-         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
-            this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
+        var heightCheckOffset = 300;
+        var scrollBenchMarkRatio = 90;
+        var heightAddLegnth = 1000;
+        if(window.scrollY + heightCheckOffset > this.moments.offsetHeight * scrollBenchMarkRatio / 100 && this.scrollFlag){
+            this.moments.style.height = this.moments.offsetHeight + heightAddLengthß + "px";
             console.log("size Expanded");
             
             //추가 객체들을 요청. 
