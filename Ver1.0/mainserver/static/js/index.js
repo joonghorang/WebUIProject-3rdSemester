@@ -18,6 +18,7 @@ var setItemFactoryDisplay = {
         this.request = new XMLHttpRequest();
         this.pageIndexNum = 1;  // css Style 적용을 먹일 페이지 넘버 
         this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
+        this.scrollFlag = true;
     },
     "openFactory" : function(){
         display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
@@ -32,7 +33,7 @@ var setItemFactoryDisplay = {
     },
     "bootColorSet" : function(){
         var request = new XMLHttpRequest();
-        request.open("GET", "/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
+        request.open("GET", "/page/1", true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
         request.send();
         request.addEventListener('load', function(){
             var result = JSON.parse(request.responseText);
@@ -63,7 +64,7 @@ var setItemFactoryDisplay = {
         // 새로 길이를 늘려주고 엘레멘트들을 추가하는 코드로 변경. 
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
 
-         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100){
+         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
             this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
             console.log("size Expanded");
             
@@ -74,8 +75,11 @@ var setItemFactoryDisplay = {
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
-        var result = JSON.parse
-            for(var i = 0; i < result.moments.length; i++){
+        var result = JSON.parse(this.request.responseText);
+        if(result.moments.length < 7){
+            this.scrollFlag = false;
+        }
+        for(var i = 0; i < result.moments.length; i++){
             var addA = document.createElement('a');
             addA.setAttribute("href", "./moment/" + result.moments[i].id);
 
