@@ -3,9 +3,7 @@ var MAX_HEIGHT = window.innerHeight;
 
 
 var setItemFactoryDisplay = {
-
     "getElements" : function(){
-
         this.wrapper = document.getElementById("wrapper");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
@@ -32,7 +30,7 @@ var setItemFactoryDisplay = {
     },
     "bootColorSet" : function(){
         var request = new XMLHttpRequest();
-        request.open("GET", "/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
+        request.open("GET", "/page/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
         request.send();
         request.addEventListener('load', function(){
             var result = JSON.parse(request.responseText);
@@ -48,7 +46,7 @@ var setItemFactoryDisplay = {
         // console.log("scrollY " + window.scrollY);
         // console.log("lastEle " + (lastEle.offsetTop - window.innerHeight));
         //console.log("moments " + this.moments.offsetHeight);
-        // 일단, 메이슨리를 쓰기 때문에 기존의 방법대로 무한스클로을 구현할 수 없다.
+        // 일단, 메이슨리를 쓰기 때문에 기존의 방법대로 무한스크롤을 구현할 수 없다.
         // 따라서 우리가 해야하는 일은 가장 마지막 아이를 찾고,
         // 그 아이의 Y값위치를 계산한뒤, 
         // 현재 스크롤의 위치와 비교하여 
@@ -198,18 +196,39 @@ var confirm = {
         this.request.addEventListener('load', this.getData.bind(this));
     }
 };
-var submit = {
-    "getElements" : function(){
-        this.request = new XMLHttpRequest();
+
+var Model = {
+    init : function(){
         this.submitButton = document.getElementById("submit-button");
         this.textInput = document.getElementById("text-input");
         this.fileInput = document.getElementById("upload-hidden");
         this.moments = document.getElementById("moments");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
-        this.mainContentWrapper = document.getElementById("wrapper");
-        this.previewImgWrapper = document.getElementById("preview-image");
-        this.previewImg = document.getElementById("input-image");
+    }
+        
+}
+var submit = {
+    "getElements" : function(){
+        this.request = new XMLHttpRequest();
+//        this.submitButton = document.getElementById("submit-button");
+//        this.textInput = document.getElementById("text-input");
+//        this.fileInput = document.getElementById("upload-hidden");
+//        this.moments = document.getElementById("moments");
+//        this.itemFactory = document.getElementById("itemFactory");
+//        this.itemFactoryButton = document.getElementById("itemFactory-button");
+        
+        var ids = ["submit-button","text-input","upload-hidden"];
+        
+        ids.forEach(function(id,i){
+            this[id.replace(/\-(%s)/,function(v){
+                return v.toUpperCase();
+            })] = document.getElementById(v);
+        },this);
+        
+//        this.mainContentWrapper = document.getElementById("wrapper");
+//        this.previewImgWrapper = document.getElementById("preview-image");
+//        this.previewImg = document.getElementById("input-image");
     },
     "reset" : function(){
         // 텍스트 인풋창을 닫고 메인화면으로 돌아간다. 
