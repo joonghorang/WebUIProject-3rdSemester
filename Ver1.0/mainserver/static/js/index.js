@@ -211,24 +211,15 @@ var Model = {
 var submit = {
     "getElements" : function(){
         this.request = new XMLHttpRequest();
-//        this.submitButton = document.getElementById("submit-button");
-//        this.textInput = document.getElementById("text-input");
-//        this.fileInput = document.getElementById("upload-hidden");
-//        this.moments = document.getElementById("moments");
-//        this.itemFactory = document.getElementById("itemFactory");
-//        this.itemFactoryButton = document.getElementById("itemFactory-button");
-        
-        var ids = ["submit-button","text-input","upload-hidden"];
-        
-        ids.forEach(function(id,i){
-            this[id.replace(/\-(%s)/,function(v){
-                return v.toUpperCase();
-            })] = document.getElementById(v);
-        },this);
-        
-//        this.mainContentWrapper = document.getElementById("wrapper");
-//        this.previewImgWrapper = document.getElementById("preview-image");
-//        this.previewImg = document.getElementById("input-image");
+        this.submitButton = document.getElementById("submit-button");
+        this.textInput = document.getElementById("text-input");
+        this.fileInput = document.getElementById("upload-hidden");
+        this.moments = document.getElementById("moments");
+        this.itemFactory = document.getElementById("itemFactory");
+        this.itemFactoryButton = document.getElementById("itemFactory-button");
+        this.mainContentWrapper = document.getElementById("wrapper");
+        this.previewImgWrapper = document.getElementById("preview-image");
+        this.previewImg = document.getElementById("input-image");
     },
     "reset" : function(){
         // 텍스트 인풋창을 닫고 메인화면으로 돌아간다. 
