@@ -51,6 +51,7 @@ var VALUE_RANGE = 101;
 var CHROMA_RULE = {sL: 0.20, vL:0.20};
 var ACHROMA_RULE = {sR: 0.20, vR:0.20};
 var HIGH_SAT_RULE = {sL : 0.7, vL:0.9};
+    
 /* Module */
 var Impressive = function Impressive(imageObj, mode){
     var DateStart = new Date();
@@ -70,6 +71,7 @@ var Impressive = function Impressive(imageObj, mode){
         this.chromaColors = new Colors();
         this.achromaColors = new Colors();
         this.dominantColors = new Colors();
+        
         var svHists = this.svHists = [];
         
         var highHueHistResult = hueHistogram(imageCanvas, HIGH_SAT_RULE);
@@ -89,13 +91,14 @@ var Impressive = function Impressive(imageObj, mode){
                 //채도가 가장 높은거만 뽑는다.
                 pickedSV.sort(function(f,b){ return b.x - f.x }); 
                 console.log("s, v : ", pickedSV[0]);
-                var color = tc({
+                var color = {
                     h : pickedHighSHues[hIdx]["x"],
                     s : pickedSV[0]["x"],
-                    v : pickedSV[0]["y"]
-                }).toRgb();
+                    v : pickedSV[0]["y"],
+                    rate : svHistsResult.rate * pickedSV[0].rate
+                };
                 //존재 비율을 추가해서 color배열에 넣는다.
-                color.rate = svHistsResult.rate * pickedSV[0].rate;
+                
                 console.log("color : ", color);
                 this.highSatColors[this.highSatColors.length] = 
                 this.pickedColors[this.pickedColors.length] = color;
@@ -133,12 +136,13 @@ var Impressive = function Impressive(imageObj, mode){
             
                 for(var svIdx = 0; svIdx < pickedSV.length; ++svIdx){
                     console.log("s, v : ", pickedSV[svIdx]);
-                    var color = tc({
+                    var color = {
                         h : pickedHues[hIdx]["x"],
                         s : pickedSV[svIdx]["x"],
-                        v : pickedSV[svIdx]["y"]
-                    }).toRgb();
-                    color.rate = pickedHues[hIdx].rate * pickedSV[svIdx].rate;
+                        v : pickedSV[svIdx]["y"],
+                        rate : pickedHues[hIdx].rate * pickedSV[svIdx].rate
+                    }
+                    
                     console.log("color", color);
                 
                     this.chromaColors[this.chromaColors.length] = 
@@ -162,12 +166,13 @@ var Impressive = function Impressive(imageObj, mode){
         for(var vIdx = 0; vIdx < pickedTones.length; ++vIdx){
             
             console.log("Achroma value " +vIdx+ " : ", pickedTones[vIdx]);
-            var color = tc({
+            var color = {
                 h : achromaAvgHsv.h,
                 s : achromaAvgHsv.s,
-                v : (pickedTones[vIdx].x/VALUE_RANGE)
-            }).toRgb();
-            color.rate = (1-chromaRate) * pickedTones[vIdx].rate;
+                v : (pickedTones[vIdx].x/VALUE_RANGE),
+                rate : (1-chromaRate) * pickedTones[vIdx].rate
+            }
+            
             console.log("color", color);
             this.achromaColors[this.achromaColors.length] = 
             this.pickedColors[this.pickedColors.length] = color;
@@ -207,37 +212,16 @@ var Impressive = function Impressive(imageObj, mode){
     console.log(">> RunTime ms : ", DateEnd - DateStart);
 }
  
-/* prototype */
-Impressive.prototype = {
-    oldToRgb : function(num){
-        return this.pickedColorsOld;
-    }, 
-    toRgb : function(num){
-        return this.pickedColors;
-    },
-    oldToHexString : function(num){
-        num = typeof num !== "undefined" ? num : 100;
-        var pickedHexString =[];
-        for(var i = 0; i < this.pickedColorsOld.length && i < num; ++i){
-            pickedHexString[i] = tc(this.pickedColorsOld[i]).toHexString();
-        }
-        return pickedHexString;
-    },
-    toHexString : function(num){
-        num = typeof num !== "undefined" ? num : 100;
-        var pickedHexString =[];
-        for(var i = 0; i < this.pickedColors.length && i < num; ++i){
-            pickedHexString[i] = tc(this.pickedColors[i]).toHexString();
-        }
-        return pickedHexString;
-    }
-}
-
 /* colors */
 function Colors(){
     var colorsArr = new Array();
     colorsArr.toRgb = function(num){
-        return this;
+        num = typeof num !== "undefined" ? num : 100;
+        var pickedRgb =[];
+        for(var i = 0; i < this.length && i < num; ++i){
+            pickedRgb[i] = tc(this[i]).toRgb();
+        }
+        return pickedRgb;
     },
     colorsArr.toHexString = function(num){
         num = typeof num !== "undefined" ? num : 100;
@@ -249,12 +233,6 @@ function Colors(){
     }
     return colorsArr;
 }
-//Impressive.create2DHist = create2DHist;
-//Impressive.histCV = histCV;
-//Impressive.smoothing2DHist = smoothing2DHist;
-//Impressive.toBinary2DHist = toBinary2DHist;
-//Impressive.flatten2DHist = flatten2DHist;
-//Impressive.pick2DPeaks = pick2DPeaks;
         
 function isInHueRange(hue, rangeL, rangeR){
     if(rangeL * rangeR > 0 && rangeL <= rangeR){

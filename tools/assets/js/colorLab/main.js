@@ -3,6 +3,8 @@ define(["testingTools", "impressive", "commonCanvas"], function(testingTools,imp
 //    var imp = impressive(image);
     var tD = document.getElementById("two-dimension");
     var hueHist = document.getElementById("hue-hist");
+
+    
 //    var test2DHist = 
 //        [
 //            [1,2,1],
@@ -33,5 +35,5 @@ define(["testingTools", "impressive", "commonCanvas"], function(testingTools,imp
 //        tD.appendChild(testingTools.draw2dHistogram(hists[i].smoothing(3).flatten(0.3), SIZE,SIZE));
 //        console.log(hists[i].smoothing(3).flatten(0.3).pickPeaks());
 //    }
-    
+//    
 });
