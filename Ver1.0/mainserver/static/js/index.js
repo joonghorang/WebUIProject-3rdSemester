@@ -129,7 +129,7 @@ var setItemFactoryDisplay = {
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
-        EventUtil.addHandler(window, 'DOMContentLoaded', this.bootColorSet.bind(this));
+       // EventUtil.addHandler(window, 'DOMContentLoaded', this.bootColorSet.bind(this));
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         this.request.addEventListener('load', this.createMoments.bind(this), false);
     }
