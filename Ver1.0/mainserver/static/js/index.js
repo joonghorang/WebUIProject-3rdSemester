@@ -249,20 +249,9 @@ var submit = {
         this.previewImgWrapper = document.getElementById("preview-image");
         this.previewImg = document.getElementById("input-image");
     },
-    // "reset" : function(){
-    //     // 텍스트 인풋창을 닫고 메인화면으로 돌아간다. 
-    //     display([this.itemFactory], "hide");
-    //     display([this.mainContentWrapper, this.itemFactoryButton, this.moments], "show");
-
-    //     // 기존 preview Image에 들어있는 사진을 지우고 원래의 사진기 아이콘으로 되돌려준다. 
-    //     this.previewImgWrapper.removeChild(this.previewImgWrapper.firstElementChild);
-    //     var addCamera = document.createElement("img");
-    //     addCamera.setAttribute('id', "camera");
-    //     addCamera.setAttribute('src', "image/camera.png");
-    //     this.previewImgWrapper.appendChild(addCamera);
-    // },
     "sendData" : function(e){
         display([this.submitButton], 'hide');
+        // 음 여기에 중복을 막는 코드를 넣은 듯? 해놓은듯?
         e.preventDefault();
         // 데이터를 전송 
         var formData = new FormData(); 
@@ -272,7 +261,7 @@ var submit = {
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
     },
-    // 중복 전송을 막는 코드 - 중일 
+    // 중복 전송을 막는 코드. - 중일 
     "preventDoubleSubmit" : function(e){
         var submitEvent = EventUtil.getEvent(e);
         EventUtil.preventDefault(submitEvent);
@@ -281,7 +270,8 @@ var submit = {
         this.getElements();
 //        this.submitButton.addEventListener('click', this.reset.bind(this),false);
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
-        this.submitButton.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
+        this.textInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
+        this.fileInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
         this.request.addEventListener('load', function(){
             window.location.reload(true);
         }.bind(this) ,false);
