@@ -125,8 +125,8 @@ var setItemFactoryDisplay = {
         
         this.uploadText.children[0].value = "30자 이내로 입력하세요."; // 문구 초기화                    
         
-        if(typeof(this.previewImg.children[0]) !== "undefined"){                       // 프리뷰 이미지가 남아있다면, 
-            this.previewImg.children[0].setAttribute("id", "camera");                  // 카메라 아이콘을 살려준다. 
+        if(typeof(this.previewImg.children[0]) !== "undefined"){ // 프리뷰 이미지가 남아있다면, 
+            this.previewImg.children[0].setAttribute("id", "camera"); // 카메라 아이콘을 살려준다. 
             this.previewImg.children[0].src = "image/camera.png";
         } else {
             var addPreview = document.createElement('img');

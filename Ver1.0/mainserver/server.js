@@ -185,7 +185,6 @@ app.post('/upload-image', function(request, response){
                 var chromaColors = imp.chromaColors.toHexString();
                 var achromaColors = imp.achromaColors.toHexString();
                 var dominatColors = imp.dominantColors.toHexString();
-                
                 console.log(pickedColorAll, highSatColors, chromaColors, achromaColors, dominatColors);
                 
                 var colorCf = colorClassifier(imp);
