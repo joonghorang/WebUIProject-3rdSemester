@@ -42,7 +42,7 @@ var pool = mysql.createPool({
     password : '16d5ce5e',
     database : 'heroku_7081e1ce7ec12df',
     connectionLimit:20,
-    waitForConnections:true
+    waitForConnections:true //이 속성이 커넥션이 없을 경우 커넥션이 반납될 때까지 기다리라는 속성이기는 한데.....잘 작동을 안하나?? -신영
 });
 
 // connection요청을 10개 밖에 못보내니까 임시로 써두는 queue.
@@ -56,15 +56,13 @@ function connectionWaiting(getConnection){
     console.log("queriedCount : ", queriedCount);
     getConnection();
 }
-/* Router */
+
 app.get('/', function(request, response){
-    /*DB SELECT*/
     var mainData = {};
 
     connectionWaiting(function(){
     queriedCount++; // mysql queue
     pool.getConnection(function(err, connection){
-        
         connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
                          'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC;', function(err, result){
             if(err) {
@@ -92,7 +90,7 @@ app.get('/page/:pageNum', function(request, response){
     pool.getConnection(function(err, connection){
         if(err){
             console.log("Error~!! pageNum err입니당");
-            console.log(err);
+            throw err;
         }
         connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
                          'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;', function(err, result){
@@ -159,10 +157,7 @@ app.get('/moment/:id', function(request, response){
             });
         });
     });
-
-
 });
-
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
 app.post('/upload-image', function(request, response){
@@ -197,11 +192,7 @@ app.post('/upload-image', function(request, response){
                 var textColors = colorCf.textColors.toHexString();
                 var bgColors = colorCf.bgColors.toHexString();
                 console.log(textColors, bgColors);
-                
-//                var colorList = Impressive(img).toHexString();
-//                var bgColor = colorClassifier(colorList).bgColorHex();
-//                var textColor = colorClassifier(colorList).textColorHex();
-                
+                   
                 response.send(
                     {
                         "bgColor" : bgColors[0],
@@ -223,7 +214,6 @@ app.post('/upload-text', function(request, response){
             throw error;
         }
         else{
-            //클라이언트에서 입력한 text data
             var text = fields.textInput;
             var date = new Date();
             var timeStamp = mytools.toYYYYMMDDHHmmSSsss(date);
@@ -327,7 +317,7 @@ app.post('/upload-text', function(request, response){
             });
         }
     });
-}); //이 콜백지옥....................
+}); 
 
 app.get('/colorLab', function(req, res){
     var imageData = fs.readFileSync(uploads + app.get("colorLabData")); 
