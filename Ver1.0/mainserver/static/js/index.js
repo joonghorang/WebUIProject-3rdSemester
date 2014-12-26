@@ -95,7 +95,6 @@ var setItemFactoryDisplay = {
             } else {
                this.classIndexNum++;
             }
-            addDiv.style.backgroundColor = result.moments[i].bgColor;
             var addSpan = document.createElement('span');
             addSpan.innerHTML = result.moments[i].text;
 
