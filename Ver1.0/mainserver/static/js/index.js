@@ -15,7 +15,7 @@ var setItemFactoryDisplay = {
         this.confirmButton = document.getElementById("confirm-button");
         this.previewImg = document.getElementById('preview-image');
         this.request = new XMLHttpRequest();
-        this.pageIndexNum = 1;  // css Style 적용을 먹일 페이지 넘버 
+        this.pageIndexNum = 2;  // css Style 적용을 먹일 페이지 넘버 
         this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
         this.scrollFlag = true;
     },
@@ -52,10 +52,12 @@ var setItemFactoryDisplay = {
         request.open("GET", "/page/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
         request.send();
         request.addEventListener('load', function(){
-            var result = JSON.parse(request.responseText);
-            var body = document.getElementById("body");
-            body.style.backgroundColor = result.moments[0].bgColor;
-            console.log("bdColorSet : " + result.moments[0].bgColor);
+            if(request.responteText !== null){
+                var result = JSON.parse(request.responseText);
+                var body = document.getElementById("body");
+                body.style.backgroundColor = result.moments[0].bgColor;
+                console.log("bdColorSet : " + result.moments[0].bgColor);
+            }
         }, false);
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
@@ -84,13 +86,14 @@ var setItemFactoryDisplay = {
 
         if(window.scrollY > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
             //window.detachEvent("scroll", this.displayMore());
-            this.pageIndexNum++;
+
             this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
             this.request.send();
             console.log(this.pageIndexNum);
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+        this.pageIndexNum++;
         this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
         console.log("size Expanded");
             
