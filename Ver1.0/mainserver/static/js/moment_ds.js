@@ -209,8 +209,6 @@
 //        }
 //    }
 //    
-    
-    
     var letsShow = {
         //image를 보여주기위한 함수
         //imageWrapper를 열고 textCanvas를 닫는다.

@@ -9,8 +9,11 @@ function drawTextOn(textCanvas, text, textColor){
     function textWriter(originTextData){
             // Comment : Setting을 빼두는 것까진 좋았다. 그런데 이 데이타들이 내부에서 설정되어야 하는 친구들이었을까?            
             // Comment : 30과 같은것을 하드코딩이라 한다. 가독성도, 수정도 좋지않다.
-		    if(originTextData > MAX_STR_LEN){
-		        alert("Error");
+		    if(originTextData.length > MAX_STR_LEN){
+                console.log(originTextData);
+                console.log(originTextData.length);
+                console.log(MAX_STR_LEN);
+		        alert("Length Error in drawText.js");
 		    } else {
 		        var words = stringToWordList(originTextData);
 		        //var words = originTextArray;//addEnterToWordList(originTextArray);
@@ -28,7 +31,7 @@ function drawTextOn(textCanvas, text, textColor){
                 // Comment : 이런 부정확한 이름들은 어떤 역할을 하는 변수인지 확실히 써주자.
                 var addTextX = 0;
                 // Comment : 마찬가지. 이 array방식에는 문제가 있다.
-                var addTextArray =[24,36,48,60,72,100];
+                var addTextArray =[18, 24,36,48,60,72,100];
                 // Comment : addTextX와 떨어져 있어야 했나?
                 var addTextY = addTextArray[2]; // 24가 기본값
                 var uuuuuu = fontSizeAndAddTextY(wordArray);
