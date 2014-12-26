@@ -226,9 +226,9 @@ var confirm = {
             secondColor = bgColor;
         }
 
-        // 입력받은 평균 배경의 밝기가 160이하이면 글자색을 흰색으로 설정해준다.(점점 어두워 질테니 125보다 좀더 높게 잡음) 
+        // 입력받은 평균 배경의 밝기가 130이하이면 글자색을 흰색으로 설정해준다.(점점 어두워 질테니 130보다 좀더 높게 잡음) 
         var avgBrightness = (fR + fG + fB) / 3;
-        if(avgBrightness < 160){
+        if(avgBrightness < 130){
             this.textInput.style.color = "#FFFFFF";
         }
         console.log(avgBrightness);
