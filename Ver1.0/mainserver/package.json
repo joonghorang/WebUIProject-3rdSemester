@@ -9,7 +9,7 @@
     "express": "^4.10.5",
     "formidable": "^1.0.15",
     "fs": "0.0.2",
-    "impressive": "1.0.3",
+    "impressive": "^2.0.0",
     "mysql": "^2.5.3",
     "tinycolor2": "^1.1.1"
   },
