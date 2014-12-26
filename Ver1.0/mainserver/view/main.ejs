@@ -73,7 +73,7 @@
             var moments = <%- JSON.stringify(moments) %>;
             var hoverText = "";
             for(var i=0; i<moments.length ; i++){
-                hoverText += "#moments a:nth-of-type("+i+") div:hover{background-color:"+moments[i].bgColor+";}";
+                hoverText += "#moments a:nth-of-type("+(i+1)+") div:hover{background-color:"+moments[i].bgColor+";}";
             }
             
             var head = document.head;

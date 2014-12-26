@@ -95,6 +95,7 @@ app.get('/moment/:id', function(request, response){
     var momentData = {};
 
     //comment : 콜백 지옥에 오신것을 환영합니다. -덕성
+    //comment : 콜백 지옥에서 벗어나기 위한 해결책을 찾아보려 합니다 - 신영 
     
     //moment table select
     pool.getConnection(function(err, connection){
@@ -102,7 +103,7 @@ app.get('/moment/:id', function(request, response){
                          function(err, result){
             if(err){
                 console.log('moment inputData select error');
-                throw err;
+                throw err; //종종 여기에서 에러가 나는데........왜지요?
             }
             momentData.textColor = result[0].textColor;
             momentData.text = result[0].text;
