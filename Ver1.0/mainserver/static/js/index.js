@@ -137,7 +137,9 @@ var manageFileInput = {
         display([this.previewImg], 'show');
         
         /*인풋 이미지 크기에 테두리 맞추기*/
-        
+        this.previewImg.style.transition = 'all 0.3s ease-in';
+        this.previewImg.style.width = imgElement.style.width;
+        this.previewImg.style.height = imgElement.style.height;
         
         /*//인풋 이미지 크기에 테두리 맞추기*/
     },
