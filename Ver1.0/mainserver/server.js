@@ -90,6 +90,7 @@ app.get('/page/:pageNum', function(request, response){
 /*/moment/picId 라우터로 이동*/
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
+    console.log(targetId + '라우터로 이동하였습니다');
     var momentData = {};
 
     //comment : 콜백 지옥에 오신것을 환영합니다. -덕성
