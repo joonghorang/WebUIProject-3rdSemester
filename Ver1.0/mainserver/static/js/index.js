@@ -15,6 +15,7 @@ var setItemFactoryDisplay = {
         this.confirmButton = document.getElementById("confirm-button");
         this.previewImg = document.getElementById('preview-image');
         this.request = new XMLHttpRequest();
+        this.sendCheck = 0;     // 페이지 인덱스 넘과 비교하여 동일하면 다시 요청하지 않는다. 
         this.pageIndexNum = 2;  // css Style 적용을 먹일 페이지 넘버 
         this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
         this.scrollFlag = true;
@@ -85,11 +86,14 @@ var setItemFactoryDisplay = {
 
 
         if(window.scrollY > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
-            //window.detachEvent("scroll", this.displayMore());
-
-            this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
-            this.request.send();
-            console.log(this.pageIndexNum);
+            //window.removeEventListener("scroll", this.displayMore(), false);
+            if(this.sendCheck !== this.pageIndexNum){
+                this.sendCheck = this.pageIndexNum;
+               // console.log("sc" + this.sendCheck);
+                this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
+                this.request.send();
+                //console.log(this.pageIndexNum);    
+            }
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
