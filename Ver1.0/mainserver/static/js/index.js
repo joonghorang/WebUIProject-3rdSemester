@@ -55,6 +55,7 @@ var setItemFactoryDisplay = {
             var result = JSON.parse(request.responseText);
             var body = document.getElementById("body");
             body.style.backgroundColor = result.moments[0].bgColor;
+            //console.log("bdColorSet : " + result.moments[0].bgColor);
         }, false);
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
@@ -82,6 +83,7 @@ var setItemFactoryDisplay = {
 
 
         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
+            this.pageIndexNum++;
             this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
             this.request.send();
          }
@@ -91,11 +93,11 @@ var setItemFactoryDisplay = {
         console.log("size Expanded");
             
         //추가 객체들을 요청. 
-        this.pageIndexNum++;
 
         var result = JSON.parse(this.request.responseText);
         var unitNumberInPage = 7;
         if(result.moments.length < unitNumberInPage){
+            console.log("this is End Page " + "pageIndexNum = " + this.pageIndexNum + "element in Lastpage : " + result.moments.length);
             this.scrollFlag = false;
         }
         for(var i = 0; i < result.moments.length; i++){
@@ -223,11 +225,15 @@ var confirm = {
         } else{
             secondColor = bgColor;
         }
-        console.log(textColor);
-        console.log(secondColor);
-        console.log(bgColor);
-        console.log(textColor);
-        drawGradation(bgColor, textColor); //......????? 아, 전역변수였던가요....? - 신영
+
+        // 입력받은 평균 배경의 밝기가 160이하이면 글자색을 흰색으로 설정해준다.(점점 어두워 질테니 125보다 좀더 높게 잡음) 
+        var avgBrightness = (fR + fG + fB) / 3;
+        if(avgBrightness < 160){
+            this.textInput.style.color = "#FFFFFF";
+        }
+        console.log(avgBrightness);
+        drawGradation(bgColor, textColor);  //......????? 아, 전역변수였던가요....? - 신영
+                                            // 묑장하지? - 중일
     },
     "init" : function(){
         this.getElements();
@@ -260,6 +266,9 @@ var submit = {
         
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
+        var sendData = 1;
+        console.log("sendData Count : " + sendData);
+        sendData++;
     },
     // 중복 전송을 막는 코드. - 중일 
     "preventDoubleSubmit" : function(e){
