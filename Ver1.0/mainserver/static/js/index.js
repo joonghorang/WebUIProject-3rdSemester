@@ -97,7 +97,7 @@ var setItemFactoryDisplay = {
         var result = JSON.parse(this.request.responseText);
         var unitNumberInPage = 7;
         if(result.moments.length < unitNumberInPage){
-            console.log("this is End Page " + "pageIndexNum = " + this.pageIndexNum + "element in Lastpage : " + result.moments.length);
+            console.log("this is End Page " + "pageIndexNum = " + this.pageIndexNum + "\nelement in Lastpage : " + result.moments.length);
             this.scrollFlag = false;
         }
         for(var i = 0; i < result.moments.length; i++){
