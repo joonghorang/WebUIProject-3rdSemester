@@ -73,6 +73,10 @@ app.get('/page/:pageNum', function(request, response){
     var pageData = {};
     
     pool.getConnection(function(err, connection){
+        if(err){
+            console.log("pageNum err입니당");
+            console.log(err);
+        }
         connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
                          'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;', function(err, result){
             if(err){
