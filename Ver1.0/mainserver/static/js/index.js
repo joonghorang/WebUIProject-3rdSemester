@@ -82,10 +82,12 @@ var setItemFactoryDisplay = {
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
 
 
-        if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
+        if(window.scrollY > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
+            //window.detachEvent("scroll", this.displayMore());
             this.pageIndexNum++;
             this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
             this.request.send();
+            console.log(this.pageIndexNum);
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
@@ -123,13 +125,14 @@ var setItemFactoryDisplay = {
             addA.appendChild(addDiv);
             addDiv.appendChild(addSpan);
         }
+        EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
     },
 
     "init" : function(){ // mainPage Initial code
         this.getElements();
         this.itemFactoryButton.addEventListener('click',this.openFactory.bind(this),false);
         this.closeButton.addEventListener('click', this.closeFactory.bind(this), false);
-       // EventUtil.addHandler(window, 'DOMContentLoaded', this.bootColorSet.bind(this));
+        EventUtil.addHandler(window, 'DOMContentLoaded', this.bootColorSet.bind(this));
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         this.request.addEventListener('load', this.createMoments.bind(this), false);
     }
