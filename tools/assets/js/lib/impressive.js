@@ -124,25 +124,34 @@ var Impressive = function Impressive(imageObj, mode){
         console.log(">-");
         for(var hIdx = 0; hIdx < pickedHues.length; ++hIdx){
             console.log("Chroma hue " +hIdx+ " : ", pickedHues[hIdx]);    
-            var svHistsResult = svHistogram(imageCanvas, pickedHues[hIdx], CHROMA_RULE);  
-            svHists[svHists.length] = svHistsResult.hist;
-            console.log("Hue rate : ",svHistsResult.rate);
+            if(!isHighSatColorsIn.call(this,pickedHues[hIdx])){
+                var svHistsResult = svHistogram(imageCanvas, pickedHues[hIdx], CHROMA_RULE);  
+                svHists[svHists.length] = svHistsResult.hist;
+                console.log("Hue rate : ",svHistsResult.rate);
 
-            var pickedSV = svHists[svHists.length-1].smoothing(3).flatten(0.3).pickPeaks();
+                var pickedSV = svHists[svHists.length-1].smoothing(3).flatten(0.3).pickPeaks();
             
-            for(var svIdx = 0; svIdx < pickedSV.length; ++svIdx){
-                console.log("s, v : ", pickedSV[svIdx]);
-                var color = tc({
-                    h : pickedHues[hIdx]["x"],
-                    s : pickedSV[svIdx]["x"],
-                    v : pickedSV[svIdx]["y"]
-                }).toRgb();
-                color.rate = pickedHues[hIdx].rate * pickedSV[svIdx].rate;
-                console.log("color", color);
-                this.chromaColors[this.chromaColors.length] = 
-                this.dominantColors[this.dominantColors.length] = 
-                this.pickedColors[this.pickedColors.length] = color;
+                for(var svIdx = 0; svIdx < pickedSV.length; ++svIdx){
+                    console.log("s, v : ", pickedSV[svIdx]);
+                    var color = tc({
+                        h : pickedHues[hIdx]["x"],
+                        s : pickedSV[svIdx]["x"],
+                        v : pickedSV[svIdx]["y"]
+                    }).toRgb();
+                    color.rate = pickedHues[hIdx].rate * pickedSV[svIdx].rate;
+                    console.log("color", color);
+                
+                    this.chromaColors[this.chromaColors.length] = 
+                    this.pickedColors[this.pickedColors.length] = color;
+                }    
             }
+        }
+        function isHighSatColorsIn(hueData){
+            for(var i =0; i < this.highSatColors.length; ++i){
+                var hsv = tc(this.highSatColors[i]).toHsv();
+                if(isInHueRange(hsv.h, hueData.rangeL, hueData.rangeR)) return true;   
+            }
+            return false;
         }
         
         console.log(">-");
@@ -161,10 +170,38 @@ var Impressive = function Impressive(imageObj, mode){
             color.rate = (1-chromaRate) * pickedTones[vIdx].rate;
             console.log("color", color);
             this.achromaColors[this.achromaColors.length] = 
-            this.dominantColors[this.dominantColors.length] = 
             this.pickedColors[this.pickedColors.length] = color;
         }
-        this.dominantColors.sort(function(f,b){ return b.rate - f.rate; });
+        this.chromaColors.sort(function(f,b){ return b.rate - f.rate; });
+        this.achromaColors.sort(function(f,b){ return b.rate - f.rate; });
+
+        if(chromaRate > 0.6){
+            for(var i=0; i< this.chromaColors.length; ++i){
+                this.dominantColors[i] = this.chromaColors[i];   
+            }
+            for(var i=0; i< this.achromaColors.length; ++i){
+                this.dominantColors[this.dominantColors.length+i] = this.achromaColors[i];
+            }
+        }else if( chromaRate < 0.3 ){
+            for(var i=0; i< this.achromaColors.length; ++i){
+                this.dominantColors[i] = this.achromaColors[i];
+            }
+            for(var i=0; i< this.chromaColors.length; ++i){
+                this.dominantColors[this.dominantColors.length+i] = this.chromaColors[i];   
+            }
+
+        }else{
+            for(var i=0; i< this.chromaColors.length; ++i){
+                this.dominantColors[i] = this.chromaColors[i];   
+            }
+            for(var i=0; i< this.achromaColors.length; ++i){
+                this.dominantColors[this.dominantColors.length+i] = this.achromaColors[i];
+            }
+            this.dominantColors.sort(function(f,b){ return b.rate - f.rate; });    
+        }
+        
+        this.chromaColors.sort(function(f,b){ return b.rate - f.rate; });
+        this.achromaColors.sort(function(f,b){ return b.rate - f.rate; });
     }
     var DateEnd = new Date();
     console.log(">> RunTime ms : ", DateEnd - DateStart);
