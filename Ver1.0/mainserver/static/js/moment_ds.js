@@ -1,6 +1,6 @@
 (function(){    
     function init(){
-        delColorByTime();
+        //delColorByTime();
         initPageCanvas();
         setBgColor();
         var moment = document.getElementById("moment");
@@ -93,120 +93,118 @@
         element.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px " + shadowColor;//textColor; 텍스트칼라나 백그라운드 칼라로 적용해 봤으나 구림...
     }
 
-    // 색변화할 예정인 테스트용 함수 
-    function delColorByTime(){
-        var originImg = document.getElementById("moment-image-wrapper").children[0];
-        var Img = new Image();
-        Img.src = originImg.src;
-        Img.onload = function(){
-            var timeCanvas = document.createElement('canvas');
-            timeCanvas.width = Img.width;
-            timeCanvas.height = Img.height;
+    // 색변화할 예정인 테스트용 함수
+    // 잠정적으로 월요일 피티에서는 사용하지 않는 것으로 결정나서 주석처리함. 
+    // function delColorByTime(){
+    //     var originImg = document.getElementById("moment-image-wrapper").children[0];
+    //     var Img = new Image();
+    //     Img.src = originImg.src;
+    //     Img.onload = function(){
+    //         var timeCanvas = document.createElement('canvas');
+    //         timeCanvas.width = Img.width;
+    //         timeCanvas.height = Img.height;
 
-            var timeContext = timeCanvas.getContext("2d");
-            timeContext.drawImage(Img, 0, 0, Img.width, Img.height);
-            var timeImageData = timeContext.getImageData(0, 0, Img.width, Img.height);
+    //         var timeContext = timeCanvas.getContext("2d");
+    //         timeContext.drawImage(Img, 0, 0, Img.width, Img.height);
+    //         var timeImageData = timeContext.getImageData(0, 0, Img.width, Img.height);
 
-            var lightDegree = 1;
+    //         var lightDegree = 1;
 
-            var url = location.href;
-            var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
-            var pastYear = parseInt(url.slice(slicePointer + 7, slicePointer + 11));    // 그당시의 시각에 해당하는 문자열 
-            var pastMonth = parseInt(url.slice(slicePointer + 11, slicePointer + 13));
-            var pastDay = parseInt(url.slice(slicePointer + 13, slicePointer + 15));
-            var pastHour = parseInt(url.slice(slicePointer + 15, slicePointer + 17));
+    //         var url = location.href;
+    //         var slicePointer = url.indexOf("moment");                       // 2014로 찾을까하다가 해가지나면 다시 바꿔야 하므로 이렇게 찾는 것으로...
+    //         var pastYear = parseInt(url.slice(slicePointer + 7, slicePointer + 11));    // 그당시의 시각에 해당하는 문자열 
+    //         var pastMonth = parseInt(url.slice(slicePointer + 11, slicePointer + 13));
+    //         var pastDay = parseInt(url.slice(slicePointer + 13, slicePointer + 15));
+    //         var pastHour = parseInt(url.slice(slicePointer + 15, slicePointer + 17));
 
-            var presentDate = new Date();
-            var presentYear = parseInt(presentDate.getFullYear());
-            var presentMonth = parseInt(presentDate.getMonth()) + 1; // 월은 js에서는 0월부터 시작이라 1 더해주어야한다.  
-            var presentDay = parseInt(presentDate.getDate());
-            var presentHour = parseInt(presentDate.getHours());
+    //         var presentDate = new Date();
+    //         var presentYear = parseInt(presentDate.getFullYear());
+    //         var presentMonth = parseInt(presentDate.getMonth()) + 1; // 월은 js에서는 0월부터 시작이라 1 더해주어야한다.  
+    //         var presentDay = parseInt(presentDate.getDate());
+    //         var presentHour = parseInt(presentDate.getHours());
 
-            function monthToDay(year, month){
-                if(year % 4 === 2){ // 윤달의 경우 
-                    if(month === 2){
-                        return 31 + 29;
-                    }
-                } 
-                if(month === 1){
-                    return 31;
-                } else if(month === 2){
-                    return 31 + 28;
-                } else if(month === 3){
-                    return 31 + 28 + 31;
-                } else if(month === 4){
-                    return 31 + 28 + 31 + 30;
-                } else if(month === 5){
-                    return 31 + 28 + 31 + 30 + 31;
-                } else if(month === 6){
-                    return 31 + 28 + 31 + 30 + 31 + 30;
-                } else if(month === 7){
-                    return 31 + 28 + 31 + 30 + 31 + 30 + 31;
-                } else if(month === 8){
-                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31;
-                } else if(month === 9){
-                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30;
-                } else if(month === 10){
-                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31;
-                } else if(month === 11){
-                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30;
-                } else if(month === 12){
-                    return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31;
-                } else {
-                    console.log("wrong Input in monthToDay Function");
-                }
+    //         function monthToDay(year, month){
+    //             if(year % 4 === 2){ // 윤달의 경우 
+    //                 if(month === 2){
+    //                     return 31 + 29;
+    //                 }
+    //             } 
+    //             if(month === 1){
+    //                 return 31;
+    //             } else if(month === 2){
+    //                 return 31 + 28;
+    //             } else if(month === 3){
+    //                 return 31 + 28 + 31;
+    //             } else if(month === 4){
+    //                 return 31 + 28 + 31 + 30;
+    //             } else if(month === 5){
+    //                 return 31 + 28 + 31 + 30 + 31;
+    //             } else if(month === 6){
+    //                 return 31 + 28 + 31 + 30 + 31 + 30;
+    //             } else if(month === 7){
+    //                 return 31 + 28 + 31 + 30 + 31 + 30 + 31;
+    //             } else if(month === 8){
+    //                 return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31;
+    //             } else if(month === 9){
+    //                 return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30;
+    //             } else if(month === 10){
+    //                 return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31;
+    //             } else if(month === 11){
+    //                 return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30;
+    //             } else if(month === 12){
+    //                 return 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31;
+    //             } else {
+    //                 console.log("wrong Input in monthToDay Function");
+    //             }
 
-            }
-            var yearTime = (presentYear - pastYear) * 365 * 24;
-            var monthTime = (monthToDay(presentYear, presentMonth) - monthToDay(pastYear, pastMonth)) * 24;
-            var dayTime = (presentDay - pastDay) * 24;
-            var hourTime = presentHour - pastHour;
-            var totalTime = yearTime + monthTime + dayTime + hourTime;
-            if(totalTime > 1000){
-                totalTime = 1000;
-            }
-            console.log(bgColor);
-            var DestinationR = parseInt(bgColor.slice(1, 3), 16);
-            var DestinationG = parseInt(bgColor.slice(3, 5), 16);
-            var DestinationB = parseInt(bgColor.slice(5, 7), 16);
-            for(var x = 0; x < timeImageData.width; ++x){                            // 각 픽셀을 순회하며 전체적으로 하얀색으로 빼도록 한다. 
-                for(var y = 0; y < timeImageData.height; ++y){
-                    var index = (x + y * timeImageData.width) * 4;
+    //         }
+    //         var yearTime = (presentYear - pastYear) * 365 * 24;
+    //         var monthTime = (monthToDay(presentYear, presentMonth) - monthToDay(pastYear, pastMonth)) * 24;
+    //         var dayTime = (presentDay - pastDay) * 24;
+    //         var hourTime = presentHour - pastHour;
+    //         var totalTime = yearTime + monthTime + dayTime + hourTime;
+    //         if(totalTime > 1000){
+    //             totalTime = 1000;
+    //         }
+    //         console.log(bgColor);
+    //         var DestinationR = parseInt(bgColor.slice(1, 3), 16);
+    //         var DestinationG = parseInt(bgColor.slice(3, 5), 16);
+    //         var DestinationB = parseInt(bgColor.slice(5, 7), 16);
+    //         for(var x = 0; x < timeImageData.width; ++x){                            // 각 픽셀을 순회하며 전체적으로 하얀색으로 빼도록 한다. 
+    //             for(var y = 0; y < timeImageData.height; ++y){
+    //                 var index = (x + y * timeImageData.width) * 4;
 
-                    for(var i = 0; i < totalTime; i++){
-                         if(timeImageData.data[index + 0] > DestinationR){
-                            timeImageData.data[index + 0] -= lightDegree;// * totalTime;
-                        } else if(timeImageData.data[index + 0] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
-                            //console.log("R is Same in this pixel " + timeImageData.data[index + 0]);
-                        }else {
-                            timeImageData.data[index + 0] += lightDegree;// * totalTime;
-                        }
-                        if(timeImageData.data[index + 1] > DestinationG){
-                            timeImageData.data[index + 1] -= lightDegree;// * totalTime;
-                        } else if(timeImageData.data[index + 1] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
-                            //console.log("G is Same in this pixel " + timeImageData.data[index + 0]);
-                        }else {
-                            timeImageData.data[index + 1] += lightDegree;//* totalTime;
-                        }
-                        if(timeImageData.data[index + 2] > DestinationB){
-                            timeImageData.data[index + 2] -= lightDegree;// * totalTime;
-                        } else if(timeImageData.data[index + 2] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
-                            //console.log("B is Same in this pixel " + timeImageData.data[index + 0]);
-                        }else {
-                            timeImageData.data[index + 2] += lightDegree;// * totalTime;
-                        }                       
-                    }
-                    //timeImageData.data[index + 1] += lightDegree * totalTime;
-                    //timeImageData.data[index + 2] += lightDegree * totalTime;
-                }
-            }
-            //console.log(timeImageData);
-            var wrapper = document.getElementById("wrapper");
-            timeContext.putImageData(timeImageData, 0, 0);
-            timeCanvas.setAttribute("id", "timeCanvas");
-            wrapper.appendChild(timeCanvas);
-        }
-    }
+    //                 for(var i = 0; i < totalTime; i++){
+    //                      if(timeImageData.data[index + 0] > DestinationR){
+    //                         timeImageData.data[index + 0] -= lightDegree;// * totalTime;
+    //                     } else if(timeImageData.data[index + 0] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
+    //                         //console.log("R is Same in this pixel " + timeImageData.data[index + 0]);
+    //                     }else {
+    //                         timeImageData.data[index + 0] += lightDegree;// * totalTime;
+    //                     }
+    //                     if(timeImageData.data[index + 1] > DestinationG){
+    //                         timeImageData.data[index + 1] -= lightDegree;// * totalTime;
+    //                     } else if(timeImageData.data[index + 1] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
+    //                         //console.log("G is Same in this pixel " + timeImageData.data[index + 0]);
+    //                     }else {
+    //                         timeImageData.data[index + 1] += lightDegree;//* totalTime;
+    //                     }
+    //                     if(timeImageData.data[index + 2] > DestinationB){
+    //                         timeImageData.data[index + 2] -= lightDegree;// * totalTime;
+    //                     } else if(timeImageData.data[index + 2] === DestinationR) {     // 최종적으로 색상이 같아졌다면 아무것도 하지 않고, 로그만 남긴다. 
+    //                         //console.log("B is Same in this pixel " + timeImageData.data[index + 0]);
+    //                     }else {
+    //                         timeImageData.data[index + 2] += lightDegree;// * totalTime;
+    //                     }                       
+    //                 }
+    //             }
+    //         }
+    //         var wrapper = document.getElementById("wrapper");
+    //         timeContext.putImageData(timeImageData, 0, 0);
+    //         timeCanvas.setAttribute("id", "timeCanvas");
+    //         wrapper.appendChild(timeCanvas);
+    //     }
+    // }
     var letsShow = {
         //image를 보여주기위한 함수
         //imageWrapper를 열고 textCanvas를 닫는다.

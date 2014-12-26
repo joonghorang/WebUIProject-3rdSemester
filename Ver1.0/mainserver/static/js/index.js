@@ -12,6 +12,7 @@ var setItemFactoryDisplay = {
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
+        this.confirmButton = document.getElementById("confirm-button");
         this.previewImg = document.getElementById('preview-image');
         this.request = new XMLHttpRequest();
         this.pageIndexNum = 1;  // css Style 적용을 먹일 페이지 넘버 
@@ -19,15 +20,32 @@ var setItemFactoryDisplay = {
         this.scrollFlag = true;
     },
     "openFactory" : function(){
-        display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
+        display([this.itemFactory,this.itemFactoryButton, this.confirmButton, this.uploadFile,this.closeButton, this.previewImg],'show');
         display([this.moments, this.itemFactoryButton, this.uploadText],'hide');
     },
     "closeFactory" : function(){
+        // 취소하므로 모든 상황을 업로드 이전 상태로 돌려준다. 
         if(this.previewImg.childNodes[0] !== undefined){
             this.previewImg.removeChild(this.previewImg.childNodes[0]);
         }   
         display([this.moments, this.itemFactoryButton],'show');
-        display([this.itemFactory, this.closeButton, this.previewImg],'hide');
+        display([this.itemFactory, this.closeButton, this.previewImg],'hide');  
+        this.uploadText.children[0].value = "30자 이내로 입력하세요.";                    // 문구 초기화
+        if(typeof(this.previewImg.children[0]) !== "undefined"){                                      // 프리뷰 이미지가 남아있다면, 
+            this.previewImg.children[0].setAttribute("id", "camera");                  // 카메라 아이콘을 살려준다. 
+            this.previewImg.children[0].src = "image/camera.png";
+        } else {
+            var addPreview = document.createElement('img');
+            addPreview.setAttribute("id", "camera");
+            addPreview.src = "image/camera.png";
+            this.previewImg.appendChild(addPreview);
+        } 
+        this.uploadFile.children[1].value = null;                                      // 입력받은 인풋 파일 태그 초기화 
+        fR = 255; 
+        fG = 255; 
+        fB = 255;                                                                       // 그라데이션 색상 초기화 
+        firstColor = "#FFFFFF";     
+        secondColor = "#FFFFFF";        
     },
     "bootColorSet" : function(){
         var request = new XMLHttpRequest();
@@ -64,16 +82,17 @@ var setItemFactoryDisplay = {
 
 
         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
-            this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
-            console.log("size Expanded");
-            
-            //추가 객체들을 요청. 
-            this.pageIndexNum++;
             this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
             this.request.send();
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+        this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
+        console.log("size Expanded");
+            
+        //추가 객체들을 요청. 
+        this.pageIndexNum++;
+
         var result = JSON.parse(this.request.responseText);
         var unitNumberInPage = 7;
         if(result.moments.length < unitNumberInPage){
@@ -189,7 +208,7 @@ var confirm = {
         var textColor = result.textColor;
         //텍스트 입력창으로 전환 : timer 필요함
         display([this.uploadText],'show');
-        display([this.uploadFile, this.closeButton],'hide');
+        display([this.uploadFile], 'hide');// , this.closeButton],'hide');
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
 
@@ -199,7 +218,15 @@ var confirm = {
         fB = parseInt(bgColor.slice(5,7), 16);
         
         firstColor = bgColor;
-        secondColor = textColor;
+        if(textColor !== null){
+            secondColor = textColor;
+        } else{
+            secondColor = bgColor;
+        }
+        console.log(textColor);
+        console.log(secondColor);
+        console.log(bgColor);
+        console.log(textColor);
         drawGradation(bgColor, textColor); //......????? 아, 전역변수였던가요....? - 신영
     },
     "init" : function(){
