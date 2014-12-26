@@ -5,9 +5,15 @@
         <meta name="viewport" content="width=device-width, user-scalable=no">
         <link rel="stylesheet" type="text/css" href="../css/lib/reset.css">
         <link rel="stylesheet" type="text/css" href="../css/moment.css">
-        <title>moment</title>
+        <title><%= text %></title>
     </head>
     <body>
+        <div id="return-button-wrapper">
+            <a href="/">
+                <div id="return-button"></div>
+            </a>
+        </div>
+        
         <% if(prevId !== "null")
         {%>
         <div id = "backward-button-wrapper">
@@ -47,9 +53,6 @@
             var textColor = "<%= textColor %>";
             var text = "<%= text %>";
             var file = "<%= file %>";
-//            Caman("#page-background", "./"+file , function () {
-//              this.stackBlur(5).render();
-//            });
         </script>
         <script src="../js/moment_ds.js"></script>
 

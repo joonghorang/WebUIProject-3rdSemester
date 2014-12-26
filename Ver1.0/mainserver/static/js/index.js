@@ -12,6 +12,7 @@ var setItemFactoryDisplay = {
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
         this.closeButton = document.getElementById("close-button-wrapper");
+        this.confirmButton = document.getElementById("confirm-button");
         this.previewImg = document.getElementById('preview-image');
         this.request = new XMLHttpRequest();
         this.pageIndexNum = 1;  // css Style 적용을 먹일 페이지 넘버 
@@ -19,15 +20,32 @@ var setItemFactoryDisplay = {
         this.scrollFlag = true;
     },
     "openFactory" : function(){
-        display([this.itemFactory,this.uploadFile,this.closeButton, this.previewImg],'show');
+        display([this.itemFactory,this.itemFactoryButton, this.confirmButton, this.uploadFile,this.closeButton, this.previewImg],'show');
         display([this.moments, this.itemFactoryButton, this.uploadText],'hide');
     },
     "closeFactory" : function(){
+        // 취소하므로 모든 상황을 업로드 이전 상태로 돌려준다. 
         if(this.previewImg.childNodes[0] !== undefined){
             this.previewImg.removeChild(this.previewImg.childNodes[0]);
         }   
         display([this.moments, this.itemFactoryButton],'show');
-        display([this.itemFactory, this.closeButton, this.previewImg],'hide');
+        display([this.itemFactory, this.closeButton, this.previewImg],'hide');  
+        this.uploadText.children[0].value = "30자 이내로 입력하세요.";                    // 문구 초기화
+        if(typeof(this.previewImg.children[0]) !== "undefined"){                                      // 프리뷰 이미지가 남아있다면, 
+            this.previewImg.children[0].setAttribute("id", "camera");                  // 카메라 아이콘을 살려준다. 
+            this.previewImg.children[0].src = "image/camera.png";
+        } else {
+            var addPreview = document.createElement('img');
+            addPreview.setAttribute("id", "camera");
+            addPreview.src = "image/camera.png";
+            this.previewImg.appendChild(addPreview);
+        } 
+        this.uploadFile.children[1].value = null;                                      // 입력받은 인풋 파일 태그 초기화 
+        fR = 255; 
+        fG = 255; 
+        fB = 255;                                                                       // 그라데이션 색상 초기화 
+        firstColor = "#FFFFFF";     
+        secondColor = "#FFFFFF";        
     },
     "bootColorSet" : function(){
         var request = new XMLHttpRequest();
@@ -36,7 +54,8 @@ var setItemFactoryDisplay = {
         request.addEventListener('load', function(){
             var result = JSON.parse(request.responseText);
             var body = document.getElementById("body");
-         //   body.style.backgroundColor = result.moments[0].bgColor;
+            body.style.backgroundColor = result.moments[0].bgColor;
+            //console.log("bdColorSet : " + result.moments[0].bgColor);
         }, false);
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
@@ -64,19 +83,21 @@ var setItemFactoryDisplay = {
 
 
         if(window.scrollY + 300 > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
-            this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
-            console.log("size Expanded");
-            
-            //추가 객체들을 요청. 
             this.pageIndexNum++;
             this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
             this.request.send();
          }
     }, 
     "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+        this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
+        console.log("size Expanded");
+            
+        //추가 객체들을 요청. 
+
         var result = JSON.parse(this.request.responseText);
         var unitNumberInPage = 7;
         if(result.moments.length < unitNumberInPage){
+            console.log("this is End Page " + "pageIndexNum = " + this.pageIndexNum + "\nelement in Lastpage : " + result.moments.length);
             this.scrollFlag = false;
         }
         for(var i = 0; i < result.moments.length; i++){
@@ -95,7 +116,6 @@ var setItemFactoryDisplay = {
             } else {
                this.classIndexNum++;
             }
-            addDiv.style.backgroundColor = result.moments[i].bgColor;
             var addSpan = document.createElement('span');
             addSpan.innerHTML = result.moments[i].text;
 
@@ -190,7 +210,7 @@ var confirm = {
         var textColor = result.textColor;
         //텍스트 입력창으로 전환 : timer 필요함
         display([this.uploadText],'show');
-        display([this.uploadFile, this.closeButton],'hide');
+        display([this.uploadFile], 'hide');// , this.closeButton],'hide');
 
         //JSON에 있는 RGB데이터로 텍스트입력창 배경색 그리기 : 원래 testInput.js에 있던 시행함수
 
@@ -200,8 +220,20 @@ var confirm = {
         fB = parseInt(bgColor.slice(5,7), 16);
         
         firstColor = bgColor;
-        secondColor = textColor;
-        drawGradation(bgColor, textColor); //......????? 아, 전역변수였던가요....? - 신영
+        if(textColor !== null){
+            secondColor = textColor;
+        } else{
+            secondColor = bgColor;
+        }
+
+        // 입력받은 평균 배경의 밝기가 130이하이면 글자색을 흰색으로 설정해준다.(점점 어두워 질테니 130보다 좀더 높게 잡음) 
+        var avgBrightness = (fR + fG + fB) / 3;
+        if(avgBrightness < 130){
+            this.textInput.style.color = "#FFFFFF";
+        }
+        console.log(avgBrightness);
+        drawGradation(bgColor, textColor);  //......????? 아, 전역변수였던가요....? - 신영
+                                            // 묑장하지? - 중일
     },
     "init" : function(){
         this.getElements();
@@ -223,20 +255,9 @@ var submit = {
         this.previewImgWrapper = document.getElementById("preview-image");
         this.previewImg = document.getElementById("input-image");
     },
-    "reset" : function(){
-        // 텍스트 인풋창을 닫고 메인화면으로 돌아간다. 
-        display([this.itemFactory], "hide");
-        display([this.mainContentWrapper, this.itemFactoryButton, this.moments], "show");
-
-        // 기존 preview Image에 들어있는 사진을 지우고 원래의 사진기 아이콘으로 되돌려준다. 
-        this.previewImgWrapper.removeChild(this.previewImgWrapper.firstElementChild);
-        var addCamera = document.createElement("img");
-        addCamera.setAttribute('id', "camera");
-        addCamera.setAttribute('src', "image/camera.png");
-        this.previewImgWrapper.appendChild(addCamera);
-    },
     "sendData" : function(e){
         display([this.submitButton], 'hide');
+        // 음 여기에 중복을 막는 코드를 넣은 듯? 해놓은듯?
         e.preventDefault();
         // 데이터를 전송 
         var formData = new FormData(); 
@@ -245,12 +266,21 @@ var submit = {
         
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
+        var sendData = 1;
+        console.log("sendData Count : " + sendData);
+        sendData++;
     },
-
+    // 중복 전송을 막는 코드. - 중일 
+    "preventDoubleSubmit" : function(e){
+        var submitEvent = EventUtil.getEvent(e);
+        EventUtil.preventDefault(submitEvent);
+    },
     "init" : function(){
         this.getElements();
 //        this.submitButton.addEventListener('click', this.reset.bind(this),false);
         this.submitButton.addEventListener('click', this.sendData.bind(this),false);
+        this.textInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
+        this.fileInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
         this.request.addEventListener('load', function(){
             window.location.reload(true);
         }.bind(this) ,false);
