@@ -68,7 +68,6 @@ app.get('/', function(request, response){
 
 //pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
 app.get('/page/:pageNum', function(request, response){
-    console.log(request);
     var pageNum = request.param('pageNum');
     //console.log(pageNum); 페이지 넘버는 맞게 들어갔는데 왜 로딩부터 에러가 뜨는지 이해불가 ㅠ
     var pageData = {};
@@ -80,7 +79,6 @@ app.get('/page/:pageNum', function(request, response){
                 console.log('pageNum data select error');
                 throw err;
             }
-//            console.log(result);
             pageData.moments = result;
             response.json(pageData);
             connection.release();
@@ -111,11 +109,7 @@ app.get('/moment/:id', function(request, response){
             momentData.date = result[0].date;
             momentData.prevId = result[0].prevId;
             momentData.nextId = result[0].nextId;
-            /*get previous, next momentId*/
-//            momentData.previousMomentId;
-//            momentData.nextMomentId;
-            /*//get previous, next momentId*/
-            
+
             connection.release();
             
             //color table select
@@ -232,7 +226,6 @@ app.post('/upload-text', function(request, response){
                             textColor : textColors[0],
                         }
                         
-                        /*set prevId, nextId of moment*/
                         var latestId;
                         pool.getConnection(function(err, connection){
                             //가장 최근에 추가한 모멘트의 id, nextId select
@@ -243,8 +236,7 @@ app.post('/upload-text', function(request, response){
                                 }
                                 if(typeof result[0]!=="undefined"){
                                     latestId = result[0].id;
-                                    moment.prevId = latestId; //왜 prevId가 들어가지 않는거죠....?
-                                    moment.nextId = null;
+                                    moment.prevId = latestId;
                                     connection.release();
                                     
                                     pool.getConnection(function(err, connection){
@@ -257,49 +249,50 @@ app.post('/upload-text', function(request, response){
                                         });
                                     });
                                 }
-                                else{
+                                else{//맨처음 업로드할 경우.
+                                    moment.prevId = null;
                                     connection.release();
                                 }
-                            });
-                        });
-                        console.log(latestId);
-                        /*//set prevId, nextId of moment*/
-                        
-                        var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
-                        
-                        pool.getConnection(function(err, connection){
-                            connection.query(momentQuery, function(err, res){
-                                if(err) {
-                                    console.log('moment insert error');
-                                    //문제 : 텍스트에 ' 가 들어갈 경우 에러가 납니다.
-                                    throw err;
-                                }
-                                connection.release();
+                                moment.nextId = null;
+                                
+                                var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
                                 pool.getConnection(function(err, connection){
-                                    for(var i=0; i<moment.bgColor.length ; i++){
-                                        connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
-                                                                        [moment.id, i, moment.bgColor[i]]),function(err, res){
-                                            if(err) {
-                                                console.log('bgColor insert error');
-                                                throw err;
+                                    connection.query(momentQuery, function(err, res){
+                                        if(err) {
+                                            console.log('moment insert error');
+                                            //문제 : 텍스트에 ' 가 들어갈 경우 에러가 납니다.
+                                            throw err;
+                                        }
+                                        connection.release();
+                                        pool.getConnection(function(err, connection){
+                                            for(var i=0; i<moment.bgColor.length ; i++){
+                                                connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
+                                                                                [moment.id, i, moment.bgColor[i]]),function(err, res){
+                                                    if(err) {
+                                                        console.log('bgColor insert error');
+                                                        throw err;
+                                                    }
+                                                });  
                                             }
-                                        });  
-                                    }
-                                    connection.release();
-                                    console.log('>>>inserted');
-                        
-                                    var result = {
-                                        "id" : id,
-                                        "bgColor" : moment.bgColor[0],
-                                        "textColor" : moment.textColor,
-                                    };
-                        
-                                    response.send(result);
-                                    response.end();
+                                            connection.release();
+                                            console.log('>>>inserted');
+
+                                            var result = {
+                                                "id" : id,
+                                                "bgColor" : moment.bgColor[0],
+                                                "textColor" : moment.textColor,
+                                            };
+
+                                            response.send(result);
+                                            response.end();
+                                        });
+                                    });
+
                                 });
+
                             });
-                            
                         });
+                        
                     }
                 });
             });
