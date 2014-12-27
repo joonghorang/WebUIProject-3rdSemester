@@ -190,6 +190,7 @@ var manageFileInput = {
 
 var confirm = {
     "getElements" : function(){
+        this.itemFactory = document.getElementById("itemFactory");
         this.closeButton = document.getElementById("close-button-wrapper");
         this.uploadFile = document.getElementById("upload-file");
         this.uploadText = document.getElementById("upload-text");
@@ -197,13 +198,41 @@ var confirm = {
         this.fileInput = document.getElementById("upload-hidden");
         this.previewImg = document.getElementById('preview-image');
         this.textInput = document.getElementById("text-input");
+        this.loadingImageWrapper = document.getElementById("loading-image-wrapper");
+        this.loadingImageR = document.getElementById("loading-image-r");
+        this.loadingImageY = document.getElementById("loading-image-y");
+        this.loadingImageB = document.getElementById("loading-image-b");
         this.request = new XMLHttpRequest();
     },
+
+// 로딩버튼 추가중.
     "sendImage" : function(e){
-        display([this.confirmButton], 'hide');         
-        e.preventDefault();
-        //파일 없을때 에러처리
-        if(this.fileInput.files.item(0)===null){
+        display([this.confirmButton, this.itemFactory, this.closeButton], 'hide');
+        display([this.loadingImageWrapper], 'show');        
+
+        var lCanvas_W = window.innerWidth;
+        var lCanvas_H = window.innerHeight;
+        this.loadingImageR.width = lCanvas_W;
+        this.loadingImageR.height = lCanvas_H;
+        this.loadingImageY.width = lCanvas_W;
+        this.loadingImageY.height = lCanvas_H;
+        this.loadingImageB.width = lCanvas_W;
+        this.loadingImageB.height = lCanvas_H;        
+        var loadingRCtx = this.loadingImageR.getContext("2d");
+        var loadingYCtx = this.loadingImageY.getContext("2d");
+        var loadingBCtx = this.loadingImageB.getContext("2d");
+        var srcR = document.getElementById("origin-R");
+        var srcY = document.getElementById("origin-Y");
+        var srcB = document.getElementById("origin-B");
+        var loadingW = srcR.width;
+        var loadingH = srcR.height;;
+        loadingRCtx.drawImage(srcR, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
+        loadingYCtx.drawImage(srcY, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
+        loadingBCtx.drawImage(srcB, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
+        //loadingYCtx.drawImage(srcY, 0, 0, 40, 40);
+        //loadingBCtx.drawImage(srcB, 0, 0, 40, 40);
+        e.preventDefault();                             // 중복전송 방지.
+        if(this.fileInput.files.item(0)===null){        //파일 없을때 에러처리
             alert('no image');
         }
         else{
@@ -221,8 +250,8 @@ var confirm = {
     },
     "getColorForTextInput" : function(){
         //텍스트 입력창으로 전환 : 로딩이미지 넣기
-        display([this.uploadText],'show');
-        display([this.uploadFile], 'hide');
+        display([this.uploadText, this.itemFactory, this.closeButton],'show');
+        display([this.uploadFile, this.loadingImageWrapper], 'hide');
         
         var result = JSON.parse(this.request.responseText);
         var bgColor = result.bgColor;
@@ -245,7 +274,7 @@ var confirm = {
         if(avgBrightness < 130){
             this.textInput.style.color = "#FFFFFF";
         }
-        console.log(avgBrightness);
+        //console.log(avgBrightness);
         drawGradation(bgColor, textColor);  //......????? 아, 전역변수였던가요....? - 신영
                                             // 묑장하지? - 중일
     },
@@ -268,8 +297,12 @@ var submit = {
         this.mainContentWrapper = document.getElementById("wrapper");
         this.previewImgWrapper = document.getElementById("preview-image");
         this.previewImg = document.getElementById("input-image");
+        this.loadingImageWrapper = document.getElementById("loading-image-wrapper");
+        this.loadingImage = document.getElementById("loading-image");
     },
     "sendData" : function(e){
+// 로딩버튼 추가중.
+
         display([this.submitButton], 'hide');
         e.preventDefault();
         // 데이터를 전송 
