@@ -4,6 +4,10 @@ var formidable = require('formidable');
 var fs = require('fs');
 var ejs = require('ejs');
 var mysql = require('mysql');
+var queues = require('mysql-queues');
+
+
+
 var Impressive = require('impressive');
 
 //impressive(image).toRgb();
@@ -84,7 +88,6 @@ app.get('/', function(request, response){
 //pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
 app.get('/page/:pageNum', function(request, response){
     var pageNum = request.param('pageNum');
-    //console.log(pageNum); 페이지 넘버는 맞게 들어갔는데 왜 로딩부터 에러가 뜨는지 이해불가 ㅠ
     var pageData = {};
     connectionWaiting(function(){
     queriedCount++; // mysql queue                      
@@ -120,16 +123,39 @@ app.get('/moment/:id', function(request, response){
     console.log(targetId + '라우터로 이동하였습니다');
     var momentData = {};
 
-    //comment : 콜백 지옥에 오신것을 환영합니다. -덕성
-    //comment : 콜백 지옥에서 벗어나기 위한 해결책을 찾아보려 합니다 - 신영 
-    
     //moment table select
+//    var momentSelectQ ='SELECT * FROM moment WHERE id="'+targetId+'";';
+//    console.log(momentSelectQ);
+//    connectionHandler(momentSelectQ , 'moment inputData select error', function(){
+//        console.log('여기 들어오기는 하나.....??');
+//        momentData.textColor = result[0].textColor;
+//        momentData.text = result[0].text;
+//        momentData.file = result[0].file;
+//        momentData.date = result[0].date;
+//        momentData.prevId = result[0].prevId;
+//        momentData.nextId = result[0].nextId;
+//        momentData.bgColor = [];
+//        
+//        connection.release();
+//        
+//        var bgColorSelectQ = 'SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";';
+//        connectionHandler(bgColorSelectQ , 'moment bgColor select error', function(){
+//            console.log('여기는....??');
+//            for(var i =0; i<result.length; ++i){
+//                        momentData.bgColor[i] = result[i].bgColor;
+//                    }
+//                    console.log(momentData);
+//                    response.render("moment", momentData);
+//                    connection.release();
+//        });
+//    });
+    
     pool.getConnection(function(err, connection){
         connection.query('SELECT * FROM moment WHERE id="'+targetId+'";', 
                          function(err, result){
             if(err){
                 console.log('moment inputData select error');
-                throw err; //종종 여기에서 에러가 나는데........왜지요?
+                throw err;
             }
             momentData.textColor = result[0].textColor;
             momentData.text = result[0].text;
@@ -137,17 +163,18 @@ app.get('/moment/:id', function(request, response){
             momentData.date = result[0].date;
             momentData.prevId = result[0].prevId;
             momentData.nextId = result[0].nextId;
-
+            momentData.bgColor = [];
+            
             connection.release();
             
             //color table select
             pool.getConnection(function(err, connection){
-                connection.query('SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";', function(err, result){
+                var selectMomentQ = 'SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";';
+                connection.query(selectMomentQ, function(err, result){
                     if(err){
                         console.log('moment bgColor select error');
                         throw err;
                     }
-                    momentData.bgColor = [];
                     for(var i =0; i<result.length; ++i){
                         momentData.bgColor[i] = result[i].bgColor;
                     }
@@ -159,6 +186,25 @@ app.get('/moment/:id', function(request, response){
         });
     });
 });
+
+//
+////addEventListener같은거 만들기? 
+//function connectionHandler(queryString, errMessage, callback){
+//    pool.getConnection(function(err, connection){
+//        if(err){
+//            console.log('connection error');
+//            throw err;
+//        }
+//        connection.query(this.queryString ,function(err, result){
+//            if(err){
+//                console.log(this.errMessage);
+//                throw err;
+//            }
+//            this.callback();
+//        });
+//    });
+//};
+
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
 app.post('/upload-image', function(request, response){
@@ -246,6 +292,10 @@ app.post('/upload-text', function(request, response){
                         }
                         
                         var latestId;
+                        
+                        
+                        
+                        
                         pool.getConnection(function(err, connection){
                             //가장 최근에 추가한 모멘트의 id, nextId select
                             connection.query("SELECT id FROM moment ORDER BY date DESC LIMIT 1",function(err, result){
@@ -253,10 +303,15 @@ app.post('/upload-text', function(request, response){
                                     console.log('select latest moment error');
                                     throw err;
                                 }
+                                
                                 if(typeof result[0]!=="undefined"){
                                     latestId = result[0].id;
                                     moment.prevId = latestId;
                                     connection.release();
+                                    
+                                    
+                                    
+                                    
                                     
                                     pool.getConnection(function(err, connection){
                                         connection.query("UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'",function(err,result){
@@ -274,6 +329,11 @@ app.post('/upload-text', function(request, response){
                                 }
                                 moment.nextId = null;
                                 
+                                
+                                
+                                
+                                
+                                
                                 var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
                                 pool.getConnection(function(err, connection){
                                     connection.query(momentQuery, function(err, res){
@@ -283,6 +343,12 @@ app.post('/upload-text', function(request, response){
                                             throw err;
                                         }
                                         connection.release();
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                                         pool.getConnection(function(err, connection){
                                             for(var i=0; i<moment.bgColor.length ; i++){
                                                 connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
