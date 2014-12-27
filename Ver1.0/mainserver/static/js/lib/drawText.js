@@ -60,7 +60,7 @@ function drawTextOn(textCanvas, text, textColor){
 		                break;
 		            case 2 :
 		                fontSize = fontSizeArray[2];
-		                addTextY = addTextArray[1];
+		                addTextY = addTextArray[3];
 
 		                for(var i = 0; i < wordArray.length; i++){
 		                    if(wordArray[i].length > 6 && wordArray[i].length <= 12){
