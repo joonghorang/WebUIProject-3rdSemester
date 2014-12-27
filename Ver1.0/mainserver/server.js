@@ -70,8 +70,9 @@ app.get('/', function(request, response){
                 throw err;
             }
 //            console.log(result);
+            mainData.bodyColor = result[0].bgColor; // 메인페이지 배경색을 위해 가장 최근 모멘트의 색 추출
             mainData.moments = result;
-//            console.log(mainData);
+            console.log(mainData);
             response.render('main',mainData);
             connection.release();
             setTimeout(function(){ queriedCount--; }, 500); //임시방편

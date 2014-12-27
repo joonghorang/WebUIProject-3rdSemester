@@ -21,19 +21,6 @@ var setMainGridView = {
         this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
         this.scrollFlag = true;
     },
-    "bootColorSet" : function(){ //요것이 가장 최근것의 배경색만을 위해 첫페이지 데이터를 다 가져오는거라면 수정이 필요해보입니다아 -신영comment
-        var request = new XMLHttpRequest();
-        request.open("GET", "/page/" + 1, true); // DB 에 저장된 가장 첫페이지의 객체정보를 가져온다. 
-        request.send();
-        request.addEventListener('load', function(){
-            if(request.responteText !== null){
-                var result = JSON.parse(request.responseText);
-                var body = document.getElementById("body");
-                body.style.backgroundColor = result.moments[0].bgColor;
-                console.log("bdColorSet : " + result.moments[0].bgColor);
-            }
-        }, false);
-    },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
         if(window.scrollY > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
@@ -88,13 +75,12 @@ var setMainGridView = {
     "run" : function(){
         this.getElements();
         this.setLogicIndexes();
-        EventUtil.addHandler(window, 'DOMContentLoaded', this.bootColorSet.bind(this));
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
-        this.request.addEventListener('load', this.createMoments.bind(this), false);
+        EventUtil.addHandler(this.request, 'load', this.createMoments.bind(this));
     }
 };
 
-var setItemFactoryDisplay = {
+var itemFactoryDisplay = {
     "getElements" : function(){
         this.wrapper = document.getElementById("wrapper");
         this.itemFactory = document.getElementById("itemFactory");
@@ -306,7 +292,7 @@ uploadDrag.addEventListener("drop", function(e){
 uploadDrag.addEventListener("dragover", function(e){ e.preventDefault(); }, true);
 
 setMainGridView.run();
-setItemFactoryDisplay.run();
+itemFactoryDisplay.run();
 manageFileInput.run();
 confirm.run();
 submit.run();
