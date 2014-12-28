@@ -175,11 +175,22 @@ var manageFileInput = {
         this.previewImg.appendChild(imgElement);   
         display([this.previewImg], 'show');
         
-        /*인풋 이미지 크기에 테두리 맞추기*/
-        this.previewImg.style.transition = 'all 0.3s ease-in';
-        this.previewImg.style.width = imgElement.style.width;
-        this.previewImg.style.height = imgElement.style.height;
-        /*//인풋 이미지 크기에 테두리 맞추기*/
+        this.dynamicBorder();
+    },
+    "dynamicBorder" : function(){ //인풋 이미지 크기에 테두리 맞추기
+        var previewDiv = document.getElementById('preview-image-border');
+        var previewDivStyle = window.getComputedStyle(previewDiv);
+        var divWidth = previewDivStyle.width;
+        var divHeight = previewDivStyle.height;
+        var insertedImg = document.getElementById('input-image');
+        insertedImg.onload = function(){
+            previewDiv.style.width = insertedImg.clientWidth + 14 + 'px';
+            previewDiv.style.height = insertedImg.clientHeight + 14 + 'px';
+            
+//            var xRatio = parseInt(insertedImg.clientWidth)/parseInt(divWidth);
+//            var yRatio = parseInt(insertedImg.clientHeight)/parseInt(divHeight);
+//            previewDiv.style.transform = 'scale('+ (xRatio*1.05)+','+ (yRatio*1.05) +')';
+        }
     },
     "run" : function(){
         this.getElements();
@@ -373,14 +384,12 @@ var confirm = {
         if(avgBrightness < 130){
             this.textInput.style.color = "#FFFFFF";
         }
-        //console.log(avgBrightness);
-        drawGradation(bgColor, textColor);  //......????? 아, 전역변수였던가요....? - 신영
-                                            // 묑장하지? - 중일
+        drawGradation(bgColor, textColor);
     },
     "run" : function(){
         this.getElements();
         EventUtil.addHandler(this.confirmButton, 'click', this.sendImage.bind(this));
-        this.request.addEventListener('load', this.getColorForTextInput.bind(this));
+        EventUtil.addHandler(this.request, 'load', this.getColorForTextInput.bind(this));
     }
 };
 
@@ -423,11 +432,9 @@ var submit = {
     "run" : function(){
         this.getElements();
         EventUtil.addHandler(this.submitButton, 'click', this.sendData.bind(this));
+        EventUtil.addHandler(this.request, 'load', function(){window.location.reload(true)}.bind(this));
         this.textInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
         this.fileInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
-        this.request.addEventListener('load', function(){
-            window.location.reload(true);
-        }.bind(this) ,false);
     }
 };
 

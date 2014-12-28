@@ -85,7 +85,7 @@ app.get('/', function(request, response){
         connectionHandler(mainGridSelectQ, 'mainPage select error', function(connection, result){
             //메인데이터 : 가장 최근 모멘트의 색(배경), 1페이지 모멘트들 데이터
             if(result.length>0){
-                mainData.bodyColor = result[0].bgColor; //이거 맨처음에 데이터 없으면 뻑남......................
+                mainData.bodyColor = result[0].bgColor;
             }
             mainData.moments = result;
 
@@ -110,7 +110,7 @@ app.get('/page/:pageNum', function(request, response){
         connectionHandler(pageDataSelectQ, 'pageNum data select error', function(connection, result){
             if(result.length === 0){
                 console.log('Error~!! no Result about PageNum. 너무 큰 pageNum을 넣으셨네요 히읗');
-                response.send(400);
+                response.sendStatus(400);
             }else{
                 pageData.moments = result;
                 response.json(pageData);
