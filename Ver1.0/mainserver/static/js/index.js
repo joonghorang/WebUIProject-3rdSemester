@@ -53,7 +53,7 @@ var setMainGridView = {
             }
          }
     }, 
-    "createMoments" : function(){       //DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+    "createMoments" : function(){ //DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
         this.pageIndexNum++;
         this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
         console.log("size Expanded");
@@ -86,8 +86,7 @@ var setMainGridView = {
             /*오류 안나는 코드 : 벗 이렇게 하면 태그를 계속 추가하는데.......*/
             var head = document.head;
             var styleTag = document.createElement('style');
-            styleTag.type = 'text/css';
-            
+            styleTag.type = 'text/css';  
             if (styleTag.styleSheet){
                 styleTag.styleSheet.cssText = hoverText;
             } else {
@@ -95,7 +94,6 @@ var setMainGridView = {
             }
             head.appendChild(styleTag);
             ///*오류 안나는 코드*/
-            
             
             //사진이 보이는 칸(1,8,9,12번째)
             if(this.classIndexNum == 1 || this.classIndexNum == 8 || this.classIndexNum == 9 || this.classIndexNum == 12){
@@ -156,6 +154,7 @@ var itemFactoryDisplay = {
         //dynamic border 초기화
         this.previewImgBorder.style.width = '100%';
         this.previewImgBorder.style.height = '100%';
+        this.previewImgBorder.style.borderColor = '#202020';
 
         //text, file input 초기화
         this.textInput.value = "30자 이내로 입력하세요.";                    
@@ -179,7 +178,7 @@ var manageFileInput = {
         this.textInput = document.getElementById("text-input");
         this.previewImg = document.getElementById('preview-image');
         this.inputImg = document.getElementById('input-image');
-        this.previewDiv = document.getElementById('preview-image-border');
+        this.previewDivBorder = document.getElementById('preview-image-border');
     },
     "reset" : function(){
         this.fileInput.value = null;
@@ -197,8 +196,9 @@ var manageFileInput = {
         
         //dynamic border
         this.inputImg.onload = function(){
-            this.previewDiv.style.width = this.inputImg.clientWidth + 14 + 'px';
-            this.previewDiv.style.height = this.inputImg.clientHeight + 14 + 'px';
+            this.previewDivBorder.style.width = this.inputImg.clientWidth + 20 + 'px';
+            this.previewDivBorder.style.height = this.inputImg.clientHeight + 20 + 'px';
+            this.previewDivBorder.style.borderColor = '#ffffff';
         }.bind(this);
 
     },
@@ -273,6 +273,7 @@ var confirm = {
                 shadow.y = -(Math.sin(shadow.degree) * shadow.offset);
             } 
         }, 40);
+        
         function drawLoading(context, circleR, circleColor, shadow){
             context.fillStyle = circleColor;
             context.globalCompositeOperation = "copy";
@@ -287,9 +288,9 @@ var confirm = {
             context.fill();
             }
         }
-        e.preventDefault();                             // 중복전송 방지.
+        e.preventDefault(); // 중복전송 방지.
 
-        if(this.fileInput.files.item(0)===null){        //파일 없을때 에러처리
+        if(this.fileInput.files.item(0)===null){ //파일 없을때 에러처리
             alert('no image');
         }
         else{
@@ -302,10 +303,10 @@ var confirm = {
             this.request.send(formData);
         }
     },
-    "getColorForTextInput" : function(){
+    "switchToTextInput" : function(){
         //로딩버튼관련
         clearInterval(this.duringTime);
-        //텍스트 입력창으로 전환 : 로딩이미지 넣기
+        //텍스트 입력창으로 전환
         display([this.uploadText, this.itemFactory, this.closeButton],'show');
         display([this.uploadFile, this.loadingImageWrapper], 'hide');
         
@@ -335,7 +336,7 @@ var confirm = {
     "run" : function(){
         this.getElements();
         EventUtil.addHandler(this.confirmButton, 'click', this.sendImage.bind(this));
-        EventUtil.addHandler(this.request, 'load', this.getColorForTextInput.bind(this));
+        EventUtil.addHandler(this.request, 'load', this.switchToTextInput.bind(this));
     }
 };
 
@@ -370,8 +371,7 @@ var submit = {
         console.log("sendData Count : " + sendData);
         sendData++;
     },
-    // 중복 전송을 막는 코드. - 중일 
-    "preventDoubleSubmit" : function(e){
+    "preventDoubleSubmit" : function(e){ // 중복 전송을 막는 코드. - 중일 
         var submitEvent = EventUtil.getEvent(e);
         EventUtil.preventDefault(submitEvent);
     },
