@@ -25,7 +25,6 @@ var colorClassifier = function colorClassifier(impressive){
         return new colorClassifier(impressive);   
     }
     if(impressive instanceof Impressive){
-        console.log(impressive.dominantColors);
         this.bgColors = new Colors();
         this.textColors = new Colors();
         this.middleColors = new Colors();
@@ -86,7 +85,6 @@ var colorClassifier = function colorClassifier(impressive){
             }
             function isGoodForBg(bgColor){
                 var textColor = this.textColors[0];
-                console.log(textColor.v, bgColor.v);
                 if( vContrastRate(textColor.v, bgColor.v) > 0.28 ||
                    ((bgColor.v > 0.3 && textColor.v > 0.3) && 
                    ( bgColor.s > 0.2 && textColor.s > 0.2 &&
@@ -95,8 +93,6 @@ var colorClassifier = function colorClassifier(impressive){
             }
             function isGoodForText(textColor){
                 var bgColor = this.bgColors[0];
-                console.log(textColor.v, bgColor.v);
-                console.log(hContrastRate(bgColor.h, textColor.h));
                 if( vContrastRate(bgColor.v, textColor.v) > 0.28 || 
                    ((bgColor.v > 0.3 && textColor.v > 0.3) && 
                    ( bgColor.s > 0.2 && textColor.s > 0.2 &&       

@@ -30,3 +30,7 @@ header {
 main {
     position : relative;
 }
+
+.colors {
+    min-height: 100px;
+}
