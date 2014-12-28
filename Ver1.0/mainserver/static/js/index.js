@@ -66,12 +66,37 @@ var setMainGridView = {
             this.scrollFlag = false;
         }
         for(var i = 0; i < result.moments.length; i++){
+            //moment set 하나씩 추가(div in a tag)
             var addA = document.createElement('a');
             addA.setAttribute("href", "./moment/" + result.moments[i].id);
-
             var addDiv = document.createElement('div');
             addDiv.setAttribute("class", "moment-" + this.classIndexNum.toString());
 
+            //hover했을 때 색이 보이도록 cssText 추가
+            var momentIndex = this.moments.getElementsByTagName('a').length;
+            console.log('currently adding momentId : ' + momentIndex);
+            
+            var hoverText = "#moments a:nth-of-type("+(momentIndex+1)+") div:hover{background-color:"+result.moments[i].bgColor+";}";
+            
+            /*오류나는 코드 : 왜 오류나는지 알 수 없음....*/
+//            var styleTag = document.getElementsByTagName('STYLE');
+//            styleTag.appendChild(document.createTextNode(hoverText));
+            /*//오류나는 코드*/
+            
+            /*오류 안나는 코드 : 벗 이렇게 하면 태그를 계속 추가하는데.......*/
+            var head = document.head;
+            var styleTag = document.createElement('style');
+            styleTag.type = 'text/css';
+            
+            if (styleTag.styleSheet){
+                styleTag.styleSheet.cssText = hoverText;
+            } else {
+                styleTag.appendChild(document.createTextNode(hoverText));
+            }
+            head.appendChild(styleTag);
+            ///*오류 안나는 코드*/
+            
+            
             //사진이 보이는 칸(1,8,9,12번째)
             if(this.classIndexNum == 1 || this.classIndexNum == 8 || this.classIndexNum == 9 || this.classIndexNum == 12){
                 addDiv.style.backgroundImage = "url(" + result.moments[i].file + ")";
