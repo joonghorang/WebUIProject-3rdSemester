@@ -234,7 +234,6 @@ var confirm = {
         // 초기 설정
         var lCanvas_W = window.innerWidth;
         var lCanvas_H = window.innerHeight;
-<<<<<<< HEAD
         this.loadingImage.width = lCanvas_W;
         this.loadingImage.height = lCanvas_H; 
         var lCtx = this.loadingImage.getContext("2d");
@@ -242,35 +241,6 @@ var confirm = {
         // 원설정 
         var circleR = 10;
         var circleColor = "#FFFFFF";
-
-=======
-        this.loadingImageR.width = lCanvas_W;
-        this.loadingImageR.height = lCanvas_H;
-        this.loadingImageY.width = lCanvas_W;
-        this.loadingImageY.height = lCanvas_H;
-        this.loadingImageB.width = lCanvas_W;
-        this.loadingImageB.height = lCanvas_H;        
-        var loadingRCtx = this.loadingImageR.getContext("2d");
-        var loadingYCtx = this.loadingImageY.getContext("2d");
-        var loadingBCtx = this.loadingImageB.getContext("2d");
-        var srcR = document.getElementById("origin-R");
-        var srcY = document.getElementById("origin-Y");
-        var srcB = document.getElementById("origin-B");
-        var loadingW = srcR.width;
-        var loadingH = srcR.height;;
-        loadingRCtx.drawImage(srcR, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
-        loadingYCtx.drawImage(srcY, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
-        loadingBCtx.drawImage(srcB, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
-        //loadingYCtx.drawImage(srcY, 0, 0, 40, 40);
-        //loadingBCtx.drawImage(srcB, 0, 0, 40, 40);
-        e.preventDefault(); // 중복전송 방지.
-        
-        this.loadingImageR.height = lCanvas_H;   
-        var lCtx = this.loadingImageR.getContext("2d");
-        // 원 설정 
-        lCtx.fillStyle = "#FFFFFF";
-        var circleR = 5;
->>>>>>> FETCH_HEAD
         // 그림자 설정
         var shadow = {
             x : 4,
