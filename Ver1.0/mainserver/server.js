@@ -185,10 +185,7 @@ app.post('/upload-image', function(request, response){
                 console.log(textColors, bgColors);
                    
                 response.send({
-//                        "bgColor" : bgColors[0],
-//                        "textColor" : textColors[0] //input창 수정 테스트 중에 주석처리해둡니다. 
-                        "firstColor" : bgColors[0],
-                        "secondColor" : bgColors[1],
+                        "bgColor" : bgColors[0],
                         "textColor" : textColors[0]
                     });
                 response.end();
