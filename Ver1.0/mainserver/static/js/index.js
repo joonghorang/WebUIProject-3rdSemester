@@ -314,31 +314,8 @@ var confirm = {
         display([this.uploadFile, this.loadingImageWrapper], 'hide');
         
         var result = JSON.parse(this.request.responseText);
-        var bgColor = result.firstColor;
-        var textColor = result.secondColor;
-        
-        
-        /*테스트중입니다*/
-        var fontColor = result.textColor;
-        
-        this.bgCanvas.style.width = window.innerWidth + 'px';
-        this.bgCanvas.style.height = window.innerHeight + 'px';
-        
-        var imgFile = this.fileInput.files.item(0);
-        alert(imgFile);
-        var imgURL = URL.createObjectURL(imgFile);
-        this.itemFactory.style.backgroundImage = 'url('+imgURL+');';
-        this.itemFactory.style.backgroundSize = 'cover';
-        
-        var bgCanvasCtx = this.bgCanvas.getContext('2d');
-        bgCanvasCtx.globalCompositeOperation = 'overlay';
-
-        /*//테스트중입니다*/
-        
-        
-        //input창 수정 테스트 중에 주석처리해둡니다. 
-//        var bgColor = result.bgColor;
-//        var textColor = result.textColor;
+        var bgColor = result.bgColor;
+        var textColor = result.textColor;
 
         // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
         fR = parseInt(bgColor.slice(1,3), 16);
