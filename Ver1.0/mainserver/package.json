@@ -11,6 +11,7 @@
     "fs": "0.0.2",
     "impressive": "^2.0.0",
     "mysql": "^2.5.3",
+    "mysql-queues": "^1.0.0",
     "tinycolor2": "^1.1.1"
   },
   "devDependencies": {},

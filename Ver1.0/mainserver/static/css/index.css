@@ -52,6 +52,7 @@ body{
     cursor: pointer;
 }
 #close-button-wrapper{
+    min-width: 700px;
     z-index: 20;
     position: fixed;
     width: 100%;
@@ -104,15 +105,25 @@ body{
     margin: auto;
     left: 0;
     right: 0;
-    border: 2px solid #202020;
-    border-radius : 2px;
-    border-style: solid;
-    box-sizing: border-box;
     text-align: center;
     line-height: 60px;
 }
-#camera {
+#preview-image-border {
+    border: 2px solid #202020;
+    border-radius : 2px;
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: all 0.8s ease-in-out;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 
+#camera {
     position : relative;
     top : 30%;
     width: 200px;
@@ -124,8 +135,8 @@ body{
 }
 #input-image {
     z-index: 120;
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 90%;
+    max-height: 90%;
     position: absolute;
     margin: auto;
     left: 0;
@@ -230,15 +241,27 @@ input:focus{
     top: 105%;
     cursor: pointer;
 }
-/*#wrapper{
-    height : 7000px;
-}*/
-/*#moments-wrapper{
-    height : 7000px; 
-}*/
-/*#moments{
-    height : 7000px;
-}*/
-/*html{
-    height : 7000px;
-}*/
+#loading-image-wrapper {
+    width : 100%;
+    height : 100%;
+    position : absolute;
+    display : none;
+}
+#loading-image-r{
+    position : absolute;
+}
+#loading-image-y{
+    position : absolute;
+}
+#loading-image-b{
+    position : absolute;
+}
+#origin-R{
+    display : none;
+}
+#origin-Y{
+    display : none;
+}
+#origin-B{
+    display : none;
+}

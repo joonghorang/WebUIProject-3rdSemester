@@ -3,7 +3,7 @@ define(["testingTools", "impressive", "commonCanvas"], function(testingTools,imp
 //    var imp = impressive(image);
     var tD = document.getElementById("two-dimension");
     var hueHist = document.getElementById("hue-hist");
-
+    var SIZE = 300;
     
 //    var test2DHist = 
 //        [
@@ -15,7 +15,7 @@ define(["testingTools", "impressive", "commonCanvas"], function(testingTools,imp
     
     
 //    var hists = imp.svHists;
-//    var SIZE = 300;
+    
 ////    hueHist.appendChild(testingTools.drawHistogram(imp.hueHist, 900, 300));
 ////    hueHist.appendChild(testingTools.drawHistogram(imp.hueHist.smoothing(4).flatten(0.01), 900, 300));
 //    for(var i = 0; i<hists.length; ++i){
@@ -36,4 +36,7 @@ define(["testingTools", "impressive", "commonCanvas"], function(testingTools,imp
 //        console.log(hists[i].smoothing(3).flatten(0.3).pickPeaks());
 //    }
 //    
+//    var achroma = imp.achroma;
+//    tD.appendChild(testingTools.draw2dHistogram(achroma, SIZE,SIZE));
+
 });
