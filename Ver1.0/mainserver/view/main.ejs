@@ -16,6 +16,7 @@
                         <div id="preview-image">
                             <div id="preview-image-border"></div>
                             <img id="camera" src="image/camera.png"/>
+                            <img id="input-image"/>
                         </div>
                         <input type = "file" id = "upload-hidden" name = "image" accept = "image/*">
                         <div id="upload-drag"></div>
@@ -78,7 +79,7 @@
             var hoverText = "";
             for(var i=0; i<moments.length ; i++){
                 hoverText += "#moments a:nth-of-type("+(i+1)+") div:hover{background-color:"+moments[i].bgColor+";}";
-            }
+            } //추가되는 것들에 대해서 적용되지 않음.... 
             
             var head = document.head;
             var styleTag = document.createElement('style');
