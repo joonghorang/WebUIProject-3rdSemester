@@ -13,7 +13,7 @@ var setMainGridView = {
         this.closeButton = document.getElementById("close-button-wrapper");
         this.confirmButton = document.getElementById("confirm-button");
         this.previewImg = document.getElementById('preview-image');
-        this.request = new XMLHttpRequest();
+        this.request = new XMLHttpRequest();  
     },
     "setLogicIndexes" : function(){
         this.sendCheck = 0;     // 페이지 인덱스 넘과 비교하여 동일하면 다시 요청하지 않는다. 
@@ -53,13 +53,12 @@ var setMainGridView = {
             }
          }
     }, 
-    "createMoments" : function(){       //2.DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
+    "createMoments" : function(){       //DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
         this.pageIndexNum++;
         this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
         console.log("size Expanded");
             
         //추가 객체들을 요청. 
-
         var result = JSON.parse(this.request.responseText);
         var unitNumberInPage = 7;
         if(result.moments.length < unitNumberInPage){
@@ -73,10 +72,11 @@ var setMainGridView = {
             var addDiv = document.createElement('div');
             addDiv.setAttribute("class", "moment-" + this.classIndexNum.toString());
 
+            //사진이 보이는 칸(1,8,9,12번째)
             if(this.classIndexNum == 1 || this.classIndexNum == 8 || this.classIndexNum == 9 || this.classIndexNum == 12){
-                
                 addDiv.style.backgroundImage = "url(" + result.moments[i].file + ")";
             }
+            
             if(this.classIndexNum === 14){
                 this.classIndexNum = 1;
             } else {
@@ -101,50 +101,44 @@ var setMainGridView = {
 
 var itemFactoryDisplay = {
     "getElements" : function(){
-        this.wrapper = document.getElementById("wrapper");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
-        this.momentsWrapper = document.getElementById("moments-wrapper");
         this.uploadFile = document.getElementById("upload-file");
+        this.fileInput = document.getElementById('upload-hidden');
         this.uploadText = document.getElementById("upload-text");
+        this.textInput = document.getElementById('text-input');
         this.closeButton = document.getElementById("close-button-wrapper");
         this.confirmButton = document.getElementById("confirm-button");
         this.previewImg = document.getElementById('preview-image');
-        this.request = new XMLHttpRequest();
+        this.previewImgBorder = document.getElementById('preview-image-border');
+        this.inputImg = document.getElementById('input-image');
     },
     "openFactory" : function(){
         display([this.itemFactory,this.itemFactoryButton, this.confirmButton, this.uploadFile,this.closeButton, this.previewImg],'show');
         display([this.moments, this.itemFactoryButton, this.uploadText],'hide');
     },
     "closeFactory" : function(){
-        // 취소하므로 모든 상황을 업로드 이전 상태로 돌려준다. 
-        this.initializeItemfactory();
+        this.initializeItemfactory(); // 취소하므로 모든 상황을 업로드 이전 상태로 돌려준다. 
         display([this.moments, this.itemFactoryButton],'show');
         display([this.itemFactory, this.closeButton, this.previewImg],'hide');
     },
     "initializeItemfactory" : function(){
-        if(this.previewImg.childNodes[0] !== undefined){
-            this.previewImg.removeChild(this.previewImg.childNodes[0]);
-        }  
+        //preview image src 초기화
+        if(this.inputImg.src !== ""){ 
+            this.inputImg.src = "";
+        }
+        //dynamic border 초기화
+        this.previewImgBorder.style.width = '100%';
+        this.previewImgBorder.style.height = '100%';
+
+        //text, file input 초기화
+        this.textInput.value = "30자 이내로 입력하세요.";                    
+        this.fileInput.value = null;                                     
         
-        this.uploadText.children[0].value = "30자 이내로 입력하세요."; // 문구 초기화                    
-        
-        if(typeof(this.previewImg.children[0]) !== "undefined"){ // 프리뷰 이미지가 남아있다면, 
-            this.previewImg.children[0].setAttribute("id", "camera"); // 카메라 아이콘을 살려준다. 
-            this.previewImg.children[0].src = "image/camera.png";
-        } else {
-            var addPreview = document.createElement('img');
-            addPreview.setAttribute("id", "camera");
-            addPreview.src = "image/camera.png";
-            this.previewImg.appendChild(addPreview);
-        } 
-        
-        this.uploadFile.children[1].value = null; // 입력받은 인풋 파일 태그 초기화                                       
-        fR = 255; 
-        fG = 255; 
-        fB = 255;                                                                        
-        firstColor = "#FFFFFF"; // 그라데이션 색상 초기화     
+        // 그라데이션 색상 초기화  
+        fR = 255; fG = 255; fB = 255;                                                                        
+        firstColor = "#FFFFFF";    
         secondColor = "#FFFFFF"; 
     },
     "run" : function(){ // mainPage Initial code
@@ -159,38 +153,29 @@ var manageFileInput = {
         this.fileInput = document.getElementById("upload-hidden");
         this.textInput = document.getElementById("text-input");
         this.previewImg = document.getElementById('preview-image');
+        this.inputImg = document.getElementById('input-image');
+        this.previewDiv = document.getElementById('preview-image-border');
     },
     "reset" : function(){
         this.fileInput.value = null;
     },
     "onChange" : function(){
+        //img src 초기화
+        if(this.inputImg.src !== ""){ 
+            this.inputImg.src = "";
+        }
+        //inputImg preview
         var imgFile = this.fileInput.files.item(0);
         var imgURL = URL.createObjectURL(imgFile);
-        if(this.previewImg.childNodes[0] !== undefined){
-            this.previewImg.removeChild(this.previewImg.childNodes[0]);
-        }  
-        var imgElement = document.createElement('img');
-        imgElement.setAttribute('id', 'input-image');
-        imgElement.src=imgURL; 
-        this.previewImg.appendChild(imgElement);   
+        this.inputImg.src = imgURL;
         display([this.previewImg], 'show');
         
-        this.dynamicBorder();
-    },
-    "dynamicBorder" : function(){ //인풋 이미지 크기에 테두리 맞추기
-        var previewDiv = document.getElementById('preview-image-border');
-        var previewDivStyle = window.getComputedStyle(previewDiv);
-        var divWidth = previewDivStyle.width;
-        var divHeight = previewDivStyle.height;
-        var insertedImg = document.getElementById('input-image');
-        insertedImg.onload = function(){
-            previewDiv.style.width = insertedImg.clientWidth + 14 + 'px';
-            previewDiv.style.height = insertedImg.clientHeight + 14 + 'px';
-            
-//            var xRatio = parseInt(insertedImg.clientWidth)/parseInt(divWidth);
-//            var yRatio = parseInt(insertedImg.clientHeight)/parseInt(divHeight);
-//            previewDiv.style.transform = 'scale('+ (xRatio*1.05)+','+ (yRatio*1.05) +')';
-        }
+        //dynamic border
+        this.inputImg.onload = function(){
+            this.previewDiv.style.width = this.inputImg.clientWidth + 14 + 'px';
+            this.previewDiv.style.height = this.inputImg.clientHeight + 14 + 'px';
+        }.bind(this);
+
     },
     "run" : function(){
         this.getElements();
@@ -208,6 +193,7 @@ var confirm = {
         this.confirmButton = document.getElementById("confirm-button");
         this.fileInput = document.getElementById("upload-hidden");
         this.previewImg = document.getElementById('preview-image');
+        this.previewImgBorder = document.getElementById('preview-image-border');
         this.textInput = document.getElementById("text-input");
         this.loadingImageWrapper = document.getElementById("loading-image-wrapper");
         this.loadingImageR = document.getElementById("loading-image-r");
@@ -242,14 +228,12 @@ var confirm = {
         loadingBCtx.drawImage(srcB, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
         //loadingYCtx.drawImage(srcY, 0, 0, 40, 40);
         //loadingBCtx.drawImage(srcB, 0, 0, 40, 40);
-        e.preventDefault();                             // 중복전송 방지.
+        e.preventDefault(); // 중복전송 방지.
+        
         if(this.fileInput.files.item(0)===null){        //파일 없을때 에러처리
             alert('no image');
         }
         else{
-            if(this.previewImg.childNodes[0] !== undefined){
-                this.previewImg.removeChild(this.previewImg.childNodes[0]);
-            }  
             display([this.previewImg], 'hide');
             //AJAX로 데이터 보내기
             var formData = new FormData();
