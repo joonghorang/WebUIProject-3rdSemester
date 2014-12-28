@@ -1,3 +1,5 @@
+var MAX_WIDTH = window.innerWidth;
+var MAX_HEIGHT = window.innerHeight;
 
 var wrapper = document.getElementById("wrapper");
 var textInput = document.getElementById("text-input");
@@ -15,7 +17,6 @@ var offset = 4;
 
 window.onload = function(){
 	textInputEventManager();
-	// drawGradation(firstColor, secondColor);
 };
 
 function changeDecToHexColor(r, g, b){
