@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="./css/index.css">
         <title>a moment</title>
     </head>
-    <body id = "body" style="background-color:<%= bodyColor %>">
+    <body id = "body" <% if(typeof bodyColor !== "undefined"){ %> style="background-color: <%= bodyColor %>" <%} %> >
         <div id = "wrapper">
 <!--        업로드 버튼 클릭시 나타나는 아이템팩토리-->
             <div id="itemFactory">

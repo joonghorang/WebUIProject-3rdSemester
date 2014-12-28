@@ -6,8 +6,6 @@ var ejs = require('ejs');
 var mysql = require('mysql');
 var queues = require('mysql-queues');
 
-
-
 var Impressive = require('impressive');
 
 //impressive(image).toRgb();
@@ -46,7 +44,7 @@ var pool = mysql.createPool({
     password : '16d5ce5e',
     database : 'heroku_7081e1ce7ec12df',
     connectionLimit:20,
-    waitForConnections:true //이 속성이 커넥션이 없을 경우 커넥션이 반납될 때까지 기다리라는 속성이기는 한데.....잘 작동을 안하나?? -신영
+    waitForConnections:true 
 });
 
 // connection요청을 10개 밖에 못보내니까 임시로 써두는 queue.
@@ -61,27 +59,42 @@ function connectionWaiting(getConnection){
     getConnection();
 }
 
-app.get('/', function(request, response){
-    var mainData = {};
-
-    connectionWaiting(function(){
-    queriedCount++; // mysql queue
+function connectionHandler(queryString, errMessage, callback){
     pool.getConnection(function(err, connection){
-        connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
-                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC;', function(err, result){
-            if(err) {
-                console.log('mainPage select error');
+        if(err){
+            console.log('connection error');
+            throw err;
+        }
+        connection.query(queryString ,function(err, result){
+            if(err){
+                console.log(errMessage);
                 throw err;
             }
-//            console.log(result);
-            mainData.bodyColor = result[0].bgColor; // 메인페이지 배경색을 위해 가장 최근 모멘트의 색 추출
-            mainData.moments = result;
-            console.log(mainData);
-            response.render('main',mainData);
-            connection.release();
-            setTimeout(function(){ queriedCount--; }, 500); //임시방편
+            callback(connection, result);
         });
     });
+};
+
+app.get('/', function(request, response){
+    var mainData = {};
+    connectionWaiting(function(){
+    queriedCount++; // mysql queue
+        
+        var mainGridSelectQ = 'SELECT m.date, m.id, m.text, m.file, c.bgColor '+
+            'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC;';
+        connectionHandler(mainGridSelectQ, 'mainPage select error', function(connection, result){
+            //메인데이터 : 가장 최근 모멘트의 색(배경), 1페이지 모멘트들 데이터
+            if(result.length>0){
+                mainData.bodyColor = result[0].bgColor; //이거 맨처음에 데이터 없으면 뻑남......................
+            }
+            mainData.moments = result;
+
+            connection.release();
+            //메인페이지 렌더
+            response.render('main',mainData);
+            setTimeout(function(){ queriedCount--; }, 500); //임시방편
+        
+        });
     });
 });
 
@@ -90,29 +103,22 @@ app.get('/page/:pageNum', function(request, response){
     var pageNum = request.param('pageNum');
     var pageData = {};
     connectionWaiting(function(){
-    queriedCount++; // mysql queue                      
-    pool.getConnection(function(err, connection){
-        if(err){
-            console.log("Error~!! pageNum err입니당");
-            throw err;
-        }
-        connection.query('SELECT m.date, m.id, m.text, m.file, c.bgColor '+
-                         'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;', function(err, result){
-            if(err){
-                console.log('pageNum data select error');
-                throw err;
-            }else if(result.length === 0){
+    queriedCount++; // mysql queue
+        
+        var pageDataSelectQ = 'SELECT m.date, m.id, m.text, m.file, c.bgColor '+
+                             'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;';
+        connectionHandler(pageDataSelectQ, 'pageNum data select error', function(connection, result){
+            if(result.length === 0){
                 console.log('Error~!! no Result about PageNum. 너무 큰 pageNum을 넣으셨네요 히읗');
                 response.send(400);
             }else{
                 pageData.moments = result;
                 response.json(pageData);
-
             }
             connection.release();
             setTimeout(function(){ queriedCount--; }, 500); //임시방편
         });
-    });
+        
     });
 });
 
@@ -120,91 +126,35 @@ app.get('/page/:pageNum', function(request, response){
 /*/moment/picId 라우터로 이동*/
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
-    console.log(targetId + '라우터로 이동하였습니다');
+    console.log(targetId + ' 라우터로 이동하였습니다');
     var momentData = {};
 
     //moment table select
-//    var momentSelectQ ='SELECT * FROM moment WHERE id="'+targetId+'";';
-//    console.log(momentSelectQ);
-//    connectionHandler(momentSelectQ , 'moment inputData select error', function(){
-//        console.log('여기 들어오기는 하나.....??');
-//        momentData.textColor = result[0].textColor;
-//        momentData.text = result[0].text;
-//        momentData.file = result[0].file;
-//        momentData.date = result[0].date;
-//        momentData.prevId = result[0].prevId;
-//        momentData.nextId = result[0].nextId;
-//        momentData.bgColor = [];
-//        
-//        connection.release();
-//        
-//        var bgColorSelectQ = 'SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";';
-//        connectionHandler(bgColorSelectQ , 'moment bgColor select error', function(){
-//            console.log('여기는....??');
-//            for(var i =0; i<result.length; ++i){
-//                        momentData.bgColor[i] = result[i].bgColor;
-//                    }
-//                    console.log(momentData);
-//                    response.render("moment", momentData);
-//                    connection.release();
-//        });
-//    });
-    
-    pool.getConnection(function(err, connection){
-        connection.query('SELECT * FROM moment WHERE id="'+targetId+'";', 
-                         function(err, result){
-            if(err){
-                console.log('moment inputData select error');
-                throw err;
-            }
-            momentData.textColor = result[0].textColor;
-            momentData.text = result[0].text;
-            momentData.file = result[0].file;
-            momentData.date = result[0].date;
-            momentData.prevId = result[0].prevId;
-            momentData.nextId = result[0].nextId;
-            momentData.bgColor = [];
-            
-            connection.release();
-            
-            //color table select
-            pool.getConnection(function(err, connection){
-                var selectMomentQ = 'SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";';
-                connection.query(selectMomentQ, function(err, result){
-                    if(err){
-                        console.log('moment bgColor select error');
-                        throw err;
-                    }
-                    for(var i =0; i<result.length; ++i){
+    var momentSelectQ ='SELECT * FROM moment WHERE id="'+targetId+'";';
+    var errMessage = 'moment inputData select error';
+    connectionHandler(momentSelectQ , errMessage, function(connection, result){
+        momentData.textColor = result[0].textColor;
+        momentData.text = result[0].text;
+        momentData.file = result[0].file;
+        momentData.date = result[0].date;
+        momentData.prevId = result[0].prevId;
+        momentData.nextId = result[0].nextId;
+        momentData.bgColor = [];
+        
+        connection.release();
+        
+        var bgColorSelectQ = 'SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";';
+        connectionHandler(bgColorSelectQ , 'moment bgColor select error', function(connection, result){
+            for(var i =0; i< (result.length<5 ? result.length : 5) ; ++i){
                         momentData.bgColor[i] = result[i].bgColor;
-                    }
-                    connection.release();
-                    console.log(momentData);
-                    response.render("moment", momentData);
-                });
-            });
+            }
+            console.log(momentData);
+            response.render("moment", momentData);
+            connection.release();
         });
     });
+
 });
-
-//
-////addEventListener같은거 만들기? 
-//function connectionHandler(queryString, errMessage, callback){
-//    pool.getConnection(function(err, connection){
-//        if(err){
-//            console.log('connection error');
-//            throw err;
-//        }
-//        connection.query(this.queryString ,function(err, result){
-//            if(err){
-//                console.log(this.errMessage);
-//                throw err;
-//            }
-//            this.callback();
-//        });
-//    });
-//};
-
 
 //fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 colorData DB에 저장, 클라에 전달
 app.post('/upload-image', function(request, response){
@@ -239,8 +189,7 @@ app.post('/upload-image', function(request, response){
                 var bgColors = colorCf.bgColors.toHexString();
                 console.log(textColors, bgColors);
                    
-                response.send(
-                    {
+                response.send({
                         "bgColor" : bgColors[0],
                         "textColor" : textColors[0]
                     });
@@ -291,99 +240,62 @@ app.post('/upload-text', function(request, response){
                             textColor : textColors[0],
                         }
                         
-                        var latestId;
+                    var latestId;    
+                    var latestSelectQ = "SELECT id FROM moment ORDER BY date DESC LIMIT 1";//가장 최근에 추가한 모멘트의 id, nextId select
+                    connectionHandler(latestSelectQ, 'select latest moment error', function(connection,result){
+
+                        if(typeof result[0]!=="undefined"){
+                            latestId = result[0].id;
+                            moment.prevId = latestId;
+
+                            var setNextIdToLatestQ = "UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'";
+                            connectionHandler(setNextIdToLatestQ, 'update nextId error', function(connection, result){
+                                connection.release();
+                            });
+                        }
+                        else{//맨처음 업로드할 때
+                            moment.prevId = null;
+                        }
+
+                        connection.release();
+                        moment.nextId = null;
                         
-                        
-                        
-                        
-                        pool.getConnection(function(err, connection){
-                            //가장 최근에 추가한 모멘트의 id, nextId select
-                            connection.query("SELECT id FROM moment ORDER BY date DESC LIMIT 1",function(err, result){
-                                if(err){
-                                    console.log('select latest moment error');
-                                    throw err;
-                                }
-                                
-                                if(typeof result[0]!=="undefined"){
-                                    latestId = result[0].id;
-                                    moment.prevId = latestId;
-                                    connection.release();
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    pool.getConnection(function(err, connection){
-                                        connection.query("UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'",function(err,result){
-                                            if(err){
-                                                console.log('update nextId error');
-                                                throw err;
-                                            }
-                                            connection.release();
-                                        });
-                                    });
-                                }
-                                else{//맨처음 업로드할 경우.
-                                    moment.prevId = null;
-                                    connection.release();
-                                }
-                                moment.nextId = null;
-                                
-                                
-                                
-                                
-                                
-                                
-                                var momentQuery = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
-                                pool.getConnection(function(err, connection){
-                                    connection.query(momentQuery, function(err, res){
+                        var insertMomentQ = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text, textColor)", moment);
+                        connectionHandler(insertMomentQ, 'moment insert error', function(connection, result){
+                            connection.release();
+                            
+                            pool.getConnection(function(err, connection){
+                                for(var i=0; i<moment.bgColor.length ; i++){
+                                    connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
+                                                                    [moment.id, i, moment.bgColor[i]]),function(err, res){
                                         if(err) {
-                                            console.log('moment insert error');
-                                            //문제 : 텍스트에 ' 가 들어갈 경우 에러가 납니다.
+                                            console.log('bgColor insert error');
                                             throw err;
                                         }
-                                        connection.release();
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        pool.getConnection(function(err, connection){
-                                            for(var i=0; i<moment.bgColor.length ; i++){
-                                                connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
-                                                                                [moment.id, i, moment.bgColor[i]]),function(err, res){
-                                                    if(err) {
-                                                        console.log('bgColor insert error');
-                                                        throw err;
-                                                    }
-                                                });  
-                                            }
-                                            connection.release();
-                                            console.log('>>>inserted');
+                                    });  
+                                }
+                                connection.release();
+                                console.log('>>>inserted');
 
-                                            var result = {
-                                                "id" : id,
-                                                "bgColor" : moment.bgColor[0],
-                                                "textColor" : moment.textColor,
-                                            };
+                                var result = {
+                                    "id" : id,
+                                    "bgColor" : moment.bgColor[0],
+                                    "textColor" : moment.textColor,
+                                };
 
-                                            response.send(result);
-                                            response.end();
-                                        });
-                                    });
-
-                                });
-
+                                response.send(result);
+                                response.end();
                             });
                         });
                         
-                    }
+
+                    });
+                    }   
                 });
-            });
+            });            
         }
     });
-}); 
+});
 
 app.get('/colorLab', function(req, res){
     var imageData = fs.readFileSync(uploads + app.get("colorLabData")); 
