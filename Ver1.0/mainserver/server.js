@@ -296,9 +296,15 @@ app.get('/colorLab', function(req, res){
     var imageData = fs.readFileSync(uploads + app.get("colorLabData")); 
     var image = new Image();
     image.src = imageData;
+    console.log(Impressive);
+    var imp = Impressive(image);
     res.render('colorLab.html',{
         imageSrc : app.get("colorLabData"),
-        pickedColors : Impressive(image).toHexString()
+        pickedColors : imp.pickedColors.toHexString(),
+        highSatColors : imp.highSatColors.toHexString(),
+        chromaColors : imp.chromaColors.toHexString(),
+        achromaColors : imp.achromaColors.toHexString(),
+        dominantColors : imp.dominantColors.toHexString()
     });
 });
 
