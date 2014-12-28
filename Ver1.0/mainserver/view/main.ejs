@@ -9,8 +9,15 @@
     </head>
     <body id = "body" <% if(typeof bodyColor !== "undefined"){ %> style="background-color: <%= bodyColor %>" <%} %> >
         <div id = "wrapper">
-<!--        업로드 버튼 클릭시 나타나는 아이템팩토리-->
+
             <div id="itemFactory">
+                
+<!--                테스트중입니다-->
+                
+                <canvas id = "back-ground-canvas"></canvas>
+                
+<!--                //테스트중입니다-->
+                
                 <div id="upload-wrapper">
                     <div id="upload-file">
                         <div id="preview-image">
@@ -23,23 +30,20 @@
                         <div id = "confirm-button"></div>
                     </div>
 
+                    
                     <div id="upload-text">
                         <input id = "text-input" type = "text" value = "30자 이내로 입력하세요." style="ime-mode: disabled;">
-                        <canvas id = "back-ground-canvas"></canvas>
+<!--                        <canvas id = "back-ground-canvas"></canvas> 테스트에 실패하면 돌려두겠습니다-->
                         <img id = "submit-button" src = "image/png/confirm.png">
                     </div>
                 </div>
             </div>        
-    <!--        //업로드 버튼 클릭시 나타나는 아이템팩토리-->
+
             <div id="close-button-wrapper">
-<!--                <a href = "./">-->
-                    <img id="close-button" src="image/png/close.png"/>
-<!--                </a>-->
+                <img id="close-button" src="image/png/close.png"/>
             </div>
             <div id="itemFactory-button-wrapper">
-<!--                <a href = "./#itemFactory">-->
-                    <img id = "itemFactory-button" src = "./image/png/plus.png"/>
-<!--                </a>-->
+                <img id = "itemFactory-button" src = "./image/png/plus.png"/>
             </div>
             <div id ="loading-image-wrapper">
                 <canvas id = "loading-image"></canvas>\

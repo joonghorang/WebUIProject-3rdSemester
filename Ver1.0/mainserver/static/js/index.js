@@ -1,5 +1,5 @@
-var MAX_WIDTH = window.innerWidth;
-var MAX_HEIGHT = window.innerHeight;
+//var MAX_WIDTH = window.innerWidth;
+//var MAX_HEIGHT = window.innerHeight;
 
 var setMainGridView = {
     "getElements" : function(){
@@ -220,6 +220,9 @@ var confirm = {
         this.previewImg = document.getElementById('preview-image');
         this.previewImgBorder = document.getElementById('preview-image-border');
         this.textInput = document.getElementById("text-input");
+        
+        this.bgCanvas = document.getElementById('back-ground-canvas');
+        
         this.loadingImageWrapper = document.getElementById("loading-image-wrapper");
         this.loadingImage = document.getElementById("loading-image");
         this.duringTime = 0;
@@ -311,8 +314,31 @@ var confirm = {
         display([this.uploadFile, this.loadingImageWrapper], 'hide');
         
         var result = JSON.parse(this.request.responseText);
-        var bgColor = result.bgColor;
-        var textColor = result.textColor;
+        var bgColor = result.firstColor;
+        var textColor = result.secondColor;
+        
+        
+        /*테스트중입니다*/
+        var fontColor = result.textColor;
+        
+        this.bgCanvas.style.width = window.innerWidth + 'px';
+        this.bgCanvas.style.height = window.innerHeight + 'px';
+        
+        var imgFile = this.fileInput.files.item(0);
+        alert(imgFile);
+        var imgURL = URL.createObjectURL(imgFile);
+        this.itemFactory.style.backgroundImage = 'url('+imgURL+');';
+        this.itemFactory.style.backgroundSize = 'cover';
+        
+        var bgCanvasCtx = this.bgCanvas.getContext('2d');
+        bgCanvasCtx.globalCompositeOperation = 'overlay';
+
+        /*//테스트중입니다*/
+        
+        
+        //input창 수정 테스트 중에 주석처리해둡니다. 
+//        var bgColor = result.bgColor;
+//        var textColor = result.textColor;
 
         // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
         fR = parseInt(bgColor.slice(1,3), 16);
@@ -343,6 +369,7 @@ var confirm = {
 var submit = {
     "getElements" : function(){
         this.request = new XMLHttpRequest();
+        this.closeButton = document.getElementById("close-button-wrapper");
         this.submitButton = document.getElementById("submit-button");
         this.textInput = document.getElementById("text-input");
         this.fileInput = document.getElementById("upload-hidden");
@@ -358,7 +385,7 @@ var submit = {
     "sendData" : function(e){
 // 로딩버튼 추가중.
 
-        display([this.submitButton], 'hide');
+        display([this.closeButton, this.submitButton], 'hide');
         e.preventDefault();
         // 데이터를 전송 
         var formData = new FormData(); 
