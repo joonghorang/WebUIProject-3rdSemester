@@ -108,13 +108,8 @@ app.get('/page/:pageNum', function(request, response){
         var pageDataSelectQ = 'SELECT m.date, m.id, m.text, m.file, c.bgColor '+
                              'FROM moment m INNER JOIN bgColor c ON m.id=c.momentId AND c.num=0 ORDER BY date DESC LIMIT '+ 7*(pageNum-1) +',7;';
         connectionHandler(pageDataSelectQ, 'pageNum data select error', function(connection, result){
-            if(result.length === 0){
-                console.log('Error~!! no Result about PageNum. 너무 큰 pageNum을 넣으셨네요 히읗');
-                response.sendStatus(400);
-            }else{
-                pageData.moments = result;
-                response.json(pageData);
-            }
+            pageData.moments = result;
+            response.json(pageData);
             connection.release();
             setTimeout(function(){ queriedCount--; }, 500); //임시방편
         });
