@@ -273,7 +273,20 @@ var confirm = {
                 shadow.y = -(Math.sin(shadow.degree) * shadow.offset);
             } 
         }, 40);
-
+        function drawLoading(context, circleR, circleColor, shadow){
+            context.fillStyle = circleColor;
+            context.globalCompositeOperation = "copy";
+            drawShadowCircle(context, shadow.x, shadow.y, shadow.blur, circleR);
+            
+            function drawShadowCircle(context, shadowX, shadowY, shadowBlur, circleR){
+            context.shadowOffsetX = shadowX;
+            context.shadowOffsetY = shadowY;
+            context.shadowColor = "#202020";
+            context.shadowBlur = shadowBlur;
+            context.arc(lCanvas_W/2, lCanvas_H/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
+            context.fill();
+            }
+        }
         e.preventDefault();                             // 중복전송 방지.
 
         if(this.fileInput.files.item(0)===null){        //파일 없을때 에러처리
