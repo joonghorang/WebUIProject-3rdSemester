@@ -210,9 +210,7 @@ var confirm = {
         this.previewImg = document.getElementById('preview-image');
         this.textInput = document.getElementById("text-input");
         this.loadingImageWrapper = document.getElementById("loading-image-wrapper");
-        this.loadingImageR = document.getElementById("loading-image-r");
-        this.loadingImageY = document.getElementById("loading-image-y");
-        this.loadingImageB = document.getElementById("loading-image-b");
+        this.loadingImage = document.getElementById("loading-image");
         this.duringTime = 0;
         this.request = new XMLHttpRequest();
     },
@@ -225,119 +223,46 @@ var confirm = {
         // 초기 설정
         var lCanvas_W = window.innerWidth;
         var lCanvas_H = window.innerHeight;
-        this.loadingImageR.width = lCanvas_W;
-        this.loadingImageR.height = lCanvas_H;   
-        var lCtx = this.loadingImageR.getContext("2d");
-        // 원 설정 
-        lCtx.fillStyle = "#FFFFFF";
-        var circleR = 5;
+        this.loadingImage.width = lCanvas_W;
+        this.loadingImage.height = lCanvas_H; 
+        var lCtx = this.loadingImage.getContext("2d");
+
+        // 원설정 
+        var circleR = 10;
+        var circleColor = "#FFFFFF";
+
         // 그림자 설정
-        var shadowPosition = {
+        var shadow = {
             x : 4,
-            y : 4
+            y : 4,
+            degree : 0,
+            offset : 2,
+            blur : 10
         };
-        console.log(shadowPosition);
-        var shadowDegree = 0;
-        var shadowOffset = 2; 
-        var shadowBlur = 10;
+        var sizeFlag = true;
         this.duringTime = setInterval(function(){
-            drawShadowRect(lCtx, shadowPosition.x, shadowPosition.y, shadowBlur, circleR);
-            // 애니메이션을 위한 설정값 변경 
-            circleR = circleR + 5;
-            shadowPosition.x++;
-            shadowPosition.y++;
-            shadowBlur++;
-            shadowDegree = shadowDegree + 1;
-            shadowPositionSetter(shadowDegree, shadowOffset, shadowPosition);
-            // setTimeout(function(){
-            //     lCtx.clearRect(0, 0, lCanvas_W, lCanvas_H)
-            // }, 999);
-        }, 100);
-        function drawShadowRect(context, shadowX, shadowY, shadowBlur, circleR){
-            context.shadowOffsetX = shadowX;
-            context.shadowOffsetY = shadowY;
-            context.shadowColor = "#202020";
-            context.shadowBlur = shadowBlur;
-            context.arc(lCanvas_W/2, lCanvas_H/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
-            context.fill();
-            console.log(circleR);
-        }
-        function shadowPositionSetter(degree, offset, position){
-            position.x = Math.cos(degree) * offset;
-            position.y = -(Math.sin(degree) * offset);
-        }
-
-
-
-
-
-        // var loadingRCtx = this.loadingImageR.getContext("2d");
-        // loadingRCtx.fillStyle = "yellow";
-        // var rectW = 100;
-        // var rectH = 100;
-        // loadingRCtx.fillRect((lCanvas_W-rectW)/2, (lCanvas_H-rectH)/2, rectW, rectH);
-
-
-        // this.loadingImageY.width = lCanvas_W;
-        // this.loadingImageY.height = lCanvas_H;
-        // this.loadingImageB.width = lCanvas_W;
-        // this.loadingImageB.height = lCanvas_H;        
-
-        // var loadingYCtx = this.loadingImageY.getContext("2d");
-        // var loadingBCtx = this.loadingImageB.getContext("2d");
-        // var srcR = document.getElementById("origin-R");
-        // var srcY = document.getElementById("origin-Y");
-        // var srcB = document.getElementById("origin-B");
-        // var loadingW = srcR.width;
-        // var loadingH = srcR.height;;
-        // // Test
-        // var angle = 0;
-        // for(var i = 0; i < 100; i++){
-        //     angle = angle + 5;
-        //     if(i%2 === 0){
-        //         drawScreen(loadingRCtx, "yellow", angle);
-        //     } else {
-        //         drawScreen(loadingRCtx, "red", angle);
-        //     }
-
-        // }
-        // function drawScreen(context, color, angle){
-        //     console.log("in");
-        //     angle = angle + 5;
-        //     context.setTransform(1,0,0,1,0,0);
-        //     var angleInRadians = angle * Math.PI/180;
-        //     var x = 100;
-        //     var y = 100;
-        //     var width = 40;
-        //     var height = 40;
-        //     context.translate(x + width / 2, y + height / 2);
-        //     context.rotate(angleInRadians);
-        //     context.fillStyle = color;
-        //     context.fillRect( -width / 2, -height / 2, width, height);
-        //     setTimeout(context.clearRect(-width / 2 - 10, -height / 2 - 10, width + 100, height + 100), 1000);
-        //     context.beginPath();
-        // }
-
-        //loadingRCtx.drawImage(srcR, 0, 0, 40, 40);//MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
-        //loadingYCtx.drawImage(srcY, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
-        //loadingBCtx.drawImage(srcB, MAX_WIDTH/2 - loadingW/2, MAX_HEIGHT/2 - loadingH/2, loadingW, loadingH);
-        
-        // 이미지 회전관련
-        // loadingRCtx.fillStyle = "#aaaaaa";
-        // loadingRCtx.fillRect(200, 200, 100, 100);
-        // loadingRCtx.save();
-
-        // function rotateContext(context){
-        //     function degreeToRadian(angle){
-        //         return angle * Math.PI / 180;
-        //     }
-        //     var rotationAngle = degreeToRadian(90);
-        //     context.rotate(rotationAngle);      
-        // }
-        function a(){
-            console.log(1);
-        }
-        //this.duringTime = setInterval(drawScreen(loadingRCtx, "yellow", angle), 1);
+            drawLoading(lCtx, circleR, circleColor, shadow);        // this function in Utility.js
+            if(circleR < 20 && sizeFlag === true){ //&& sizeFlag == true){
+                // circleColor = commonCanvas.rgb2Hex(commonCanvas.hex2Rgb(circleColor).r - 4,
+                //                                    commonCanvas.hex2Rgb(circleColor).g - 4,
+                //                                    commonCanvas.hex2Rgb(circleColor).b - 4); 
+                // lCtx.fillStyle = circleColor;
+                // 애니메이션을 위한 설정값 변경
+                circleR = circleR + 1;
+                shadow.blur++;
+                shadow.degree = shadow.degree + 0.3;
+                shadowPositionSetter(shadow);                
+            } else if(circleR === 20){
+                shadow.blur--;
+                shadow.degree = shadow.degree + 0.3;
+                shadowPositionSetter(shadow); 
+                sizeFlag = false;
+            }
+            function shadowPositionSetter(shadow){
+                shadow.x = Math.cos(shadow.degree) * shadow.offset;
+                shadow.y = -(Math.sin(shadow.degree) * shadow.offset);
+            } 
+        }, 40);
 
         e.preventDefault();                             // 중복전송 방지.
         if(this.fileInput.files.item(0)===null){        //파일 없을때 에러처리
