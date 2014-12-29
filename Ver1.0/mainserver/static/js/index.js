@@ -1,12 +1,15 @@
-//var MAX_WIDTH = window.innerWidth;
-//var MAX_HEIGHT = window.innerHeight;
+// 전연벽수
+
+// 임시 그림자 저장소 
 var shadowR = 20;
 var shadowG = 20;
 var shadowB = 20;
 
 // 취소 버튼을 위한 전역변수. 
 var tempImgWarehouse;
+var tempFlag = false;
 
+// 전역객체 
 var setMainGridView = {
     "getElements" : function(){
         this.wrapper = document.getElementById("wrapper");
@@ -146,6 +149,9 @@ var itemFactoryDisplay = {
     "openFactory" : function(){
         display([this.itemFactory,this.itemFactoryButton, this.confirmButton, this.uploadFile,this.closeButton, this.previewImg],'show');
         display([this.moments, this.itemFactoryButton, this.uploadText],'hide');
+        // 이미지 전송과 관련된 전역변수 초기화
+        tempImgWarehouse = null;
+        tempFlag = false;
     },
     "closeFactory" : function(){
         this.initializeItemfactory(); // 취소하므로 모든 상황을 업로드 이전 상태로 돌려준다. 
@@ -190,6 +196,9 @@ var manageFileInput = {
     "reset" : function(){
         if(this.fileInput.files.item(0) !== null){                  // 이미지창을 띄워놓고 선택하지 않을 경우를 대비해 지금 있는 이미지를
             tempImgWarehouse = this.fileInput.files.item(0);        // 미리 전역으로 선언해둔 변수에 파일을 집어넣는다. 
+            tempSrcWarehouse = URL.createObjectURL(tempImgWarehouse);
+            console.log(tempImgWarehouse);
+            console.log(this.fileInput.files.item(0));
         }
         this.fileInput.value = null;
     },
@@ -225,6 +234,7 @@ var confirm = {
         this.uploadText = document.getElementById("upload-text");
         this.confirmButton = document.getElementById("confirm-button");
         this.fileInput = document.getElementById("upload-hidden");
+        this.inputImg = document.getElementById('input-image');
         this.previewImg = document.getElementById('preview-image');
         this.previewImgBorder = document.getElementById('preview-image-border');
         this.textInput = document.getElementById("text-input");
@@ -280,6 +290,8 @@ var confirm = {
 
         if(this.fileInput.files.item(0) === null){  // 파일 없을때 에러처리
             if(tempImgWarehouse !== null){          // 전역창고에 파일이 있다면 여기서 전송해준다. 
+                this.inputImg.src = tempSrcWarehouse;
+                tempFlag = true;
                 display([this.previewImg], 'hide');
                 //AJAX로 데이터 보내기
                 var formData = new FormData();
@@ -434,17 +446,22 @@ var submit = {
                 }
             }
         }, 40);
-
-        // 데이터를 전송 
+        
+        // 데이터를 전송
         var formData = new FormData(); 
         formData.append("textInput", this.textInput.value);
-        formData.append("image", this.fileInput.files[0]);
         
+        if(tempFlag){ // 이미지취소 버튼을 누른채 템프변수들을 이용하여 이미지를 전송한 경우.
+            formData.append("image", tempImgWarehouse);
+        } else {    // 정상작동의 경우. 
+            formData.append("textInput", this.textInput.value);      
+        }
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
         var sendData = 1;
         console.log("sendData Count : " + sendData);
         sendData++;
+
     },
     "drawShadowCircle" : function(context, shadowX, shadowY, shadowBlur, circleR){
             context.shadowOffsetX = shadowX;
