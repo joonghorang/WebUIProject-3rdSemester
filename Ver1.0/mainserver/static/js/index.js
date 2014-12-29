@@ -1,5 +1,11 @@
 //var MAX_WIDTH = window.innerWidth;
 //var MAX_HEIGHT = window.innerHeight;
+var shadowR = 20;
+var shadowG = 20;
+var shadowB = 20;
+
+// 취소 버튼을 위한 전역변수. 
+var tempImgWarehouse;
 
 var setMainGridView = {
     "getElements" : function(){
@@ -179,8 +185,12 @@ var manageFileInput = {
         this.previewImg = document.getElementById('preview-image');
         this.inputImg = document.getElementById('input-image');
         this.previewDivBorder = document.getElementById('preview-image-border');
+        this.tempImgWarehouse = "";
     },
     "reset" : function(){
+        if(this.fileInput.files.item(0) !== null){                  // 이미지창을 띄워놓고 선택하지 않을 경우를 대비해 지금 있는 이미지를
+            tempImgWarehouse = this.fileInput.files.item(0);        // 미리 전역으로 선언해둔 변수에 파일을 집어넣는다. 
+        }
         this.fileInput.value = null;
     },
     "onChange" : function(){
@@ -193,14 +203,12 @@ var manageFileInput = {
         var imgURL = URL.createObjectURL(imgFile);
         this.inputImg.src = imgURL;
         display([this.previewImg], 'show');
-        
         //dynamic border
         this.inputImg.onload = function(){
             this.previewDivBorder.style.width = this.inputImg.clientWidth + 20 + 'px';
             this.previewDivBorder.style.height = this.inputImg.clientHeight + 20 + 'px';
             this.previewDivBorder.style.borderColor = '#202020'; // 가끔 이미지가 작으면 뒤에 카메라가 보이는데 차라리 같은색으로 유지하는 것이 나을듯.
-        }.bind(this);
-
+        }.bind(this);            
     },
     "run" : function(){
         this.getElements();
@@ -249,7 +257,8 @@ var confirm = {
             y : 4,
             degree : 0,
             offset : 2,
-            blur : 10
+            blur : 10,
+            color : "#202020"
         };
         var sizeFlag = true;
 
@@ -269,8 +278,19 @@ var confirm = {
         
         e.preventDefault(); // 중복전송 방지.
 
-        if(this.fileInput.files.item(0)===null){ //파일 없을때 에러처리
-            alert('no image');
+        if(this.fileInput.files.item(0) === null){  // 파일 없을때 에러처리
+            if(tempImgWarehouse !== null){          // 전역창고에 파일이 있다면 여기서 전송해준다. 
+                display([this.previewImg], 'hide');
+                //AJAX로 데이터 보내기
+                var formData = new FormData();
+                formData.append("image", tempImgWarehouse);
+                //길을 열어라! - 보내라! - 받아와라!(data가 load되면 실행)
+                this.request.open("POST" , "/upload-image" , true);
+                this.request.send(formData);
+            } else {
+                console.log("b");
+                alert('no image');
+            }
         }
         else{
             display([this.previewImg], 'hide');
@@ -298,7 +318,9 @@ var confirm = {
         fR = parseInt(bgColor.slice(1,3), 16);
         fG = parseInt(bgColor.slice(3,5), 16);
         fB = parseInt(bgColor.slice(5,7), 16);
-        
+        shadowR = parseInt(textColor.slice(1,3), 16);
+        shadowG = parseInt(textColor.slice(3,5), 16);
+        shadowB = parseInt(textColor.slice(5,7), 16);
         firstColor = bgColor;
         if(textColor !== null){
             secondColor = textColor;
@@ -358,7 +380,8 @@ var submit = {
             y : 4,
             degree : 0,
             offset : 2,
-            blur : 10
+            blur : 10,
+            color : "#202020"
         };
         // 원크기 제어를 위한 플래그 설정
         var sizeFlag = true;
@@ -366,17 +389,16 @@ var submit = {
         var loadingR = 255;
         var loadingG = 255;
         var loadingB = 255;
+        var loadingShadowR = 20; // 받아오기 위해 전역으로 선언.
+        var loadingShadowG = 20;
+        var loadingShadowB = 20;
+
         // 계산할 때 증감할 offset Num 
         var colorOffset = 1; 
 
         this.duringTime = setInterval(function(){
             drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
             if(circleR < 20 && sizeFlag === true){ 
-                // loadingR = adjustColor(loadingR, fR, colorOffset);
-                // loadingG = adjustColor(loadingG, fG, colorOffset);
-                // loadingB = adjustColor(loadingB, fB, colorOffset);
-                // circleColor = commonCanvas.rgb2Hex(loadingR, loadingB, loadingG);
-                
                 circleR = circleR + 1;
                 shadow.blur++;
                 shadow.degree = shadow.degree + 0.3;   
@@ -385,14 +407,15 @@ var submit = {
                 //받아온 칼라값을 적용
                 //전역으로 선언해둔 fR, fG, fB를 재활용. 
                 //원이 커지고 난 후부터 애니메이션이 시작되도록 설정함.
-
+                loadingShadowR = adjustColor(loadingShadowR, shadowR, colorOffset);
+                loadingShadowG = adjustColor(loadingShadowG, shadowG, colorOffset);
+                loadingShadowB = adjustColor(loadingShadowB, shadowB, colorOffset);
                 loadingR = adjustColor(loadingR, fR, colorOffset);
                 loadingG = adjustColor(loadingG, fG, colorOffset);
                 loadingB = adjustColor(loadingB, fB, colorOffset);
-                console.log(fR, fG, fB);
-                console.log(loadingR, loadingG, loadingB);
 
                 circleColor = commonCanvas.rgb2Hex(loadingR, loadingG, loadingB);
+                shadow.color = commonCanvas.rgb2Hex(loadingShadowR, loadingShadowG, loadingShadowB);
                 shadow.blur--;
                 shadow.degree = shadow.degree + 0.3;
                 sizeFlag = false;
@@ -465,7 +488,7 @@ function drawLoading(context, circleR, circleColor, shadow, canvasW, canvasH, si
     shadowPositionSetter(shadow);     
     context.shadowOffsetX = shadow.x;
     context.shadowOffsetY = shadow.y;
-    context.shadowColor = "#444444";
+    context.shadowColor = shadow.color;
     context.shadowBlur = shadow.blur;
     context.arc(canvasW/2, canvasH/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
     context.fill();
