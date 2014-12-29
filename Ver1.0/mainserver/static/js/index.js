@@ -465,7 +465,7 @@ function drawLoading(context, circleR, circleColor, shadow, canvasW, canvasH, si
     shadowPositionSetter(shadow);     
     context.shadowOffsetX = shadow.x;
     context.shadowOffsetY = shadow.y;
-    context.shadowColor = "#202020";
+    context.shadowColor = "#444444";
     context.shadowBlur = shadow.blur;
     context.arc(canvasW/2, canvasH/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
     context.fill();

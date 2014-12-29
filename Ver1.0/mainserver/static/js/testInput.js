@@ -96,7 +96,7 @@ function textInputEventManager(){
 				textInput.style.fontSize = "30px";
 			}
 		} else {
-			EventUtil.preventDefault(event);
+			textInput.value = textInput.value.slice(0,29);
 		}	
 	};
 

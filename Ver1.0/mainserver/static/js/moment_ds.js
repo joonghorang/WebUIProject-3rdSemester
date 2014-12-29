@@ -17,8 +17,8 @@
         //set canvases w, h
         var bgCanvas = document.getElementById("bg-canvas");
         var textCanvas = document.getElementById("text-canvas");
-        var CANVAS_W = 500;
-        var CANVAS_H = 500;
+        var CANVAS_W = 900;//(window.innerWidth * 99.3/100)이러면 전체 창 크기가 바뀔때 마다 달라짐 캔버스 크기는 고정크기가 좋다. 500은 너무 작아서 픽셀이 깨지니 900으로 설정. ;   
+        var CANVAS_H = 900;//(window.innerWidth * 99.3/100);   
         bgCanvas.width = CANVAS_W;
         bgCanvas.height = CANVAS_H;
         textCanvas.width = CANVAS_W;
