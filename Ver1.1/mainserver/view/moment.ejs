@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="minimal-ui">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+        <link rel="stylesheet" type="text/css" href="../css/lib/reset.css">
+        <link rel="stylesheet" type="text/css" href="../css/moment.css">
+        <title><%= text %></title>
+    </head>
+    <body>
+        <div id="return-button-wrapper">
+            <a href="/">
+                <div id="return-button"></div>
+            </a>
+        </div>
+        
+        <% if(prevId !== "null")
+        {%>
+        <div id = "backward-button-wrapper">
+            <a href = "<%= prevId%>">
+                <div id = "backward-button"></div>
+            </a>
+        </div>
+        <%}%>
+        <div id="wrapper">
+            <canvas id="page-background"></canvas>
+            <div id="moment">
+                <canvas id = "bg-canvas"></canvas>
+                <canvas id = "text-canvas"></canvas>
+                <div id="moment-image-wrapper">
+                    <img class="moment-image" src = "../<%= file %>">
+                </div>
+            </div>
+        </div>
+        <% if(nextId !== "null")
+        {%>
+        <div id = "forward-button-wrapper">     
+            <a href="<%= nextId %>">
+                <div id = "forward-button"></div>
+            </a>
+        </div>
+        <%}%>
+        <script src="../js/lib/EventUtil.js"></script>
+        <script src="../js/lib/commonCanvas.js"></script>
+        <script src="../js/lib/drawText.js"></script>
+        <script src="../js/lib/caman.full.min.js"></script>
+        <script src="../js/utility.js"></script>   
+        <script>
+            var moment = document.getElementById('moment');
+            //이후에 스타일 수정(테두리만 남기기)
+            //moment.style.border = "4px solid <%= bgColor[0] %>"
+            var bgColor = "<%= bgColor[0] %>";
+            var textColor = "<%= textColor %>";
+            var text = "<%= text %>";
+            var file = "<%= file %>";
+        </script>
+        <script src="../js/moment_ds.js"></script>
+
+    </body>
+</html>
