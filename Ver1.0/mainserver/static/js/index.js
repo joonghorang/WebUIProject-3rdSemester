@@ -392,7 +392,7 @@ var submit = {
                 console.log(fR, fG, fB);
                 console.log(loadingR, loadingG, loadingB);
 
-                circleColor = commonCanvas.rgb2Hex(loadingR, loadingB, loadingG);
+                circleColor = commonCanvas.rgb2Hex(loadingR, loadingG, loadingB);
                 shadow.blur--;
                 shadow.degree = shadow.degree + 0.3;
                 sizeFlag = false;
