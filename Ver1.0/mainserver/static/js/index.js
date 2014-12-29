@@ -358,11 +358,72 @@ var submit = {
         this.previewImg = document.getElementById("input-image");
         this.loadingImageWrapper = document.getElementById("loading-image-wrapper");
         this.loadingImage = document.getElementById("loading-image");
+        this.uploadText = document.getElementById("upload-text");
     },
     "sendData" : function(e){
 // 로딩버튼 추가중.
+        display([this.closeButton, this.submitButton, this.uploadText], 'hide');
+        display([this.loadingImageWrapper], 'show');
+        // 초기 설정
+        var lCanvas_W = window.innerWidth;
+        var lCanvas_H = window.innerHeight;
+        this.loadingImage.width = lCanvas_W;
+        this.loadingImage.height = lCanvas_H; 
+        var lCtx = this.loadingImage.getContext("2d");
 
-        display([this.closeButton, this.submitButton], 'hide');
+        // 원설정 
+        var circleR = 10;
+        var circleColor = "#FFFFFF";
+        // 그림자 설정
+        var shadow = {
+            x : 4,
+            y : 4,
+            degree : 0,
+            offset : 2,
+            blur : 10
+        };
+        var sizeFlag = true;
+        this.duringTime = setInterval(function(){
+            drawLoading(lCtx, circleR, circleColor, shadow);        // this function in Utility.js
+            if(circleR < 20 && sizeFlag === true){ //&& sizeFlag == true){
+                // circleColor = commonCanvas.rgb2Hex(commonCanvas.hex2Rgb(circleColor).r - 4,
+                //                                    commonCanvas.hex2Rgb(circleColor).g - 4,
+                //                                    commonCanvas.hex2Rgb(circleColor).b - 4); 
+                // lCtx.fillStyle = circleColor;
+                // 애니메이션을 위한 설정값 변경
+                circleR = circleR + 1;
+                shadow.blur++;
+                shadow.degree = shadow.degree + 0.3;
+                shadowPositionSetter(shadow);                
+            } else if(circleR === 20){
+                shadow.blur--;
+                shadow.degree = shadow.degree + 0.3;
+                shadowPositionSetter(shadow); 
+                sizeFlag = false;
+            }
+            function shadowPositionSetter(shadow){
+                shadow.x = Math.cos(shadow.degree) * shadow.offset;
+                shadow.y = -(Math.sin(shadow.degree) * shadow.offset);
+            } 
+        }, 40);
+        
+        function drawLoading(context, circleR, circleColor, shadow){
+            context.fillStyle = circleColor;
+            context.globalCompositeOperation = "copy";
+            drawShadowCircle(context, shadow.x, shadow.y, shadow.blur, circleR);
+            
+            function drawShadowCircle(context, shadowX, shadowY, shadowBlur, circleR){
+            context.shadowOffsetX = shadowX;
+            context.shadowOffsetY = shadowY;
+            context.shadowColor = "#202020";
+            context.shadowBlur = shadowBlur;
+            context.arc(lCanvas_W/2, lCanvas_H/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
+            context.fill();
+            }
+        }
+
+
+
         e.preventDefault();
         // 데이터를 전송 
         var formData = new FormData(); 
@@ -375,6 +436,10 @@ var submit = {
         console.log("sendData Count : " + sendData);
         sendData++;
     },
+    "afterSubmit" : function(){
+        clearInterval(this.duringTime);
+        window.location.reload(true);
+    },
     "preventDoubleSubmit" : function(e){ // 중복 전송을 막는 코드. - 중일 
         var submitEvent = EventUtil.getEvent(e);
         EventUtil.preventDefault(submitEvent);
@@ -382,7 +447,7 @@ var submit = {
     "run" : function(){
         this.getElements();
         EventUtil.addHandler(this.submitButton, 'click', this.sendData.bind(this));
-        EventUtil.addHandler(this.request, 'load', function(){window.location.reload(true)}.bind(this));
+        EventUtil.addHandler(this.request, 'load', this.afterSubmit.bind(this));
         this.textInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
         this.fileInput.addEventListener('onsubmit', this.preventDoubleSubmit(this), false);
     }
