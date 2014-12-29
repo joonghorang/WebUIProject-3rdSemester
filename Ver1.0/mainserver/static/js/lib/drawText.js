@@ -4,7 +4,7 @@ function drawTextOn(textCanvas, text, textColor){
     var fontName = "nanumMyeongjo"//"NanumBarunGothicUltraLight";
     var fontColor = textColor;
     var fontSizeArray //= [120, 100, 72, 60, 48, 36, 24, 16, 8];
-                        = [24, 36, 48, 60, 72, 100, 120];
+                        = [60, 72, 100, 120, 160, 200];
     var textContext = textCanvas.getContext("2d");
     textWriter(text);
     function textWriter(originTextData){
@@ -32,7 +32,7 @@ function drawTextOn(textCanvas, text, textColor){
                 // Comment : 이런 부정확한 이름들은 어떤 역할을 하는 변수인지 확실히 써주자.
                 var addTextX = 0;
                 // Comment : 마찬가지. 이 array방식에는 문제가 있다.
-                var addTextArray =[24,40,52,64,84,120,124];
+                var addTextArray =[48,64,84,120,140,180,220];
                 // Comment : addTextX와 떨어져 있어야 했나?
                 var addTextY = addTextArray[2]; // 24가 기본값
                 var uuuuuu = fontSizeAndAddTextY(wordArray);
@@ -47,16 +47,12 @@ function drawTextOn(textCanvas, text, textColor){
                     // Comment : 원래는 case 1, 2, 이런식의 네미잉은 좋지 않으나 
                     //          이 경우에는 줄 수라는 의미가 담겨있으므로 괜찮다.
 		            case 1 :
-                        // Comment : indexing하는 숫자는 의미를 가지고 있지 않게된다.
-		                fontSize = fontSizeArray[5];
-                        // Comment : 이것을 우리는 괴랄하다고 한다.
-                        // Comment : 결국 결정되는 fontSize와 AddTextY는 하나다.
 		                if(wordArray[0].length <= 5){ // Comment : ....이게 뭐죠. 이러기 없기.
-		                    fontSize = fontSizeArray[6];
+		                    fontSize = fontSizeArray[5];
 		                } else if(wordArray[0].length > 5 && wordArray[0].length <= 15){
-		                    fontSize = fontSizeArray[4];
+		                    fontSize = fontSizeArray[3];
 		                } else if(wordArray[0].length > 15){
-		                    fontSize = fontSizeArray[0];
+		                    fontSize = 48;
 		                }
 		                break;
 		            case 2 :
@@ -66,7 +62,7 @@ function drawTextOn(textCanvas, text, textColor){
 		                for(var i = 0; i < wordArray.length; i++){
 		                    if(wordArray[i].length > 6 && wordArray[i].length <= 12){
 		                        fontSize = fontSizeArray[3];
-		                        addTextY = addTextArray[1]
+		                        addTextY = addTextArray[2]
 		                    } else if(wordArray[i].length > 12 && wordArray[i].length <= 20){
 		                        fontSize = fontSizeArray[1];
 		                        addTextY = addTextArray[0];
@@ -78,34 +74,34 @@ function drawTextOn(textCanvas, text, textColor){
 		                break;
 		            case 3 :
 		                fontSize = fontSizeArray[5];
-		                addTextY = addTextArray[5];
+		                addTextY = addTextArray[6];
 
 		                for(var i = 0; i < wordArray.length; i++){
 		                    if(wordArray[i].length > 7 && wordArray[i].length <= 11){
 		                        fontSize = fontSizeArray[3];
 		                        addTextY = addTextArray[3];
 		                    } else if(wordArray[i].length > 11){
-                                fontSize = fontSizeArray[1];
+                                fontSize = fontSizeArray[0];
                                 addTextY = addTextArray[1];
                             }
 		                }
 		                break;
 		            case 4 :
 		                fontSize = fontSizeArray[4];
-		                addTextY = addTextArray[1];
+		                addTextY = addTextArray[2];
                         for(var i = 0; i < wordArray.length; i++){
                             if(wordArray[i].length > 7 && wordArray[i].length <= 11){
                                 fontSize = fontSizeArray[3];
-                                addTextY = addTextArray[2];
+                                addTextY = addTextArray[3];
                             } else if(wordArray[i].length > 11){
                                 fontSize = fontSizeArray[1];
-                                addTextY = addTextArray[1];
+                                addTextY = addTextArray[0];
                             }
                         }
 		                break;
 		            case 5 : 
 		                fontSize = fontSizeArray[4];
-		                addTextY = addTextArray[4];
+		                addTextY = addTextArray[5];
                         for(var i = 0; i < wordArray.length; i++){
                             if(wordArray[i].length > 7 && wordArray[i].length <= 11){
                                 fontSize = fontSizeArray[3];
