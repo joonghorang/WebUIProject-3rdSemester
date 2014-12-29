@@ -198,7 +198,7 @@ var manageFileInput = {
         this.inputImg.onload = function(){
             this.previewDivBorder.style.width = this.inputImg.clientWidth + 20 + 'px';
             this.previewDivBorder.style.height = this.inputImg.clientHeight + 20 + 'px';
-            this.previewDivBorder.style.borderColor = '#ffffff';
+            this.previewDivBorder.style.borderColor = '#202020'; // 가끔 이미지가 작으면 뒤에 카메라가 보이는데 차라리 같은색으로 유지하는 것이 나을듯.
         }.bind(this);
 
     },
@@ -233,13 +233,13 @@ var confirm = {
     "sendImage" : function(e){
         display([this.confirmButton, this.itemFactory, this.closeButton], 'hide');
         display([this.loadingImageWrapper], 'show');        
-
-        // 초기 설정
+        // 로딩버튼 초기 설정
+        var loadingImage = document.getElementById("loading-image");
         var lCanvas_W = window.innerWidth;
         var lCanvas_H = window.innerHeight;
-        this.loadingImage.width = lCanvas_W;
-        this.loadingImage.height = lCanvas_H; 
-        var lCtx = this.loadingImage.getContext("2d");
+        loadingImage.width = lCanvas_W;
+        loadingImage.height = lCanvas_H; 
+        var lCtx = loadingImage.getContext("2d");
 
         // 원설정 
         var circleR = 10;
@@ -253,44 +253,21 @@ var confirm = {
             blur : 10
         };
         var sizeFlag = true;
+
         this.duringTime = setInterval(function(){
-            drawLoading(lCtx, circleR, circleColor, shadow);        // this function in Utility.js
-            if(circleR < 20 && sizeFlag === true){ //&& sizeFlag == true){
-                // circleColor = commonCanvas.rgb2Hex(commonCanvas.hex2Rgb(circleColor).r - 4,
-                //                                    commonCanvas.hex2Rgb(circleColor).g - 4,
-                //                                    commonCanvas.hex2Rgb(circleColor).b - 4); 
-                // lCtx.fillStyle = circleColor;
-                // 애니메이션을 위한 설정값 변경
+            drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
+            if(circleR < 20 && sizeFlag === true){ 
                 circleR = circleR + 1;
                 shadow.blur++;
-                shadow.degree = shadow.degree + 0.3;
-                shadowPositionSetter(shadow);                
+                shadow.degree = shadow.degree + 0.3;   
             } else if(circleR === 20){
                 shadow.blur--;
                 shadow.degree = shadow.degree + 0.3;
-                shadowPositionSetter(shadow); 
+ 
                 sizeFlag = false;
             }
-            function shadowPositionSetter(shadow){
-                shadow.x = Math.cos(shadow.degree) * shadow.offset;
-                shadow.y = -(Math.sin(shadow.degree) * shadow.offset);
-            } 
         }, 40);
         
-        function drawLoading(context, circleR, circleColor, shadow){
-            context.fillStyle = circleColor;
-            context.globalCompositeOperation = "copy";
-            drawShadowCircle(context, shadow.x, shadow.y, shadow.blur, circleR);
-            
-            function drawShadowCircle(context, shadowX, shadowY, shadowBlur, circleR){
-            context.shadowOffsetX = shadowX;
-            context.shadowOffsetY = shadowY;
-            context.shadowColor = "#202020";
-            context.shadowBlur = shadowBlur;
-            context.arc(lCanvas_W/2, lCanvas_H/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
-            context.fill();
-            }
-        }
         e.preventDefault(); // 중복전송 방지.
 
         if(this.fileInput.files.item(0)===null){ //파일 없을때 에러처리
@@ -306,6 +283,7 @@ var confirm = {
             this.request.send(formData);
         }
     },
+
     "switchToTextInput" : function(){
         //로딩버튼관련
         clearInterval(this.duringTime);
@@ -364,12 +342,13 @@ var submit = {
 // 로딩버튼 추가중.
         display([this.closeButton, this.submitButton, this.uploadText], 'hide');
         display([this.loadingImageWrapper], 'show');
-        // 초기 설정
+        // 로딩버튼 초기 설정
+        var loadingImage = document.getElementById("loading-image");
         var lCanvas_W = window.innerWidth;
         var lCanvas_H = window.innerHeight;
-        this.loadingImage.width = lCanvas_W;
-        this.loadingImage.height = lCanvas_H; 
-        var lCtx = this.loadingImage.getContext("2d");
+        loadingImage.width = lCanvas_W;
+        loadingImage.height = lCanvas_H; 
+        var lCtx = loadingImage.getContext("2d");
 
         // 원설정 
         var circleR = 10;
@@ -383,48 +362,21 @@ var submit = {
             blur : 10
         };
         var sizeFlag = true;
+
         this.duringTime = setInterval(function(){
-            drawLoading(lCtx, circleR, circleColor, shadow);        // this function in Utility.js
-            if(circleR < 20 && sizeFlag === true){ //&& sizeFlag == true){
-                // circleColor = commonCanvas.rgb2Hex(commonCanvas.hex2Rgb(circleColor).r - 4,
-                //                                    commonCanvas.hex2Rgb(circleColor).g - 4,
-                //                                    commonCanvas.hex2Rgb(circleColor).b - 4); 
-                // lCtx.fillStyle = circleColor;
-                // 애니메이션을 위한 설정값 변경
+            drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
+            if(circleR < 20 && sizeFlag === true){ 
                 circleR = circleR + 1;
                 shadow.blur++;
-                shadow.degree = shadow.degree + 0.3;
-                shadowPositionSetter(shadow);                
+                shadow.degree = shadow.degree + 0.3;   
             } else if(circleR === 20){
                 shadow.blur--;
                 shadow.degree = shadow.degree + 0.3;
-                shadowPositionSetter(shadow); 
+ 
                 sizeFlag = false;
             }
-            function shadowPositionSetter(shadow){
-                shadow.x = Math.cos(shadow.degree) * shadow.offset;
-                shadow.y = -(Math.sin(shadow.degree) * shadow.offset);
-            } 
         }, 40);
-        
-        function drawLoading(context, circleR, circleColor, shadow){
-            context.fillStyle = circleColor;
-            context.globalCompositeOperation = "copy";
-            drawShadowCircle(context, shadow.x, shadow.y, shadow.blur, circleR);
-            
-            function drawShadowCircle(context, shadowX, shadowY, shadowBlur, circleR){
-            context.shadowOffsetX = shadowX;
-            context.shadowOffsetY = shadowY;
-            context.shadowColor = "#202020";
-            context.shadowBlur = shadowBlur;
-            context.arc(lCanvas_W/2, lCanvas_H/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
-            context.fill();
-            }
-        }
 
-
-
-        e.preventDefault();
         // 데이터를 전송 
         var formData = new FormData(); 
         formData.append("textInput", this.textInput.value);
@@ -435,6 +387,14 @@ var submit = {
         var sendData = 1;
         console.log("sendData Count : " + sendData);
         sendData++;
+    },
+    "drawShadowCircle" : function(context, shadowX, shadowY, shadowBlur, circleR){
+            context.shadowOffsetX = shadowX;
+            context.shadowOffsetY = shadowY;
+            context.shadowColor = "#202020";
+            context.shadowBlur = shadowBlur;
+            context.arc(lCanvas_W/2, lCanvas_H/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
+            context.fill();
     },
     "afterSubmit" : function(){
         clearInterval(this.duringTime);
@@ -463,6 +423,24 @@ uploadDrag.addEventListener("drop", function(e){
 }, true);
 //브라우저는 이미지를 받으면 바로 이미지를 여는 기본기능이 있기 때문에, 기본기능을 막아둔다.
 uploadDrag.addEventListener("dragover", function(e){ e.preventDefault(); }, true);
+
+// LoadingImage관련 전역함수.
+function drawLoading(context, circleR, circleColor, shadow, canvasW, canvasH, sizeFlag){
+    context.fillStyle = circleColor;
+    context.globalCompositeOperation = "copy";
+    shadowPositionSetter(shadow);     
+    context.shadowOffsetX = shadow.x;
+    context.shadowOffsetY = shadow.y;
+    context.shadowColor = "#202020";
+    context.shadowBlur = shadow.blur;
+    context.arc(canvasW/2, canvasH/2, circleR, (Math.PI/180)*0, (Math.PI/180)*360, false); 
+    context.fill();
+
+    function shadowPositionSetter(shadow){
+        shadow.x = Math.cos(shadow.degree) * shadow.offset;
+        shadow.y = -(Math.sin(shadow.degree) * shadow.offset);
+    }
+}
 
 setMainGridView.run();
 itemFactoryDisplay.run();
