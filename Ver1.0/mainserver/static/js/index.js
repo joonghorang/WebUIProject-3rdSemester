@@ -228,19 +228,18 @@ var confirm = {
         this.duringTime = 0;
         this.request = new XMLHttpRequest();
     },
-
-// 로딩버튼 추가중.
     "sendImage" : function(e){
         display([this.confirmButton, this.itemFactory, this.closeButton], 'hide');
         display([this.loadingImageWrapper], 'show');        
         // 로딩버튼 초기 설정
         var loadingImage = document.getElementById("loading-image");
-        var lCanvas_W = window.innerWidth;
-        var lCanvas_H = window.innerHeight;
+        var lCanvas_W = window.innerWidth * 99.3/100;                    // innerWidth와 실제 창의 크기가 달라서 비율을 넣었다.
+        var lCanvas_H = window.innerHeight * 99.3/100;
         loadingImage.width = lCanvas_W;
         loadingImage.height = lCanvas_H; 
         var lCtx = loadingImage.getContext("2d");
-
+        // 컨텍스트 합성환경설정
+        lCtx.globalCompositeOperation = "copy";
         // 원설정 
         var circleR = 10;
         var circleColor = "#FFFFFF";
@@ -254,7 +253,7 @@ var confirm = {
         };
         var sizeFlag = true;
 
-        this.duringTime = setInterval(function(){
+        this.duringTime = setInterval(function(){                          // 따로 함수로 빼려고 했으나, setInterval 특성상 안쪽에 넣는 것이 좋을 것이라고 판단. (중일)
             drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
             if(circleR < 20 && sizeFlag === true){ 
                 circleR = circleR + 1;
@@ -339,20 +338,20 @@ var submit = {
         this.uploadText = document.getElementById("upload-text");
     },
     "sendData" : function(e){
-// 로딩버튼 추가중.
         display([this.closeButton, this.submitButton, this.uploadText], 'hide');
         display([this.loadingImageWrapper], 'show');
         // 로딩버튼 초기 설정
         var loadingImage = document.getElementById("loading-image");
-        var lCanvas_W = window.innerWidth;
-        var lCanvas_H = window.innerHeight;
+        var lCanvas_W = window.innerWidth * 99.3/100;
+        var lCanvas_H = window.innerHeight * 99.3/100;
         loadingImage.width = lCanvas_W;
         loadingImage.height = lCanvas_H; 
         var lCtx = loadingImage.getContext("2d");
-
+        // 컨텍스트 합성환경설ㅈ
+        lCtx.globalCompositeOperation = "copy";
         // 원설정 
         var circleR = 10;
-        var circleColor = "#FFFFFF";
+        var circleColor = "#FFFFFF"; 
         // 그림자 설정
         var shadow = {
             x : 4,
@@ -361,19 +360,55 @@ var submit = {
             offset : 2,
             blur : 10
         };
+        // 원크기 제어를 위한 플래그 설정
         var sizeFlag = true;
+        // 전역변수 fR, fG, fB와 연동하면서 계산할 RGB변수
+        var loadingR = 255;
+        var loadingG = 255;
+        var loadingB = 255;
+        // 계산할 때 증감할 offset Num 
+        var colorOffset = 1; 
 
         this.duringTime = setInterval(function(){
             drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
             if(circleR < 20 && sizeFlag === true){ 
+                // loadingR = adjustColor(loadingR, fR, colorOffset);
+                // loadingG = adjustColor(loadingG, fG, colorOffset);
+                // loadingB = adjustColor(loadingB, fB, colorOffset);
+                // circleColor = commonCanvas.rgb2Hex(loadingR, loadingB, loadingG);
+                
                 circleR = circleR + 1;
                 shadow.blur++;
                 shadow.degree = shadow.degree + 0.3;   
             } else if(circleR === 20){
+
+                //받아온 칼라값을 적용
+                //전역으로 선언해둔 fR, fG, fB를 재활용. 
+                //원이 커지고 난 후부터 애니메이션이 시작되도록 설정함.
+
+                loadingR = adjustColor(loadingR, fR, colorOffset);
+                loadingG = adjustColor(loadingG, fG, colorOffset);
+                loadingB = adjustColor(loadingB, fB, colorOffset);
+                console.log(fR, fG, fB);
+                console.log(loadingR, loadingG, loadingB);
+
+                circleColor = commonCanvas.rgb2Hex(loadingR, loadingB, loadingG);
                 shadow.blur--;
                 shadow.degree = shadow.degree + 0.3;
- 
                 sizeFlag = false;
+                // RGB비교후 offset만큼 맞춰주는 함수
+                function adjustColor(colorNum, sourceColor, offset){
+                    if(colorNum > sourceColor){
+                        colorNum = colorNum - offset;
+                    } else if(colorNum == sourceColor){
+                        colorNum = colorNum;
+                    } else if(colorNum < sourceColor){
+                        colorNum = colorNum + offset;
+                    } else {
+                        console.log("error in adjestColor function");
+                    }
+                    return colorNum;
+                }
             }
         }, 40);
 
@@ -427,7 +462,6 @@ uploadDrag.addEventListener("dragover", function(e){ e.preventDefault(); }, true
 // LoadingImage관련 전역함수.
 function drawLoading(context, circleR, circleColor, shadow, canvasW, canvasH, sizeFlag){
     context.fillStyle = circleColor;
-    context.globalCompositeOperation = "copy";
     shadowPositionSetter(shadow);     
     context.shadowOffsetX = shadow.x;
     context.shadowOffsetY = shadow.y;
