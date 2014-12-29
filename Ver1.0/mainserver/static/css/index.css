@@ -24,7 +24,7 @@ body{
 	line-height: 100%;
     font-family: "Nanum Gothic Ultra light", sans-serif;
     
-    opacity: 0.9;    
+    opacity: 1;    
     background-image:url( "../image/backGround.jpg");
     background-size: auto;
     background-attachment: fixed;
