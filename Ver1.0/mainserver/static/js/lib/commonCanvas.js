@@ -1,14 +1,13 @@
 (function(){
-var isNodeModule = typeof module !== "undefined" && module.exports;
+var isNodeModule = typeof module !== 'undefined' && module.exports;
 var isRequirejs = typeof define === 'function' && define.amd;
     
 var Canvas;
-var Image;
-
+    
 /* Constructor Setting */
 if(isNodeModule){
     var Canvas = require("canvas");   
-    var Image = Canvas.Image;
+    Image = Canvas.Image;
 }else {
     var Canvas = function(width, height){
         var canvas = document.createElement("canvas");
@@ -17,20 +16,23 @@ if(isNodeModule){
         return canvas;
     }
 }
-    
+
 var commonCanvas = {
     Canvas : Canvas,
-    
     isCanvas : isNodeModule ? function(imageObj){
-    return imageObj instanceof Canvas;} 
-    : function(imageObj){
+        return imageObj instanceof Canvas;} 
+        : function(imageObj){
         return imageObj.toString() === "[object HTMLCanvasElement]";
+    },
+    isImage : function(imageObj){
+        return imageObj instanceof Image || 
+            imageObj.toString() === "[object HTMLImageElement]";   
     },
     
     setPixel : function(target, x, y, r, g, b, a){
         color = typeof r === 'object' ? r : {r: r, g: g, b: b, a: a};
         if(target.constructor.name === "CanvasRenderingContext2D"){
-            target.fillStyle = 'rgba('+color.r+','+color.g+','+color.b+','+rolor.a+')';
+            target.fillStyle = 'rgba('+color.r+','+color.g+','+color.b+','+color.a+')';
             target.fillRect(x,y,1,1);
         } else if(target.constructor.name === "ImageData"){
             if(a < 1) parseInt( a * 255 );
@@ -43,17 +45,27 @@ var commonCanvas = {
             throw target;
         }
     },
+    setText : function (context, text, x, y, align, baseline, fontName, fontColor, fontSize){
+        var font = typeof fontName === 'object' ? fontName : { name : fontName, color : fontColor, size : fontSize};
+        context.fillStyle = font.color;
+        context.font = font.size + "px " + font.name; //fontWeight + " " + 
+        context.textAlign = align;
+        context.textBaseline = baseline;
+        // Comment : 이런 20은 다른사람이 수정을 하기 힘들게 한다. 
+        context.fillText(text, x, y);
+    },
     
     createCanvasByImage : function(img, pixelSaturate){
     //    console.log(__basename + " - function() createCanvasByImage start ...");
     //    console.log(img);
-
-        var pixelNum = img.width * img.height;
+        var imgWidth = typeof img.naturalWidth !== "undefined" ? img.naturalWidth : img.width;
+        var imgHeight = typeof img.naturalHeight !== "undefined" ? img.naturalHeight : img.height;
+        var pixelNum = imgWidth * imgHeight;
         pixelSaturate = typeof pixelSaturate !== "undefined" ? pixelSaturate : pixelNum;    
         var pixelNumRate = pixelNum / pixelSaturate;
 
-        var canvasWidth = img.width;
-        var canvasHeight = img.height;
+        var canvasWidth = imgWidth;
+        var canvasHeight = imgHeight;
 
         if(pixelNumRate > 1){
 //            console.log("resizing... pixcoelNumRate : " + pixelNumRate);
@@ -65,7 +77,7 @@ var commonCanvas = {
 
         var rCanvas = new Canvas(canvasWidth, canvasHeight);
         var rCanvasCtx = rCanvas.getContext("2d");
-        rCanvasCtx.drawImage(img, 0,0, img.width, img.height, 0,0, canvasWidth, canvasHeight);
+        rCanvasCtx.drawImage(img, 0,0, imgWidth, imgHeight, 0,0, canvasWidth, canvasHeight);
     //    console.log(__basename + " - function() createCanvasByImage end");
         return rCanvas;
     },

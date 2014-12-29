@@ -117,6 +117,7 @@ app.get('/page/:pageNum', function(request, response){
     });
 });
 
+
 /*/moment/picId 라우터로 이동*/
 app.get('/moment/:id', function(request, response){
     var targetId = request.param('id');
@@ -259,9 +260,7 @@ app.post('/upload-text', function(request, response){
                             connection.release();
                             
                             pool.getConnection(function(err, connection){
-                                
                                 for(var i=0; i<moment.bgColor.length ; i++){
-                                    
                                     connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgColor)", 
                                                                     [moment.id, i, moment.bgColor[i]]),function(err, res){
                                         if(err) {
@@ -276,7 +275,7 @@ app.post('/upload-text', function(request, response){
                                 var result = {
                                     "id" : id,
                                     "bgColor" : moment.bgColor[0],
-                                    "textColor" : moment.textColor
+                                    "textColor" : moment.textColor,
                                 };
 
                                 response.send(result);
@@ -311,6 +310,10 @@ app.get('/colorLab', function(req, res){
         textColors : colorCf.textColors.toHexString(),
         middleColors : colorCf.middleColors.toHexString()
     });
+});
+
+app.get('/junk', function(req, res){
+    res.render('junk.html');
 });
 
 //웹서버를 실행한다.
