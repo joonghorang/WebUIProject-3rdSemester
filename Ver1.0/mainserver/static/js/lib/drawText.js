@@ -116,11 +116,21 @@ function drawTextOn(textCanvas, text, textColor){
 		                fontSize = fontSizeArray[1];
 		                addTextY = addTextArray[0];
                         break;
-		            default : 
-                        // Comment : 좋지않은 indent.
-                        //          그리고 default의 의미를 알자.
+		            case 7: 
                         fontSize = fontSizeArray[0];
-                        addTextY = addTextArray[0];
+                        addTextY = addTextArray[2];
+                        break;
+                    case 8: 
+                        fontSize = fontSizeArray[0];
+                        addTextY = addTextArray[3];
+                        break;
+                    case 9: 
+                        fontSize = fontSizeArray[0];
+                        addTextY = addTextArray[3];
+                        break;
+                    default :
+                        fontSize = fontSizeArray[0];
+                        addTextY = addTextArray[4];
                         break;
                 }
                     return {fontSize: fontSize, addTextY: addTextY};
