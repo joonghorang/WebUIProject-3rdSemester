@@ -451,10 +451,10 @@ var submit = {
         var formData = new FormData(); 
         formData.append("textInput", this.textInput.value);
         
-        if(tempFlag){ // 이미지취소 버튼을 누른채 템프변수들을 이용하여 이미지를 전송한 경우.
+        if(tempFlag === true){ // 이미지취소 버튼을 누른채 템프변수들을 이용하여 이미지를 전송한 경우.
             formData.append("image", tempImgWarehouse);
         } else {    // 정상작동의 경우. 
-            formData.append("textInput", this.textInput.value);      
+            formData.append("image", this.fileInput.files[0]);    
         }
         this.request.open("POST", "/upload-text", true);
         this.request.send(formData);
