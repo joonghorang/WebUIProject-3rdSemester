@@ -278,11 +278,7 @@ app.post('/upload-text', function(request, response){
                             file : fileName,
                             text : fields.textInput,
                             bgColor : bgColors,
-<<<<<<< HEAD
-                            textColor : textColors,
-=======
                             textColor : textColors
->>>>>>> f275d8f0ba2cf6be47c9df98ec8dc3cf27049cca
                         }
                         
                         var latestId;    
