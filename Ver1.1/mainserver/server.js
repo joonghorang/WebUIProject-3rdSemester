@@ -228,7 +228,7 @@ app.post('/upload-text', function(request, response){
                             file : fileName,
                             text : fields.textInput,
                             bgColor : bgColors,
-                            textColor : textColors[0],
+                            textColor : textColors,
                         }
                         
                     var latestId;    
