@@ -1,0 +1,16 @@
+
+.moment {
+    position : relative;
+    height : 300px;
+    margin: 10px 0;
+}
+
+.moment-image {
+    height : 100%;
+}
+
+.moment-canvas {
+    width : 290px;
+    height : 290px;
+    margin: 5px 5px 5px 5px;
+}

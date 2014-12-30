@@ -19,6 +19,9 @@ header {
     height : 90px;
     margin: 5px;
 }
+#two-dimension > *{
+    margin: 5px;   
+}
 #shell {
     position : relative;
 }
