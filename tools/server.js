@@ -7,6 +7,12 @@ var formidable = require("formidable");
 var tinycolor = require("tinycolor2");
 var mytools = require("./controllers/mytools.js");
 var Impressive = require("impressive");
+var colorClassifier = require("./controllers/colorClassifier");
+
+var Imp1 = require('./controllers/impressiveVer1');
+var Imp2 = require('./controllers/impressiveVer2');
+var Imp3 = require('./controllers/impressiveVer3');
+var Imp4 = require('./controllers/impressiveVer4');
 
 var app = express();
 
@@ -70,6 +76,15 @@ app.post('/', function(req, res){
                             console.log("post / : upload image error!");
                         }else{
                             console.log("post / : upload image complete");
+                            var moments = JSON.parse(fs.readFileSync( __dirname + '/' + 'moments.json'));
+                            moments.image.push(filename);
+                            fs.writeFile(__dirname + '/' + 'moments.json', JSON.stringify(moments, null, 4), function(err){
+                                if(err){
+                                    console.log(err);
+                                }else{
+                                    
+                                }                                
+                            });
                         }
                     });    
 //                    var query = connection.query('insert into moments (filename) VALUES ("'+filename+'");', function(err, results){
@@ -88,15 +103,108 @@ app.get('/colorLab', function(req, res){
     var imageData = fs.readFileSync(uploads + app.get("targetName")); 
     var image = new Image();
     image.src = imageData;
-    console.log(Impressive);
     var imp = Impressive(image);
+    var colorCf = colorClassifier(imp);
     res.render('colorLab.html',{
         imageSrc : app.get("targetName"),
         pickedColors : imp.pickedColors.toHexString(),
         highSatColors : imp.highSatColors.toHexString(),
         chromaColors : imp.chromaColors.toHexString(),
         achromaColors : imp.achromaColors.toHexString(),
-        dominantColors : imp.dominantColors.toHexString()
+        dominantColors : imp.dominantColors.toHexString(),
+        bgColors : colorCf.bgColors.toHexString(),
+        textColors : colorCf.textColors.toHexString(),
+        middleColors : colorCf.middleColors.toHexString()
+    });
+});
+app.get('/colorLab1', function(req, res){
+    var imageData = fs.readFileSync(uploads + app.get("targetName")); 
+    var image = new Image();
+    image.src = imageData;
+    res.render('colorLab1.html',{
+        imageSrc : app.get("targetName"),
+        pickedColors : Imp1(image).toHexString()
+    });
+});
+app.get('/colorLab2', function(req, res){
+    var imageData = fs.readFileSync(uploads + app.get("targetName")); 
+    var image = new Image();
+    image.src = imageData;
+    res.render('colorLab1.html',{
+        imageSrc : app.get("targetName"),
+        pickedColors : Imp2(image).toHexString()
+    });
+});
+app.get('/colorLab3', function(req, res){
+    var imageData = fs.readFileSync(uploads + app.get("targetName")); 
+    var image = new Image();
+    image.src = imageData;
+    res.render('colorLab1.html',{
+        imageSrc : app.get("targetName"),
+        pickedColors : Imp3(image).toHexString()
+    });
+});
+app.get('/colorLab4', function(req, res){
+    var imageData = fs.readFileSync(uploads + app.get("targetName")); 
+    var image = new Image();
+    image.src = imageData;
+    var imp = Imp4(image);
+    var colorCf = colorClassifier(imp);
+    res.render('colorLab2.html',{
+        imageSrc : app.get("targetName"),
+        pickedColors : imp.pickedColors.toHexString(),
+        highSatColors : imp.highSatColors.toHexString(),
+        chromaColors : imp.chromaColors.toHexString(),
+        achromaColors : imp.achromaColors.toHexString(),
+        dominantColors : imp.dominantColors.toHexString(),
+    });
+});
+app.get('/colorLab/:id', function(req, res){
+    var id = req.params.id;
+    var filename = id + '.jpg';
+    var imageData = fs.readFileSync(uploads + filename); 
+    var image = new Image();
+    image.src = imageData;
+    var imp = Impressive(image);
+    var colorCf = colorClassifier(imp);
+    console.log(imp.pickedColors.toHexString());
+    res.render('colorLab.html',{
+        imageSrc : '/' + filename,
+        pickedColors : imp.pickedColors.toHexString(),
+        highSatColors : imp.highSatColors.toHexString(),
+        chromaColors : imp.chromaColors.toHexString(),
+        achromaColors : imp.achromaColors.toHexString(),
+        dominantColors : imp.dominantColors.toHexString(),
+        bgColors : colorCf.bgColors.toHexString(),
+        textColors : colorCf.textColors.toHexString(),
+        middleColors : colorCf.middleColors.toHexString()
+    });
+});
+app.get('/momentsTest', function(req, res){
+    var momentsData = JSON.parse(fs.readFileSync( __dirname + '/' + 'moments.json'));
+    var moments = [];
+    var bgColorsArr = [];
+    var textColorsArr = [];
+    for(var i =0; i< momentsData.image.length; ++i){
+        var filename = momentsData.image[i];
+        moments[i] = {
+            id : path.basename(filename, path.extname(filename)),
+            imageSrc : filename
+        }
+        var imageData = fs.readFileSync(uploads + filename); 
+        var image = new Image();
+        image.src = imageData;
+        var imp = Impressive(image);
+        var colorCf = colorClassifier(imp);
+        bgColorsArr.push(colorCf.bgColors.toHexString());
+        textColorsArr.push(colorCf.textColors.toHexString());
+    }
+    
+    res.render('momentsTest.html', {
+        moments : moments,
+        text : momentsData.text,
+        bgColorsArr : bgColorsArr,
+        textColorsArr : textColorsArr 
     });
 });
 app.get('/gradientLab', function(req, res){
@@ -105,7 +213,12 @@ app.get('/gradientLab', function(req, res){
     });
 });
 app.get('/imageAging', function(req, res){
-    res.render('imageAging.html');
+    var imageData = fs.readFileSync(uploads + app.get("targetName")); 
+    var image = new Image();
+    image.src = imageData;
+    res.render('imageAging.html', {
+        imageSrc : app.get("targetName")
+    });
 });
 app.get('/junk', function(req, res){
     res.render('junk.html');

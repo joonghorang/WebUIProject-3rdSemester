@@ -4,11 +4,15 @@
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="./css/lib/reset.css">
         <link rel="stylesheet" type="text/css" href="./css/imageAging.css">
+        <script data-main="/js/imageAging.js" src="/js/lib/require.js"></script>
         <title>Deok's Image Aging</title>
     </head>
     <body>
         <div id = "shell">
             <header>Image Aging</header>
+            <main id = 'fading'>
+                <img id = "image" src = "<%= imageSrc %>">
+            </main>
         </div>
     </body>
 </html>

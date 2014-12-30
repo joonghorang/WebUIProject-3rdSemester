@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="/css/lib/reset.css">
+        <link rel="stylesheet" type="text/css" href="/css/colorLab.css">
+        <script data-main="/js/colorLab.js" src="/js/lib/require.js"></script>
+        <title>Deok's Color Lab</title>
+    </head>
+    <body>
+        <header>Color Lab</header>
+        <div id = "shell">
+            <nav></nav>
+            <main>
+                <img id = "target-image" src = "<%= imageSrc %>">
+                <section class = 'colors'>
+                    <h3>All Colors</h3>
+                    <div id = "picked-colors">
+                        <% for(var i=0; i<pickedColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= pickedColors[i] %>;"></div>
+    <% } %>
+                    </div>
+                </section>
+                <section class = 'colors'>
+                    <h3>High Saturation Colors</h3>
+                    <div id = "high-Sat-colors">
+                        <% for(var i=0; i<highSatColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= highSatColors[i] %>;"></div>
+    <% } %>
+                    </div>
+                </section>
+                <section class = 'colors'>
+                    <h3>Chromatic Colors</h3>
+                    <div id = "chroma-colors">
+                    <% for(var i=0; i<chromaColors.length; i++) {%>
+   <div class = "color" style = "background-color :<%= chromaColors[i] %>;"></div>
+<% } %>
+                    </div>
+                </section>
+                <section class = 'colors'>
+                    <h3>Achromatic Colors</h3>
+                    <div id = "achroma-colors">
+                        <% for(var i=0; i<achromaColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= achromaColors[i] %>;"></div>
+    <% } %>
+                    </div>   
+                </section>    
+                <section class = 'colors'>
+                    <h3>Dominant Colors</h3>
+                    <div id = "dominant-colors">
+                        <% for(var i=0; i<dominantColors.length; i++) {%>
+       <div class = "color" style = "background-color :<%= dominantColors[i] %>;"></div>
+    <% } %>
+                    </div>   
+                </section> 
+                <div id = "hue-hist"></div>
+                <div id = "two-dimension">
+                    
+                </div>
+            </main>
+        </div>
+        <footer>NHNNEXT DeokSeong</footer>
+        <script>
+        </script>
+    </body>
+</html>

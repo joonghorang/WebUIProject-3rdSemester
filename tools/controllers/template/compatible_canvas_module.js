@@ -1,13 +1,13 @@
 (function(){
-var isNodeModule = typeof module !== undefined && module.exports;
-
+var isNodeModule = typeof module !== 'undefined' && module.exports;
+var isRequirejs = typeof define === 'function' && define.amd;
+    
 var Canvas;
-var Image;
-
+    
 /* Constructor Setting */
 if(isNodeModule){
     var Canvas = require("canvas");   
-    var Image = Canvas.Image;
+    Image = Canvas.Image;
 }else {
     var Canvas = function(width, height){
         var canvas = document.createElement("canvas");
@@ -17,11 +17,14 @@ if(isNodeModule){
     }
 }
 
+
     
     
 if(isNodeModule){
-    module.exports = // moduleName ;
+    module.exports = 
+}else if(isRequirejs){
+    define(function(){ return  });
 }else {
-    window.//moduleName = moduleName;
+    window.
 }
 })();

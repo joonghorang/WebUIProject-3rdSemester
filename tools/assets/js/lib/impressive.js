@@ -56,7 +56,8 @@ var CHROMA_RULE = {sL: 0.15, vL:0.2};
 var ACHROMA_RULE = {sR: 0.15, vR:0.2};
 var HIGH_SAT_RULE = {sL : 0.7, vL:0.9};
     
-var GREEN_HUE = 120
+var YELLOW_HUE = 60;    
+var GREEN_HUE = 120;
     
 /* Module */
 var Impressive = function Impressive(imageObj, mode){
@@ -102,15 +103,15 @@ var Impressive = function Impressive(imageObj, mode){
             console.log("\t  Hue rate after SV : ",Math.round(svHistsResult.rate * 10000)/100 + " %");
             //아아 깔끔하다.
             
-            if(Math.round(svHistsResult.rate*1000)/1000 >= HIGH_SAT_COLOR_EXISTENCE_BOUNDARY_RATE){
+            if(Math.round(svHistsResult.rate*1000)/1000 >= HIGH_SAT_COLOR_EXISTENCE_BOUNDARY_RATE && Math.round(svHistsResult.rate*1000)/1000 < 0.5){
                 var pickedSV = svHists[svHists.length-1].smoothing(3).flatten(0.3).pickPeaks();
                 //채도가 가장 높은거만 뽑는다.
                 pickedSV.sort(function(f,b){ return b.x - f.x }); 
                 console.log("\t\t rate in hue: ", Math.round(pickedSV[0].rate * 10000)/100 + " %");
                 var color = {
                     h : pickedHighSHues[hIdx]["x"],
-                    s : pickedSV[0]["x"],
-                    v : pickedSV[0]["y"],
+                    s : pickedSV[0]["x"]/(SATURATION_RANGE-1),
+                    v : pickedSV[0]["y"]/(VALUE_RANGE-1),
                     rate : svHistsResult.rate * pickedSV[0].rate
                 };
                 //존재 비율을 추가해서 color배열에 넣는다.
@@ -119,14 +120,13 @@ var Impressive = function Impressive(imageObj, mode){
                 this.highSatColors[this.highSatColors.length] = 
                 this.pickedColors[this.pickedColors.length] = color;
             }
-            
         }
         
         var classifyResult = classifyChroma(imageCanvas, CHROMA_RULE);
         
-        var chroma = classifyResult.chroma;
+        var chroma = this.chroma = classifyResult.chroma;
         var chromaRate = classifyResult.rate;
-        var achroma = classifyResult.achroma;
+        var achroma = this.achroma = classifyResult.achroma;
         
         var avgRgb = classifyResult.avgRgb;
         var avgHsv = tc(avgRgb).toHsv();
@@ -136,9 +136,8 @@ var Impressive = function Impressive(imageObj, mode){
         console.log(">  chroma rate : ", Math.round(chromaRate*10000)/100 + " %");
         console.log("> achroma rate : ", Math.round((1-chromaRate)*10000)/100 + " %");
 
-        var pickedHues = chroma.smoothing(4).flatten(0.01).pickPeaks();        
+        var pickedHues = this.pickedHues = chroma.smoothing(4).flatten(0.01).pickPeaks();        
         var pickedTones = achroma.smoothing(4).flatten(0.01).pickPeaks();
-        this.achroma = achroma;
         
         console.log(">-------------------------------------");
         console.log(">--");
@@ -161,8 +160,8 @@ var Impressive = function Impressive(imageObj, mode){
                 console.log("\t\t rate in hue: ", Math.round(pickedSV[svIdx].rate * 10000)/100 + " %");
                 var color = {
                     h : pickedHues[hIdx]["x"],
-                    s : pickedSV[svIdx]["x"],
-                    v : pickedSV[svIdx]["y"],
+                    s : pickedSV[svIdx]["x"]/(SATURATION_RANGE-1),
+                    v : pickedSV[svIdx]["y"]/(VALUE_RANGE-1),
                     rate : pickedHues[hIdx].rate * pickedSV[svIdx].rate
                 }
                 console.log(JSON.stringify(color, colorShowFormat, '|     '));
@@ -186,17 +185,25 @@ var Impressive = function Impressive(imageObj, mode){
                         break;
                     }
                     if(vContrastRate(tmpColors[tmpIdx].v, color.v) < 0.15){
-                        tmpColors[tmpIdx].s = tmpColors[tmpIdx].s > color. s ? tmpColors[tmpIdx].s: color.s;
+                        tmpColors[tmpIdx].s = tmpColors[tmpIdx].s > color.s ? tmpColors[tmpIdx].s : color.s;
+                        tmpColors[tmpIdx].v = tmpColors[tmpIdx].v > color.v ? tmpColors[tmpIdx].v : color.v;
                         tmpColors[tmpIdx].rate += color.rate;
                         tmpColors.pop();
                         break;
                     }else if(sContrastRate(tmpColors[tmpIdx].s, color.s) < 0.3){
-                        if(sContrastRate(tmpColors[tmpIdx].v, color.v) < 0.3){
+                        if(sContrastRate(tmpColors[tmpIdx].v, color.v) < 0.15){
 
                             tmpColors[tmpIdx].s = 
                             ((tmpColors[tmpIdx].s * tmpColors[tmpIdx].rate) + (color.s * color.rate))/ (tmpColors[tmpIdx].rate + color.rate);
+                            tmpColors[tmpIdx].v = tmpColors[tmpIdx].v > color.v ? tmpColors[tmpIdx].v : color.v;
+                            tmpColors[tmpIdx].rate += color.rate;
+                            tmpColors.pop();
+                            break;
+                        }else if(sContrastRate(tmpColors[tmpIdx].v, color.v) < 0.3){
+                            tmpColors[tmpIdx].s = 
+                            ((tmpColors[tmpIdx].s * tmpColors[tmpIdx].rate) + (color.s * color.rate))/ (tmpColors[tmpIdx].rate + color.rate);
                             tmpColors[tmpIdx].v = 
-                            ((tmpColors[tmpIdx].v * tmpColors[tmpIdx].rate) + (color.v * color.rate))/ (tmpColors[tmpIdx].rate + color.rate)
+                            ((tmpColors[tmpIdx].v * tmpColors[tmpIdx].rate) + (color.v * color.rate))/ (tmpColors[tmpIdx].rate + color.rate);               
                             tmpColors[tmpIdx].rate += color.rate;
                             tmpColors.pop();
                             break;
@@ -239,8 +246,8 @@ var Impressive = function Impressive(imageObj, mode){
             console.log("Achroma " +svIdx+ " rate : " +  Math.round(pickedTones[svIdx].rate* 10000)/100 + " %");
             var color = {
                 'h' : achromaAvgHsv.h,
-                's' : pickedTones[svIdx].x,
-                'v' : pickedTones[svIdx].y,
+                's' : pickedTones[svIdx].x/(SATURATION_RANGE-1),
+                'v' : pickedTones[svIdx].y/(VALUE_RANGE-1),
                 'rate' : (1-chromaRate) * pickedTones[svIdx].rate
             }
             console.log(JSON.stringify(color, colorShowFormat, '|     '));
@@ -287,10 +294,12 @@ function hContrastRate(h1, h2){
     
     function toColorCircle(hue){
         var colorCircle;
-        if(hue < GREEN_HUE){
-            colorCircle = hue * (3 / 2)   
+        if(hue < YELLOW_HUE){
+            colorCircle = hue * 2
+        }else if(hue < GREEN_HUE){
+            colorCircle = YELLOW_HUE * 2 + hue - YELLOW_HUE;
         }else{
-            colorCircle = HUE_RANGE/2 + (hue - GREEN_HUE) * 3 / 4;
+            colorCircle = GREEN_HUE * 3 / 2 + (hue - GREEN_HUE) * 3 / 4;
         }
         return colorCircle;
     }
@@ -298,12 +307,12 @@ function hContrastRate(h1, h2){
 Impressive.sContrastRate = sContrastRate;
 function sContrastRate(s1, s2){
     var diff = Math.abs(s1 - s2);
-    return diff / (SATURATION_RANGE - 1);
+    return diff;
 }
 Impressive.vContrastRate = vContrastRate;
 function vContrastRate(v1, v2){
     var diff = Math.abs(v1 - v2);
-    return diff / (VALUE_RANGE -1);
+    return diff;
 }
 
 function colorShowFormat(key, value){
@@ -340,7 +349,12 @@ function Colors(arr){
         num = typeof num !== "undefined" ? num : 100;
         var pickedRgb =[];
         for(var i = 0; i < this.length && i < num; ++i){
-            pickedRgb[i] = tc(this[i]).toRgb();
+            var tmpColor = {
+                h: this[i].h,
+                s: this[i].s,
+                v: this[i].v
+            }
+            pickedRgb[i] = tc(tmpColor).toRgb();
         }
         return pickedRgb;
     },
@@ -348,7 +362,12 @@ function Colors(arr){
         num = typeof num !== "undefined" ? num : 100;
         var pickedHexString =[];
         for(var i = 0; i < this.length && i < num; ++i){
-            pickedHexString[i] = tc(this[i]).toHexString();
+            var tmpColor = {
+                h: this[i].h,
+                s: this[i].s,
+                v: this[i].v
+            }
+            pickedHexString[i] = tc(tmpColor).toHexString();
         }
         return pickedHexString;
     }
@@ -889,11 +908,11 @@ histogram2D.prototype.loop = function(doing){
 histogram2D.prototype.cv = function(mat, saturate){
     saturate = typeof saturate !== "undefined" ? saturate : 1;
     var resultHist = new histogram2D('2d', this.width, this.height);
-    var matSize = Math.sqrt(mat.length);
+    var matSize = parseInt(Math.sqrt(mat.length));
     var cvRange = parseInt(matSize/2);
     for(var x =0; x< this.width; ++x){
         for(var y =0; y< this.height; ++y){
-            if( x > cvRange && y > cvRange && 
+            if( x >= cvRange && y >= cvRange && 
                x < this.width - cvRange && y < this.height - cvRange ){
                 for(var i = -cvRange; i <= cvRange; ++i ){
                     for(var j = -cvRange; j<= cvRange; ++j ){

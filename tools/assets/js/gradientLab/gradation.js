@@ -240,4 +240,12 @@ var gradation = {
         return rCanvas;
     }
 }
+if(isNodeModule){
+     module.exports = gradation;
+}else if(isRequirejs){
+        //export Requirejs module
+}else{
+    //export normal browser
+    window.gradation = gradation;
+}
 })();
