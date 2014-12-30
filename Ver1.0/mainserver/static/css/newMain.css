@@ -1,6 +1,7 @@
 /*@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(http://cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
 @import url(http://cdn.jsdelivr.net/font-nanum/1.0/nanumgothiccoding/nanumgothiccoding.css);*/
+
 @font-face{
     font-family : "nanumLight";
     font-style : normal;
@@ -8,29 +9,21 @@
     src: url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/v3/NanumGothic-Light.eot?#iefix) format('embedded-opentype'),
     url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/v3/NanumGothic-Light.woff) format('woff'),
     url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/v3/NanumGothic-Light.ttf) format('truetype');
-};
-/*@font-face {
+}
+@font-face {
     font-family: "NanumBarunGothicLight";
     font-style: normal;
-    src: url('../font/NanumGothicLight/NanumBarunGothicLight.eot');,
+    src: url('../font/NanumGothicLight/NanumBarunGothicLight.eot'),
     url('../font/NanumGothicLight/NanumBarunGothicLight.woff') format('woff'),
     url('../font/NanumGothicLight/NanumBarunGothicLight.ttf') format('truetype');
 }
 @font-face {
     font-family: "NanumBarunGothicUltraLight";
     font-style: normal;
-    src: url('../font/NanumGothicLight/NanumBarunGothicUltraLight.eot');,
+    src: url('../font/NanumGothicLight/NanumBarunGothicUltraLight.eot'),
     url('../font/NanumGothicLight/NanumBarunGothicUltraLight.woff') format('woff'),
     url('../font/NanumGothicLight//NanumBarunGothicUltraLight.ttf') format('truetype');
 }
-@font-face {
-    font-family: "momentHelvetica";
-    src: local("Helvetica Neue"),
-         local("HelveticaNeue-Regular"),
-         url(HelveticaNeue-Regular.ttf) format('truetype');
-    font-style: normal;
-    font-weight: light;
-}*/
 
 html{
 	height : 100%;
