@@ -42,7 +42,6 @@ function drawTextOn(textCanvas, text, textColor){
                 setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
                 
                 function fontSizeAndAddTextY(wordArray){
-                    var fontSize, addTextY;
                     switch(wordArray.length){
                     // Comment : 원래는 case 1, 2, 이런식의 네미잉은 좋지 않으나 
                     //          이 경우에는 줄 수라는 의미가 담겨있으므로 괜찮다.
@@ -100,13 +99,16 @@ function drawTextOn(textCanvas, text, textColor){
                         }
 		                break;
 		            case 5 : 
-		                fontSize = fontSizeArray[4];
-		                addTextY = addTextArray[5];
+		                fontSize = fontSizeArray[3];
+		                addTextY = addTextArray[3];
+                        console.log(fontSize);
+                        console.log(addTextY);
                         for(var i = 0; i < wordArray.length; i++){
                             if(wordArray[i].length > 7 && wordArray[i].length <= 11){
                                 fontSize = fontSizeArray[3];
                                 addTextY = addTextArray[4];
                             } else if(wordArray[i].length > 11){
+
                                 fontSize = fontSizeArray[1];
                                 addTextY = addTextArray[2];
                             }
@@ -139,7 +141,16 @@ function drawTextOn(textCanvas, text, textColor){
                 // Comment : textY, addTextY는 뭐가 다를까?
                 function setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY){
                     // Comment : 이건 예외지 버그가 아니다.
-                    checkOneWord(wordArray);                              // 연속해서 한 단어가 있는지 검사. 
+                    var checkFlag = false;
+                    wordArray = checkOneWord(wordArray);    // 연속해서 한 단어가 있는지 검사.
+                    if(checkFlag){
+                        // 다시 맡게 재배치한다. 
+                        uuuuuu = fontSizeAndAddTextY(wordArray);
+                        fontSize = uuuuuu.fontSize;
+                        addTextY = uuuuuu.addTextY;
+                        console.log(wordArray);
+                    }
+                     
                     // Comment : 알수없는 네이밍 변수.
                     var wordIdx = 0;
                     // Comment : 무엇의 tmp 인가.
@@ -186,9 +197,10 @@ function drawTextOn(textCanvas, text, textColor){
                     //          함수에대한 코멘트를 써주었다면 네이밍에도 고민이 줄고 이해도 올라갔을 것이다.
                     function checkOneWord(wordArray){
                         //console.log(wordArray);
+
                         for(var i = 0; i < wordArray.length - 1; i++){ // 연속적으로 1글자 짜리가 오면 뒷 단어를 복사하고 
                             if(parseInt(wordArray[i].length) + parseInt(wordArray[i+1].length) === 2){
-                                //console.log("checkOneWord In");
+                                checkFlag = true;
                                 wordArray[i] = wordArray[i] + " " + wordArray[i+1];
                                 wordArray[i + 1] = "";  
                                 //console.log(wordArray);
@@ -204,12 +216,20 @@ function drawTextOn(textCanvas, text, textColor){
                             }
                         }
 
+                        var delIndex = 0;
+                        var delIndexFlag = false;
+                        var delCount = 0;
                         for(var l = 0; l <= wordArray.length; l++){ // 가장 뒤로 밀린 공백을 삭제한다. 
-                            if(wordArray[l] === ""){
-                                wordArray.splice(l, 0);
-            
+                            if(wordArray[l] === "" && delIndexFlag === false){
+                                delIndex = l;
+                                delIndexFlag = true;
+                                delCount++;
+                            } else if(wordArray[l] === "" && delIndexFlag === true){
+                                delCount++;
                             }
                         }
+                        wordArray.splice(delIndex, delCount);
+                        return wordArray;
                     }
                 };
             }
