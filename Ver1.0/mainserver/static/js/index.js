@@ -238,7 +238,7 @@ var confirm = {
         this.previewImg = document.getElementById('preview-image');
         this.previewImgBorder = document.getElementById('preview-image-border');
         this.textInput = document.getElementById("text-input");
-        
+        this.submitButton = document.getElementById("submit-button");
         this.bgCanvas = document.getElementById('back-ground-canvas');
         
         this.loadingImageWrapper = document.getElementById("loading-image-wrapper");
@@ -344,6 +344,14 @@ var confirm = {
         var avgBrightness = (fR + fG + fB) / 3;
         if(avgBrightness < 130){
             this.textInput.style.color = "#FFFFFF";
+            this.closeButton.children[0].src = "image/png/close(invert).png";
+            this.submitButton.src = "image/png/confirm(invert).png";
+            // console.log(this.closeButton);
+             console.log(this.submitButton);
+        } else{
+            this.textInput.style.color = "#000000";
+            this.closeButton.children[0].src = "image/png/close.png";
+            this.submitButton.src = "image/png/confirm.png";           
         }
         drawGradation(bgColor, textColor);
     },

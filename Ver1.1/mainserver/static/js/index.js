@@ -44,6 +44,11 @@ var setMainGridView = {
         // 새로 길이를 늘려주고 엘레멘트들을 추가하는 코드로 변경. 
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
 
+
+
+
+
+        // 스크롤 유닛 관련 수정 해야할지도?
         if(window.scrollY > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
             if(this.sendCheck !== this.pageIndexNum){
                 this.sendCheck = this.pageIndexNum;
@@ -53,6 +58,11 @@ var setMainGridView = {
             }
          }
     }, 
+
+
+
+
+
     "createMoments" : function(){ //DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
         this.pageIndexNum++;
         this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
@@ -60,11 +70,23 @@ var setMainGridView = {
             
         //추가 객체들을 요청. 
         var result = JSON.parse(this.request.responseText);
+
+
+
+
+
+        //// 스크롤 유닛 관련 수정 해야할지도?
         var unitNumberInPage = 7;
         if(result.moments.length < unitNumberInPage){
             console.log("this is End Page " + "pageIndexNum = " + this.pageIndexNum + "\nelement in Lastpage : " + result.moments.length);
             this.scrollFlag = false;
         }
+
+
+
+
+
+
         for(var i = 0; i < result.moments.length; i++){
             //moment set 하나씩 추가(div in a tag)
             var addA = document.createElement('a');
@@ -310,6 +332,10 @@ var confirm = {
         var avgBrightness = (fR + fG + fB) / 3;
         if(avgBrightness < 130){
             this.textInput.style.color = "#FFFFFF";
+            // this.closeButton.src = "image/png/close(invert).png";
+            // this.confirmButton.src = "image/png/confirm(invert).png";
+            // console.log(closeButton);
+            // console.log(confirmButton);
         }
         drawGradation(bgColor, textColor);
     },

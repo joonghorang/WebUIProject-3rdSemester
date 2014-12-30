@@ -53,7 +53,7 @@ body{
 }
 #close-button-wrapper{
     min-width: 700px;
-    z-index: 20;
+    z-index: 500;
     position: fixed;
     width: 100%;
     height: 40px;
@@ -63,7 +63,7 @@ body{
 
 }
 #close-button{
-    z-index: 20;
+    z-index: 500;
     position: absolute;
     height: 100%;
     min-height: 100%;
@@ -230,7 +230,6 @@ input:focus{
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 20;
 }
 #submit-button {
     z-index : 22;
@@ -247,23 +246,5 @@ input:focus{
     width : 100%;
     height : 100%;
     position : absolute;
-    display : none;
-}
-#loading-image-r{
-    position : absolute;
-}
-#loading-image-y{
-    position : absolute;
-}
-#loading-image-b{
-    position : absolute;
-}
-#origin-R{
-    display : none;
-}
-#origin-Y{
-    display : none;
-}
-#origin-B{
     display : none;
 }
