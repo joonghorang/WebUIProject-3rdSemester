@@ -33,8 +33,6 @@ var setMainGridView = {
     },
     "setShadow" : function(){
         this.shadowColor = "#202020";
-        this.startDegree = 270/180*Math.PI;
-        this.addDegree = 0.01;
         this.addLength = 0.01;
         this.shadowLength = 10;
         this.shadowMaxLength = 30;
@@ -74,12 +72,12 @@ var setMainGridView = {
                 console.log("pageNum now : " + this.pageIndexNum);    
             }
          } else if(window.scrollY > 0){ // 그림자를 휠 동작에 맞춰서 바꿔준다.
-            var degree = this.startDegree + this.addDegree;
+            var degree = scrollY/10000; // 직접 각도에 scrollY를 삽입하는 방법으로 해결.
 
             var posX = Math.cos(degree) * this.shadowLength;
             var posY = Math.sin(degree) * this.shadowLength;
             this.itemFactoryButtonWrapper.style.boxShadow = posX.toString() + "px " + posY.toString() + "px " +  this.shadowBlur + "px " + this.shadowColor;
-            this.startDegree = degree + this.addDegree;
+
             if(this.shadowLength > this.shadowMaxLength){
                 this.shadowLengthFlag = false;
             } else if(this.shadowLength < this.shadowMinLength){

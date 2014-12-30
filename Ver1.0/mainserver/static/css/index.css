@@ -39,7 +39,7 @@ body{
     padding-top: 30px;
     background-color : #404040;
     opacity : 0.7;
-    box-shadow : 0px 10px 15px #202020;
+    box-shadow : 7px 1px 15px #202020; /*초기scrollY의 값과 가장 유사하게 바꿈*/
 }
 
 #itemFactory-button {
