@@ -94,65 +94,79 @@ app.get('/getmoments', function(request, response){
 
     var index = request.query.index; //현재 모멘트 개수
     var num = request.query.num; //요청받은 데이터 개수
+    
+    console.log('>>>>>>>'+index, num);
+    
+    var flag = false;
+    
     var momentsData = {};
     
     connectionWaiting(function(){
         queriedCount++;
         var getIdTextQ = 'SELECT id, text FROM moment LIMIT ' + index + ',' + num + ';'; //index부터 num개를 가져온다.
         connectionHandler(getIdTextQ, 'get (id, text) error', function(connection, result){
+            
+            console.log('getIdText>>>>>'+result);
+            
             momentsData.moment = result;
+            console.log(momentsData.moment);
             connection.release();
             
+            var currentMoment;
             var targetId;
-            
-            pool.getConnection(function(err, connection){
-            
-                var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
-                for(var i=0; i<momentsData.moment.length ;i++){
+            var bgcolorResult = [];
+            var textcolorResult = [];
+            for(var i=0; i<momentsData.moment.length ; i++){
+                currentMoment = momentsData.moment[i];
+                targetId = currentMoment.id;
+                pool.getConnection(function(err, connection){
+                    var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
                     connection.query(getBgcolorsQ, function(err, result){
                         if(err){
                             console.log('getBgcolorQ error');
                             throw err;
                         }
-                        momentsData.moment[i].bgColor = result;
-                        
+                        bgcolorResult[bgcolorResult.length] = result;
+                        console.log('>>>>>>>>>>>bgcolor!!!!!!');
+                            //
                         var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
                         connection.query(getTextcolorsQ, function(err, result){
-                        if(err){
-                            console.log('getTextcolorQ error');
-                            throw err;
-                        }
-                        momentsData.moment[i].textColor = result;
+                            if(err){
+                                console.log('getTextcolorQ error');
+                                throw err;
+                            }
+                            textcolorResult[textcolorResult.length] = result;
+                            console.log('>>>>>>>>>>>textcolor!!!!!!');
+                            //
+                            connection.release();
                         });
                     });
+                });   
+            }
+            var intervalId = setInterval(function(){
+                if(momentsData.moment.length === textcolorResult.length){
+                    console.log(">>>>>send")
+                    for(var i =0; i < momentsData.moment.length; ++i){
+                        momentsData.moment[i].bgColor = [];
+                        for(var bgIdx = 0; bgIdx < bgcolorResult[i].length; ++bgIdx){
+                            momentsData.moment[i].bgColor[momentsData.moment[i].bgColor.length] = bgcolorResult[i][bgIdx].bgcolor;
+                        }
+                        momentsData.moment[i].textColor = [];
+                        for(var textIdx = 0; textIdx < textcolorResult[i].length; ++textIdx){
+                            momentsData.moment[i].textColor[momentsData.moment[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
+                        }
+                    }
+                    console.log(JSON.stringify(momentsData, null, 4));
+                    response.send(momentsData);   
+                    clearInterval(intervalId);
                 }
-                
-                response.json(momentsData);
-                connection.release();
-            });
-
-//            for(var i=0; i<momentsData.moment.length; i++){
-//                targetId = momentsData.moment[i].id;
-//                
-//                /*targetId와 일치하는 id를 갖는 bgColors 가져오기*/
-//                var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
-//                connectionHandler(getBgcolorsQ, 'get bgcolors error', function(connection, result){
-//                    momentsData.moment[i].bgColor = result;
-//                    connection.release();
-//                    
-//                    /*targetId와 일치하는 id를 갖는 textColors 가져오기*/
-//                    var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
-//                    connectionHandler(getBgcolorsQ, 'get textcolors error', function(connection, result){
-//                        momentsData.moment[i].textColor = result;
-//                        response.json(momentsData);
-//                        connection.release();
-//                    });
-//                    
-//                });   
-//            }
+            }, 500);  
             setTimeout(function(){ queriedCount--; }, 500); //임시방편
         });
+
+        console.log('누가 이따위로 만들었냐 진짜');
     });
+ 
     
 });
 
