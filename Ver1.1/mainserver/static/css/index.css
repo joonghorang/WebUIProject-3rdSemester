@@ -124,14 +124,14 @@ body{
 }
 
 #camera {
-    position : relative;
-    top : 30%;
+    position : absolute;
+    left: 0;
+    right: 0;
+    top : 0;
+    bottom : 0;
     width: 200px;
     height: 200px;
     margin: auto;
-    left: 0;
-    right: 0;
-    text-align: center;
 }
 #input-image {
     z-index: 120;
