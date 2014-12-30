@@ -124,11 +124,13 @@ body{
 }
 
 #camera {
-    position : relative;
-    top : 30%;
+    position : absolute;
+    margin: auto;
     width: 200px;
     height: 200px;
     margin: auto;
+    top : 0;
+    bottom : 0;
     left: 0;
     right: 0;
     text-align: center;
