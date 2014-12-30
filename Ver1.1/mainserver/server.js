@@ -386,7 +386,7 @@ app.get('/colorLab', function(req, res){
 });
 var intervalId = setInterval(fadingImage, 1000*60);
 function fadingImage(){
-    
+                                                                 
 }
 
 //웹서버를 실행한다.
