@@ -46,6 +46,7 @@ var setMainGridView = {
     },
     // 처음 윈도우가 온로드외었을 때 객체들을 추가
     "preload" : function(){
+        console.log(this.getUnitNum);
         this.request.open("GET", "/getmoments?index=" + 0 + "&num=" + this.getUnitNum, true);
         this.request.send();
 
@@ -85,6 +86,44 @@ var setMainGridView = {
             addA.appendChild(addSpan);
         }
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
+
+        // //기본 구조
+        // this.moments.addEventListener('mouseover', function(){
+        //     this.momentsWrapper.style.backgroundColor = '#b1a686';
+            
+        //     var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+        //     for(var i=0 ; i<otherSpans.length ; i++){
+        //         otherSpans[i].style.opacity = '0.5';
+        //     }
+        // });
+        // this.moments.addEventListener('mouseout', function(){
+        //     this.momentsWrapper.style.backgroundColor = 'transparent';
+            
+        //     var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+        //     for(var i=0 ; i<otherSpans.length ; i++){
+        //         otherSpans[i].style.opacity = '1';
+        //     }
+        // });
+
+        // //아마도 이렇게 함수로 만들어서, span추가될때마다 색상값만 데이터로 넣어서 이벤트도 같이 추가하면 될 듯?
+        // function spanHover(targetSpan, bgColor){
+        //     targetSpan.addEventListener('mouseover', function(){
+        //         this.momentsWrapper.style.backgroundColor = bgColor;
+                
+        //         var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+        //         for(var i=0 ; i<otherSpans.length ; i++){
+        //             otherSpans[i].style.opacity = '0.5';
+        //         }
+        //     });
+        //     targetSpan.addEventListener('mouseout', function(){
+        //         this.momentsWrapper.style.backgroundColor = 'transparent';
+                
+        //         var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+        //         for(var i=0 ; i<otherSpans.length ; i++){
+        //             otherSpans[i].style.opacity = '1';
+        //         }
+        //     });
+        // };
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
@@ -158,10 +197,10 @@ var setMainGridView = {
             this.stringSum += result.moments[i].text.length;
             this.momentArray.push(this.moments[i]);
         }
-        // 모자라면 재요청을 보내는 코드
-        if(this.stringSum < this.maxStringNum - 30){    // 정확히 270자인 경우는 극히 드물 것이므로 30자의 버퍼를 주어 최악의 경우에 대비한다.  
-            this.createMoments.bind(this);
-        }
+        // // 모자라면 재요청을 보내는 코드
+        // if(this.stringSum < this.maxStringNum - 30){    // 정확히 270자인 경우는 극히 드물 것이므로 30자의 버퍼를 주어 최악의 경우에 대비한다.  
+        //     this.createMoments.bind(this);
+        // }
 
 
         //받아온 페이지가 끝 페이지인지 알아보는 코드
@@ -216,15 +255,16 @@ var setMainGridView = {
             // addSpan.innerHTML = result.moments[i].text;
 
         }
-        EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
+        //EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
     },
     "run" : function(){
         this.getElements();
         this.setLogicIndexes();
         this.setShadow();
-        EventUtil.addHandler(window, 'onload', this.preload.bind(this));
-        EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
-        EventUtil.addHandler(this.request, 'load', this.createMoments.bind(this));
+
+        EventUtil.addHandler(document, "DOMContentLoaded", this.preload.bind(this));
+        // EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
+        // EventUtil.addHandler(this.request, 'load', this.createMoments.bind(this));
     }
 };
 

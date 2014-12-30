@@ -104,25 +104,52 @@ app.get('/getmoments', function(request, response){
             connection.release();
             
             var targetId;
-            for(var i=0; i<momentsData.moment.length; i++){
-                targetId = momentsData.moment[i].id;
-                
-                /*targetId와 일치하는 id를 갖는 bgColors 가져오기*/
+            
+            pool.getConnection(function(err, connection){
+            
                 var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
-                connectionHandler(getBgcolorsQ, 'get bgcolors error', function(connection, result){
-                    momentsData.moment[i].bgColor = result;
-                    connection.release();
-                    
-                    /*targetId와 일치하는 id를 갖는 textColors 가져오기*/
-                    var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
-                    connectionHandler(getBgcolorsQ, 'get textcolors error', function(connection, result){
+                for(var i=0; i<momentsData.moment.length ;i++){
+                    connection.query(getBgcolorsQ, function(err, result){
+                        if(err){
+                            console.log('getBgcolorQ error');
+                            throw err;
+                        }
+                        momentsData.moment[i].bgColor = result;
+                        
+                        var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
+                        connection.query(getTextcolorsQ, function(err, result){
+                        if(err){
+                            console.log('getTextcolorQ error');
+                            throw err;
+                        }
                         momentsData.moment[i].textColor = result;
-                        response.json(momentsData);
-                        connection.release();
+                        });
                     });
-                    
-                });   
-            }
+                }
+                
+                response.json(momentsData);
+                connection.release();
+            });
+
+//            for(var i=0; i<momentsData.moment.length; i++){
+//                targetId = momentsData.moment[i].id;
+//                
+//                /*targetId와 일치하는 id를 갖는 bgColors 가져오기*/
+//                var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
+//                connectionHandler(getBgcolorsQ, 'get bgcolors error', function(connection, result){
+//                    momentsData.moment[i].bgColor = result;
+//                    connection.release();
+//                    
+//                    /*targetId와 일치하는 id를 갖는 textColors 가져오기*/
+//                    var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
+//                    connectionHandler(getBgcolorsQ, 'get textcolors error', function(connection, result){
+//                        momentsData.moment[i].textColor = result;
+//                        response.json(momentsData);
+//                        connection.release();
+//                    });
+//                    
+//                });   
+//            }
             setTimeout(function(){ queriedCount--; }, 500); //임시방편
         });
     });

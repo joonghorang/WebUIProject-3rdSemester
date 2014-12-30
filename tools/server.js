@@ -226,7 +226,7 @@ app.get('/junk', function(req, res){
 });
 var intervalId = setInterval(FadingImage, 1000);
 function FadingImage(){
-    console.log('fading');
+    
 }
 
 if (!module.parent) {
