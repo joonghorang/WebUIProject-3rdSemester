@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-
-@font-face {
+@import url(cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
+/*@font-face {
     font-family: "NanumBarunGothicLight";
     font-style: normal;
     src: url('../font/NanumGothicLight/NanumBarunGothicLight.eot');,
@@ -21,7 +21,7 @@
          url(HelveticaNeue-Regular.ttf) format('truetype');
     font-style: normal;
     font-weight: light;
-}
+}*/
 
 html{
 	height : 100%;
@@ -45,8 +45,7 @@ body{
 	width : 100%;
 	display : block;
 	line-height: 100%;
-    font-family: "NanumBarunGothicUltraLight", sans-serif;
-    
+    font-family: "nanumbarungothiclight", sans-serif;
     background-image:url( "../image/backGround.jpg");
     background-size: auto;
     background-attachment: fixed;
