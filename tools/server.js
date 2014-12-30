@@ -8,6 +8,7 @@ var tinycolor = require("tinycolor2");
 var mytools = require("./controllers/mytools.js");
 var Impressive = require("impressive");
 var colorClassifier = require("./controllers/colorClassifier");
+var fading = require("./controllers/fading");
 
 var Imp1 = require('./controllers/impressiveVer1');
 var Imp2 = require('./controllers/impressiveVer2');
@@ -223,6 +224,11 @@ app.get('/imageAging', function(req, res){
 app.get('/junk', function(req, res){
     res.render('junk.html');
 });
+var intervalId = setInterval(FadingImage, 1000);
+function FadingImage(){
+    console.log('fading');
+}
+
 if (!module.parent) {
   app.listen(app.get('port'), function(){  
       console.log('내가 포트 '+app.get('port')+'으로 서버를 켰단다.');

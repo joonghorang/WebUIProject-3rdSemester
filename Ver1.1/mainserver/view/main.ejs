@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="./css/index.css">
         <title>a moment</title>
     </head>
-    <body id = "body" <% if(typeof bodyColor !== "undefined"){ %> style="background-color: <%= bodyColor %>" <%} %> >
+    <body id = "body">
         <div id = "wrapper">
             <div id="itemFactory">
                 <div id="upload-wrapper">
@@ -42,53 +42,15 @@
             </div>
             <div id = "moments-wrapper">
                 <div id = "moments">
-                    <!-- 맨처음 14개만 데이터베이스에서 불러온다 + 데이터가 14개보다 적을 경우는 있는 데이터 전체를 불러오도록 한다.-->
-                    <% for(var i=0; i< (moments.length>14 ? 14 : moments.length) ; i++){ %>
-                        <a href="./moment/<%= moments[i].id %>">
-                            
-                            <div class="moment-<%= (i%14)+1 %>" style="<% if(i%14==0||i%14==7||i%14==8||i%14==11){ %> background-image : url('./<%= moments[i].file %>'); background-color : <%= moments[i].bgColor %><%}%>">
-                                <span><%= moments[i].text %></span>
-                            </div>
-                            
-                        </a>
-                    
-                    <%}%>
-
                 </div> 
             </div>    
         </div>
         <script src="./js/lib/commonCanvas.js"></script>
         <script src="./js/lib/EventUtil.js"></script>
         <script src="./js/lib/cssUtil.js"></script>
-        <script src="./js/lib/masonry.pkgd.min.js"></script>
+
         <script src="./js/index.js"></script>
         <script src="./js/testInput.js"></script>
-        <script>
-            var container = document.getElementById('moments');
-            var masnry = new Masonry(container, {
-                columnWidth : 150,
-                itemSelector : '.moment'
-            });   
-        </script>
-        <script>
-            var moments = <%- JSON.stringify(moments) %>;
-            var hoverText = "";
-            for(var i=0; i<moments.length ; i++){
-                hoverText += "#moments a:nth-of-type("+(i+1)+") div:hover{background-color:"+moments[i].bgColor+";}";
-            } //추가되는 것들에 대해서 적용되지 않음.... 
-            
-            var head = document.head;
-            var styleTag = document.createElement('style');
-            styleTag.type = 'text/css';
-            
-            if (styleTag.styleSheet){
-                styleTag.styleSheet.cssText = hoverText;
-            } else {
-                styleTag.appendChild(document.createTextNode(hoverText));
-            }
-            head.appendChild(styleTag);
 
-        </script>
-        
     </body>
 </html>

@@ -1,3 +1,6 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+@import url(http://cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
 /*@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(http://cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
 @import url(http://cdn.jsdelivr.net/font-nanum/1.0/nanumgothiccoding/nanumgothiccoding.css);*/
@@ -24,6 +27,14 @@
     url('../font/NanumGothicLight/NanumBarunGothicUltraLight.woff') format('woff'),
     url('../font/NanumGothicLight//NanumBarunGothicUltraLight.ttf') format('truetype');
 }
+@font-face {
+    font-family: "momentHelvetica";
+    src: local("Helvetica Neue"),
+         local("HelveticaNeue-Regular"),
+         url(HelveticaNeue-Regular.ttf) format('truetype');
+    font-style: normal;
+    font-weight: light;
+}
 
 html{
 	height : 100%;
@@ -47,6 +58,7 @@ body{
 	width : 100%;
 	display : block;
 	line-height: 100%;
+    font-family: "NanumBarunGothicUltraLight", sans-serif;
     font-family: "nanumLight", sans-serif;
     background-image:url( "../image/backGround.jpg");
     background-size: auto;
@@ -109,6 +121,7 @@ span{
     color: #b1a686;
 }
 #t2:hover{
+    text-decoration: underline;
     color: #ed6840;
 }
 #t3:hover{

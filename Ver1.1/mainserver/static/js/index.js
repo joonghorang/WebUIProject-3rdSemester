@@ -1,5 +1,5 @@
 // 전연벽수
-
+var momentArray = new Array(); // 받아온 모멘트들을 저장하는 전역배열 
 // 임시 그림자 저장소 
 var shadowR = 20;
 var shadowG = 20;
@@ -13,6 +13,7 @@ var tempFlag = false;
 var setMainGridView = {
     "getElements" : function(){
         this.wrapper = document.getElementById("wrapper");
+        this.itemFactoryButtonWrapper = document.getElementById("itemFactory-button-wrapper");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
@@ -25,10 +26,65 @@ var setMainGridView = {
         this.request = new XMLHttpRequest();  
     },
     "setLogicIndexes" : function(){
-        this.sendCheck = 0;     // 페이지 인덱스 넘과 비교하여 동일하면 다시 요청하지 않는다. 
-        this.pageIndexNum = 2;  // css Style 적용을 먹일 페이지 넘버 
-        this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
+        this.momentlength = 0;     // 페이지 인덱스 넘과 비교하여 동일하면 다시 요청하지 않는다. 
+        //this.pageIndexNum = 2;  // css Style 적용을 먹일 페이지 넘버 
+        //this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
         this.scrollFlag = true;
+
+        this.stringSum = 0;
+        this.maxStringNum = 270;
+        this.getUnitNum = 15;
+    },
+    "setShadow" : function(){
+        this.shadowColor = "#202020";
+        this.addLength = 0.01;
+        this.shadowLength = 10;
+        this.shadowMaxLength = 30;
+        this.shadowMinLength = 10;
+        this.shadowBlur = 15;
+        this.shadowLengthFlag = true;
+    },
+    // 처음 윈도우가 온로드외었을 때 객체들을 추가
+    "preload" : function(){
+        this.request.open("GET", "/getmoments?index=" + 0 + "&num=" + this.getUnitNum, true);
+        this.request.send();
+
+        this.moments.style.height = this.moments.style.height + window.innerHeight;//this.moments.offsetHeight + 1000 + "px";
+        console.log("size Expanded");
+            
+        //추가 객체들을 요청. 
+        var result = JSON.parse(this.request.responseText);
+        for(var i = 0; i < result.moments.length; i++){
+            this.mementlength++
+            if(this.stringSum > this.maxStringNum){
+                //this.scrollFlag = false;
+                break;
+            }
+            this.stringSum += result.moments[i].text.length;
+            this.momentArray.push(this.moments[i]);
+        }
+        // 모자라면 재요청을 보내는 코드
+        if(this.stringSum < this.maxStringNum - 30){    // 정확히 270자인 경우는 극히 드물 것이므로 30자의 버퍼를 주어 최악의 경우에 대비한다.  
+            this.createMoments.bind(this);
+        }
+
+
+        //받아온 페이지가 끝 페이지인지 알아보는 코드
+        if(result.moments.length < this.getUnitNum){
+            this.scrollFlag = false;
+        }
+
+        for(var i = 0; i < result.moments.length; i++){
+            //moment set 하나씩 추가(div in a tag)
+            var addA = document.createElement('a');
+            addA.setAttribute("href", "./moment/" + result.moments[i].id);
+            var addSpan = document.createElement('span'); // 이제 디브가 아니라 스팬으로 추가. 
+            addSpan.setAttribute("class", "moment-span");// + this.classIndexNum.toString());
+
+            this.moments.appendChild(addA);
+            addA.appendChild(addSpan);
+        }
+        EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
@@ -54,38 +110,80 @@ var setMainGridView = {
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
 
         if(window.scrollY > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
-            if(this.sendCheck !== this.pageIndexNum){
-                this.sendCheck = this.pageIndexNum;
-                this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
+            // if(this.sendCheck !== this.pageIndexNum){
+            //     this.sendCheck = this.pageIndexNum;
+                this.request.open("GET", "/getmoments?index=" + this.momentlength + "&num=" + this.getUnitNum, true);
                 this.request.send();
-                console.log("pageNum now : " + this.pageIndexNum);    
+            //     console.log("pageNum now : " + this.pageIndexNum);    
+            // }
+            //수정이 필요함
+
+
+
+         } else if(window.scrollY > 0){ // 그림자를 휠 동작에 맞춰서 바꿔준다.
+            var degree = scrollY/10000; // 직접 각도에 scrollY를 삽입하는 방법으로 해결.
+
+            var posX = Math.cos(degree) * this.shadowLength;
+            var posY = Math.sin(degree) * this.shadowLength;
+            this.itemFactoryButtonWrapper.style.boxShadow = posX.toString() + "px " + posY.toString() + "px " +  this.shadowBlur + "px " + this.shadowColor;
+
+            if(this.shadowLength > this.shadowMaxLength){
+                this.shadowLengthFlag = false;
+            } else if(this.shadowLength < this.shadowMinLength){
+                this.shadowLengthFlag = true;
+            }
+            if(this.shadowLengthFlag === true){
+                this.shadowLength = this.shadowLength + this.addLength;
+                this.shadowBlur = this.shadowBlur + this.addLength;
+            } else if(this.shadowLengthFlag === false){
+                this.shadowLength = this.shadowLength - this.addLength;
+                this.shadowBlur = this.shadowBlur - this.addLength;   
             }
          }
     }, 
     "createMoments" : function(){ //DB에 저장된 유닛들을 받아서 원하는 그리드로 뿌려주는 코드.
-        this.pageIndexNum++;
-        this.moments.style.height = this.moments.offsetHeight + 1000 + "px";
+        
+
+        this.moments.style.height = this.moments.style.height + window.innerHeight;//this.moments.offsetHeight + 1000 + "px";
         console.log("size Expanded");
             
         //추가 객체들을 요청. 
         var result = JSON.parse(this.request.responseText);
-        var unitNumberInPage = 7;
-        if(result.moments.length < unitNumberInPage){
-            console.log("this is End Page " + "pageIndexNum = " + this.pageIndexNum + "\nelement in Lastpage : " + result.moments.length);
+        for(var i = 0; i < result.moments.length; i++){
+            this.mementlength++
+            if(this.stringSum > this.maxStringNum){
+                //this.scrollFlag = false;
+                break;
+            }
+            this.stringSum += result.moments[i].text.length;
+            this.momentArray.push(this.moments[i]);
+        }
+        // 모자라면 재요청을 보내는 코드
+        if(this.stringSum < this.maxStringNum - 30){    // 정확히 270자인 경우는 극히 드물 것이므로 30자의 버퍼를 주어 최악의 경우에 대비한다.  
+            this.createMoments.bind(this);
+        }
+
+
+        //받아온 페이지가 끝 페이지인지 알아보는 코드
+        if(result.moments.length < this.getUnitNum){
             this.scrollFlag = false;
         }
+
         for(var i = 0; i < result.moments.length; i++){
             //moment set 하나씩 추가(div in a tag)
             var addA = document.createElement('a');
             addA.setAttribute("href", "./moment/" + result.moments[i].id);
-            var addDiv = document.createElement('div');
-            addDiv.setAttribute("class", "moment-" + this.classIndexNum.toString());
+            var addSpan = document.createElement('span'); // 이제 디브가 아니라 스팬으로 추가. 
+            addSpan.setAttribute("class", "moment-span");// + this.classIndexNum.toString());
 
+            this.moments.appendChild(addA);
+            addA.appendChild(addSpan);
+            // 텍스트 레이아웃은 호버하지 않음. 
             //hover했을 때 색이 보이도록 cssText 추가
-            var momentIndex = this.moments.getElementsByTagName('a').length;
-            console.log('currently adding momentId : ' + momentIndex);
+            // var momentIndex = this.moments.getElementsByTagName('a').length;
+            // console.log('currently adding momentId : ' + result.moments[i].id);
             
-            var hoverText = "#moments a:nth-of-type("+(momentIndex+1)+") div:hover{background-color:"+result.moments[i].bgColor+";}";
+            // var hoverText = "#moments a:nth-of-type("+(momentIndex+1)+") div:hover{background-color:"+result.moments[i].bgColor+";}";
             
             /*오류나는 코드 : 왜 오류나는지 알 수 없음....*/
 //            var styleTag = document.getElementsByTagName('STYLE');
@@ -93,39 +191,38 @@ var setMainGridView = {
             /*//오류나는 코드*/
             
             /*오류 안나는 코드 : 벗 이렇게 하면 태그를 계속 추가하는데.......*/
-            var head = document.head;
-            var styleTag = document.createElement('style');
-            styleTag.type = 'text/css';  
-            if (styleTag.styleSheet){
-                styleTag.styleSheet.cssText = hoverText;
-            } else {
-                styleTag.appendChild(document.createTextNode(hoverText));
-            }
-            head.appendChild(styleTag);
+            // var head = document.head;
+            // var styleTag = document.createElement('style');
+            // styleTag.type = 'text/css';  
+            // if (styleTag.styleSheet){
+            //     styleTag.styleSheet.cssText = hoverText;
+            // } else {
+            //     styleTag.appendChild(document.createTextNode(hoverText));
+            // }
+            // head.appendChild(styleTag);
             ///*오류 안나는 코드*/
             
             //사진이 보이는 칸(1,8,9,12번째)
-            if(this.classIndexNum == 1 || this.classIndexNum == 8 || this.classIndexNum == 9 || this.classIndexNum == 12){
-                addDiv.style.backgroundImage = "url(" + result.moments[i].file + ")";
-            }
+            // if(this.classIndexNum == 1 || this.classIndexNum == 8 || this.classIndexNum == 9 || this.classIndexNum == 12){
+            //     addDiv.style.backgroundImage = "url(" + result.moments[i].file + ")";
+            // }
             
-            if(this.classIndexNum === 14){
-                this.classIndexNum = 1;
-            } else {
-               this.classIndexNum++;
-            }
-            var addSpan = document.createElement('span');
-            addSpan.innerHTML = result.moments[i].text;
+            // if(this.classIndexNum === 14){
+            //     this.classIndexNum = 1;
+            // } else {
+            //    this.classIndexNum++;
+            // }
+            // var addSpan = document.createElement('span');
+            // addSpan.innerHTML = result.moments[i].text;
 
-            this.moments.appendChild(addA);
-            addA.appendChild(addDiv);
-            addDiv.appendChild(addSpan);
         }
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
     },
     "run" : function(){
         this.getElements();
         this.setLogicIndexes();
+        this.setShadow();
+        EventUtil.addHandler(window, 'onload', this.preload.bind(this));
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         EventUtil.addHandler(this.request, 'load', this.createMoments.bind(this));
     }
@@ -135,6 +232,7 @@ var itemFactoryDisplay = {
     "getElements" : function(){
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
+        this.itemFactoryButtonWrapper = document.getElementById("itemFactory-button-wrapper");
         this.moments = document.getElementById("moments");
         this.uploadFile = document.getElementById("upload-file");
         this.fileInput = document.getElementById('upload-hidden');
@@ -145,18 +243,19 @@ var itemFactoryDisplay = {
         this.previewImg = document.getElementById('preview-image');
         this.previewImgBorder = document.getElementById('preview-image-border');
         this.inputImg = document.getElementById('input-image');
+        this.bgCanvas = document.getElementById('back-ground-canvas');
     },
     "openFactory" : function(){
         display([this.itemFactory,this.itemFactoryButton, this.confirmButton, this.uploadFile,this.closeButton, this.previewImg],'show');
-        display([this.moments, this.itemFactoryButton, this.uploadText],'hide');
+        display([this.moments, this.itemFactoryButton, this.itemFactoryButtonWrapper, this.uploadText],'hide');
         // 이미지 전송과 관련된 전역변수 초기화
         tempImgWarehouse = null;
         tempFlag = false;
     },
     "closeFactory" : function(){
         this.initializeItemfactory(); // 취소하므로 모든 상황을 업로드 이전 상태로 돌려준다. 
-        display([this.moments, this.itemFactoryButton],'show');
-        display([this.itemFactory, this.closeButton, this.previewImg],'hide');
+        display([this.moments, this.itemFactoryButton, this.itemFactoryButtonWrapper],'show');
+        display([this.itemFactory, this.closeButton, this.previewImg, this.bgCanvas],'hide');
     },
     "initializeItemfactory" : function(){
         //preview image src 초기화
@@ -347,7 +446,7 @@ var confirm = {
             this.closeButton.children[0].src = "image/png/close(invert).png";
             this.submitButton.src = "image/png/confirm(invert).png";
             // console.log(this.closeButton);
-             console.log(this.submitButton);
+             // console.log(this.submitButton);
         } else{
             this.textInput.style.color = "#000000";
             this.closeButton.children[0].src = "image/png/close.png";

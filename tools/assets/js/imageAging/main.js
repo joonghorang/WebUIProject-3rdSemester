@@ -14,7 +14,7 @@ define(['impressive', 'fading', 'commonCanvas'], function(Impressive, fading, cm
     
     function drawFading(){
         console.log("interval");
-        var affected = fading(fadingCanvas, nowHue.rangeL, nowHue.rangeR, rate );
+        var affected = fading(fadingCanvas, nowHue.rangeL, nowHue.rangeR, rate);
         if(!affected){
             if(hueList.length <= 0){
                 clearInterval(intervalId);   
