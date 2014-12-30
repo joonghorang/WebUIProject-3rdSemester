@@ -316,6 +316,10 @@ app.get('/junk', function(req, res){
     res.render('junk.html');
 });
 
+app.get('/textOnly', function(req, res){
+    res.render('newMain.html');
+});
+
 //웹서버를 실행한다.
 app.listen(app.get("port"), function(){
     console.log('server running at port '+app.get("port")+'...');
