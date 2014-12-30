@@ -40,9 +40,9 @@ app.set('colorLabData', "/colorLab_image_data");
 /* DB Connection Setting */
 var pool = mysql.createPool({
     host :'us-cdbr-iron-east-01.cleardb.net',
-    user : 'bf67c12c853ddc',
-    password : '16d5ce5e',
-    database : 'heroku_7081e1ce7ec12df',
+    user : 'b9142df70e9d74',
+    password : '0f6c4870',
+    database : 'heroku_90cbdb405fb3ec7',
     connectionLimit:20,
     waitForConnections:true 
 });
