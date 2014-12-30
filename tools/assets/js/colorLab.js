@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl:'js/lib',
+    baseUrl:'/js/lib',
     paths: {
         app: '../colorLab'   
     }

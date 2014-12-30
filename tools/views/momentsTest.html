@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="./css/lib/reset.css">
+        <link rel="stylesheet" type="text/css" href="./css/momentsTest.css">
+        <script data-main="js/momentsTest.js" src="js/lib/require.js"></script>
+        <title>Deok's Moment Test</title>
+    </head>
+    <body>
+        <header>Testing Images</header>
+        <div id = "shell">
+            <main>
+                <ul id = moments>
+                <% for(var i =0; i < moments.length; ++i){%>
+                    <li class = 'moment'>
+                        <a href = "../colorLab/<%= moments[i].id %>">
+                            <img class = 'moment-image' src = "<%= moments[i].imageSrc %>">    
+                            <canvas class = 'moment-canvas' width = 500 height = 500></canvas>
+                        </a>
+                    </li>
+                <%}%>
+                </ul>
+            </main>
+        </div>
+        <footer>NHNNEXT DeokSeong</footer>
+        <script>
+            var bgColorsArr = <%- JSON.stringify(bgColorsArr) %>;
+            var textColorsArr = <%- JSON.stringify(textColorsArr) %>;
+            var text = '<%= text %>';
+        </script>
+    </body>
+</html>

@@ -28,7 +28,14 @@ var commonCanvas = {
         return imageObj instanceof Image || 
             imageObj.toString() === "[object HTMLImageElement]";   
     },
-    
+    getPixel : function(target, x, y){
+        var index = (target.width * y + x) * 4;
+        var r = target.data[index + 0];
+        var g = target.data[index + 1];
+        var b = target.data[index + 2];
+        var a = target.data[index + 3];
+        return {r: r, g: g, b: b, a: a};
+    },
     setPixel : function(target, x, y, r, g, b, a){
         color = typeof r === 'object' ? r : {r: r, g: g, b: b, a: a};
         if(target.constructor.name === "CanvasRenderingContext2D"){
@@ -44,6 +51,15 @@ var commonCanvas = {
         } else {
             throw target;
         }
+    },
+    setText : function (context, text, x, y, align, baseline, fontName, fontColor, fontSize){
+        var font = typeof fontName === 'object' ? fontName : { name : fontName, color : fontColor, size : fontSize};
+        context.fillStyle = font.color;
+        context.font = font.size + "px " + font.name; //fontWeight + " " + 
+        context.textAlign = align;
+        context.textBaseline = baseline;
+        // Comment : 이런 20은 다른사람이 수정을 하기 힘들게 한다. 
+        context.fillText(text, x, y);
     },
     
     createCanvasByImage : function(img, pixelSaturate){

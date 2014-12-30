@@ -8,6 +8,8 @@ var queues = require('mysql-queues');
 
 var Impressive = require('impressive');
 
+
+
 //impressive(image).toRgb();
 var Canvas = require('canvas');
 var Image = Canvas.Image;
@@ -43,7 +45,7 @@ var pool = mysql.createPool({
     user : 'b9142df70e9d74',
     password : '0f6c4870',
     database : 'heroku_90cbdb405fb3ec7',
-    connectionLimit:20,
+    connectionLimit:10,
     waitForConnections:true 
 });
 
@@ -140,9 +142,8 @@ app.get('/moment/:id', function(request, response){
         var bgColorSelectQ = 'SELECT c.num, c.bgColor FROM moment m JOIN bgColor c ON m.id=c.momentId AND m.id="'+targetId+'";';
         connectionHandler(bgColorSelectQ , 'moment bgColor select error', function(connection, result){
             for(var i =0; i< (result.length<5 ? result.length : 5) ; ++i){
-                        momentData.bgColor[i] = result[i].bgColor;
+                momentData.bgColor[i] = result[i].bgColor;
             }
-            console.log(momentData);
             response.render("moment", momentData);
             connection.release();
         });
@@ -176,13 +177,9 @@ app.post('/upload-image', function(request, response){
                 var chromaColors = imp.chromaColors.toHexString();
                 var achromaColors = imp.achromaColors.toHexString();
                 var dominatColors = imp.dominantColors.toHexString();
-                console.log(pickedColorAll, highSatColors, chromaColors, achromaColors, dominatColors);
-                console.log(imp.dominantColors);
                 var colorCf = colorClassifier(imp);
                 var textColors = colorCf.textColors.toHexString();
-                var bgColors = colorCf.bgColors.toHexString();
-                console.log(textColors, bgColors);
-                   
+                var bgColors = colorCf.bgColors.toHexString();        
                 response.send({
                         "bgColor" : bgColors[0],
                         "textColor" : textColors[0]
