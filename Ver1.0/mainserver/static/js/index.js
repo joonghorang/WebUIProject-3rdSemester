@@ -13,6 +13,7 @@ var tempFlag = false;
 var setMainGridView = {
     "getElements" : function(){
         this.wrapper = document.getElementById("wrapper");
+        this.itemFactoryButtonWrapper = document.getElementById("itemFactory-button-wrapper");
         this.itemFactory = document.getElementById("itemFactory");
         this.itemFactoryButton = document.getElementById("itemFactory-button");
         this.moments = document.getElementById("moments");
@@ -29,6 +30,15 @@ var setMainGridView = {
         this.pageIndexNum = 2;  // css Style 적용을 먹일 페이지 넘버 
         this.classIndexNum = 1; // css Style pageIndexNum안에 적용될 하나 하나의 객체 클래스넘버. 
         this.scrollFlag = true;
+    },
+    "setShadow" : function(){
+        this.shadowColor = "#202020";
+        this.addLength = 0.01;
+        this.shadowLength = 10;
+        this.shadowMaxLength = 30;
+        this.shadowMinLength = 10;
+        this.shadowBlur = 15;
+        this.shadowLengthFlag = true;
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
@@ -54,11 +64,31 @@ var setMainGridView = {
         // 즉, 절대적인 길이를 기준으로 바뀌는게 아니라 비율값으로 변경되도록 하였다. 
 
         if(window.scrollY > this.moments.offsetHeight * 90 / 100 && this.scrollFlag){
+            // 추가로 필요한 객체를 요청한다. 
             if(this.sendCheck !== this.pageIndexNum){
                 this.sendCheck = this.pageIndexNum;
                 this.request.open("GET", "/page/" + this.pageIndexNum.toString(), true);
                 this.request.send();
                 console.log("pageNum now : " + this.pageIndexNum);    
+            }
+         } else if(window.scrollY > 0){ // 그림자를 휠 동작에 맞춰서 바꿔준다.
+            var degree = scrollY/10000; // 직접 각도에 scrollY를 삽입하는 방법으로 해결.
+
+            var posX = Math.cos(degree) * this.shadowLength;
+            var posY = Math.sin(degree) * this.shadowLength;
+            this.itemFactoryButtonWrapper.style.boxShadow = posX.toString() + "px " + posY.toString() + "px " +  this.shadowBlur + "px " + this.shadowColor;
+
+            if(this.shadowLength > this.shadowMaxLength){
+                this.shadowLengthFlag = false;
+            } else if(this.shadowLength < this.shadowMinLength){
+                this.shadowLengthFlag = true;
+            }
+            if(this.shadowLengthFlag === true){
+                this.shadowLength = this.shadowLength + this.addLength;
+                this.shadowBlur = this.shadowBlur + this.addLength;
+            } else if(this.shadowLengthFlag === false){
+                this.shadowLength = this.shadowLength - this.addLength;
+                this.shadowBlur = this.shadowBlur - this.addLength;   
             }
          }
     }, 
@@ -126,6 +156,7 @@ var setMainGridView = {
     "run" : function(){
         this.getElements();
         this.setLogicIndexes();
+        this.setShadow();
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         EventUtil.addHandler(this.request, 'load', this.createMoments.bind(this));
     }

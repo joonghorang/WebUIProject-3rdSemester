@@ -1,0 +1,173 @@
+/*@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(http://cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
+@import url(http://cdn.jsdelivr.net/font-nanum/1.0/nanumgothiccoding/nanumgothiccoding.css);*/
+
+@font-face{
+    font-family : "nanumLight";
+    font-style : normal;
+    src: url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/v3/NanumGothic-Light.eot);
+    src: url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/v3/NanumGothic-Light.eot?#iefix) format('embedded-opentype'),
+    url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/v3/NanumGothic-Light.woff) format('woff'),
+    url(//cdn.jsdelivr.net/font-nanum/1.0/nanumgothic/v3/NanumGothic-Light.ttf) format('truetype');
+}
+@font-face {
+    font-family: "NanumBarunGothicLight";
+    font-style: normal;
+    src: url('../font/NanumGothicLight/NanumBarunGothicLight.eot'),
+    url('../font/NanumGothicLight/NanumBarunGothicLight.woff') format('woff'),
+    url('../font/NanumGothicLight/NanumBarunGothicLight.ttf') format('truetype');
+}
+@font-face {
+    font-family: "NanumBarunGothicUltraLight";
+    font-style: normal;
+    src: url('../font/NanumGothicLight/NanumBarunGothicUltraLight.eot'),
+    url('../font/NanumGothicLight/NanumBarunGothicUltraLight.woff') format('woff'),
+    url('../font/NanumGothicLight//NanumBarunGothicUltraLight.ttf') format('truetype');
+}
+
+html{
+	height : 100%;
+	width : 100%;
+    max-height: 100%;
+    max-width: 100%;
+	position : relative;
+	display : block;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body{
+	position: absolute;
+	height : 100%;
+	width : 100%;
+	display : block;
+	line-height: 100%;
+    font-family: "nanumLight", sans-serif;
+    background-image:url( "../image/backGround.jpg");
+    background-size: auto;
+    background-attachment: fixed;
+}
+
+a:visited, a:link{
+    color: #555555;
+    text-decoration: none;
+}
+
+#wrapper{
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+#text-wrapper{
+    width: 60%;
+    height: 72%;
+    position: absolute;
+    margin:auto;
+    left: 0;
+    right: 0;
+    top: 10%;
+    padding-top: 45px;
+    font-size: 30px;
+    line-height: 55px;
+    
+    text-align: justify;
+}
+
+#itemFactory-button-wrapper {
+    z-index: 10;
+    position: fixed;
+    width: 100%;
+    height: 20px;
+    min-height: 20px;
+    padding-top: 100px;
+}
+
+#itemFactory-button {
+    z-index: 10;
+    position: absolute;
+    height: 30px;
+    min-height: 30px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity : 1;
+    cursor: pointer;
+}
+span{
+    word-break: keep-all;
+}
+
+#t1:hover{
+    color: #b1a686;
+}
+#t2:hover{
+    color: #ed6840;
+}
+#t3:hover{
+    color: #0b0804;
+}
+#t4:hover{
+    color: #38ebc1;
+}
+#t5:hover{
+    color: #38ebc1;
+}
+#t6:hover{
+    color: #f5d72c;
+}
+#t7:hover{
+    color: #a78496;
+}
+#t8:hover{
+    color: #c7e2db;
+}
+#t9:hover{
+    color: #eb372a;
+}
+#t10:hover{
+    color: #76a67c;
+}
+#t11:hover{
+    color: #ed7a40;
+}
+#t12:hover{
+    color: #e85709;
+}
+#t13:hover{
+    color: #ffffff;
+}
+#t14:hover{
+    color: #ffffff;
+}
+#t15:hover{
+    color: #404f7d;
+}
+#t16:hover{
+    color: #567e99;
+}
+#t17:hover{
+    color: #7a766d;
+}
+#t18:hover{
+    color: #c7b081;
+}
+#t19:hover{
+    color: #a8977b;
+}
+#t20:hover{
+    color: #473733;
+}
+#t21:hover{
+    color: #255761;
+}
+#t22:hover{
+    color: #b0a690
+}

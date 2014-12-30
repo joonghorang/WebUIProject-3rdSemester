@@ -38,7 +38,7 @@ function drawTextOn(textCanvas, text, textColor){
                 var uuuuuu = fontSizeAndAddTextY(wordArray);
                 var fontSize = uuuuuu.fontSize;
                 var addTextY = uuuuuu.addTextY;
-                textX = repositionTextX(wordArray, textX, fontSize);
+                //textX = repositionTextX(wordArray, textX, fontSize);
                 setTextFactory(wordArray, context, fontColor, fontName, fontSize, textX, textY, addTextY);
                 
                 function fontSizeAndAddTextY(wordArray){
@@ -148,6 +148,8 @@ function drawTextOn(textCanvas, text, textColor){
                         uuuuuu = fontSizeAndAddTextY(wordArray);
                         fontSize = uuuuuu.fontSize;
                         addTextY = uuuuuu.addTextY;
+                        textX = repositionTextX(wordArray, textX, fontSize);
+                    } else {
                         textX = repositionTextX(wordArray, textX, fontSize);
                     }
                      
