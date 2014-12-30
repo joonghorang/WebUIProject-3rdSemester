@@ -37,6 +37,8 @@ var setMainGridView = {
         this.addDegree = 0.01;
         this.addLength = 0.01;
         this.shadowLength = 10;
+        this.shadowMaxLength = 30;
+        this.shadowMinLength = 10;
         this.shadowBlur = 15;
         this.shadowLengthFlag = true;
     },
@@ -73,21 +75,22 @@ var setMainGridView = {
             }
          } else if(window.scrollY > 0){ // 그림자를 휠 동작에 맞춰서 바꿔준다.
             var degree = this.startDegree + this.addDegree;
-            console.log("degree" + degree);
 
             var posX = Math.cos(degree) * this.shadowLength;
             var posY = Math.sin(degree) * this.shadowLength;
             this.itemFactoryButtonWrapper.style.boxShadow = posX.toString() + "px " + posY.toString() + "px " +  this.shadowBlur + "px " + this.shadowColor;
             this.startDegree = degree + this.addDegree;
-            if(this.shadowLength > 20){
+            if(this.shadowLength > this.shadowMaxLength){
                 this.shadowLengthFlag = false;
-            } else if(this.shadowLength < 10){
+            } else if(this.shadowLength < this.shadowMinLength){
                 this.shadowLengthFlag = true;
             }
             if(this.shadowLengthFlag === true){
                 this.shadowLength = this.shadowLength + this.addLength;
+                this.shadowBlur = this.shadowBlur + this.addLength;
             } else if(this.shadowLengthFlag === false){
-                this.shadowLength = this.shadowLength - this.addLength;    
+                this.shadowLength = this.shadowLength - this.addLength;
+                this.shadowBlur = this.shadowBlur - this.addLength;   
             }
          }
     }, 
