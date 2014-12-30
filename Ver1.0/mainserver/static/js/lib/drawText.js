@@ -148,7 +148,7 @@ function drawTextOn(textCanvas, text, textColor){
                         uuuuuu = fontSizeAndAddTextY(wordArray);
                         fontSize = uuuuuu.fontSize;
                         addTextY = uuuuuu.addTextY;
-                        console.log(wordArray);
+                        textX = repositionTextX(wordArray, textX, fontSize);
                     }
                      
                     // Comment : 알수없는 네이밍 변수.
