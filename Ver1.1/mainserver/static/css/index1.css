@@ -1,0 +1,258 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+html{
+	height : 100%;
+	width : 100%;
+    max-height: 100%;
+    max-width: 100%;
+	position : relative;
+	display : block;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body{
+	position: absolute;
+	height : 100%;
+	width : 100%;
+	display : block;
+	line-height: 100%;
+    font-family: "Nanum Gothic Ultra light", sans-serif;
+    
+    opacity: 1;    
+    background-image:url( "../image/backGround.jpg");
+    background-size: auto;
+    background-attachment: fixed;
+}
+
+#itemFactory-button-wrapper {
+    z-index: 10;
+    position: fixed;
+    width: 590px;
+    height: 20px;
+    min-height: 20px;
+    padding-top: 30px;
+/*    background-color : yellow;*/
+    opacity : 0.8;
+
+    box-shadow : 7px 1px 15px #202020; /*초기scrollY의 값과 가장 유사하게 바꿈*/
+    margin : auto;
+    right : 0;
+    left : 0;   
+}
+
+#itemFactory-button {
+    z-index: 10;
+    position: absolute;
+    height: 30px;
+    min-height: 30px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity : 1;
+    cursor: pointer;
+}
+#close-button-wrapper{
+    min-width: 700px;
+    z-index: 500;
+    position: fixed;
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    top: 60px;
+    display : none;
+
+}
+#close-button{
+    z-index: 500;
+    position: absolute;
+    height: 100%;
+    min-height: 100%;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+#itemFactory {
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#upload-wrapper {
+    z-index: 100;
+    position: absolute;
+    width: 60%;
+    min-width: 700px;
+    height: 60%;
+    min-height: 400px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#preview-image {
+    z-index: 120;
+    width: 80%;
+    height: 80%;
+    position: relative;
+    top: 5%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    line-height: 60px;
+}
+#preview-image-border {
+    border: 2px solid #202020;
+    border-radius : 2px;
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: all 0.8s ease-in-out;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#camera {
+    position : absolute;
+    margin: auto;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    top : 0;
+    bottom : 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+#input-image {
+    z-index: 120;
+    max-width: 90%;
+    max-height: 90%;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#upload-file, upload-text {
+    z-index: 120;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    width: 80%;
+    min-width: 600px;
+    height: 100%;
+    min-height: 400px;
+    text-align: center;
+}
+
+#upload-hidden {
+    z-index: 140;
+    position: absolute;
+    top: 5%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    width: 85%;
+    height: 80%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#upload-drag {
+    z-index: 130;
+    width: 85%;
+    height: 80%;
+    position: absolute;
+    top: 5%;
+    margin: auto;
+    left: 0;
+    right: 0;
+    opacity: 0;
+}
+
+#confirm-button {
+    z-index: 130;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 20%;
+    background-image: url(../image/png/confirm.png);
+    background-size: cover;
+    cursor: pointer;
+}
+
+input:focus{
+    outline : 0;
+}
+#text-input {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    line-height: 100%;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    font-family: "NanumMyeongjo";
+    font-size : 50px;
+
+    text-align: center;
+    vertical-align: middle;
+    z-index: 21;
+
+}
+#back-ground-canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+#submit-button {
+    z-index : 22;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 110%;
+    cursor: pointer;
+}
+#loading-image-wrapper {
+    width : 100%;
+    height : 100%;
+    position : absolute;
+    display : none;
+}
