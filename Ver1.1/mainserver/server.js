@@ -240,7 +240,8 @@ app.post('/upload-text', function(request, response){
                         var img = new Image();
                         img.src = data;
                         var imp = Impressive(img);
-                
+                        var hueData = imp.pickedHues;
+                        
                         var colorCf = colorClassifier(imp);
                         var textColors = colorCf.textColors.toHexString();
                         var bgColors = colorCf.bgColors.toHexString();
@@ -251,11 +252,7 @@ app.post('/upload-text', function(request, response){
                             file : fileName,
                             text : fields.textInput,
                             bgColor : bgColors,
-<<<<<<< HEAD
-                            textColor : textColors,
-=======
                             textColor : textColors
->>>>>>> f275d8f0ba2cf6be47c9df98ec8dc3cf27049cca
                         }
                         
                         var latestId;    
@@ -321,6 +318,18 @@ app.post('/upload-text', function(request, response){
                                     response.end();
                                 });
                             });
+                            pool.getConnection(function(err, connection){
+                                for(var i =0; i<hueData.length; ++i){
+                                    connection.query(sq.INSERT_INTO("hue", "(momentId, num, hue, hueLeft, hueRight, rate)", [moment.id, i, hueData[i].hue, hueData[i].rangeL, hueData[i].rangeR, hueData[i].rate]), function(err, res){
+                                        if(err) {
+                                            console.log('hue insert error');
+                                            throw err;
+                                        }
+                                    });
+                                }
+                                connection.release();
+                                console.log('>>> hue inserted');
+                            });
                         });
                     }   
                 });
@@ -348,6 +357,10 @@ app.get('/colorLab', function(req, res){
         middleColors : colorCf.middleColors.toHexString()
     });
 });
+var intervalId = setInterval(fadingImage, 1000*60);
+function fadingImage(){
+    
+}
 
 //웹서버를 실행한다.
 app.listen(app.get("port"), function(){
