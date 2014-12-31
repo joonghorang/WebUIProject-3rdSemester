@@ -108,16 +108,15 @@ app.get('/getmoments', function(request, response){
             
             console.log('getIdText>>>>>'+result);
             
-            momentsData.moment = result;
-            console.log(momentsData.moment);
+            momentsData.moments = result;
             connection.release();
             
             var currentMoment;
             var targetId;
             var bgcolorResult = [];
             var textcolorResult = [];
-            for(var i=0; i<momentsData.moment.length ; i++){
-                currentMoment = momentsData.moment[i];
+            for(var i=0; i<momentsData.moments.length ; i++){
+                currentMoment = momentsData.moments[i];
                 targetId = currentMoment.id;
                 pool.getConnection(function(err, connection){
                     var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
@@ -144,16 +143,16 @@ app.get('/getmoments', function(request, response){
                 });   
             }
             var intervalId = setInterval(function(){
-                if(momentsData.moment.length === textcolorResult.length){
+                if(momentsData.moments.length === textcolorResult.length){
                     console.log(">>>>>send")
-                    for(var i =0; i < momentsData.moment.length; ++i){
-                        momentsData.moment[i].bgColor = [];
+                    for(var i =0; i < momentsData.moments.length; ++i){
+                        momentsData.moments[i].bgColor = [];
                         for(var bgIdx = 0; bgIdx < bgcolorResult[i].length; ++bgIdx){
-                            momentsData.moment[i].bgColor[momentsData.moment[i].bgColor.length] = bgcolorResult[i][bgIdx].bgcolor;
+                            momentsData.moments[i].bgColor[momentsData.moments[i].bgColor.length] = bgcolorResult[i][bgIdx].bgcolor;
                         }
-                        momentsData.moment[i].textColor = [];
+                        momentsData.moments[i].textColor = [];
                         for(var textIdx = 0; textIdx < textcolorResult[i].length; ++textIdx){
-                            momentsData.moment[i].textColor[momentsData.moment[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
+                            momentsData.moments[i].textColor[momentsData.moments[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
                         }
                     }
                     console.log(JSON.stringify(momentsData, null, 4));
