@@ -1,5 +1,6 @@
 // 전연벽수
 var momentArray = new Array(); // 받아온 모멘트들을 저장하는 전역배열 
+
 // 임시 그림자 저장소 
 var shadowR = 20;
 var shadowG = 20;
@@ -52,78 +53,97 @@ var setMainGridView = {
 
         this.moments.style.height = this.moments.style.height + window.innerHeight;//this.moments.offsetHeight + 1000 + "px";
         console.log("size Expanded");
-            
-        //추가 객체들을 요청. 
-        var result = JSON.parse(this.request.responseText);
-        for(var i = 0; i < result.moments.length; i++){
-            this.mementlength++
-            if(this.stringSum > this.maxStringNum){
-                //this.scrollFlag = false;
-                break;
-            }
-            this.stringSum += result.moments[i].text.length;
-            this.momentArray.push(this.moments[i]);
-        }
-        // 모자라면 재요청을 보내는 코드
-        if(this.stringSum < this.maxStringNum - 30){    // 정확히 270자인 경우는 극히 드물 것이므로 30자의 버퍼를 주어 최악의 경우에 대비한다.  
-            this.createMoments.bind(this);
-        }
 
+//        //추가 객체들을 요청. 
+//
+//        for(var i = 0; i < result.moments.length; i++){
+//            this.mementlength++
+//            if(this.stringSum > this.maxStringNum){
+//                //this.scrollFlag = false;
+//                break;
+//            }
+//            this.stringSum += result.moments[i].text.length;
+//            this.momentArray.push(this.moments[i]);
+//        }
+//        // 모자라면 재요청을 보내는 코드
+//        if(this.stringSum < this.maxStringNum - 30){    // 정확히 270자인 경우는 극히 드물 것이므로 30자의 버퍼를 주어 최악의 경우에 대비한다.  
+//            this.createMoments.bind(this);
+//        }
+//
+//
+//        //받아온 페이지가 끝 페이지인지 알아보는 코드
+//        if(result.moments.length < this.getUnitNum){
+//            this.scrollFlag = false;
+//        }
 
-        //받아온 페이지가 끝 페이지인지 알아보는 코드
-        if(result.moments.length < this.getUnitNum){
-            this.scrollFlag = false;
-        }
-
-        for(var i = 0; i < result.moments.length; i++){
-            //moment set 하나씩 추가(div in a tag)
-            var addA = document.createElement('a');
-            addA.setAttribute("href", "./moment/" + result.moments[i].id);
-            var addSpan = document.createElement('span'); // 이제 디브가 아니라 스팬으로 추가. 
-            addSpan.setAttribute("class", "moment-span");// + this.classIndexNum.toString());
-
-            this.moments.appendChild(addA);
-            addA.appendChild(addSpan);
-        }
+//        for(var i = 0; i < result.moments.length; i++){
+//            //moment set 하나씩 추가(div in a tag)
+//            var addA = document.createElement('a');
+//            addA.setAttribute("href", "./moment/" + result.moments[i].id);
+//            var addSpan = document.createElement('span'); // 이제 디브가 아니라 스팬으로 추가. 
+//            addSpan.setAttribute("class", "moment-span");// + this.classIndexNum.toString());
+//
+//            this.moments.appendChild(addA);
+//            addA.appendChild(addSpan);
+//        }
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
-
-        // //기본 구조
-        // this.moments.addEventListener('mouseover', function(){
-        //     this.momentsWrapper.style.backgroundColor = '#b1a686';
-            
-        //     var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-        //     for(var i=0 ; i<otherSpans.length ; i++){
-        //         otherSpans[i].style.opacity = '0.5';
-        //     }
-        // });
-        // this.moments.addEventListener('mouseout', function(){
-        //     this.momentsWrapper.style.backgroundColor = 'transparent';
-            
-        //     var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-        //     for(var i=0 ; i<otherSpans.length ; i++){
-        //         otherSpans[i].style.opacity = '1';
-        //     }
-        // });
-
-        // //아마도 이렇게 함수로 만들어서, span추가될때마다 색상값만 데이터로 넣어서 이벤트도 같이 추가하면 될 듯?
-        // function spanHover(targetSpan, bgColor){
-        //     targetSpan.addEventListener('mouseover', function(){
-        //         this.momentsWrapper.style.backgroundColor = bgColor;
+        this.request.addEventListener('load', function(){
+            var momentsWrapper = document.getElementById('moments');
+            var result = JSON.parse(this.request.responseText);
+            for(var i =0; i < result.moments.length; ++i){
+                var moment = result.moments[i];
+                var momentA = document.createElement('a');
+                momentA.href = '/moment/' + result.moments[i].id;
+                var momentSpan = document.createElement('span');  
+                momentSpan.innerHTML = moment.text;
                 
-        //         var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-        //         for(var i=0 ; i<otherSpans.length ; i++){
-        //             otherSpans[i].style.opacity = '0.5';
-        //         }
-        //     });
-        //     targetSpan.addEventListener('mouseout', function(){
-        //         this.momentsWrapper.style.backgroundColor = 'transparent';
                 
-        //         var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-        //         for(var i=0 ; i<otherSpans.length ; i++){
-        //             otherSpans[i].style.opacity = '1';
-        //         }
-        //     });
-        // };
+                
+//                
+//                this.moments.addEventListener('mouseover', function(){
+//             this.momentsWrapper.style.backgroundColor = '#b1a686';
+//            
+//             var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+//             for(var i=0 ; i<otherSpans.length ; i++){
+//                 otherSpans[i].style.opacity = '0.5';
+//             }
+//         });
+//         this.moments.addEventListener('mouseout', function(){
+//             this.momentsWrapper.style.backgroundColor = 'transparent';
+//            
+//             var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+//             for(var i=0 ; i<otherSpans.length ; i++){
+//                 otherSpans[i].style.opacity = '1';
+//             }
+//         });
+
+         //아마도 이렇게 함수로 만들어서, span추가될때마다 색상값만 데이터로 넣어서 이벤트도 같이 추가하면 될 듯?
+   
+                momentA.appendChild(momentSpan);
+                momentsWrapper.appendChild(momentA);
+            }
+        }.bind(this));
+         //기본 구조
+        function spanHover(targetSpan, bgColor){
+            targetSpan.addEventListener('mouseover', function(){
+                this.momentsWrapper.style.backgroundColor = bgColor;
+                
+                var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+                for(var i=0 ; i<otherSpans.length ; i++){
+                    otherSpans[i].style.opacity = '0.5';
+                }
+            });
+            targetSpan.addEventListener('mouseout', function(){
+                this.momentsWrapper.style.backgroundColor = 'transparent';
+                
+                var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+                for(var i=0 ; i<otherSpans.length ; i++){
+                    otherSpans[i].style.opacity = '1';
+                }
+            });
+        };
+             
+
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
