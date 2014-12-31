@@ -32,7 +32,17 @@ spanHover(t13, '#4F61F4');
 spanHover(t14, '#26AFA8');
 spanHover(t15, '#5B527F');
 spanHover(t16, '#26AFA8');
-
+spanHover(t17, '#2b2410');
+spanHover(t18, '#dbd8d2');
+spanHover(t19, '#6d420d');
+spanHover(t20, '#876744');
+spanHover(t21, '#736c96');
+spanHover(t22, '#4f414c');
+spanHover(t23, '#5f756d');
+spanHover(t24, '#857f80');
+spanHover(t25, '#212426');
+spanHover(t26, '#26AFA8');
+spanHover(t26, '#26AFA8');
 
 //기본 구조
 t2.addEventListener('mouseover', function(){
