@@ -71,6 +71,11 @@ body{
     background-attachment: fixed;
 }
 
+#wrapper{
+    width: 100%;
+    height: 100%;
+}
+
 #itemFactory-button-wrapper {
     z-index: 10;
     position: fixed;
@@ -298,6 +303,11 @@ input:focus{
     display : none;
 }
 
+#moments-wrapper{
+    width: 100%;
+    height: 100%;
+}
+
 /*mainPage.css에서 이사한 코드*/
 #moments{
     z-index: 0;
@@ -314,6 +324,10 @@ input:focus{
     font-size: 30px;
     line-height: 55px;
     text-align: justify;
+}
+
+#moments span{
+    word-break: keep-all;
 }
 
 #moments span:hover{
