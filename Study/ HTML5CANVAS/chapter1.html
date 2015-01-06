@@ -1,0 +1,89 @@
+<!-- Canvas요소 자체는 캔버스 2D 컨텍스트를 이용하여 브라우저에서 DOM으로 접근할 수 있지만, 캔버스 위에 만들어진 그래픽 요소는 DOM객체로 접근할 수 없다. 
+앞서 말했듯이 캔벗는 그림 객체를 가지고 있는게 아니라 오직 개별 프레임에 무엇을 그릴지에 대한 정보만 가지고 즉시 모드로 그림을 그리기 때문이다. 
+
+window는 DOM에서 최상위 레벨 객체다. 캔버스 애플리케이션 시작 전에 모든 코드와 값이 제대로 올라왔는지를 확인하는 데 window객체를 사용한다. 
+document객체는 HTML 페이지 안에 있는 모든HTML 태그를 가지고 있다. 예제에서 자바스크립트로 <canvas> 인스턴스에 접근할 때 바로 이 객체를 사용할 것이다.
+
+context의 속성값
+- strokeStyle
+- fillStyle
+- globalAlpha
+- lineWidth
+- lineCap
+- lineJoin
+- miterLimit
+- shadowOffsetX
+- shadowOffsetY
+- shadowBlur
+- shadowColor
+- globalCompositeOperation
+- font 
+- textAlign
+- textBaseline
+
+캔버스의 width, height속성은 읽기전용 속성이 아니다. 따라서 자바스크립트로 동적으로 제어할 수 있다. 
+
+-->
+
+<!doctype html>
+<html lang = "ko">
+<head>
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+	<script type = "text/javascript">
+	window.addEventListener("load", eventWindowLoaded, false);
+	var Debugger = function() {};
+
+	Debugger.log = function (message) {
+		try {
+			console.log(message);
+		} catch(exception){
+			return;
+		}
+	}
+
+	function eventWindowLoaded(){
+		canvasApp();
+	}
+
+	function canvasApp(){
+		var theCanvas = document.getElementById("canvasOne");
+		var context = theCanvas.getContext("2d");
+
+		Debugger.log("Drawing Canvas");
+
+		function drawScreen(){
+			//backGround draw
+			context.fillStyle = "#ffffaa";
+			context.fillRect(0, 0, 500, 300);
+
+			//character
+			context.fillStyle = "#000000";
+			context.font = "20px _sans";
+			context.textBaseline = "top";
+			context.fillText ("Hello Wordl!", 195, 80);
+
+			// image
+			var helloWorldImage = new Image();
+			helloWorldImage.src = "hello.jpg";
+			helloWorldImage.onload = function(){
+				context.drawImage(helloWorldImage, 160, 130);
+			}
+
+			// rectangle
+			context.strokeStyle = "#000000";
+			context.strokeRect(5, 5, 490, 290);
+		}
+
+		drawScreen();
+	}
+	</script>
+</head>
+<body>
+<div style = "position : absolute; top : 50px; left : 50px;">
+	<canvas id = "canvasOne" width = "500" height = "300">
+		Your browser does not support HTML5 Canvas.
+	</canvas>
+</div>
+</body>
+</html>
