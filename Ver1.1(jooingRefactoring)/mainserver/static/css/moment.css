@@ -1,0 +1,263 @@
+@font-face {
+    font-family: "NanumBarunGothicLight";
+    font-style: normal;
+    src: url('../font/NanumGothicLight/NanumBarunGothicLight.eot');,
+    url('../font/NanumGothicLight/NanumBarunGothicLight.woff') format('woff'),
+    url('../font/NanumGothicLight/NanumBarunGothicLight.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'NanumBarunGothicUltraLight';
+    font-style: normal;
+    src: url('../font/NanumGothicLight/NanumBarunGothicUltraLight.eot');,
+    url('../font/NanumGothicLight/NanumBarunGothicUltraLight.woff') format('woff'),
+    url('../font/NanumGothicLight//NanumBarunGothicUltraLight.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'momentHelvetica';
+    src: local("Helvetica Neue"),
+         local("HelveticaNeue-Regular"),
+         url(HelveticaNeue-Regular.ttf) format('truetype');
+    font-style: normal;
+    font-weight: light;
+}
+
+html, body{
+    width : 100%;
+    height : 100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#return-button-wrapper{
+    z-index: 300;
+    position: relative;
+    float: right;
+    width: 40px;
+    height: 40px;
+    opacity: 0.8;
+    top: 20px;
+    right: 20px;
+}
+
+#return-button{
+    background-image: url(../image/square.png);
+    background-position: center;
+    background-size: 80px;
+    width: 100%;
+    height: 100%;
+}
+
+#backward-button-wrapper{
+    z-index : 300;
+    position : absolute;
+    width : 40px;
+    height : 40px;
+    margin-top : 30%;
+    left : 10%;
+}
+#backward-button{
+    background-image: url("../image/png/back.png");
+    background-size : 40px;
+    z-index : 310;
+    width : 100%;
+    height : 100%;
+}
+#forward-button-wrapper{
+    z-index : 300;
+    position : absolute;
+    width : 40px;
+    height : 40px;
+    margin-top : 30%;
+    right : 10%;
+}
+#forward-button{
+    background-image: url("../image/png/forward.png");
+    background-size : 40px;
+    z-index : 310;
+    width : 100%;
+    height : 100%;
+}
+#wrapper {
+    z-index: 20;
+    width : 100%;
+    height : 100%;
+    position: absolute;
+    opacity: 0.9;
+    background-image:url( "../image/backGround.jpg");
+    background-size: auto;
+    background-attachment: fixed;
+}
+
+#page-background{
+    width : 100%
+    height : 100%;
+    position: absolute;
+}
+#bg-image {
+    z-index: 10;
+    position: absolute;
+    width: 0%;
+    height: 0%;
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+}
+
+#moment {
+    z-index: 100;
+    width : 46%;
+    padding-bottom : 46%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 4% auto 0 auto;
+    /*box-shadow: 10px 10px 15px #555555;*/
+}
+
+#text-canvas{
+    z-index : 110;
+    width : 100%;
+    height : 100%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+#bg-canvas{
+    z-index : 105;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#moment-image-wrapper {
+    z-index: 120;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+
+.moment-image {
+    z-index: 130;
+    max-height: 100%;
+    max-width: 100%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+@media screen 
+and (min-device-width : 320px) 
+and (max-device-width : 680px)
+and (min-device-height : 320px)
+and (max-device-height : 680px)
+{
+    #wrapper {
+        width : 100%;
+        height : 100%;
+        position: absolute;
+        background-image: url(../image/concrete_texture.jpg);
+        background-size: auto;
+        background-attachment: fixed;
+        background-position: center center;
+    }
+    #moment {
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    #text-canvas {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    #backward-button-wrapper {
+        position : absolute;
+        opacity: 0.8;
+        bottom : 5%;
+        left: 2%;
+    }
+    #backward-button{
+        background-image: url("../image/previousMobile.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    #forward-button-wrapper {
+        position: absolute;
+        opacity: 0.8;
+        bottom : 5%;
+        right: 2%;
+    }
+    #forward-button{
+        background-image: url("../image/nextMobile.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+@media screen 
+and (min-device-width : 320px) 
+and (max-device-width : 680px)
+and (min-device-height : 320px)
+and (max-device-height : 680px)
+and (orientation : portrait){
+    #frame{
+        width: 85vw;
+        height: 85vw;
+        padding : 0;
+        
+        margin: auto auto;
+        top :0;
+        left : 0;
+        right : 0;
+        bottom: 0;
+    }
+}
+
+@media screen 
+and (min-device-width : 320px) 
+and (max-device-width : 680px)
+and (min-device-height : 320px)
+and (max-device-height : 680px)
+and (orientation : landscape){
+    #moment{
+        width : 85vh;
+        height: 85vh;
+        padding: 0;
+        margin: auto;
+        top :0;
+        left : 0;
+        right : 0;
+        bottom: 0;
+    }
+}
