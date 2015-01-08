@@ -1,19 +1,3 @@
-var MAX_WIDTH = window.innerWidth;
-var MAX_HEIGHT = window.innerHeight;
-
-var wrapper = document.getElementById("wrapper");
-var textInput = document.getElementById("text-input");
-var submitButton = document.getElementById("submit-button");
-var backGroundCanvas = document.getElementById("back-ground-canvas");
-
-var textValue;	// 입력받은 문자열 저장 변수 
-
-var fR;
-var fG;
-var fB;
-var firstColor;	// 그라데이션 칼라 초기값
-var secondColor;
-var offset = 4;
 
 window.onload = function(){
 	textInputEventManager();
@@ -33,38 +17,52 @@ function zeroCheck(num){
     }
 }
 
-function drawGradation(firstColor, secondColor) {
+function drawGradation(color1, color2) {
+	var backGroundCanvas = document.getElementById("back-ground-canvas");
 	var grdContext = backGroundCanvas.getContext('2d');
+	var grdW = (GlobalVar.CONSTANTS()).MAX_WIDTH;
+	var grdH = (GlobalVar.CONSTANTS()).MAX_HEIGHT;
+
 	// 그라데이션 영역 정의 및 객체 생성
-	var grd = grdContext.createLinearGradient(0, MAX_HEIGHT, MAX_WIDTH, MAX_HEIGHT); 			// 풀스크린용
-	grd.addColorStop(0, firstColor);
-	grd.addColorStop(1, secondColor);
+	var grd = grdContext.createLinearGradient(0, grdH, grdW, grdH); 			// 풀스크린용
+	grd.addColorStop(0, color1);
+	grd.addColorStop(1, color2);
 
 	// 도형의채우는 색상 속성에 그라데이션 객체 설정
 	grdContext.fillStyle = grd;
-	grdContext.fillRect(0, 0, MAX_WIDTH, MAX_HEIGHT);											// 풀스크린용
+	grdContext.fillRect(0, 0, grdW, grdH);											// 풀스크린용
 }
 
-function changeGradationColor(num, offset){
-	var R, G, B;
-	if((fR - offset * num) < 16){
-		R = 16;
+function changeGradationColor(textCount, offset){
+	var result = [];
+	var origin = [];
+	var gradationColor = GlobalVar.GradationColorGetter();
+	var color1 = gradationColor.color1;
+	var color2 = gradationColor.color2;
+	var maginotBrightness = 16;
+
+	origin.R = (commonCanvas.hex2Rgb(color1)).r;
+	origin.G = (commonCanvas.hex2Rgb(color1)).g;
+	origin.B = (commonCanvas.hex2Rgb(color1)).b;
+	if((origin.R - offset * textCount) < maginotBrightness){
+		result.R = maginotBrightness;
 	} else {
-		R = decimalToHex(zeroCheck(fR - offset * num));
+		result.R = decimalToHex(zeroCheck(origin.R - offset * textCount));
 	}
-	if((fG - offset * num) < 16){
-		G = 16;
+	if((origin.G - offset * textCount) < maginotBrightness){
+		result.G = maginotBrightness;
 	} else {
-		G = decimalToHex(zeroCheck(fG - offset * num));
+		result.G = decimalToHex(zeroCheck(origin.G - offset * textCount));
 	}
-	if((fB - offset * num) < 16){
-		B = 16;
+	if((origin.B - offset * textCount) < maginotBrightness){
+		result.B = maginotBrightness;
 	} else {
-		B = decimalToHex(zeroCheck(fB - offset * num));
+		result.B = decimalToHex(zeroCheck(origin.B - offset * textCount));
 	}
-	firstColor = combineRgbString(R, G, B);
-	drawGradation(firstColor, secondColor);
-		
+	color1 = commonCanvas.rgb2Hex(result.R, result.G, result.B);
+
+	drawGradation(color1, color2);
+
 	function decimalToHex(num){
 		var hexnum = (num).toString(16);
 		return hexnum;
@@ -76,26 +74,25 @@ function changeGradationColor(num, offset){
 }
 
 function textInputEventManager(){
+	var textInput = document.getElementById("text-input");
+	var textCount;
+	var offset = 4; 									// 한 번에 줄어드는 빛의 양.
 	textInput.oninput = function(event){
+		textCount = textInput.value.length;
+		changeGradationColor(textCount, offset);
 		if(textInput.value.length < 30){
-			var num = textInput.value.length;
-			if(num < 5){
-				changeGradationColor(num, offset);
+			if(textCount < 5){
 				textInput.style.fontSize = "50px";
-			} else if(num < 10) {
-				changeGradationColor(num, offset);
+			} else if(textCount < 10) {
 				textInput.style.fontSize = "45px";
-			} else if(num < 15) {
-				changeGradationColor(num, offset);
+			} else if(textCount < 15) {
 				textInput.style.fontSize = "40px";
-			} else if(num < 20) {
-				changeGradationColor(num, offset);
+			} else if(textCount < 20) {
 				textInput.style.fontSize = "35px";
 			} else {
-				changeGradationColor(num, offset);
 				textInput.style.fontSize = "30px";
 			}
-		} else {
+		} else {												// 30자가 넘어가면 자동으로 텍스트를 잘라버려서 입력되지 않게끔 한다. 
 			textInput.value = textInput.value.slice(0,29);
 		}	
 	};
@@ -106,7 +103,6 @@ function textInputEventManager(){
 			EventUtil.preventDefault(event);
 		}
 	});
-
 
 	EventUtil.addHandler(textInput, "focus", function(event){	// 입력창 포커스시 
 		textInput.value = "";
@@ -125,5 +121,4 @@ function textInputEventManager(){
 			textValue = textInput.textContent;
 		} 
 	});
-
 };

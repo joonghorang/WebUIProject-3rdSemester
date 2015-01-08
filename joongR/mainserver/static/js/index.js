@@ -1,14 +1,3 @@
-// 전연벽수
-var momentArray = new Array(); // 받아온 모멘트들을 저장하는 전역배열 
-
-// 임시 그림자 저장소 
-var shadowR = 20;
-var shadowG = 20;
-var shadowB = 20;
-
-// 취소 버튼을 위한 전역변수. 
-var tempImgWarehouse;
-var tempFlag = false;
 
 // 전역객체 
 var setMainGridView = {
@@ -47,7 +36,7 @@ var setMainGridView = {
     },
     // 처음 윈도우가 온로드외었을 때 객체들을 추가
     "preload" : function(){
-        console.log(this.getUnitNum);
+        console.log("getUnitNumber : " + this.getUnitNum);
         this.request.open("GET", "/getmoments?index=" + 0 + "&num=" + this.getUnitNum, true);
         this.request.send();
 
@@ -332,7 +321,7 @@ var itemFactoryDisplay = {
         this.fileInput.value = null;                                     
         
         // 그라데이션 색상 초기화  
-        fR = 255; fG = 255; fB = 255;                                                                        
+        GlobalVar.GradationColorSetter("#FFFFFF", "#FFFFFF");                                                                       
         firstColor = "#FFFFFF";    
         secondColor = "#FFFFFF"; 
     },
@@ -407,7 +396,7 @@ var confirm = {
     },
     "sendImage" : function(e){
         display([this.confirmButton, this.itemFactory, this.closeButton], 'hide');
-        display([this.loadingImageWrapper], 'show');        
+        display([this.loadingImageWrapper, this.bgCanvas], 'show');        
         // 로딩버튼 초기 설정
         var loadingImage = document.getElementById("loading-image");
         var lCanvas_W = window.innerWidth * 99.3/100;                    // innerWidth와 실제 창의 크기가 달라서 비율을 넣었다.
@@ -475,44 +464,46 @@ var confirm = {
     },
 
     "switchToTextInput" : function(){
-        //로딩버튼관련
+
         clearInterval(this.duringTime);
         //텍스트 입력창으로 전환
         display([this.uploadText, this.itemFactory, this.closeButton],'show');
         display([this.uploadFile, this.loadingImageWrapper], 'hide');
         
+        //로딩버튼관련
         var result = JSON.parse(this.request.responseText);
-        var bgColor = result.bgColor;
-        var textColor = result.textColor;
+        var color1 = result.bgColor;
+        var color2 = result.textColor;
+        var thisPictureR, thisPictureG, thisPictureB;
+        var brightnessMark = 130;
 
-        // 16진수를 10진수로 바꿔서 fRGB에 넣어준다. 
-        fR = parseInt(bgColor.slice(1,3), 16);
-        fG = parseInt(bgColor.slice(3,5), 16);
-        fB = parseInt(bgColor.slice(5,7), 16);
-        shadowR = parseInt(textColor.slice(1,3), 16);
-        shadowG = parseInt(textColor.slice(3,5), 16);
-        shadowB = parseInt(textColor.slice(5,7), 16);
-        firstColor = bgColor;
-        if(textColor !== null){
-            secondColor = textColor;
-        } else{
-            secondColor = bgColor;
+        // 추후를 위해 전송받은 색들을 전역변수에 저장
+        GlobalVar.ShadowColorSetter(parseInt(color2.slice(1,3), 16),
+                                    parseInt(color2.slice(3,5), 16),
+                                    parseInt(color2.slice(5,7), 16)); 
+        // 색이 하나 밖에 없을 때에는(흑밴사진의 경우) 하나의 값으로 모든 그라데이션을 처리 
+        if(color2 !== null){
+            GlobalVar.GradationColorSetter(color1, color2);
+        } else {
+            GlobalVar.GradationColorSetter(color1, color1);
         }
 
         // 입력받은 평균 배경의 밝기가 130이하이면 글자색을 흰색으로 설정해준다.(점점 어두워 질테니 130보다 좀더 높게 잡음) 
-        var avgBrightness = (fR + fG + fB) / 3;
-        if(avgBrightness < 130){
-            this.textInput.style.color = "#FFFFFF";
+        thisPictureR = parseInt(color1.slice(1,3), 16);
+        thisPictureG = parseInt(color1.slice(3,5), 16);
+        thisPictureB = parseInt(color1.slice(5,7), 16);
+
+        var avgBrightness = (thisPictureR + thisPictureG + thisPictureB) / 3;
+        if(avgBrightness < brightnessMark){
+            this.textInput.style.color = "white";
             this.closeButton.children[0].src = "image/png/close(invert).png";
             this.submitButton.src = "image/png/confirm(invert).png";
-            // console.log(this.closeButton);
-             // console.log(this.submitButton);
         } else{
-            this.textInput.style.color = "#000000";
+            this.textInput.style.color = "black";
             this.closeButton.children[0].src = "image/png/close.png";
             this.submitButton.src = "image/png/confirm.png";           
         }
-        drawGradation(bgColor, textColor);
+        drawGradation(color1, color2);
     },
     "run" : function(){
         this.getElements();
@@ -548,11 +539,13 @@ var submit = {
         loadingImage.width = lCanvas_W;
         loadingImage.height = lCanvas_H; 
         var lCtx = loadingImage.getContext("2d");
-        // 컨텍스트 합성환경설ㅈ
+        // 컨텍스트 합성환경설정
         lCtx.globalCompositeOperation = "copy";
         // 원설정 
         var circleR = 10;
+        var circleMaximumR = 20;
         var circleColor = "#FFFFFF"; 
+
         // 그림자 설정
         var shadow = {
             x : 4,
@@ -564,34 +557,35 @@ var submit = {
         };
         // 원크기 제어를 위한 플래그 설정
         var sizeFlag = true;
-        // 전역변수 fR, fG, fB와 연동하면서 계산할 RGB변수
+
+        // 전역색상값과 연동하면서 계산할 RGB변수
         var loadingR = 255;
         var loadingG = 255;
         var loadingB = 255;
         var loadingShadowR = 20; // 받아오기 위해 전역으로 선언.
         var loadingShadowG = 20;
         var loadingShadowB = 20;
-
+        var gradationColor = commonCanvas.hex2Rgb((GlobalVar.GradationColorGetter()).color1);
+        var shadowColor = GlobalVar.ShadowColorGetter(); 
         // 계산할 때 증감할 offset Num 
         var colorOffset = 1; 
 
         this.duringTime = setInterval(function(){
             drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
-            if(circleR < 20 && sizeFlag === true){ 
+            if(circleR < circleMaximumR && sizeFlag === true){ 
                 circleR = circleR + 1;
                 shadow.blur++;
                 shadow.degree = shadow.degree + 0.3;   
-            } else if(circleR === 20){
+            } else if(circleR === circleMaximumR){
 
                 //받아온 칼라값을 적용
-                //전역으로 선언해둔 fR, fG, fB를 재활용. 
                 //원이 커지고 난 후부터 애니메이션이 시작되도록 설정함.
-                loadingShadowR = adjustColor(loadingShadowR, shadowR, colorOffset);
-                loadingShadowG = adjustColor(loadingShadowG, shadowG, colorOffset);
-                loadingShadowB = adjustColor(loadingShadowB, shadowB, colorOffset);
-                loadingR = adjustColor(loadingR, fR, colorOffset);
-                loadingG = adjustColor(loadingG, fG, colorOffset);
-                loadingB = adjustColor(loadingB, fB, colorOffset);
+                loadingShadowR = adjustColor(loadingShadowR, shadowColor.shadowR, colorOffset);
+                loadingShadowG = adjustColor(loadingShadowG, shadowColor.shadowG, colorOffset);
+                loadingShadowB = adjustColor(loadingShadowB, shadowColor.shadowB, colorOffset);
+                loadingR = adjustColor(loadingR, gradationColor.r, colorOffset);
+                loadingG = adjustColor(loadingG, gradationColor.g, colorOffset);
+                loadingB = adjustColor(loadingB, gradationColor.b, colorOffset);
 
                 circleColor = commonCanvas.rgb2Hex(loadingR, loadingG, loadingB);
                 shadow.color = commonCanvas.rgb2Hex(loadingShadowR, loadingShadowG, loadingShadowB);
