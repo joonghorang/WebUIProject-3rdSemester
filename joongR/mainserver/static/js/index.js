@@ -503,7 +503,7 @@ var confirm = {
             this.closeButton.children[0].src = "image/png/close.png";
             this.submitButton.src = "image/png/confirm.png";           
         }
-        drawGradation(color1, color2);
+        textInput.drawGradation(color1, color2);
     },
     "run" : function(){
         this.getElements();

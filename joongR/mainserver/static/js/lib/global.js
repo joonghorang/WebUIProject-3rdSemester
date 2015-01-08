@@ -42,12 +42,12 @@ GlobalVar = {
 		this.result.shadowB = this.shadowB;
 		return this.result;
 	},
-	"TempImgWarehouseSetter" : function(img){
-		this.tempImgWarehouse = img;
-	},
-	"FlagSetter" : function(){
+	// "TempImgWarehouseSetter" : function(img){
+	// 	this.tempImgWarehouse = img;
+	// },
+	// "FlagSetter" : function(){
 
-	},
+	// },
 	"Init" : function(){
 		this.ShadowColorGetter.bind(this.ShadowColorSetter);
 		this.GradationColorGetter.bind(this.GradationColorSetter);
