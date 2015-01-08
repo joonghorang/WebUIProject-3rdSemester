@@ -1,8 +1,4 @@
 
-window.onload = function(){
-	textInputEventManager();
-};
-
 function changeDecToHexColor(r, g, b){
     var result = "#" + zeroCheck((r).toString(16)) 
                      + zeroCheck((g).toString(16)) 
@@ -73,7 +69,7 @@ function changeGradationColor(textCount, offset){
 	}
 }
 
-function textInputEventManager(){
+function textInputEventManager(){ 
 	var textInput = document.getElementById("text-input");
 	var textCount;
 	var offset = 4; 									// 한 번에 줄어드는 빛의 양.
@@ -94,13 +90,15 @@ function textInputEventManager(){
 			}
 		} else {												// 30자가 넘어가면 자동으로 텍스트를 잘라버려서 입력되지 않게끔 한다. 
 			textInput.value = textInput.value.slice(0,29);
-		}	
+		}
+		//console.log(event);
+	
 	};
 
-	EventUtil.addHandler(textInput, "textInput", function(event){
-		event = EventUtil.getEvent(event);
-		if(textInput.value.length > 29){
-			EventUtil.preventDefault(event);
+	EventUtil.addHandler(textInput, "keydown", function(event){
+		if(event.keyCode === 13){
+			console.log("Pressed enter to submit.");
+			submit.sendData();
 		}
 	});
 
@@ -114,11 +112,18 @@ function textInputEventManager(){
 		EventUtil.preventDefault(event);
 	});
 
-	EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누르면 전송하게 하는 이벤트 
-		event = EventUtil.getEvent(event);
-		if(event.keyCode === 13){
-			EventUtil.preventDefault(event);
-			textValue = textInput.textContent;
-		} 
-	});
+	// EventUtil.addHandler(textInput, "textInput", function(event){	// 엔터키 누르면 전송하게 하는 이벤트 
+	// 	event = EventUtil.getEvent(event);
+	// 	if(event.keyCode === 13){
+	// 		console.log("enter");
+	// 		EventUtil.preventDefault(event);
+
+	// 		submit.sendData();
+	// 	} 
+	// });
+};
+
+
+window.onload = function(){
+	textInputEventManager();
 };
