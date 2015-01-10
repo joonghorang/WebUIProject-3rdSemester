@@ -98,7 +98,7 @@ app.get('/getmoments', function(request, response){
     
     async.waterfall([
         function(callback){
-            var getIdTextQ = 'SELECT id, text FROM moment LIMIT ' + index + ',' + num + ';'; //index부터 num개를 가져온다.
+            var getIdTextQ = 'SELECT id, text FROM moment ORDER BY date DESC LIMIT ' + index + ',' + num + ';'; //index부터 num개를 가져온다.
             connectionHandler(getIdTextQ, 'get (id, text) error', function(connection, result){            
                 momentsData = result;
                 connection.release();
