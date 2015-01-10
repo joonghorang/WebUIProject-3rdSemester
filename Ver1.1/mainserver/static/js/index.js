@@ -34,7 +34,7 @@ var setMainGridView = {
 
         this.stringSum = 0;
         this.maxStringNum = 270;
-        this.getUnitNum = 15;
+        this.getUnitNum = 20;
     },
     "setShadow" : function(){
         this.shadowColor = "#202020";
@@ -54,53 +54,20 @@ var setMainGridView = {
         this.moments.style.height = this.moments.style.height + window.innerHeight;//this.moments.offsetHeight + 1000 + "px";
         console.log("size Expanded");
 
-//        //추가 객체들을 요청. 
-//
-//        for(var i = 0; i < result.moments.length; i++){
-//            this.mementlength++
-//            if(this.stringSum > this.maxStringNum){
-//                //this.scrollFlag = false;
-//                break;
-//            }
-//            this.stringSum += result.moments[i].text.length;
-//            this.momentArray.push(this.moments[i]);
-//        }
-//        // 모자라면 재요청을 보내는 코드
-//        if(this.stringSum < this.maxStringNum - 30){    // 정확히 270자인 경우는 극히 드물 것이므로 30자의 버퍼를 주어 최악의 경우에 대비한다.  
-//            this.createMoments.bind(this);
-//        }
-//
-//
-//        //받아온 페이지가 끝 페이지인지 알아보는 코드
-//        if(result.moments.length < this.getUnitNum){
-//            this.scrollFlag = false;
-//        }
-
-//        for(var i = 0; i < result.moments.length; i++){
-//            //moment set 하나씩 추가(div in a tag)
-//            var addA = document.createElement('a');
-//            addA.setAttribute("href", "./moment/" + result.moments[i].id);
-//            var addSpan = document.createElement('span'); // 이제 디브가 아니라 스팬으로 추가. 
-//            addSpan.setAttribute("class", "moment-span");// + this.classIndexNum.toString());
-//
-//            this.moments.appendChild(addA);
-//            addA.appendChild(addSpan);
-//        }
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         this.request.addEventListener('load', function(){
             var moments = document.getElementById('moments');
             var wrapper = document.getElementById('wrapper')
             var result = JSON.parse(this.request.responseText);
-            for(var i =0; i < result.moments.length; ++i){
-                var moment = result.moments[i];
-                var bgColor = result.moments[i].bgColor[0];
+            for(var i =0; i < result.length; ++i){
+                var moment = result[i];
                 var momentA = document.createElement('a');
-                momentA.href = '/moment/' + result.moments[i].id;
+                momentA.href = '/moment/' + result[i].id;
                 var momentSpan = document.createElement('span');  
                 momentSpan.innerHTML = moment.text;
-                console.log(bgColor);
-                spanHover(momentSpan, bgColor);
-   
+
+                spanHover(momentSpan, result[i].bgColor[0]);
+                
                 momentA.appendChild(momentSpan);
                 moments.appendChild(momentA);
                 
@@ -115,10 +82,27 @@ var setMainGridView = {
                 };
             }
         }.bind(this));
+        
          //기본 구조
-
-             
-
+        function spanHover(targetSpan, bgColor){
+            var wrapper = document.getElementById('wrapper'); 
+            targetSpan.addEventListener('mouseover', function(){
+                wrapper.style.backgroundColor = bgColor;
+                
+                var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+                for(var i=0 ; i<otherSpans.length ; i++){
+                    otherSpans[i].style.opacity = '0.5';
+                }
+            });
+            targetSpan.addEventListener('mouseout', function(){
+                wrapper.style.backgroundColor = 'transparent';
+                
+                var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
+                for(var i=0 ; i<otherSpans.length ; i++){
+                    otherSpans[i].style.opacity = '1';
+                }
+            });
+        };
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){
