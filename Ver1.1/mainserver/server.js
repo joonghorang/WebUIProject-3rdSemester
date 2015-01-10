@@ -145,6 +145,7 @@ app.get('/getmoments', function(request, response){
             var intervalId = setInterval(function(){
                 if(momentsData.moments.length === textcolorResult.length){
                     console.log(">>>>>send")
+                    console.log(bgcolorResult, textcolorResult
                     for(var i =0; i < momentsData.moments.length; ++i){
                         momentsData.moments[i].bgColor = [];
                         for(var bgIdx = 0; bgIdx < bgcolorResult[i].length; ++bgIdx){

@@ -88,60 +88,35 @@ var setMainGridView = {
 //        }
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         this.request.addEventListener('load', function(){
-            var momentsWrapper = document.getElementById('moments');
+            var moments = document.getElementById('moments');
+            var wrapper = document.getElementById('wrapper')
             var result = JSON.parse(this.request.responseText);
             for(var i =0; i < result.moments.length; ++i){
                 var moment = result.moments[i];
+                var bgColor = result.moments[i].bgColor[0];
                 var momentA = document.createElement('a');
                 momentA.href = '/moment/' + result.moments[i].id;
                 var momentSpan = document.createElement('span');  
                 momentSpan.innerHTML = moment.text;
-                
-                
-                
-//                
-//                this.moments.addEventListener('mouseover', function(){
-//             this.momentsWrapper.style.backgroundColor = '#b1a686';
-//            
-//             var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-//             for(var i=0 ; i<otherSpans.length ; i++){
-//                 otherSpans[i].style.opacity = '0.5';
-//             }
-//         });
-//         this.moments.addEventListener('mouseout', function(){
-//             this.momentsWrapper.style.backgroundColor = 'transparent';
-//            
-//             var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-//             for(var i=0 ; i<otherSpans.length ; i++){
-//                 otherSpans[i].style.opacity = '1';
-//             }
-//         });
-
-         //아마도 이렇게 함수로 만들어서, span추가될때마다 색상값만 데이터로 넣어서 이벤트도 같이 추가하면 될 듯?
+                console.log(bgColor);
+                spanHover(momentSpan, bgColor);
    
                 momentA.appendChild(momentSpan);
-                momentsWrapper.appendChild(momentA);
+                moments.appendChild(momentA);
+                
+                function spanHover(targetSpan, bgColor){
+                    targetSpan.addEventListener('mouseover', function(){
+                        wrapper.style.backgroundColor = bgColor;
+                
+                    });
+                    targetSpan.addEventListener('mouseout', function(){
+                        wrapper.style.backgroundColor = 'transparent';
+                    });
+                };
             }
         }.bind(this));
          //기본 구조
-        function spanHover(targetSpan, bgColor){
-            targetSpan.addEventListener('mouseover', function(){
-                this.momentsWrapper.style.backgroundColor = bgColor;
-                
-                var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-                for(var i=0 ; i<otherSpans.length ; i++){
-                    otherSpans[i].style.opacity = '0.5';
-                }
-            });
-            targetSpan.addEventListener('mouseout', function(){
-                this.momentsWrapper.style.backgroundColor = 'transparent';
-                
-                var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
-                for(var i=0 ; i<otherSpans.length ; i++){
-                    otherSpans[i].style.opacity = '1';
-                }
-            });
-        };
+
              
 
     },
