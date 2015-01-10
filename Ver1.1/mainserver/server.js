@@ -114,21 +114,21 @@ app.get('/getmoments', function(request, response){
                 currentMoment = momentsData[i];
                 targetId = currentMoment.id;
                 var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
+                var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
                 connectionHandler(getBgcolorsQ, 'getBgcolorQ error', function(connection, result){ 
                     bgcolorResult[bgcolorResult.length] = result;
-                    console.log('>>>>>>>>>>>bgcolor!!!!!!');
+                    console.log('>>>>>bgcolor');
                     connection.release();
-                    callback(null, targetId, bgcolorResult, textcolorResult);
                 });   
+                callback(null, getTextcolorsQ, bgcolorResult, textcolorResult);
              }
         },
-        function(targetId, bgcolorResult, textcolorResult, callback){     //문제사항 : 이 지점에서 targetId가 계속 같음.
-            var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
+        function(getTextcolorsQ, bgcolorResult, textcolorResult, callback){     //문제사항 : 이 지점에서 targetId가 계속 같음.
             connectionHandler(getTextcolorsQ, 'getTextcolorQ error', function(connection, result){
                 textcolorResult[textcolorResult.length] = result;
-                console.log('>>>>>>>>>>>textcolor!!!!!!');
-                callback(null, bgcolorResult, textcolorResult);
+                console.log('>>>>>textcolor');
                 connection.release();
+                callback(null, bgcolorResult, textcolorResult);
             });
         },
     ],
@@ -137,9 +137,7 @@ app.get('/getmoments', function(request, response){
             console.log(err);
         }
         cnt++;
-        console.log('현재 cnt : '+cnt);
-        console.log('현재 길이 : '+momentsData.length);
-        //현재상황. bgColor는 제대로 들어가는데 textColor는 여전히 마지막것만 들어가는듯.....150110.
+        console.log('카운트 : '+cnt);
         if(momentsData.length === cnt){
             for(var i =0; i < momentsData.length; ++i){
                 momentsData[i].bgColor = [];
@@ -152,7 +150,7 @@ app.get('/getmoments', function(request, response){
                     momentsData[i].textColor[momentsData[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
                 }
             }
-//            console.log('>>>>>>>>>결과'+JSON.stringify(momentsData, null, 4));
+            console.log('>>>>>>>>>결과'+JSON.stringify(momentsData, null, 4));
             response.send(momentsData);
         }
     });
