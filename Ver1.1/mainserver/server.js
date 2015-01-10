@@ -102,12 +102,10 @@ app.get('/getmoments', function(request, response){
             connectionHandler(getIdTextQ, 'get (id, text) error', function(connection, result){            
                 momentsData = result;
                 connection.release();
-
                 var currentMoment;
                 var targetId;
                 var bgcolorResult = [];
                 var textcolorResult = [];
-
                 callback(null, currentMoment, targetId, bgcolorResult, textcolorResult);
             });
         },
@@ -119,12 +117,12 @@ app.get('/getmoments', function(request, response){
                 connectionHandler(getBgcolorsQ, 'getBgcolorQ error', function(connection, result){ 
                     bgcolorResult[bgcolorResult.length] = result;
                     console.log('>>>>>>>>>>>bgcolor!!!!!!');
-                    callback(null, targetId, bgcolorResult, textcolorResult);
                     connection.release();
+                    callback(null, targetId, bgcolorResult, textcolorResult);
                 });   
              }
         },
-        function(targetId, bgcolorResult, textcolorResult, callback){     
+        function(targetId, bgcolorResult, textcolorResult, callback){     //문제사항 : 이 지점에서 targetId가 계속 같음.
             var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
             connectionHandler(getTextcolorsQ, 'getTextcolorQ error', function(connection, result){
                 textcolorResult[textcolorResult.length] = result;
@@ -154,7 +152,7 @@ app.get('/getmoments', function(request, response){
                     momentsData[i].textColor[momentsData[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
                 }
             }
-            console.log('>>>>>>>>>결과'+JSON.stringify(momentsData, null, 4));
+//            console.log('>>>>>>>>>결과'+JSON.stringify(momentsData, null, 4));
             response.send(momentsData);
         }
     });

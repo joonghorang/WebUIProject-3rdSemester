@@ -65,6 +65,8 @@ var setMainGridView = {
                 var momentSpan = document.createElement('span');  
                 momentSpan.innerHTML = moment.text;
 
+                spanHover(momentSpan, result[i].bgColor[0]);
+                
                 momentA.appendChild(momentSpan);
                 momentsWrapper.appendChild(momentA);
             }
@@ -72,8 +74,9 @@ var setMainGridView = {
         
          //기본 구조
         function spanHover(targetSpan, bgColor){
+            var wrapper = document.getElementById('wrapper'); 
             targetSpan.addEventListener('mouseover', function(){
-                this.momentsWrapper.style.backgroundColor = bgColor;
+                wrapper.style.backgroundColor = bgColor;
                 
                 var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
                 for(var i=0 ; i<otherSpans.length ; i++){
@@ -81,7 +84,7 @@ var setMainGridView = {
                 }
             });
             targetSpan.addEventListener('mouseout', function(){
-                this.momentsWrapper.style.backgroundColor = 'transparent';
+                wrapper.style.backgroundColor = 'transparent';
                 
                 var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
                 for(var i=0 ; i<otherSpans.length ; i++){
