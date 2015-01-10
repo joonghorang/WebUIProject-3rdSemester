@@ -75,9 +75,9 @@ var drawLoadingButton = {
         // 설정
         this.shadowDegreeOffset = 0.3;
         this.circleR_Offset = 1;
-        console.log(shadow.degree);
+        console.log(this.circle.r);
         // 일단은 20까지는 원이 커지도록 둔다. 
-        if(circle.r < circle.maximumR && circle.sizeFlag === true){ 
+        if(circle.r < circle.maximumR && this.circle.sizeFlag === true){ 
             circle.r = circle.r + this.circleR_Offset;
             shadow.blur++;
             shadow.degree = shadow.degree + this.shadowDegreeOffset;   
