@@ -15,8 +15,8 @@ var textInput = {
 		this.grdContext.fillRect(0, 0, this.grdW, this.grdH);	
 	},
 	"changeGradationColor" : function(textCount, offset){
-		this.result = [];
-		this.origin = [];
+		this.result = [];	// result color array
+		this.origin = [];	// original color array
 		this.gradationColor = GlobalVar.GradationColorGetter();
 		this.color1 = this.gradationColor.color1;
 		this.color2 = this.gradationColor.color2;
@@ -100,4 +100,5 @@ var textInput = {
 		this.run.bind(this.textInput);
 	}
 }
+
 textInput.run();

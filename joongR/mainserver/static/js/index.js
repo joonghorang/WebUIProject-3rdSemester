@@ -398,18 +398,18 @@ var confirm = {
         display([this.confirmButton, this.itemFactory, this.closeButton], 'hide');
         display([this.loadingImageWrapper, this.bgCanvas], 'show');        
         // 로딩버튼 초기 설정
+        // 로딩버튼을 위한 설정변수.
         var loadingImage = document.getElementById("loading-image");
-        var lCanvas_W = window.innerWidth * 99.3/100;                    // innerWidth와 실제 창의 크기가 달라서 비율을 넣었다.
+        var lCanvas_W = window.innerWidth * 99.3/100;
         var lCanvas_H = window.innerHeight * 99.3/100;
-        loadingImage.width = lCanvas_W;
-        loadingImage.height = lCanvas_H; 
-        var lCtx = loadingImage.getContext("2d");
-        // 컨텍스트 합성환경설정
-        lCtx.globalCompositeOperation = "copy";
-        // 원설정 
-        var circleR = 10;
-        var circleColor = "#FFFFFF";
-        // 그림자 설정
+
+        // 버튼크기 및 초기 색상설정
+        var circle ={
+            r : 10,
+            maximumR : 20,
+            color : "#FFFFFF",
+            sizeFlag : true 
+        } 
         var shadow = {
             x : 4,
             y : 4,
@@ -418,21 +418,10 @@ var confirm = {
             blur : 10,
             color : "#202020"
         };
-        var sizeFlag = true;
 
-        this.duringTime = setInterval(function(){                          // 따로 함수로 빼려고 했으나, setInterval 특성상 안쪽에 넣는 것이 좋을 것이라고 판단. (중일)
-            drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
-            if(circleR < 20 && sizeFlag === true){ 
-                circleR = circleR + 1;
-                shadow.blur++;
-                shadow.degree = shadow.degree + 0.3;   
-            } else if(circleR === 20){
-                shadow.blur--;
-                shadow.degree = shadow.degree + 0.3;
- 
-                sizeFlag = false;
-            }
-        }, 40);
+        drawLoadingButton.init(loadingImage, lCanvas_W, lCanvas_H, circle, shadow, false);  // src = /lib/drawLoadingButton.js 
+
+        this.duringTime = setInterval(drawLoadingButton.run.bind(drawLoadingButton), 40);
         
         e.preventDefault(); // 중복전송 방지.
 
@@ -469,8 +458,7 @@ var confirm = {
         //텍스트 입력창으로 전환
         display([this.uploadText, this.itemFactory, this.closeButton],'show');
         display([this.uploadFile, this.loadingImageWrapper], 'hide');
-        
-        //로딩버튼관련
+    
         var result = JSON.parse(this.request.responseText);
         var color1 = result.bgColor;
         var color2 = result.textColor;
@@ -532,82 +520,20 @@ var submit = {
     "sendData" : function(e){
         display([this.closeButton, this.submitButton, this.uploadText], 'hide');
         display([this.loadingImageWrapper], 'show');
-        // 로딩버튼 초기 설정
+        
+        // 로버튼을 위한 설정변수.
         var loadingImage = document.getElementById("loading-image");
         var lCanvas_W = window.innerWidth * 99.3/100;
         var lCanvas_H = window.innerHeight * 99.3/100;
-        loadingImage.width = lCanvas_W;
-        loadingImage.height = lCanvas_H; 
-        var lCtx = loadingImage.getContext("2d");
-        // 컨텍스트 합성환경설정
-        lCtx.globalCompositeOperation = "copy";
-        // 원설정 
-        var circleR = 10;
-        var circleMaximumR = 20;
-        var circleColor = "#FFFFFF"; 
 
-        // 그림자 설정
-        var shadow = {
-            x : 4,
-            y : 4,
-            degree : 0,
-            offset : 2,
-            blur : 10,
-            color : "#202020"
-        };
-        // 원크기 제어를 위한 플래그 설정
-        var sizeFlag = true;
-
-        // 전역색상값과 연동하면서 계산할 RGB변수
-        var loadingR = 255;
-        var loadingG = 255;
-        var loadingB = 255;
-        var loadingShadowR = 20; // 받아오기 위해 전역으로 선언.
-        var loadingShadowG = 20;
-        var loadingShadowB = 20;
-        var gradationColor = commonCanvas.hex2Rgb((GlobalVar.GradationColorGetter()).color1);
-        var shadowColor = GlobalVar.ShadowColorGetter(); 
-        // 계산할 때 증감할 offset Num 
-        var colorOffset = 1; 
-
-        this.duringTime = setInterval(function(){
-            drawLoading(lCtx, circleR, circleColor, shadow, lCanvas_W, lCanvas_H, sizeFlag);
-            if(circleR < circleMaximumR && sizeFlag === true){ 
-                circleR = circleR + 1;
-                shadow.blur++;
-                shadow.degree = shadow.degree + 0.3;   
-            } else if(circleR === circleMaximumR){
-
-                //받아온 칼라값을 적용
-                //원이 커지고 난 후부터 애니메이션이 시작되도록 설정함.
-                loadingShadowR = adjustColor(loadingShadowR, shadowColor.shadowR, colorOffset);
-                loadingShadowG = adjustColor(loadingShadowG, shadowColor.shadowG, colorOffset);
-                loadingShadowB = adjustColor(loadingShadowB, shadowColor.shadowB, colorOffset);
-                loadingR = adjustColor(loadingR, gradationColor.r, colorOffset);
-                loadingG = adjustColor(loadingG, gradationColor.g, colorOffset);
-                loadingB = adjustColor(loadingB, gradationColor.b, colorOffset);
-
-                circleColor = commonCanvas.rgb2Hex(loadingR, loadingG, loadingB);
-                shadow.color = commonCanvas.rgb2Hex(loadingShadowR, loadingShadowG, loadingShadowB);
-                shadow.blur--;
-                shadow.degree = shadow.degree + 0.3;
-                sizeFlag = false;
-                // RGB비교후 offset만큼 맞춰주는 함수
-                function adjustColor(colorNum, sourceColor, offset){
-                    if(colorNum > sourceColor){
-                        colorNum = colorNum - offset;
-                    } else if(colorNum == sourceColor){
-                        colorNum = colorNum;
-                    } else if(colorNum < sourceColor){
-                        colorNum = colorNum + offset;
-                    } else {
-                        console.log("error in adjestColor function");
-                    }
-                    return colorNum;
-                }
-            }
-        }, 40);
-        
+        // 버튼크기 및 초기 색상설정
+        var circle ={
+            circleR : 10,
+            circleMaximumR : 20,
+            circleColor : "#FFFFFF",
+            sizeFlag : true 
+        } 
+        drawLoadingButton(loadingImage, lCanvas_W, lCanvas_H, circle);  // src = /lib/drawLoadingButton.js 
         // 데이터를 전송
         var formData = new FormData(); 
         formData.append("textInput", this.textInput.value);
