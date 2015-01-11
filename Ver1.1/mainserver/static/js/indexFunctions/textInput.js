@@ -101,4 +101,4 @@ var textInput = {
 	}
 }
 
-textInput.run();
+

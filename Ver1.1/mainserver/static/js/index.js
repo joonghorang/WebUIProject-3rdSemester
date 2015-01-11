@@ -489,4 +489,5 @@ itemFactoryDisplay.run();
 manageFileInput.run();
 confirm.run();
 submit.run();
-
+// /indexFunctions/textInput.js
+textInput.run();
