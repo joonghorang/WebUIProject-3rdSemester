@@ -21,7 +21,7 @@
         this.maxStringNum = 270;
         this.getUnitNum = 20;
     },
-    "setShadow" : function(){
+    "setShadow" : function(){   // 메뉴바 그림자 관련 설정 변수 
         this.shadowColor = "#202020";
         this.addLength = 0.01;
         this.shadowLength = 10;

@@ -342,18 +342,18 @@ app.post('/upload-text', function(request, response){
                                     response.end();
                                 });
                             });
-                            pool.getConnection(function(err, connection){
-                                for(var i =0; i<hueData.length; ++i){
-                                    connection.query(sq.INSERT_INTO("hue", "(momentId, num, hue, hueLeft, hueRight, rate)", [moment.id, i, hueData[i].hue, hueData[i].rangeL, hueData[i].rangeR, hueData[i].rate]), function(err, res){
-                                        if(err) {
-                                            console.log('hue insert error');
-                                            throw err;
-                                        }
-                                    });
-                                }
-                                connection.release();
-                                console.log('>>> hue inserted');
-                            });
+                            //pool.getConnection(function(err, connection){
+                            //     for(var i =0; i<hueData.length; ++i){
+                            //         connection.query(sq.INSERT_INTO("hue", "(momentId, num, hue, hueLeft, hueRight, rate)", [moment.id, i, hueData[i].hue, hueData[i].rangeL, hueData[i].rangeR, hueData[i].rate]), function(err, res){
+                            //             if(err) {
+                            //                 console.log('hue insert error');
+                            //                 throw err;
+                            //             }
+                            //         });
+                            //     }
+                            //     connection.release();
+                            //     console.log('>>> hue inserted');
+                            // });
                         });
                     }   
                 });
