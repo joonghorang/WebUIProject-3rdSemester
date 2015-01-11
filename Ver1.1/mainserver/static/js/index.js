@@ -1,6 +1,4 @@
-
-// 전역객체 
-var setMainGridView = {
+ var setMainGridView = {
     "getElements" : function(){
         this.wrapper = document.getElementById("wrapper");
         this.itemFactoryButtonWrapper = document.getElementById("itemFactory-button-wrapper");
@@ -76,21 +74,17 @@ var setMainGridView = {
                 spanHover(momentSpan, result[i].bgColor[0]);
                 
                 momentA.appendChild(momentSpan);
-<<<<<<< HEAD
-                momentsWrapper.appendChild(momentA);
-=======
-                moments.appendChild(momentA);
+                //momentsWrapper.appendChild(momentA);
                 
-                function spanHover(targetSpan, bgColor){
-                    targetSpan.addEventListener('mouseover', function(){
-                        wrapper.style.backgroundColor = bgColor;
+                // function spanHover(targetSpan, bgColor){
+                //     targetSpan.addEventListener('mouseover', function(){
+                //         wrapper.style.backgroundColor = bgColor;
                 
-                    });
-                    targetSpan.addEventListener('mouseout', function(){
-                        wrapper.style.backgroundColor = 'transparent';
-                    });
-                };
->>>>>>> FETCH_HEAD
+                //     });
+                //     targetSpan.addEventListener('mouseout', function(){
+                //         wrapper.style.backgroundColor = 'transparent';
+                //     });
+                // };
             }
         }.bind(this));
         
