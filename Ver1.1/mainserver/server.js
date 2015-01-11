@@ -4,11 +4,9 @@ var formidable = require('formidable');
 var fs = require('fs');
 var ejs = require('ejs');
 var mysql = require('mysql');
-var queues = require('mysql-queues');
+var async = require('async');
 
 var Impressive = require('impressive');
-
-
 
 //impressive(image).toRgb();
 var Canvas = require('canvas');
@@ -93,80 +91,67 @@ app.get('/', function(request, response){
 app.get('/getmoments', function(request, response){
 
     var index = request.query.index; //현재 모멘트 개수
-    var num = request.query.num; //요청받은 데이터 개수
-    
+    var num = request.query.num; //요청받은 데이터 개수    
     console.log('>>>>>>>'+index, num);
-    
-    var flag = false;
-    
+    var cnt = 0; //데이터 개수 임시카운트.
     var momentsData = {};
     
-    connectionWaiting(function(){
-        queriedCount++;
-        var getIdTextQ = 'SELECT id, text FROM moment LIMIT ' + index + ',' + num + ';'; //index부터 num개를 가져온다.
-        connectionHandler(getIdTextQ, 'get (id, text) error', function(connection, result){
-            
-            console.log('getIdText>>>>>'+result);
-            
-            momentsData.moments = result;
-            connection.release();
-            
-            var currentMoment;
-            var targetId;
-            var bgcolorResult = [];
-            var textcolorResult = [];
-            for(var i=0; i<momentsData.moments.length ; i++){
-                currentMoment = momentsData.moments[i];
+    async.waterfall([
+        function(callback){
+            var getIdTextQ = 'SELECT id, text FROM moment ORDER BY date DESC LIMIT ' + index + ',' + num + ';'; //index부터 num개를 가져온다.
+            connectionHandler(getIdTextQ, 'get (id, text) error', function(connection, result){            
+                momentsData = result;
+                connection.release();
+                var currentMoment;
+                var targetId;
+                var bgcolorResult = [];
+                var textcolorResult = [];
+                callback(null, currentMoment, targetId, bgcolorResult, textcolorResult);
+            });
+        },
+        function(currentMoment, targetId, bgcolorResult, textcolorResult, callback){
+             for(var i=0; i<momentsData.length ; i++){
+                currentMoment = momentsData[i];
                 targetId = currentMoment.id;
-                pool.getConnection(function(err, connection){
-                    var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
-                    connection.query(getBgcolorsQ, function(err, result){
-                        if(err){
-                            console.log('getBgcolorQ error');
-                            throw err;
-                        }
-                        bgcolorResult[bgcolorResult.length] = result;
-                        console.log('>>>>>>>>>>>bgcolor!!!!!!');
-                            //
-                        var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
-                        connection.query(getTextcolorsQ, function(err, result){
-                            if(err){
-                                console.log('getTextcolorQ error');
-                                throw err;
-                            }
-                            textcolorResult[textcolorResult.length] = result;
-                            console.log('>>>>>>>>>>>textcolor!!!!!!');
-                            //
-                            connection.release();
-                        });
-                    });
+                var getBgcolorsQ = 'SELECT bgcolor FROM bgcolor WHERE momentId="'+targetId+'" ORDER BY num;';
+                var getTextcolorsQ = 'SELECT textcolor FROM textcolor WHERE momentId="'+targetId+'" ORDER BY num;';
+                connectionHandler(getBgcolorsQ, 'getBgcolorQ error', function(connection, result){ 
+                    bgcolorResult[bgcolorResult.length] = result;
+                    console.log('>>>>>bgcolor');
+                    connection.release();
                 });   
-            }
-            var intervalId = setInterval(function(){
-                if(momentsData.moments.length === textcolorResult.length){
-                    console.log(">>>>>send")
-                    for(var i =0; i < momentsData.moments.length; ++i){
-                        momentsData.moments[i].bgColor = [];
-                        for(var bgIdx = 0; bgIdx < bgcolorResult[i].length; ++bgIdx){
-                            momentsData.moments[i].bgColor[momentsData.moments[i].bgColor.length] = bgcolorResult[i][bgIdx].bgcolor;
-                        }
-                        momentsData.moments[i].textColor = [];
-                        for(var textIdx = 0; textIdx < textcolorResult[i].length; ++textIdx){
-                            momentsData.moments[i].textColor[momentsData.moments[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
-                        }
-                    }
-                    console.log(JSON.stringify(momentsData, null, 4));
-                    response.send(momentsData);   
-                    clearInterval(intervalId);
+                callback(null, getTextcolorsQ, bgcolorResult, textcolorResult);
+             }
+        },
+        function(getTextcolorsQ, bgcolorResult, textcolorResult, callback){     //문제사항 : 이 지점에서 targetId가 계속 같음.
+            connectionHandler(getTextcolorsQ, 'getTextcolorQ error', function(connection, result){
+                textcolorResult[textcolorResult.length] = result;
+                console.log('>>>>>textcolor');
+                connection.release();
+                callback(null, bgcolorResult, textcolorResult);
+            });
+        }], function(err, bgcolorResult, textcolorResult){
+        if(err){
+            console.log(err);
+        }
+        cnt++;
+        console.log('카운트 : '+cnt);
+        if(momentsData.length === cnt){
+            for(var i =0; i < momentsData.length; ++i){
+                momentsData[i].bgColor = [];
+                for(var bgIdx = 0; bgIdx < bgcolorResult[i].length; ++bgIdx){
+                    momentsData[i].bgColor[momentsData[i].bgColor.length] = bgcolorResult[i][bgIdx].bgcolor;
                 }
-            }, 500);  
-            setTimeout(function(){ queriedCount--; }, 500); //임시방편
-        });
 
-        console.log('누가 이따위로 만들었냐 진짜');
+                momentsData[i].textColor = [];
+                for(var textIdx = 0; textIdx < textcolorResult[i].length; ++textIdx){
+                    momentsData[i].textColor[momentsData[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
+                }
+            }
+            console.log('>>>>>>>>>결과'+JSON.stringify(momentsData, null, 4));
+            response.send(momentsData);
+        }
     });
- 
-    
 });
 
 /*
@@ -180,7 +165,6 @@ app.get('/moment/:id', function(request, response){
     //moment table select
     var momentSelectQ ='SELECT * FROM moment WHERE id="'+targetId+'";';
     connectionHandler(momentSelectQ , 'moment inputData select error', function(connection, result){
-//        momentData.textColor = result[0].textColor;
         momentData.text = result[0].text;
         momentData.file = result[0].file;
         momentData.date = result[0].date;

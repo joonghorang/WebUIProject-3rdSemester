@@ -21,7 +21,7 @@ var setMainGridView = {
 
         this.stringSum = 0;
         this.maxStringNum = 270;
-        this.getUnitNum = 15;
+        this.getUnitNum = 20;
     },
     "setShadow" : function(){
         this.shadowColor = "#202020";
@@ -63,23 +63,42 @@ var setMainGridView = {
 
         EventUtil.addHandler(window, 'scroll', this.displayMore.bind(this));
         this.request.addEventListener('load', function(){
-            var momentsWrapper = document.getElementById('moments');
+            var moments = document.getElementById('moments');
+            var wrapper = document.getElementById('wrapper')
             var result = JSON.parse(this.request.responseText);
-            for(var i =0; i < result.moments.length; ++i){
-                var moment = result.moments[i];
+            for(var i =0; i < result.length; ++i){
+                var moment = result[i];
                 var momentA = document.createElement('a');
-                momentA.href = '/moment/' + result.moments[i].id;
+                momentA.href = '/moment/' + result[i].id;
                 var momentSpan = document.createElement('span');  
                 momentSpan.innerHTML = moment.text;
+
+                spanHover(momentSpan, result[i].bgColor[0]);
                 
                 momentA.appendChild(momentSpan);
+<<<<<<< HEAD
                 momentsWrapper.appendChild(momentA);
+=======
+                moments.appendChild(momentA);
+                
+                function spanHover(targetSpan, bgColor){
+                    targetSpan.addEventListener('mouseover', function(){
+                        wrapper.style.backgroundColor = bgColor;
+                
+                    });
+                    targetSpan.addEventListener('mouseout', function(){
+                        wrapper.style.backgroundColor = 'transparent';
+                    });
+                };
+>>>>>>> FETCH_HEAD
             }
         }.bind(this));
+        
          //기본 구조
         function spanHover(targetSpan, bgColor){
+            var wrapper = document.getElementById('wrapper'); 
             targetSpan.addEventListener('mouseover', function(){
-                this.momentsWrapper.style.backgroundColor = bgColor;
+                wrapper.style.backgroundColor = bgColor;
                 
                 var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
                 for(var i=0 ; i<otherSpans.length ; i++){
@@ -87,7 +106,7 @@ var setMainGridView = {
                 }
             });
             targetSpan.addEventListener('mouseout', function(){
-                this.momentsWrapper.style.backgroundColor = 'transparent';
+                wrapper.style.backgroundColor = 'transparent';
                 
                 var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
                 for(var i=0 ; i<otherSpans.length ; i++){
@@ -95,8 +114,6 @@ var setMainGridView = {
                 }
             });
         };
-             
-
     },
     //  화면 끝에 다다랐을 떄 추가적으로 로드하는 코드
     "displayMore" : function(){

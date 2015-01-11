@@ -100,6 +100,7 @@ app.get('/', function(request, response){
 
 //pageNum에 따라 데이터를 7개씩 뽑아준다. pageNum=2 이면 최근순서 정렬로, 8~14번째 데이터를 전달한다.
 app.get('/page/:pageNum', function(request, response){
+    
     var pageNum = request.param('pageNum');
     var pageData = {};
     connectionWaiting(function(){
@@ -166,7 +167,7 @@ app.post('/upload-image', function(request, response){
             fs.readFile(files.image.path, function(error, data){
                 /*colorLab logic*/
                 fs.writeFile( uploads + app.get("colorLabData"), data, function(err){
-                   console.log('>>>> /upload-image : colorLabData saved.'); 
+                    console.log('>>>> /upload-image : colorLabData saved.');
                 });
                 var img = new Image();
                 img.src = data;
@@ -319,7 +320,14 @@ app.get('/junk', function(req, res){
 app.get('/textOnly', function(req, res){
     res.render('newMain.html');
 });
-
+app.get('/imageAging', function(req, res){
+    var imageData = fs.readFileSync(uploads + app.get("colorLabData")); 
+    var image = new Image();
+    image.src = imageData;
+    res.render('imageAging.html', {
+        imageSrc : app.get("targetName")
+    });
+});
 //웹서버를 실행한다.
 app.listen(app.get("port"), function(){
     console.log('server running at port '+app.get("port")+'...');
