@@ -71,7 +71,7 @@
                 var momentSpan = document.createElement('span');  
                 momentSpan.innerHTML = moment.text;
 
-                spanHover(momentSpan, result[i].bgColor[0]);
+                spanHover(momentSpan, result[i].textColor[0], result[i].bgColor[0]);
                 
                 momentA.appendChild(momentSpan);
                 //momentsWrapper.appendChild(momentA);
@@ -89,11 +89,11 @@
         }.bind(this));
         
          //기본 구조
-        function spanHover(targetSpan, bgColor){
+        function spanHover(targetSpan, textColor, bgColor){
             var wrapper = document.getElementById('wrapper'); 
             targetSpan.addEventListener('mouseover', function(){
                 wrapper.style.backgroundColor = bgColor;
-                
+                this.style.color = textColor;
                 var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
                 for(var i=0 ; i<otherSpans.length ; i++){
                     otherSpans[i].style.opacity = '0.5';
@@ -101,7 +101,7 @@
             });
             targetSpan.addEventListener('mouseout', function(){
                 wrapper.style.backgroundColor = 'transparent';
-                
+                this.style.color='#606060';
                 var otherSpans = document.querySelectorAll('span:not(#'+this.id+')');
                 for(var i=0 ; i<otherSpans.length ; i++){
                     otherSpans[i].style.opacity = '1';

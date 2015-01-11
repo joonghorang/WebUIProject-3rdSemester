@@ -130,28 +130,30 @@ app.get('/getmoments', function(request, response){
                 connection.release();
                 callback(null, bgcolorResult, textcolorResult);
             });
-        }], function(err, bgcolorResult, textcolorResult){
-        if(err){
-            console.log(err);
-        }
-        cnt++;
-        console.log('카운트 : '+cnt);
-        if(momentsData.length === cnt){
-            for(var i =0; i < momentsData.length; ++i){
-                momentsData[i].bgColor = [];
-                for(var bgIdx = 0; bgIdx < bgcolorResult[i].length; ++bgIdx){
-                    momentsData[i].bgColor[momentsData[i].bgColor.length] = bgcolorResult[i][bgIdx].bgcolor;
-                }
-
-                momentsData[i].textColor = [];
-                for(var textIdx = 0; textIdx < textcolorResult[i].length; ++textIdx){
-                    momentsData[i].textColor[momentsData[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
-                }
+        },
+        ],
+        function(err, bgcolorResult, textcolorResult){
+            if(err){
+                console.log(err);
             }
-            console.log('>>>>>>>>>결과'+JSON.stringify(momentsData, null, 4));
-            response.send(momentsData);
-        }
-    });
+            cnt++;
+            console.log('카운트 : '+cnt);
+            if(momentsData.length === cnt){
+                for(var i =0; i < momentsData.length; ++i){
+                    momentsData[i].bgColor = [];
+                    for(var bgIdx = 0; bgIdx < bgcolorResult[i].length; ++bgIdx){
+                        momentsData[i].bgColor[momentsData[i].bgColor.length] = bgcolorResult[i][bgIdx].bgcolor;
+                    }
+
+                    momentsData[i].textColor = [];
+                    for(var textIdx = 0; textIdx < textcolorResult[i].length; ++textIdx){
+                        momentsData[i].textColor[momentsData[i].textColor.length] = textcolorResult[i][textIdx].textcolor;
+                    }
+                }
+                console.log('>>>>>>>>>결과'+JSON.stringify(momentsData, null, 4));
+                response.send(momentsData);
+            }
+        });
 });
 
 /*
@@ -198,7 +200,6 @@ app.get('/moment/:id', function(request, response){
 [fileInput에서 받아온 데이터 처리(confirm상태) : 이미지 읽어서 클라에 전달]
 */
 app.post('/upload-image', function(request, response){
-    //formidable. parse uploaded file.
     var form = new formidable.IncomingForm();
     form.parse(request, function(error, fields, files) {
                
@@ -207,9 +208,7 @@ app.post('/upload-image', function(request, response){
             throw error;
         }
         else{
-            //readFile : 업로드된 파일을 tmp디렉토리에 저장한다.
             fs.readFile(files.image.path, function(error, data){
-                /*colorLab logic*/
                 fs.writeFile( uploads + app.get("colorLabData"), data, function(err){
                    console.log('>>>> /upload-image : colorLabData saved.'); 
                 });
@@ -246,98 +245,98 @@ app.post('/upload-text', function(request, response){
             console.log('form parsing error');
             throw error;
         }
-        else{
-            var text = fields.textInput;
-            var date = new Date();
-            var timeStamp = mytools.toYYYYMMDDHHmmSSsss(date);
-            var id = mytools.genId(date);
-            var fileName = id + ".jpg";
-            var uploadFileName = __dirname + '/uploads/' + fileName;
-            
-            fs.readFile(files.image.path, function(error, data){
-                fs.writeFile(uploadFileName, data, function(error){
-                    if(error){
-                        console.log('file saving error');
-                        throw error;
+        var text = fields.textInput;
+        var date = new Date();
+        var timeStamp = mytools.toYYYYMMDDHHmmSSsss(date);
+        var id = mytools.genId(date);
+        var fileName = id + ".jpg";
+        var uploadFileName = __dirname + '/uploads/' + fileName;
+
+        fs.readFile(files.image.path, function(error, data){
+            fs.writeFile(uploadFileName, data, function(error){
+                if(error){
+                    console.log('file saving error');
+                    throw error;
+                }
+                
+                var img = new Image();
+                img.src = data;
+                var imp = Impressive(img);
+                var hueData = imp.pickedHues;
+
+                var colorCf = colorClassifier(imp);
+                var textColors = colorCf.textColors.toHexString();
+                var bgColors = colorCf.bgColors.toHexString();
+
+                var moment = {
+                    date : timeStamp,
+                    id : id,
+                    file : fileName,
+                    text : fields.textInput,
+                    bgColor : bgColors,
+                    textColor : textColors
+                }
+
+                var latestId;    
+                var latestSelectQ = "SELECT id FROM moment ORDER BY date DESC LIMIT 1";//가장 최근에 추가한 모멘트의 id, nextId select
+                connectionHandler(latestSelectQ, 'select latest moment error', function(connection,result){
+
+                    if(typeof result[0]!=="undefined"){
+                        latestId = result[0].id;
+                        moment.prevId = latestId;
+
+                        var setNextIdToLatestQ = "UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'";
+                        connectionHandler(setNextIdToLatestQ, 'update nextId error', function(connection, result){
+                            connection.release();
+                        });
                     }
-                    else {
-                        var img = new Image();
-                        img.src = data;
-                        var imp = Impressive(img);
-                        var hueData = imp.pickedHues;
-                        
-                        var colorCf = colorClassifier(imp);
-                        var textColors = colorCf.textColors.toHexString();
-                        var bgColors = colorCf.bgColors.toHexString();
-                        
-                        var moment = {
-                            date : timeStamp,
-                            id : id,
-                            file : fileName,
-                            text : fields.textInput,
-                            bgColor : bgColors,
-                            textColor : textColors
-                        }
-                        
-                        var latestId;    
-                        var latestSelectQ = "SELECT id FROM moment ORDER BY date DESC LIMIT 1";//가장 최근에 추가한 모멘트의 id, nextId select
-                        connectionHandler(latestSelectQ, 'select latest moment error', function(connection,result){
+                    else{//맨처음 업로드할 때
+                        moment.prevId = null;
+                    }
 
-                            if(typeof result[0]!=="undefined"){
-                                latestId = result[0].id;
-                                moment.prevId = latestId;
+                    connection.release();
+                    moment.nextId = null;
 
-                                var setNextIdToLatestQ = "UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'";
-                                connectionHandler(setNextIdToLatestQ, 'update nextId error', function(connection, result){
-                                    connection.release();
-                                });
+                    var insertMomentQ = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text)", moment);
+                    connectionHandler(insertMomentQ, 'moment insert error', function(connection, result){
+                        connection.release();
+
+                        pool.getConnection(function(err, connection){
+
+                            for(var i=0; i<moment.bgColor.length ; i++){
+
+                                connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgcolor)", 
+                                                                [moment.id, i, moment.bgColor[i]]),function(err, res){
+                                    if(err) {
+                                        console.log('bgColor insert error');
+                                        throw err;
+                                    }
+                                });  
                             }
-                            else{//맨처음 업로드할 때
-                                moment.prevId = null;
+
+
+                            for(var i=0; i<moment.textColor.length ; i++){
+
+                                connection.query(sq.INSERT_INTO("textColor", "(momentId, num, textcolor)", 
+                                                                [moment.id, i, moment.textColor[i]]),function(err, res){
+                                    if(err) {
+                                        console.log('textColor insert error');
+                                        throw err;
+                                    }
+                                });  
                             }
+
 
                             connection.release();
-                            moment.nextId = null;
+                            console.log('>>>inserted');
 
-                            var insertMomentQ = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text)", moment);
-                            connectionHandler(insertMomentQ, 'moment insert error', function(connection, result){
-                                connection.release();
+                            var result = {
+                                "id" : id,
+                                "bgColor" : moment.bgColor, //colorlist 그대로 넘김.
+                                "textColor" : moment.textColor
+                            };
 
-                                pool.getConnection(function(err, connection){
-
-                                    for(var i=0; i<moment.bgColor.length ; i++){
-
-                                        connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgcolor)", 
-                                                                        [moment.id, i, moment.bgColor[i]]),function(err, res){
-                                            if(err) {
-                                                console.log('bgColor insert error');
-                                                throw err;
-                                            }
-                                        });  
-                                    }
-
-
-                                    for(var i=0; i<moment.textColor.length ; i++){
-
-                                        connection.query(sq.INSERT_INTO("textColor", "(momentId, num, textcolor)", 
-                                                                        [moment.id, i, moment.textColor[i]]),function(err, res){
-                                            if(err) {
-                                                console.log('textColor insert error');
-                                                throw err;
-                                            }
-                                        });  
-                                    }
-
-
-                                    connection.release();
-                                    console.log('>>>inserted');
-
-                                    var result = {
-                                        "id" : id,
-                                        "bgColor" : moment.bgColor, //colorlist 그대로 넘김.
-                                        "textColor" : moment.textColor
-                                    };
-
+<<<<<<< Updated upstream
                                     response.send(result);
                                     response.end();
                                 });
@@ -356,10 +355,30 @@ app.post('/upload-text', function(request, response){
                             // });
                         });
                     }   
+=======
+                            response.send(result);
+                            response.end();
+                        });
+                    });
+                    pool.getConnection(function(err, connection){
+                        for(var i =0; i<hueData.length; ++i){
+                            connection.query(sq.INSERT_INTO("hue", "(momentId, num, hue, hueLeft, hueRight, rate)", [moment.id, i, hueData[i].hue, hueData[i].rangeL, hueData[i].rangeR, hueData[i].rate]), function(err, res){
+                                if(err) {
+                                    console.log('hue insert error');
+                                    throw err;
+                                }
+                            });
+                        }
+                        connection.release();
+                        console.log('>>> hue inserted');
+                    });
+>>>>>>> Stashed changes
                 });
-            });            
-        }
-    });
+
+            });//writeFile end
+        });//readFile end            
+
+    });//formParse end
 });
 
 app.get('/colorLab', function(req, res){

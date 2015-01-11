@@ -334,11 +334,12 @@ input:focus{
 }
 
 #moments span{
+    color: #606060;
     word-break: keep-all;
 }
 
 #moments span:hover{
-    text-decoration: underline;
+/*    text-decoration: underline;*/
 }
 
 /*#moments div {
