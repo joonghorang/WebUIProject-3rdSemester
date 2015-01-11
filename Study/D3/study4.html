@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang = "ko">
+<head>
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+	<script type = "text/javascript" src = "d3-master/d3.js"></script>
+</head>
+<body>
+	<script type = "text/javascript">
+		var dataset = [ 5, 10, 15, 20, 55];
+  		d3.select("body").selectAll("p")
+  		  .data(dataset)
+  		  .enter()
+  		  .append("p")
+  		  .text(function(d) {return d;})
+  		  .style("color", function(d){
+  		  	if(d > 15){
+  		  		return "red";
+  		  	} else {
+  		  		return "black";
+  		  	}
+  		  });	// 받은 데이터 값을 그대로 텍스트로 입력.
+  		 /* 체인을 사용하지 않으면
+  		 var body = d3.select("body");
+  		 var p = body.append("p");
+  		 p.text("New");*/
+	</script>
+</body>
+</html>

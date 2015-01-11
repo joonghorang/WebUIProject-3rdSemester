@@ -69,6 +69,7 @@
             }
         }
         pageBackground.style.opacity = "0.3";
+        colorAnimation();
     }
 
     function drawShadow(element){
@@ -93,6 +94,10 @@
         element.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px " + shadowColor;//textColor; 텍스트칼라나 백그라운드 칼라로 적용해 봤으나 구림...
     }
     
+    function colorAnimation(){
+        console.log(bgColor);
+        console.log(textColor);
+    }
 //
 //    // 색변화할 예정인 테스트용 함수 
 //    function delColorByTime(){
