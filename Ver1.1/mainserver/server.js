@@ -336,7 +336,6 @@ app.post('/upload-text', function(request, response){
                                 "textColor" : moment.textColor
                             };
 
-<<<<<<< Updated upstream
                                     response.send(result);
                                     response.end();
                                 });
@@ -355,7 +354,6 @@ app.post('/upload-text', function(request, response){
                             // });
                         });
                     }   
-=======
                             response.send(result);
                             response.end();
                         });
@@ -372,7 +370,6 @@ app.post('/upload-text', function(request, response){
                         connection.release();
                         console.log('>>> hue inserted');
                     });
->>>>>>> Stashed changes
                 });
 
             });//writeFile end
