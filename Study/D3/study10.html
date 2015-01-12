@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang = "ko">
+<head>
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+  <link rel="stylesheet" type="text/css" href="./study10.css">
+	<script type = "text/javascript" src = "d3-master/d3.js"></script>
+</head>
+<body>
+  <div id = "tooltip" class = "hidden">
+    <p><strong>Important Label Heading</strong></p>
+    <p><span id = "value">100</span>%</p>
+  </div>
+	<script type = "text/javascript">
+    // 데이터셋
+    var numValues = 25;
+    var dataset = [];
+    for( var i = 0; i < numValues; i++){
+      var newNumber = Math.floor(Math.random() * 25);
+      dataset.push(newNumber);
+    }
+    var w = 600;
+    var h = 250;
+
+    // svg설정
+    var svg = d3.select("body")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+    // 스케일 설정
+    var xScale = d3.scale.ordinal()
+                   .domain(d3.range(dataset.length))
+                   .rangeRoundBands([0, w], 0.05);
+    var yScale = d3.scale.linear()
+                   .domain([0, d3.max(dataset)])
+                   .range([0, h]);
+
+    // 막대를 생성한다
+    svg.selectAll("rect")
+       .data(dataset)
+       .enter()
+       .append("rect")
+       //속성을 지정한다
+       .attr("x", function(d, i){
+          return xScale(i);
+       })
+       .attr("width", xScale.rangeBand())
+       .attr("y", function(d){
+          return h - yScale(d);
+       })
+       .attr("height", function(d){
+          return yScale(d);
+       })
+       .attr("fill", function(d) {
+          return "rgb(0, 0, " + (d * 10) + ")";
+       })
+       // 클래스 지정
+       .attr("class", "rect")
+       // 이벤트 등록
+       .on("mouseover", function(d){
+          // 이 막대의 x/Y 값을 구하고 툴팁을 위한 전달인자로 만든다. 
+          var xPosition = parseFloat(d3.select(this).attr("x")) + 
+                                      xScale.rangeBand() / 2;
+          var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
+
+          // 툴팁의 위치와 내용을 갱신
+          d3.select("#tooltip")
+            .style("left", xPosition + "px")
+            .style("top", yPosition + "px")
+            .select("#value")
+            .text(d);
+          // 툴팁을 출력
+          d3.select("#tooltip").classed("hidden", false);
+          // // tool tip
+          // svg.append("text")
+          //    .attr("id", "tooltip")
+          //    .attr("x", xPosition)
+          //    .attr("y", yPosition)
+          //    .attr("text-anchor", "middle")
+          //    .attr("font-family", "sans-serif")
+          //    .attr("font-size", "11px")
+          //    .attr("font-weight", "bold")
+          //    .attr("fill", "white")
+          //    .text(d);
+            
+          d3.select(this)
+            .attr("fill", "orange");
+       })
+       .on("mouseout", function(d){
+          d3.select("#tooltip").classed("hidden", true);
+          //d3.select("#tooltip").remove(); // tooltip remove
+          d3.select(this)
+            .transition()
+            .duration(250)
+            .attr("fill", "rgb(0, 0, " + (d * 10) + ")");
+       })
+       .on("click", function(){
+          sortBars();
+       })
+       //문서요소 추가
+       .append("title")
+       .text(function(d){
+          return "This Value is " + d;
+       });
+       // * 만약에 이벤트 걸은 객체위에 다른 놈이 잇어서 방해가 된다면 해당 객체의 css속성에 pointer-events: none; 이라고 하면 마우스와 관련한 이벤트를 무시한다. 
+
+
+    // event Function
+    var sortBars = function(){
+      sortOrder = !sortOrder;
+      svg.selectAll("rect")
+         .sort(function(a, b){
+            if(sortOrder){
+              return d3.ascending(a, b); // 이 함수는 비교해서 값이 큰쪽을 리턴한다. 
+            } else {
+              return d3.descending(a, b);
+            }
+         })
+         .transition()
+         .delay(function(d, i){
+            return i * 50;
+         })
+         .duration(1000)
+         .attr("x", function(d, i){
+            return xScale(i);
+         });
+    };
+
+    // decending or ascending
+    var sortOrder = false;
+
+	</script>
+</body>
+</html>
