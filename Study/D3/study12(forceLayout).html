@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang = "ko">
+<head>
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+  <link rel="stylesheet" type="text/css" href="./study10.css">
+	<script type = "text/javascript" src = "d3-master/d3.js"></script>
+</head>
+<body>
+<!--   <div id = "tooltip" class = "hidden">
+    <p><strong>Important Label Heading</strong></p>
+    <p><span id = "value">100</span>%</p>
+  </div> -->
+	<script type = "text/javascript">
+    var w = 500;
+    var h = 500;
+    var dataset = {
+      nodes : [
+        { name : "a"},
+        { name : "b" },
+        { name : "c"},
+        { name : "d"},
+        { name : "e"},
+        { name : "f"},
+        { name : "g"},
+        { name : "h"},
+        { name : "i"},
+        { name : "j"}
+      ],
+      edges : [
+        { source : 0, target : 1},
+        { source : 0, target : 2},
+        { source : 0, target : 3},
+        { source : 0, target : 4},
+        { source : 1, target : 5},
+        { source : 2, target : 5},
+        { source : 2, target : 5},
+        { source : 3, target : 4},
+        { source : 5, target : 8},
+        { source : 5, target : 9},
+        { source : 6, target : 7},
+        { source : 7, target : 8},
+        { source : 8, target : 9}
+      ]
+    };
+    var svg = d3.select("body")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+    var colors = d3.scale.category10();
+    
+    var force = d3.layout.force() // 물리력 설정 자세한 설정방법은 http://github.com/mbostock/d3/wiki/ForceLayout참조
+                         .nodes(dataset.nodes)
+                         .links(dataset.edges)
+                         .size([w, h])
+                         .linkDistance([50]) // 노드 사이의 거리를 기본값보다 좀 더 벌림
+                         .charge([-100]) // 노드 사이의 반발력이 기본값보다 커지도록함. 
+                         .start();
+    // 연결선 추가
+    var edges = svg.selectAll("line")
+                   .data(dataset.edges)
+                   .enter()
+                   .append("line")
+                   .style("stroke", "#ccc")
+                   .style("stroke-width", 1);
+
+    // 노드 추가
+    var nodes = svg.selectAll("circle")
+                   .data(dataset.nodes)
+                   .enter()
+                   .append("circle")
+                   .attr("r", 10)
+                   .style("fill", function(d, i){
+                      return colors(i); // 여기서 색상을 설정. 
+                   })
+                   .call(force.drag);
+
+    // 처음 로드되었을 때 나타날 애니메이션 설정
+    // 매순간오는 tick(애니메이션 기본 시간단위)마다 line과 circle의 x,y 값을 갱신하고 DOM에 반영한다. 
+    force.on("tick", function(){
+      edges.attr("x1", function(d) {return d.source.x;})
+           .attr("y1", function(d) {return d.source.y;})
+           .attr("x2", function(d) {return d.target.x;})
+           .attr("y2", function(d) {return d.target.y;});
+      nodes.attr("cx", function(d) {return d.x;})
+           .attr("cy", function(d) {return d.y;});
+    });
+	</script>
+</body>
+</html>

@@ -8,6 +8,8 @@
         initCanvases();
         drawBgCanvas(bgColor);
         drawTextCanvas(textColor, text);
+        // 색상정보 출려관련
+        drawColorOnCanvas();
         var textCanvas = document.getElementById("text-canvas");
         var imageWrapper = document.getElementById("moment-image-wrapper");
         EventUtil.addHandler(imageWrapper, "click", letsShow.momentText);
@@ -69,7 +71,6 @@
             }
         }
         pageBackground.style.opacity = "0.3";
-        colorAnimation();
     }
 
     function drawShadow(element){
@@ -93,11 +94,7 @@
         //console.log("Y " + posY);
         element.style.boxShadow = posX.toString() + "px " + posY.toString() + "px 15px " + shadowColor;//textColor; 텍스트칼라나 백그라운드 칼라로 적용해 봤으나 구림...
     }
-    
-    function colorAnimation(){
-        console.log(bgColor);
-        console.log(textColor);
-    }
+
 //
 //    // 색변화할 예정인 테스트용 함수 
 //    function delColorByTime(){
@@ -238,6 +235,66 @@
             drawShadow(moment);
         }
     }
+
+    // 원호 버전.
+    function drawColorOnCanvas(){
+        bgColorArray = bgColorArray.split(','); // 나누어지지 않은 문자열이므로 나눈후 배열로 다시 저장 
+        textColorArray = textColorArray.split(',');
+
+        // 색상 배열을 합쳐서 만듦
+        var colorSet = [];
+        for(var i = 0; i < bgColorArray.length; i++){
+            colorSet.push(bgColorArray[i]);
+        }
+        for(var i = 0; i < textColorArray.length; i++){
+            colorSet.push(textColorArray[i]);
+        }
+
+
+        // 나중에 비율 데이터가 넘어오면 데이터 비율을 설정 
+        // 지금은 랜덤으로 들어감
+        var dataset = [];
+        for(var i = 0; i < colorSet.length; i++){
+            dataset.push(Math.floor(Math.random() * 30)); // 지금은 0~30사이의 숫자가 임으로 들어감 
+        }
+
+
+        // 원호 그리기전 셋팅
+        var pie = d3.layout.pie();
+        var w = 30;//window.innerWidth * 45 / 100;
+        var h = 30;//window.innerWidth * 45 / 100;
+        var outerRadius = w / 2;
+        var innerRadius = w / 3;
+
+        // 원호 그리기 
+        var arc = d3.svg.arc()
+                        .innerRadius(innerRadius)
+                        .outerRadius(outerRadius);
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .attr("id", "svg");
+        console.log(svg);
+        console.log(svg.attr.width);
+        // 그룹지정
+        var arcs = svg.selectAll("g.arc")
+                      .data(pie(dataset))
+                      .enter()
+                      .append("g")
+                      .attr("class", "arc")
+                      .attr("transform", 
+                            "translate(" + outerRadius + ", " + outerRadius + ")");
+
+        // 호의 경로를 그린다.
+        arcs.append("path")
+            .attr("fill", function(d, i){
+                return colorSet[i];
+            })
+            .attr("d", arc);
+
+    }
+
     init();
 
 })();

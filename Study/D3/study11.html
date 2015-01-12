@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang = "ko">
+<head>
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+  <link rel="stylesheet" type="text/css" href="./study10.css">
+	<script type = "text/javascript" src = "d3-master/d3.js"></script>
+</head>
+<body>
+<!--   <div id = "tooltip" class = "hidden">
+    <p><strong>Important Label Heading</strong></p>
+    <p><span id = "value">100</span>%</p>
+  </div> -->
+	<script type = "text/javascript">
+    var dataset = [5, 10, 20, 45, 6, 25];
+    var pie = d3.layout.pie();
+    var w = 300;
+    var h = 300;
+    var outerRadius = w / 2;
+    var innerRadius = w / 3;
+    // 색지정
+    var color = d3.scale.category10();
+
+
+    var arc = d3.svg.arc()
+                    .innerRadius(innerRadius)
+                    .outerRadius(outerRadius);
+    var svg = d3.select("body")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+    // 그룹을 지정
+    var arcs = svg.selectAll("g.arc")
+                  .data(pie(dataset))
+                  .enter()
+                  .append("g")
+                  .attr("class", "arc")
+                  .attr("transform", 
+                        "translate(" + outerRadius + ", " + outerRadius + ")");
+    // 호의 경로를 그린다
+    arcs.append("path")
+        .attr("fill", function(d, i){
+          return color(i);
+        })
+        .attr("d", arc);
+
+
+    // 텍스트 설정
+    arcs.append("text")
+        .attr("transform", function(d){
+          return "translate(" + arc.centroid(d) + ")"; // centeroid는 도형의 중심점을 계산한다. 
+        })
+        .attr("text-anchor", "middle")
+        .text(function(d){
+          return d.value; // d가 아니라 d.value인 이유는 파이레이아웃을 사용한 데이터를 엮었기 때문이다. 
+        });
+
+	</script>
+</body>
+</html>

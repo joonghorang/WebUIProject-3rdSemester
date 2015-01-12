@@ -40,6 +40,8 @@
             </a>
         </div>
         <%}%>
+        
+        <script src="../js/d3-master/d3.js"></script>
         <script src="../js/lib/EventUtil.js"></script>
         <script src="../js/lib/commonCanvas.js"></script>
         <script src="../js/lib/drawText.js"></script>
@@ -49,6 +51,8 @@
             var moment = document.getElementById('moment');
             //이후에 스타일 수정(테두리만 남기기)
             //moment.style.border = "4px solid <%= bgColor[0] %>"
+            var bgColorArray = "<%= bgColor %>";
+            var textColorArray = "<%= textColor %>";
             var bgColor = "<%= bgColor[0] %>";
             var textColor = "<%= textColor[0] %>";
             var text = "<%= text %>";

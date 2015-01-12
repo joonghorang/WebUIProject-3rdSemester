@@ -163,6 +163,19 @@ html, body{
     left: 0;
     right: 0;
     bottom: 0;
+
+}
+
+#svg{
+    z-index: 200;
+    width : 46%;
+    padding-bottom : 46%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 4% auto 0 auto;
+    padding-left: 10px;
+    padding-top : 10px;
 }
 
 @media screen 
