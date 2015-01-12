@@ -277,101 +277,81 @@ app.post('/upload-text', function(request, response){
                     textColor : textColors
                 }
 
-                var latestId;    
-                var latestSelectQ = "SELECT id FROM moment ORDER BY date DESC LIMIT 1";//가장 최근에 추가한 모멘트의 id, nextId select
-                connectionHandler(latestSelectQ, 'select latest moment error', function(connection,result){
+                async.waterfall([
+                    function(selectLatest){//select : 가장 최근 모멘트
+                        var latestId;    
+                        var latestSelectQ = "SELECT id FROM moment ORDER BY date DESC LIMIT 1";//가장 최근에 추가한 모멘트의 id, nextId select
+                        connectionHandler(latestSelectQ, 'select latest moment error', function(connection,result){
 
-                    if(typeof result[0]!=="undefined"){
-                        latestId = result[0].id;
-                        moment.prevId = latestId;
+                            if(typeof result[0]!=="undefined"){
+                                latestId = result[0].id;
+                                moment.prevId = latestId;
 
-                        var setNextIdToLatestQ = "UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'";
-                        connectionHandler(setNextIdToLatestQ, 'update nextId error', function(connection, result){
-                            connection.release();
-                        });
-                    }
-                    else{//맨처음 업로드할 때
-                        moment.prevId = null;
-                    }
-
-                    connection.release();
-                    moment.nextId = null;
-
-                    var insertMomentQ = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text)", moment);
-                    connectionHandler(insertMomentQ, 'moment insert error', function(connection, result){
-                        connection.release();
-
-                        pool.getConnection(function(err, connection){
-
-                            for(var i=0; i<moment.bgColor.length ; i++){
-
-                                connection.query(sq.INSERT_INTO("bgColor", "(momentId, num, bgcolor)", 
-                                                                [moment.id, i, moment.bgColor[i]]),function(err, res){
-                                    if(err) {
-                                        console.log('bgColor insert error');
-                                        throw err;
-                                    }
-                                });  
-                            }
-
-
-                            for(var i=0; i<moment.textColor.length ; i++){
-
-                                connection.query(sq.INSERT_INTO("textColor", "(momentId, num, textcolor)", 
-                                                                [moment.id, i, moment.textColor[i]]),function(err, res){
-                                    if(err) {
-                                        console.log('textColor insert error');
-                                        throw err;
-                                    }
-                                });  
-                            }
-
-
-                            connection.release();
-                            console.log('>>>inserted');
-
-                            var result = {
-                                "id" : id,
-                                "bgColor" : moment.bgColor, //colorlist 그대로 넘김.
-                                "textColor" : moment.textColor
-                            };
-
-                                    response.send(result);
-                                    response.end();
+                                var setNextIdToLatestQ = "UPDATE moment SET nextId='"+id+"' WHERE id='"+ latestId +"'";
+                                connectionHandler(setNextIdToLatestQ, 'update nextId error', function(connection, result){
+                                    connection.release();
                                 });
-                            });
-                            //pool.getConnection(function(err, connection){
-                            //     for(var i =0; i<hueData.length; ++i){
-                            //         connection.query(sq.INSERT_INTO("hue", "(momentId, num, hue, hueLeft, hueRight, rate)", [moment.id, i, hueData[i].hue, hueData[i].rangeL, hueData[i].rangeR, hueData[i].rate]), function(err, res){
-                            //             if(err) {
-                            //                 console.log('hue insert error');
-                            //                 throw err;
-                            //             }
-                            //         });
-                            //     }
-                            //     connection.release();
-                            //     console.log('>>> hue inserted');
-                            // });
-                        });
-                    }   
-                            response.send(result);
-                            response.end();
-                        });
-                    });
-                    pool.getConnection(function(err, connection){
-                        for(var i =0; i<hueData.length; ++i){
-                            connection.query(sq.INSERT_INTO("hue", "(momentId, num, hue, hueLeft, hueRight, rate)", [moment.id, i, hueData[i].hue, hueData[i].rangeL, hueData[i].rangeR, hueData[i].rate]), function(err, res){
-                                if(err) {
-                                    console.log('hue insert error');
-                                    throw err;
-                                }
-                            });
-                        }
-                        connection.release();
-                        console.log('>>> hue inserted');
-                    });
-                });
+                            }
+                            else{//맨처음 업로드할 때
+                                moment.prevId = null;
+                            }
 
+                            connection.release();
+                            moment.nextId = null;
+                            
+                            console.log('>>> latest selected');
+                            selectLatest(null);
+                        });
+                    },
+                    function(insertMoment){ //insert : 추가하는 모멘트
+                        var insertMomentQ = sq.INSERT_INTO("moment", "(date, id, prevId, nextId, file, text)", moment);
+                        connectionHandler(insertMomentQ, 'moment insert error', function(connection, result){
+                            connection.release();
+                            console.log('>>> moment inserted');
+                            insertMoment(null);
+                        });
+                    },
+                    function(insertBgColor){ //insert : bgColor
+                                                            
+                        for(var i=0; i<moment.bgColor.length ; i++){
+                            var insertBgColorQ = sq.INSERT_INTO("bgColor", "(momentId, num, bgcolor)", [moment.id, i, moment.bgColor[i]]);
+                            connectionHandler(insertBgColorQ, 'bgColor insert error', function(connection, result){
+                                connection.release();
+                            });
+                            console.log('>>> bgColor inserted');
+                            insertBgColor(null);
+                        }                                    
+                    },
+                    function(insertTextColor){ //insert : textcolor
+                        for(var i=0; i<moment.textColor.length ; i++){
+                            var insertTextColorQ = sq.INSERT_INTO("textColor", "(momentId, num, textcolor)", 
+                                                                [moment.id, i, moment.textColor[i]]);
+                            connectionHandler(insertTextColorQ, 'textColor insert error', function(connection, result){
+                                connection.release();
+                            });
+                            console.log('>>> textColor inserted');
+                            insertTextColor(null);
+                        }     
+                    },
+                    function(insertHue){ //insert : hue data    
+                        for(var i=0; i<hueData.length ; i++){
+                            var insertHueQ = sq.INSERT_INTO("hue", "(momentId, num, hue, hueLeft, hueRight, rate)", [moment.id, i, hueData[i].hue, hueData[i].rangeL, hueData[i].rangeR, hueData[i].rate]);
+                            connectionHandler(insertHueQ, 'hue insert error', function(connection, result){
+                                connection.release();
+                            });
+                            console.log('>>> hue inserted');
+                            insertHue(null);
+                        }
+                    },
+                ],function(err, resultData){
+                    if(err){
+                        console.log(err);
+                        throw err;
+                    }
+                    console.log('>>> completed'); //이부분 왜 반복되는거죠...?
+                    response.end();
+                });
+  
             });//writeFile end
         });//readFile end            
 
