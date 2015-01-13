@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang = "ko">
+<head>
+  <link rel="stylesheet" type = "text/css" href = "./study6.css"> 
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+<script type = "text/javascript" src = "d3-master/d3.js"></script>
+</head>
+<body>
+  <script type = "text/javascript">
+  var svg = d3.select("body").append("svg");
+  var w = 500;
+  var h = 100; 
+  svg.attr("width", w)
+     .attr("height", h);
+  var dataset = [
+                  [5, 20],
+                  [480, 90],
+                  [250, 50],
+                  [100, 33],
+                  [330, 95],
+                  [410, 12],
+                  [475, 44],
+                  [25, 67],
+                  [85, 21],
+                  [220, 88],
+                  [900, 250]
+                ];
+
+
+  // 원이 경계선에서 짤리는 것을 방지하기 위한 패딩설정 
+   var padding = 20;
+
+  // 동적인 척도 적용하기
+  var xScale = d3.scale.linear()
+                       .domain([0, d3.max(dataset, function(d){
+                            return d[0];
+                       })])
+                       .range([padding, w - padding]);
+  var yScale = d3.scale.linear()
+                       .domain([0, d3.max(dataset, function(d){
+                            return d[1];
+                       })])
+                       .range([padding, h - padding]); // 방향을 반대로 하려면 h와  0의 순서를 바꾸면 된다. 
+  var rScale = d3.scale.linear()
+                       .domain([0, d3.max(dataset, function(d){
+                          return d[1];
+                       })])
+                       .range([2, 5]);  // 원의 반지름은 데이터 2번째열 값에 의한 2~5사이의 값으로 변환되어 리턴됨. 
+
+  // 척도 적용하여 산포도 그리기
+  svg.selectAll("circle")
+   .data(dataset)
+   .enter()
+   .append("circle")
+   .attr("cx", function(d){
+      return xScale(d[0]); // dataset의 첫번째 열 값
+   })
+   .attr("cy", function(d){
+      return yScale(d[1]); // 두번째 열 값 
+   })
+   .attr("r", function(d){
+      return rScale(d[1]);
+   });
+
+ 
+   //*d3.time.scale() // 날자와 시간을 위한 척도 메서드. 특정 시간 간격을 념겨줄 수 있다. 자세한 사용법은 http://bit.ly/Xxm6tc
+  </script>
+</body>
+</html>

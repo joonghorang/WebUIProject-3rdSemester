@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang = "ko">
+<head>
+  <link rel="stylesheet" type = "text/css" href = "./study6.css"> 
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+<script type = "text/javascript" src = "d3-master/d3.js"></script>
+</head>
+<body>
+  <script type = "text/javascript">
+    // 막대 사각형 그리기 
+
+    //var dataset = [25, 7, 5, 26, 11, 8, 25, 14, 23, 19, 14, 11, 22, 29, 11, 22, 29, 11, 13, 12, 17, 18, 10, 24, 18, 25, 9, 3];
+    // var dataset = [];
+    // for(var i = 0; i < 25; i++){
+    //   var newNumber = Math.floor(Math.random() * 10) * 3;
+    //   dataset.push(newNumber);
+    // }
+    // d3.select("body").selectAll("div")
+    //   .data(dataset)
+    //   .enter()
+    //   .append("div")
+    //   .attr("class", "bar")
+    //   .style("height", function(d){
+    //     var barHeight = d * 5;
+
+    //     return barHeight + "px";
+    //   });
+
+    // //원을 그릴 svg객체 설정 
+    // var svg = d3.select("body").append("svg");
+    // var width = 500;
+    // var height = 50; 
+    // svg.attr("width", width)
+    //    .attr("height", height);
+
+    // // 원에 적용할 데이터값 
+    // var dataset = [5, 10, 15, 20, 25];
+
+    // // 원의 크기와 위치를 설정
+    // var circles = svg.selectAll("circle")
+    //                  .data(dataset)
+    //                  .enter()
+    //                  .append("circle");
+    // circles.attr("cx", function(d, i){ // cx, cy는 원의 중심 좌표. i는 d3에서 제공하는 인덱스값이다. 다른 변수명을 사용해도 됨. 
+    //           return( i * 50) + 25;
+    //         })
+    //         .attr("cy", height/2) 
+    //         .attr("r", function(d){
+    //           return d;
+    //         });
+    // // 원의 스타일을 지정
+    // circles.attr("fill", "yellow")
+    //        .attr("stroke", "orange")
+    //        .attr("stroke-width", function(d){
+    //           return d/2;
+    //        });
+
+    // //* 만약 여러번 attr() 메서드를 호출하는 것이 싫다면 아래와 같이 작성할 수도 잇다.
+    // // circles.attr({
+    // //   cx : 0,
+    // //   cy : 0,
+    // //   fill : red
+    // // });
+
+    // 산포도 만들기 
+    var svg = d3.select("body").append("svg");
+    var width = 500;
+    var height = 100; 
+    svg.attr("width", width)
+       .attr("height", height);
+    var dataset = [
+                    [5, 20],
+                    [480, 90],
+                    [250, 50],
+                    [100, 33],
+                    [330, 95],
+                    [410, 12],
+                    [475, 44],
+                    [25, 67],
+                    [85, 21],
+                    [220, 88]
+                  ];
+    svg.selectAll("circle")
+       .data(dataset)
+       .enter()
+       .append("circle")
+       .attr("cx", function(d){
+          return d[0]; // dataset의 첫번째 열 값
+       })
+       .attr("cy", function(d){
+          return d[1]; // 두번째 열 값 
+       })
+       .attr("r", function(d){
+          return Math.sqrt(height - d[1]);
+       });
+
+    // label
+    svg.selectAll("text")
+       .data(dataset)
+       .enter()
+       .append("text")
+       .text(function(d) {
+          return d[0] + "," + d[1];
+       })
+       .attr("x", function(d){
+          return d[0];
+       })
+       .attr("y", function(d){
+          return d[1];
+       })
+       .attr("font-family", "sans-serif")
+       .attr("font-size", "20px")
+       .attr("fill", "teal");
+
+  </script>
+</body>
+</html>

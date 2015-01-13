@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang = "ko">
+<head>
+  <link rel="stylesheet" type = "text/css" href = "./study6.css"> 
+	<meta charset = "UTF-8">
+	<title>CH1EX3 : Your First Canvas Application </title>
+<script type = "text/javascript" src = "d3-master/d3.js"></script>
+</head>
+<body>
+  <p>Click on this text to update the chart with new data values(once).</p>
+  <p id = "del">Delete rect</p>
+  <script type = "text/javascript">
+  var svg = d3.select("body").append("svg");
+  var w = 600;
+  var h = 250; 
+  svg.attr("width", w)
+     .attr("height", h);
+  var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+                  11, 12, 15, 20, 18, 17, 16, 18, 23, 25];
+  var xScale = d3.scale.ordinal() // 선형 척도가 아닌 서열 척도이다. 
+                 .domain(d3.range(dataset.length)) // 정의역을 지정. d3.range()는 값을 받아 등차수열을 생성해 주는 함수. 
+                                                  // 전체 데이터 20이 갑시으로 들어가고 정의역은 0, 1, 2... 20으로 설정된다.  
+                 .rangeRoundBands([0,w], 0.02);  // 치역 값들의 대역을 지정한다. rangeBand()는 양끝값을 입력받아서 정의역 개수를 기준으로 그 수만큼 청크(chunk) 혹은 대역(band)로 조각낸다. 즉 (w-0)/xScale.domain().length => (600-0)/20 이다. 
+                 // 두번째 인자는 5%를 대역간의 간격으로 사용한다는 의미이다. rangeRoundBands()는 반올림을 하여 그려낸다.  
+  var yScale = d3.scale.linear()
+                 .domain([0, d3.max(dataset)])
+                 .range([0, h]);
+  // 막대를 생성
+  var bars = svg.selectAll("rect")
+     .data(dataset)
+     .enter()
+     .append("rect")
+     .attr("x", function(d, i){
+        return xScale(i);   // <--x 값을 지정한다. 
+     })
+     .attr("y", function(d){
+        return h - yScale(d);
+     })
+     .attr("height", function(d){
+        return yScale(d);
+     })
+     .attr("width", xScale.rangeBand());
+  d3.select("p")
+    .on("click", function(){
+      dataset.shift(); // datase에서 값 하나를 삭제
+      var bars = svg.selectAll("rect")
+                    .data(dataset);
+      bars.exit()
+          .transition()
+          .duration(500)
+          .attr("x", -xScale.rangeBand())
+          .remove();
+    })
+
+  // d3.select("p")
+  //   .on("click", function(){
+  //     var numValues = dataset.length;
+  //     // 클릭할때마다 랜덤으로 새로운 데이터를 넣어줌. 
+  //     dataset = [];
+  //     for(var i = 0; i < numValues; i++){
+  //         var newNumber = Math.floor(Math.random() * 25);
+  //         dataset.push(newNumber);
+  //     }
+  //     // dataset = [11, 12, 15, 20, 18, 17, 16, 18, 23, 25,
+  //     //             5, 10, 13, 19, 21, 25, 22, 18, 15, 13];
+  //     // 데이터 삭제 
+
+
+
+  //     // 신규데이터 추가
+  //     var maxValue = 25;
+  //     var newNumber = Math.floor(Math.random() * maxValue);
+  //     dataset.push(newNumber);
+  //     console.log(dataset.length);
+  //     //  추가되는 데이터를 위해 X축의 척도를 다시 조절
+  //     xScale.domain(d3.range(dataset.length));
+  //     // yScale을 재정의한다. (매번 어떤 값이 들어올지 모르므로)
+  //     yScale.domain([0, d3.max(dataset)]);
+
+  //     // svg.selectAll("rect")
+  //     //              .data(dataset)
+  //     //              .enter()
+  //     //              .append("rect")
+  //     //              .transition() // animation
+  //     //              .delay(function(d, i){
+  //     //                 return i / dataset.length * 1000; // animation각 개체간 딜레이를 줌으로써 좀 더 개별적으로 움직일 수 있도록 한다. 
+  //     //                                                   // dataset의 갯수가 많아지더라도 1초 내에 종료할 수 있도록 dataset.length로 나누어주고 1초를 곱한다. 그러면 제일 오래 걸리는 마지막 개체가 걸리는 시간은 i / i * 1000으로 1초가 된다.  
+  //     //              })
+  //     //              .duration(2000) // 애니메이션이 플레이되는 속도 
+  //     //              .ease("elastic") // animation speed configuration
+  //     //                               // others : circle, elastic, bounce, linear
+  //     //              .attr("x", function(d, i){
+  //     //                 return xScale(i) + xScale.rangeBand() /2 ;
+  //     //              })
+  //     //              .attr("y", function(d){
+  //     //                 return h - yScale(d);
+  //     //              })
+  //     //              .attr("height", function(d){
+  //     //                 return yScale(d);
+  //     //              })
+  //     //              .attr("fill", function(d){
+  //     //                 return "rgb(0, 0, " + (d * 10) + ")";
+  //     //              });
+  
+  //     var bars = svg.selectAll("rect")
+  //                  .data(dataset);
+  //     // 새로운 막대를 오른쪽 끝에 배치함 
+  //     bars.enter()
+  //         .append("rect")
+  //         .attr("x", w)
+  //         .attr("y", function(d){
+  //             return h - yScale(d);
+  //         })
+  //         .attr("width", xScale.rangeBand())
+  //         .attr("height", function(d){
+  //           return yScale(d);
+  //         })
+  //         .attr("fill", function(d){
+  //           return "rgb(0, 0, " + (d * 10) + ")";
+  //         });
+
+  //     // 갱신해서 새로그림
+  //     bars.transition()
+  //         .duration(500)
+  //         .attr("x", function(d, i){
+  //           return xScale(i);
+  //         })
+  //         .attr("y", function(d){
+  //           return h - yScale(d);
+  //         })
+  //         .attr("width", xScale.rangeBand())
+  //         .attr("height", function(d){
+  //           return yScale(d);
+  //         })
+  //         .attr("fill", function(d){
+  //           return "rgb(0, 0, " + (d * 10) + ")";
+  //         });
+  //   });
+  </script>
+</body>
+</html>
