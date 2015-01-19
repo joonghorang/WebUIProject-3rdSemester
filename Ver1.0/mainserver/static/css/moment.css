@@ -93,9 +93,10 @@ html, body{
 }
 
 #page-background{
-    width : 100%
+    width : 100%;
     height : 100%;
     position: absolute;
+    background-size: cover;
 }
 #bg-image {
     z-index: 10;
@@ -168,14 +169,15 @@ html, body{
 
 #svg{
     z-index: 200;
-    width : 46%;
-    padding-bottom : 46%;
     position: absolute;
     left: 0;
     right: 0;
-    margin: 4% auto 0 auto;
-    padding-left: 10px;
-    padding-top : 10px;
+
+    /*bottom : 0;*/
+    margin : auto;
+    /*margin: 4% auto 0 auto;
+/*
+    padding-top : 1%;*/
 }
 
 @media screen 

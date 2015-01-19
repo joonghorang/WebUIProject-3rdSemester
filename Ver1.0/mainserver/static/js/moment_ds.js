@@ -1,19 +1,29 @@
 (function(){    
     function init(){
-//        delColorByTime();
+        // 
+
+        initColorArray();
         initPageCanvas();
         setBgColor();
         var moment = document.getElementById("moment");
         drawShadow(moment);
         initCanvases();
         drawBgCanvas(bgColor);
-        drawTextCanvas(textColor, text);
+        drawTextCanvas(textColorArray[0], text);
         // 색상정보 출려관련
         drawColorOnCanvas();
+        var svg = document.getElementById("svg");
+        drawShadow(svg);
+        
         var textCanvas = document.getElementById("text-canvas");
         var imageWrapper = document.getElementById("moment-image-wrapper");
         EventUtil.addHandler(imageWrapper, "click", letsShow.momentText);
         EventUtil.addHandler(textCanvas, "click", letsShow.momentImage);
+        EventUtil.addHandler(window, "resize", resizeSvg.bind(drawColorOnCanvas));
+    }
+    function initColorArray(){
+        bgColorArray = bgColorArray.split(','); // 나누어지지 않은 문자열이므로 나눈후 배열로 다시 저장 
+        textColorArray = textColorArray.split(',');       
     }
     function initCanvases(){
         //set canvases w, h
@@ -34,6 +44,7 @@
     }
     function drawTextCanvas(textColor, text){
         var textCanvas  = document.getElementById("text-canvas");
+
         drawTextOn(textCanvas, text, textColor);
     }
     function setBgColor(){
@@ -48,28 +59,31 @@
         pageBackground.height = pCanvas_H;
         pageCtx = pageBackground.getContext("2d");
         var originImg = document.getElementById("moment-image-wrapper").children[0];
-        var pageImg = new Image();
-        pageImg.src = originImg.src;
+        pageBackground.style.backgroundImage = "url(" + originImg.src + ")";
         
-        pageImg.onload = function() {
-            if(pageImg.width < pageImg.height){     // 세로가 긴 경우, 비율상 작은쪽을 캔버스의 길이에 맞춰서 늘린다. 하지만 이렇게 하면 브라우저화면이 극단적으로 가로로 길거나 할 때 문제가 생긴다. 
-                                                    // 가로로 긴 비율의 사진을 가로로 긴 브라우저에 맞춰도 브라우저의 가로세로 비율이 더 극단적이라면 오른쪽 끝은 남게 된다. 
-                                                    // 따라서 그런 경우 분기를 하나 더 두어서, 맞춘다. 
-                if(pCanvas_W / pageImg.width * pageImg.height < pCanvas_H){
-                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_H / pageImg.width * pageImg.width, pCanvas_H / pageImg.width * pageImg.height);
-                } else {
-                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.width * pageImg.width, pCanvas_W / pageImg.width * pageImg.height);
-                }
+        // CSS로 옮김.
+        // var pageImg = new Image();
+        // pageImg.src = originImg.src;
+        
+        // pageImg.onload = function() {
+        //     if(pageImg.width < pageImg.height){     // 세로가 긴 경우, 비율상 작은쪽을 캔버스의 길이에 맞춰서 늘린다. 하지만 이렇게 하면 브라우저화면이 극단적으로 가로로 길거나 할 때 문제가 생긴다. 
+        //                                             // 가로로 긴 비율의 사진을 가로로 긴 브라우저에 맞춰도 브라우저의 가로세로 비율이 더 극단적이라면 오른쪽 끝은 남게 된다. 
+        //                                             // 따라서 그런 경우 분기를 하나 더 두어서, 맞춘다. 
+        //         if(pCanvas_W / pageImg.width * pageImg.height < pCanvas_H){
+        //             pageCtx.drawImage(pageImg, 0, 0, pCanvas_H / pageImg.width * pageImg.width, pCanvas_H / pageImg.width * pageImg.height);
+        //         } else {
+        //             pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.width * pageImg.width, pCanvas_W / pageImg.width * pageImg.height);
+        //         }
                 
-            } else {                     
-                if(pCanvas_H / pageImg.height * pageImg.width < pCanvas_W){
-                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.height * pageImg.width, pCanvas_W / pageImg.height * pageImg.height);
-                } else {
-                    pageCtx.drawImage(pageImg, 0, 0, pCanvas_H / pageImg.height * pageImg.width, pCanvas_H / pageImg.height * pageImg.height);
-                }
+        //     } else {                     
+        //         if(pCanvas_H / pageImg.height * pageImg.width < pCanvas_W){
+        //             pageCtx.drawImage(pageImg, 0, 0, pCanvas_W / pageImg.height * pageImg.width, pCanvas_W / pageImg.height * pageImg.height);
+        //         } else {
+        //             pageCtx.drawImage(pageImg, 0, 0, pCanvas_H / pageImg.height * pageImg.width, pCanvas_H / pageImg.height * pageImg.height);
+        //         }
                 
-            }
-        }
+        //     }
+        // }
         pageBackground.style.opacity = "0.3";
     }
 
@@ -236,11 +250,71 @@
         }
     }
 
-    // 원호 버전.
-    function drawColorOnCanvas(){
-        bgColorArray = bgColorArray.split(','); // 나누어지지 않은 문자열이므로 나눈후 배열로 다시 저장 
-        textColorArray = textColorArray.split(',');
+    // // 원호 버전.
+    // function drawColorOnCanvas(){
+    //     bgColorArray = bgColorArray.split(','); // 나누어지지 않은 문자열이므로 나눈후 배열로 다시 저장 
+    //     textColorArray = textColorArray.split(',');
 
+    //     // 색상 배열을 합쳐서 만듦
+    //     var colorSet = [];
+    //     for(var i = 0; i < bgColorArray.length; i++){
+    //         colorSet.push(bgColorArray[i]);
+    //     }
+    //     for(var i = 0; i < textColorArray.length; i++){
+    //         colorSet.push(textColorArray[i]);
+    //     }
+
+
+    //     // 나중에 비율 데이터가 넘어오면 데이터 비율을 설정 
+    //     // 지금은 랜덤으로 들어감
+    //     var dataset = [];
+    //     for(var i = 0; i < colorSet.length; i++){
+    //         dataset.push(Math.floor(Math.random() * 30)); // 지금은 0~30사이의 숫자가 임으로 들어감 
+    //     }
+
+
+    //     // 원호 그리기전 셋팅
+    //     var pie = d3.layout.pie();
+    //     var w = window.innerWidth * 4 / 100;
+    //     var h = window.innerWidth * 4 / 100;
+    //     var outerRadius = w / 2;
+    //     var innerRadius = w / 3;
+
+    //     // 원호 그리기 
+    //     var arc = d3.svg.arc()
+    //                     .innerRadius(innerRadius)
+    //                     .outerRadius(outerRadius);
+    //     var svg = d3.select("body")
+    //                 .append("svg")
+    //                 .attr("width", w)
+    //                 .attr("height", h)
+    //                 .attr("id", "svg");
+    //     console.log(svg);
+    //     console.log(svg.attr.width);
+    //     // 그룹지정
+    //     var arcs = svg.selectAll("g.arc")
+    //                   .data(pie(dataset))
+    //                   .enter()
+    //                   .append("g")
+    //                   .attr("class", "arc")
+    //                   .attr("transform", 
+    //                         "translate(" + outerRadius + ", " + outerRadius + ")");
+
+    //     // 호의 경로를 그린다.
+    //     arcs.append("path")
+    //         .transition()
+    //         .delay(function(d, i){
+    //             return i * 50;
+    //         })
+    //         .duration(1000)
+    //         .attr("fill", function(d, i){
+    //             return colorSet[i];
+    //         })
+    //         .attr("d", arc);
+
+    // }
+    // 막대그래프 버전.
+    function genColorSet(){
         // 색상 배열을 합쳐서 만듦
         var colorSet = [];
         for(var i = 0; i < bgColorArray.length; i++){
@@ -249,50 +323,68 @@
         for(var i = 0; i < textColorArray.length; i++){
             colorSet.push(textColorArray[i]);
         }
-
+        return colorSet;
+    }
+    function drawColorOnCanvas(){
+        var colorSet = genColorSet();
 
         // 나중에 비율 데이터가 넘어오면 데이터 비율을 설정 
         // 지금은 랜덤으로 들어감
-        var dataset = [];
-        for(var i = 0; i < colorSet.length; i++){
-            dataset.push(Math.floor(Math.random() * 30)); // 지금은 0~30사이의 숫자가 임으로 들어감 
-        }
-
-
-        // 원호 그리기전 셋팅
-        var pie = d3.layout.pie();
-        var w = 30;//window.innerWidth * 45 / 100;
-        var h = 30;//window.innerWidth * 45 / 100;
-        var outerRadius = w / 2;
-        var innerRadius = w / 3;
-
-        // 원호 그리기 
-        var arc = d3.svg.arc()
-                        .innerRadius(innerRadius)
-                        .outerRadius(outerRadius);
+        var dataset = [10, 20, 30, 25, 15];
+        // for(var i = 0; i < colorSet.length; i++){
+        //     dataset.push(Math.floor(Math.random() * 30)); // 지금은 0~30사이의 숫자가 임으로 들어감 
+        // }
+        var w = window.innerWidth * 46 / 100;
+        var h = window.innerWidth * 10 / 1000; 
+        var marginTop = window.innerWidth * 52 / 100;
         var svg = d3.select("body")
                     .append("svg")
                     .attr("width", w)
-                    .attr("height", h)
+                    .attr("height", h)// + marginTop)
+                    .attr("style", "margin-top : " +marginTop)
                     .attr("id", "svg");
-        console.log(svg);
-        console.log(svg.attr.width);
-        // 그룹지정
-        var arcs = svg.selectAll("g.arc")
-                      .data(pie(dataset))
-                      .enter()
-                      .append("g")
-                      .attr("class", "arc")
-                      .attr("transform", 
-                            "translate(" + outerRadius + ", " + outerRadius + ")");
-
-        // 호의 경로를 그린다.
-        arcs.append("path")
-            .attr("fill", function(d, i){
+        var xScale = d3.scale.linear()
+                       .domain([0, 100])
+                       .range([0, w]);
+        var yScale = d3.scale.linear()
+                       .domain([0, d3.max(dataset)])
+                       .range([0, h]);
+        var xPosition = 0;
+        svg.selectAll("rect")
+           .data(dataset)
+           .enter()
+           .append("rect")
+           .transition()
+           .delay(function(d, i){
+                return i * 50;
+           })
+           .duration(1200)
+           //.ease("elastic")
+           .attr("x", function(d, i){
+                if(i === 0){
+                    xPosition = 0
+                } else {
+                   xPosition = xPosition + xScale(dataset[i-1]); 
+                }
+                return xPosition;
+           })
+           .attr("y", 0)
+           .attr("width", function(d, i){
+                return xScale(d);
+           })
+           .attr("height", h )
+           .attr("fill", function(d, i){
                 return colorSet[i];
-            })
-            .attr("d", arc);
+           });
+    }
 
+    function resizeSvg(){
+        //칼라바의 크기를 다시 조정 
+        var svg = document.getElementById("svg");
+        svg.parentNode.removeChild(svg);
+        drawColorOnCanvas();
+        var svg = document.getElementById("svg");
+        drawShadow(svg);
     }
 
     init();
